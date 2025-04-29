@@ -30,3 +30,19 @@ export const serviceAuthenticateUser = async({email, senha}, res) => {
       res.status(500).send('Erro no servidor');      
     }
 };
+
+export const serviceListAllUsers = async(req, res) => {
+  try{
+    const con = await connectToDatabase();
+    const sql = 'SELECT * FROM users';
+    const [rows] = await con.execute(sql);
+
+    res.status(200).json({
+      message: 'Lista de Usuarios',
+      data: rows
+    });
+  }catch(err){
+    console.error(err);
+    res.status(500).send('Erro ao listar usuários' + err);
+  }
+}

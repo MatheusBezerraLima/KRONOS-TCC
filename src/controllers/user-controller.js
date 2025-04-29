@@ -1,7 +1,9 @@
-import { serviceInsertUser, serviceAuthenticateUser } from "../services/user-services/user-services.js";
+import { serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers } from "../services/user-services/user-services.js";
 
 export const getRegisterUser = async(req, res) => {
     const { nome, email, senha } = req.body;
+    console.log(req.body);
+    
     await serviceInsertUser({ nome, email, senha }, res);
 }
 
@@ -13,9 +15,11 @@ export const deleteUser = (req, res) => {
 
 }
 export const updateUser = (req, res) => {
-
 }
 
+export const getListAllUsers = async(req, res) => {
+    await serviceListAllUsers(req, res);
+}
 // export const getUserById = (req, res) => { /* ... */ }
 
 // export const getAllUsers = (req, res) => { /* ... */ }
