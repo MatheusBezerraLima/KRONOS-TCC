@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start:dev": "node --env-file=.env src/server.js",
-    "start:watch": "node --watch src/server.js"
+    "start:watch": "node --watch  --env-file=.env src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,10 +13,8 @@
   "description": "",
   "dependencies": {
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.14.1"
-  },
-  "devDependencies": {
-    "@types/node": "^22.15.2"
   }
 }
