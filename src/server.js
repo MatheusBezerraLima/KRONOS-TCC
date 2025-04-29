@@ -2,7 +2,7 @@ import { config } from './config/express.js'
 import { connectToDatabase } from './services/connect.js';
 import { __dirname } from './utils/paths.js';
 import path from 'path'; // Importa a função join do módulo path
-import { getRegisterUser, getAuthenticateUser, getListAllUsers} from './controllers/user-controller.js';
+import { getRegisterUser, getAuthenticateUser, getListAllUsers, verifyAuthToken} from './controllers/user-controller.js';
 
 const app = config();
 
@@ -17,10 +17,9 @@ app.listen(3333, (error) => {
 });
 
 app.get('/', (req , res) => {
-
 });
 
-app.get('/login', ()=> {
+app.get('/login', (req, res)=> {
     res.sendFile(path.join(__dirname, './public/html/login.html'));
 })
 
@@ -36,6 +35,6 @@ app.post('/register', async (req , res) => {
     await getRegisterUser(req, res);
 })
 
-app.get('/list', async(req, res) => {
+app.get('/list', verifyAuthToken, async(req, res) => {
     await getListAllUsers(req, res)
 })
