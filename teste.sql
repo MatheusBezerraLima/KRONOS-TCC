@@ -1,36 +1,76 @@
--- --------------------------------------------------------
--- Servidor:                     127.0.0.1
--- Versão do servidor:           8.0.30 - MySQL Community Server - GPL
--- OS do Servidor:               Win64
--- HeidiSQL Versão:              12.1.0.6537
--- --------------------------------------------------------
+-- Active: 1726787113784@@127.0.0.1@3000
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Tempo de geração: 01/05/2025 às 00:02
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Banco de dados: `teste`
+--
 
--- Copiando estrutura do banco de dados para teste
-CREATE DATABASE IF NOT EXISTS `teste` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `teste`;
+-- --------------------------------------------------------
 
--- Copiando estrutura para tabela teste.users
-CREATE TABLE IF NOT EXISTS `users` (
-  `nome` varchar(60) NOT NULL,
-  `email` varchar(60) NOT NULL,
-  `senha` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+--
+-- Estrutura para tabela `usuarios`
+--
 
--- Copiando dados para a tabela teste.users: ~0 rows (aproximadamente)
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `senha` varchar(255) NOT NULL,
+  `telefone` varchar(20) DEFAULT NULL,
+  `data_nascimento` date DEFAULT NULL,
+  `genero` enum('masculino','feminino','outro') DEFAULT NULL,
+  `foto_perfil` text DEFAULT NULL,
+  `criado_em` datetime DEFAULT current_timestamp(),
+  `atualizado_em` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+--
+-- Despejando dados para a tabela `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `telefone`, `data_nascimento`, `genero`, `foto_perfil`, `criado_em`, `atualizado_em`, `ativo`) VALUES
+(1, 'Matheus Bezerra Lima', 'matheus@gmail.com', '$2b$10$ryZsmjAchlGS/t7vx27YxOtmmnJlkKhKxBSSU/RB1N1NMGiS.7QkO', '(11)97290-7114', '2007-05-12', 'masculino', 'https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369991.png', '2025-04-30 18:57:50', '2025-04-30 18:57:50', 1);
+
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices de tabela `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT para tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
-teste
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -6,9 +6,13 @@
     <title>Login | Usuário</title>
 </head>
 <body>
-    <form action="/login" method="post">
-        <input type="email" name="email" placeholder="Name">
-        <input type="password" name="senha" placeholder="Name">
+    <form action="/user/login" method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+  
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha"/>
+
         <button type="submit">Logar</button>
     </form>
 </body>

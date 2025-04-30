@@ -2,31 +2,56 @@ import { application, json } from "express";
 import {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers} from "../services/user-services/user-services.js";
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { DatabaseErrors } from "../utils/databaseErrors.js";
+import { StatusCode } from "../utils/status-code.js";
 
 
 export const verifyAuthToken = async(req, res, next) => {
+  // capturando o token do cookie
     const token = req.cookies.authToken;    
 
     if(!token){
-        return res.status(401).json({ message: "Acesso negado. Necessário realizar a autenticação "})
+        return res.status(StatusCode.UNAUTHORIZED).json({ message: "Acesso negado. Necessário realizar a autenticação "})
     }
 
     try{
-        console.log(process.env.SECRET);
+      // verificando se o token do cookie é valido. 
         const decoded = jwt.verify(token, process.env.SECRET);        
         next();
     }catch(err){
-        console.error(err);
-        return res.status(403).json({ message: "Token inválido ou expirado. "});
+        return res.status(StatusCode.FORBIDDEN).json({ message: "Token inválido ou expirado. "});
     }
 };
 
 export const getRegisterUser = async (req, res) => {
-  const { nome, email, senha } = req.body;
+  const { nome, email, senha, telefone, data_nascimento, genero, foto_perfil } = req.body;
 
+  // criptografando a senha com o salt = 10
   const senhaHash = await bcrypt.hash(senha, 10);
 
-  await serviceInsertUser({ nome, email, senhaHash }, res);
+  try{
+
+    const { sucess, userId } = await serviceInsertUser({ nome, email, senhaHash, telefone, data_nascimento, genero, foto_perfil }, res);
+    res.status(StatusCode.CREATED).json({ message: "Sucesso ao inserir usuário" });
+
+  }catch(err){
+
+    if (err.code === DatabaseErrors.DUPLICATE_ENTRY) {
+      return res.status(StatusCode.CONFLICT).json({ erro: 'Este email já está cadastrado' });
+    }
+    
+    if (err.code === DatabaseErrors.BAD_NULL_ERROR) {
+      return res.status(StatusCode.BAD_REQUEST).json({ erro: 'Preencha todos os campos obrigatórios' });
+    }
+    
+    if (err.code === DatabaseErrors.CONNECTION_LOST) {
+      return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ erro: 'Erro de conexão com o banco de dados' });
+    }
+    
+    console.error(err)
+    return res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ erro: 'Erro inesperado no servidor' });    
+
+  }
 };
 
 export const getAuthenticateUser = async (req, res) => {
@@ -36,36 +61,55 @@ export const getAuthenticateUser = async (req, res) => {
     const { user, token } = await serviceAuthenticateUser({ email, senha });
     
     res.cookie("authToken", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
-        maxAge:  30 * 60 * 1000
-    });
-    // console.log("token inserido:" + token);
-    
+        httpOnly: true,                                   // Bloqueia o acesso por meio do JS pelo lado do usuário
+        secure: process.env.NODE_ENV === "production",    // Só permite acesso em ambiente de produção
+        sameSite: "Strict",                               // Restringe para que apenas o próprio site tenha acesso
+        maxAge:  30 * 60 * 1000                           // Tempo de duração em milisegundos 
+    });    
 
-    res.status(200).json({
-      message: "Login bem sucedido!",
-      token,
-    });
+    res.status(StatusCode.OK).json({ message: "Login bem sucedido!" });
   } catch (err) {
     if (err.message === "USER_NOT_FOUND") {
-      return res.status(404).json({ message: "Usuário não existe" });
+      return res.status(StatusCode.NOT_FOUND).json({ message: "Usuário não existe" });
     }
     if (err.message === "INVALID_PASSWORD") {
-      return res.status(401).json({ message: "Senha incorreta" });
+      return res.status(StatusCode.UNAUTHORIZED).json({ message: "Credenciais incorretas. Verifique os dados." });
     }
     console.error(err);
-    res.status(500).json({ message: "Erro no Servidor" });
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ message: "Erro no Servidor" });
   }
 };
 
-export const deleteUser = (req, res) => {};
+export const deleteUser = (req, res) => {
 
-export const updateUser = (req, res) => {};
+};
+
+export const updateUser = (req, res) => {
+};
 
 export const getListAllUsers = async (req, res) => {
-  await serviceListAllUsers(req, res);
+
+  try{
+    const {content, listUsers} = await serviceListAllUsers(req, res);
+
+    if(!content){
+      res.status(StatusCode.OK).json({ message: "Nenhum usuário encontrado" });
+    }
+
+    res.status(StatusCode.OK).json({ List: listUsers });
+
+  }catch(err){
+
+    if(err.code === DatabaseErrors.NO_SUCH_TABLE){
+      res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ erro: "A tabela especificada não existe" });
+    }
+    if(err.code === DatabaseErrors.CONNECTION_LOST){
+      res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ erro: "A conexão com o banco foi perdida" });
+    }
+    console.error('Erro inesperado ao listar usuários:', err);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ erro: "Erro interno ao buscar usuário" });
+  }
+
 };
 
 // export const getUserById = (req, res) => { /* ... */ }
