@@ -19,22 +19,22 @@ app.listen(3333, (error) => {
 app.get('/', (req , res) => {
 });
 
-app.get('/login', (req, res)=> {
+app.get('/user/login', (req, res)=> {
     res.sendFile(path.join(__dirname, './public/html/login.html'));
 })
 
-app.post('/login', async(req, res) => {
+app.post('/user/login', async(req, res) => {
     await getAuthenticateUser(req, res);
 })
 
-app.get('/register', (req , res)=> {
+app.get('/user/register', (req , res)=> {
     res.sendFile(path.join(__dirname, './public/html/register.html'));
 })
 
-app.post('/register', async (req , res) => {
+app.post('/user/register', async (req , res) => {
     await getRegisterUser(req, res);
 })
 
-app.get('/list', verifyAuthToken, async(req, res) => {
+app.get('/user/list', verifyAuthToken, async(req, res) => {
     await getListAllUsers(req, res)
 })

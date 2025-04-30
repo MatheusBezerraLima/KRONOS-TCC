@@ -3,17 +3,17 @@ import { connectToDatabase } from "../connect.js";
 import jwt from "jsonwebtoken";
 import * as bcrypt from 'bcrypt';
 
-export const serviceInsertUser = async ({ nome, email, senhaHash }, res) => {
+export const serviceInsertUser = async ({ nome, email, senhaHash, telefone, data_nascimento, genero, foto_perfil }, res) => {
   try {
     const con = await connectToDatabase();
-    const sql = "INSERT INTO users (nome, email, senha) VALUES (?, ?, ?)";
+    const sql = "INSERT INTO usuarios (nome, email, senha, telefone, data_nascimento, genero, foto_perfil ) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    await con.execute(sql, [nome, email, senhaHash]);
+    const [resultInsert] = await con.execute(sql, [nome, email, senhaHash, telefone, data_nascimento, genero, foto_perfil]);
 
-    res.status(201).send("Usuario inserido com sucesso");
+    return { sucess: true, id: resultInsert.id};
+
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Erro ao inserir dados");
+    throw new Error(err.code);
   }
 };
 
@@ -54,12 +54,12 @@ export const serviceListAllUsers = async (req, res) => {
     const sql = "SELECT * FROM users";
     const [rows] = await con.execute(sql);
 
-    res.status(200).json({
-      message: "Lista de Usuarios",
-      data: rows,
-    });
+    if(rows.length === 0){
+      return { content: false, listUsers: []};
+    }
+
+    return { content: true, listUsers: rows}
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Erro ao listar usuários" + err);
+    throw new Error(err.code);
   }
 };
