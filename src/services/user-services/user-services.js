@@ -1,9 +1,8 @@
-import { json, response } from "express";
-import { connectToDatabase } from "../connect.js";
-import jwt from "jsonwebtoken";
-import * as bcrypt from 'bcrypt';
+const { connectToDatabase } = require("../connect.js");
+const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
 
-export const serviceInsertUser = async ({ nome, email, senhaHash, telefone, data_nascimento, genero, foto_perfil }, res) => {
+const serviceInsertUser = async ({ nome, email, senhaHash, telefone, data_nascimento, genero, foto_perfil }, res) => {
   try {
     const con = await connectToDatabase();
     const sql = "INSERT INTO usuarios (nome, email, senha, telefone, data_nascimento, genero, foto_perfil ) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -17,7 +16,7 @@ export const serviceInsertUser = async ({ nome, email, senhaHash, telefone, data
   }
 };
 
-export const serviceAuthenticateUser = async ({ email, senha }) => {
+const serviceAuthenticateUser = async ({ email, senha }) => {
 
     const con = await connectToDatabase();
     const sql = "SELECT * FROM users WHERE email= ?";
@@ -48,7 +47,7 @@ export const serviceAuthenticateUser = async ({ email, senha }) => {
       return {user, token};
 };
 
-export const serviceListAllUsers = async (req, res) => {
+const serviceListAllUsers = async (req, res) => {
   try {
     const con = await connectToDatabase();
     const sql = "SELECT * FROM users";
@@ -63,3 +62,9 @@ export const serviceListAllUsers = async (req, res) => {
     throw new Error(err.code);
   }
 };
+
+module.exports = {
+  serviceAuthenticateUser,
+  serviceInsertUser,
+  serviceListAllUsers
+}
