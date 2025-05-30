@@ -1,11 +1,12 @@
-import { config } from './config/express.js'
-import { connectToDatabase } from './services/connect.js';
-import { __dirname } from './utils/paths.js';
-import path from 'path'; // Importa a função join do módulo path
-import { getRegisterUser, getAuthenticateUser, getListAllUsers, verifyAuthToken} from './controllers/user-controller.js';
+// import { connectToDatabase } from './services/connect.js';
+// import { __dirname } from './utils/paths.js';
 
-const app = config();
 
+require('dotenv').config();
+const app = require('./config/express')();
+const path = require('path');
+const sequelize = require('./config/database');
+const { getRegisterUser, getAuthenticateUser, getListAllUsers, verifyAuthToken} = require('./controllers/user-controller.js');
 
 app.listen(3333, (error) => {
     if(error){
@@ -17,10 +18,12 @@ app.listen(3333, (error) => {
 });
 
 app.get('/', (req , res) => {
+    console.log("home");
+    
 });
 
 app.get('/user/login', (req, res)=> {
-    res.sendFile(path.join(__dirname, './public/html/login.html'));
+    res.sendFile(path.join(__dirname, '../public/html/login.html'));
 })
 
 app.post('/user/login', async(req, res) => {
@@ -28,7 +31,7 @@ app.post('/user/login', async(req, res) => {
 })
 
 app.get('/user/register', (req , res)=> {
-    res.sendFile(path.join(__dirname, './public/html/register.html'));
+    res.sendFile(path.join(__dirname, '../public/html/register.html'));
 })
 
 app.post('/user/register', async (req , res) => {

@@ -2,7 +2,6 @@
   "name": "projeto",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start:dev": "node --env-file=.env src/server.js",
     "start:watch": "node --watch  --env-file=.env src/server.js"
@@ -14,9 +13,11 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
-    "mysql2": "^3.14.1"
+    "mysql2": "^3.14.1",
+    "sequelize": "^6.37.7"
   }
 }

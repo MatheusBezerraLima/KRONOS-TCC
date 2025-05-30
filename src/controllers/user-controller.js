@@ -1,12 +1,12 @@
-import { application, json } from "express";
-import {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers} from "../services/user-services/user-services.js";
-import * as bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { DatabaseErrors } from "../utils/databaseErrors.js";
-import { StatusCode } from "../utils/status-code.js";
+const { application, json } = require("express") 
+const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers} = require("../services/user-services/user-services.js"); 
+const bcrypt = require("bcrypt"); 
+const jwt = require("jsonwebtoken");
+const { DatabaseErrors } = require("../utils/databaseErrors.js");
+const { StatusCode } = require("../utils/status-code.js");
 
 
-export const verifyAuthToken = async(req, res, next) => {
+ const verifyAuthToken = async(req, res, next) => {
   // capturando o token do cookie
     const token = req.cookies.authToken;    
 
@@ -23,7 +23,7 @@ export const verifyAuthToken = async(req, res, next) => {
     }
 };
 
-export const getRegisterUser = async (req, res) => {
+ const getRegisterUser = async (req, res) => {
   const { nome, email, senha, telefone, data_nascimento, genero, foto_perfil } = req.body;
 
   // criptografando a senha com o salt = 10
@@ -54,7 +54,7 @@ export const getRegisterUser = async (req, res) => {
   }
 };
 
-export const getAuthenticateUser = async (req, res) => {
+ const getAuthenticateUser = async (req, res) => {
   const { email, senha } = req.body;
 
   try {
@@ -80,14 +80,7 @@ export const getAuthenticateUser = async (req, res) => {
   }
 };
 
-export const deleteUser = (req, res) => {
-
-};
-
-export const updateUser = (req, res) => {
-};
-
-export const getListAllUsers = async (req, res) => {
+ const getListAllUsers = async (req, res) => {
 
   try{
     const {content, listUsers} = await serviceListAllUsers(req, res);
@@ -112,5 +105,9 @@ export const getListAllUsers = async (req, res) => {
 
 };
 
-// export const getUserById = (req, res) => { /* ... */ }
-// export const logoutUser = (req, res) => { /* ... */ } // opcional, se usar sessões
+module.exports = {
+  getAuthenticateUser,
+  getListAllUsers,
+  getRegisterUser,
+  verifyAuthToken
+}
