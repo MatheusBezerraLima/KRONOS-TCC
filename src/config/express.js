@@ -1,12 +1,6 @@
 const express = require('express'); 
 const path = require('path'); 
-// const { fileURLToPath } = require('url') 'url';
-// const { dirname } = require() 'path';
 const cookieParser = require("cookie-parser");
-
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
 
 var app = express()
 

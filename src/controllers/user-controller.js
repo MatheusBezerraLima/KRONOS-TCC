@@ -1,12 +1,11 @@
-const { application, json } = require("express") 
-const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers} = require("../services/user-services/user-services.js"); 
+const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers, serviceFindById} = require("../services/user-services.js"); 
 const bcrypt = require("bcrypt"); 
 const jwt = require("jsonwebtoken");
-const { DatabaseErrors } = require("../utils/databaseErrors.js");
-const { StatusCode } = require("../utils/status-code.js");
+const DatabaseErrors = require("../utils/databaseErrors");
+const StatusCode = require("../utils/status-code");
 
 
- const verifyAuthToken = async(req, res, next) => {
+const verifyAuthToken = async(req, res, next) => {
   // capturando o token do cookie
     const token = req.cookies.authToken;    
 
@@ -23,15 +22,14 @@ const { StatusCode } = require("../utils/status-code.js");
     }
 };
 
- const getRegisterUser = async (req, res) => {
+const getRegisterUser = async (req, res) => {
   const { nome, email, senha, telefone, data_nascimento, genero, foto_perfil } = req.body;
 
   // criptografando a senha com o salt = 10
   const senhaHash = await bcrypt.hash(senha, 10);
 
   try{
-
-    const { sucess, userId } = await serviceInsertUser({ nome, email, senhaHash, telefone, data_nascimento, genero, foto_perfil }, res);
+    const userId = await serviceInsertUser({ nome, email, senha: senhaHash, telefone, data_nascimento, genero, foto_perfil }, res);
     res.status(StatusCode.CREATED).json({ message: "Sucesso ao inserir usuário" });
 
   }catch(err){
@@ -54,7 +52,7 @@ const { StatusCode } = require("../utils/status-code.js");
   }
 };
 
- const getAuthenticateUser = async (req, res) => {
+const getAuthenticateUser = async (req, res) => {
   const { email, senha } = req.body;
 
   try {
@@ -80,7 +78,7 @@ const { StatusCode } = require("../utils/status-code.js");
   }
 };
 
- const getListAllUsers = async (req, res) => {
+const getListAllUsers = async (req, res) => {
 
   try{
     const {content, listUsers} = await serviceListAllUsers(req, res);
@@ -105,9 +103,23 @@ const { StatusCode } = require("../utils/status-code.js");
 
 };
 
+const getFindById = async (req, res) => {
+  const id = req.params.id;
+
+  try{
+    const user = await serviceFindById(id)
+    console.log(user);
+    
+    res.status(200).json({ user : user })
+  }catch(err){
+    console.error("Erro ao Buscar por ID:", err)
+  }
+}
+
 module.exports = {
   getAuthenticateUser,
   getListAllUsers,
   getRegisterUser,
-  verifyAuthToken
+  verifyAuthToken,
+  getFindById
 }

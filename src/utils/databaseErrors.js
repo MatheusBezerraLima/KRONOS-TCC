@@ -1,4 +1,4 @@
-export const DatabaseErrors = {
+const DatabaseErrors = {
     // Erros de inserção (CREATE)
     DUPLICATE_ENTRY:        'ER_DUP_ENTRY',               // Entrada duplicada (chave primária ou UNIQUE)
     BAD_NULL_ERROR:         'ER_BAD_NULL_ERROR',          // Campo obrigatório não pode ser NULL
@@ -24,4 +24,4 @@ export const DatabaseErrors = {
     UNKNOWN:                'UNKNOWN'                     // Erro não identificado
   };
   
-  
+  module.exports = DatabaseErrors;
