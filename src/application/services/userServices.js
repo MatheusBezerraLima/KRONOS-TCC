@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
-const UserDAO = require('../repositories/userRepository.js');
+const UserDAO = require('../domain/repositories/userRepository.js');
 
 const serviceInsertUser = async (data, res) => {
   try {
    // Aplicar regras de negócio aqui...
+
 
     const resultInsert = await UserDAO.create(data) 
 

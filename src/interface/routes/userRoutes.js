@@ -1,7 +1,7 @@
 const express = require('express');
 const routes = express.Router()
 const path = require('path'); 
-const { getRegisterUser, getFindById, getAuthenticateUser, getListAllUsers, verifyAuthToken} = require('../controllers/user-controller');
+const { getRegisterUser, getFindById, getAuthenticateUser, getListAllUsers, verifyAuthToken} = require('../controllers/userController');
 
 
 routes.get('/login', (req, res) => {
