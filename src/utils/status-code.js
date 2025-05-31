@@ -1,4 +1,4 @@
-export const StatusCode = {
+const StatusCode = {
     // 1xx Informacional
     CONTINUE: 100,
     SWITCHING_PROTOCOLS: 101,
@@ -72,3 +72,4 @@ export const StatusCode = {
     NETWORK_AUTHENTICATION_REQUIRED: 511,
   }
   
+  module.exports = StatusCode;
