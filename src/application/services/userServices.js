@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
-const UserDAO = require('../domain/repositories/userRepository.js');
+const UserDAO = require('../../infra/database/repositories/userRepository');
 
 const serviceInsertUser = async (data, res) => {
   try {
@@ -16,36 +16,33 @@ const serviceInsertUser = async (data, res) => {
   }
 };
 
-// const serviceAuthenticateUser = async ({ email, senha }) => {
+const serviceAuthenticateUser = async (data) => {
 
-//     const con = await connectToDatabase();
-//     const sql = "SELECT * FROM users WHERE email= ?";
-//     const [rows] = await con.execute(sql, [email]);
-//     const user = rows[0];
+    const user = await UserDAO.findByEmail(data.email)
 
-//     if (!user) {
-//       throw new Error("USER_NOT_FOUND");
-//     }
+    if (!user) {
+      throw new Error("USER_NOT_FOUND");
+    }
 
-//     const passwordIsMatch = await bcrypt.compare(senha, user.senha);
+    const passwordIsMatch = await bcrypt.compare(data.senha, user.senha);
 
-//     if(!passwordIsMatch){
-//       throw new Error("INVALID_PASSWORD");
-//     }
+    if(!passwordIsMatch){
+      throw new Error("INVALID_PASSWORD");
+    }
     
-//       const payload = {
-//         id: user.id,
-//         email: user.email
-//       }
+    const payload = {
+      id: user.id,
+      email: user.email
+    }
 
-//       console.log(process.env.SECRET);
+    console.log(process.env.SECRET);
 
-//       const token = jwt.sign(payload, process.env.SECRET, {
-//         expiresIn: '30m'
-//       })
+    const token = jwt.sign(payload, process.env.SECRET, {
+      expiresIn: '30m'
+    })
       
-//       return {user, token};
-// };
+    return {user, token};
+};
 
 // const serviceListAllUsers = async (req, res) => {
 //   try {
@@ -80,7 +77,7 @@ const serviceFindById = async (id) => {
 }
 
 module.exports = {
-  // serviceAuthenticateUser,
+  serviceAuthenticateUser,
   serviceInsertUser,
   // serviceListAllUsers,
   serviceFindById

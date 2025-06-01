@@ -1,4 +1,4 @@
-const User = require('../../models/userModel');
+const User = require('../models/userModel');
 
 class UserDAO {
     async findById(id) {
@@ -16,9 +16,20 @@ class UserDAO {
         })
     }
 
+    async findByEmail(email){
+        return await User.findOne({
+            where: {
+                email: email,
+                ativo: 1
+            }
+        });
+    }
+
     async create(data){
         return User.create(data);
     }
+
+    
     
 }
 

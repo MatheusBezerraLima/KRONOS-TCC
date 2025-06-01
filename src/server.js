@@ -2,7 +2,7 @@ require('dotenv').config();
 const app = require('./config/express')();
 const path = require('path');
 const sequelize = require('./config/database');
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./interface/routes/userRoutes');
 
 app.use('/user', userRoutes);
 

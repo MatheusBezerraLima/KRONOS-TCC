@@ -1,26 +1,9 @@
-const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers, serviceFindById} = require("../../services/userServices.js"); 
+const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers, serviceFindById} = require("../../application/services/userServices.js"); 
 const bcrypt = require("bcrypt"); 
 const jwt = require("jsonwebtoken");
 const DatabaseErrors = require("../../utils/databaseErrors.js");
 const StatusCode = require("../../utils/status-code.js");
 
-
-const verifyAuthToken = async(req, res, next) => {
-  // capturando o token do cookie
-    const token = req.cookies.authToken;    
-
-    if(!token){
-        return res.status(StatusCode.UNAUTHORIZED).json({ message: "Acesso negado. Necessário realizar a autenticação "})
-    }
-
-    try{
-      // verificando se o token do cookie é valido. 
-        const decoded = jwt.verify(token, process.env.SECRET);        
-        next();
-    }catch(err){
-        return res.status(StatusCode.FORBIDDEN).json({ message: "Token inválido ou expirado. "});
-    }
-};
 
 const getRegisterUser = async (req, res) => {
   const { nome, email, senha, telefone, data_nascimento, genero, foto_perfil } = req.body;
@@ -120,6 +103,5 @@ module.exports = {
   getAuthenticateUser,
   getListAllUsers,
   getRegisterUser,
-  verifyAuthToken,
   getFindById
 }
