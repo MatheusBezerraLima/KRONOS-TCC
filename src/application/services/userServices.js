@@ -5,7 +5,7 @@ const UserDAO = require('../../infra/database/repositories/userRepository');
 const serviceInsertUser = async (data, res) => {
   try {
    // Aplicar regras de negócio aqui...
-
+    await validateRequiredFields(data)
 
     const resultInsert = await UserDAO.create(data) 
 

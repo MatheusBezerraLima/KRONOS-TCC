@@ -4,10 +4,12 @@ const path = require('path');
 const { getRegisterUser, getFindById, getAuthenticateUser, getListAllUsers} = require('../controllers/userController');
 const verifyAuthToken = require('../middlewares/userAuthenticate')
 
+// Pronta
 routes.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../../../public/html/login.html'));
 })
 
+// Pronta
 routes.post('/login', async(req, res) => {
     await getAuthenticateUser(req, res);
 })

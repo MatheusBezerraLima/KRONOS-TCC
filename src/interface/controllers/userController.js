@@ -49,6 +49,7 @@ const getAuthenticateUser = async (req, res) => {
     });    
 
     res.status(StatusCode.OK).json({ message: "Login bem sucedido!" });
+    
   } catch (err) {
     if (err.message === "USER_NOT_FOUND") {
       return res.status(StatusCode.NOT_FOUND).json({ message: "Usuário não existe" });
