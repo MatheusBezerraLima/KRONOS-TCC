@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../../../config/database');
 
 
 const User = sequelize.define('User', {
@@ -24,6 +24,11 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING(255),
         allowNull: false
     },
+    role: {
+        type: DataTypes.ENUM("admin", "user"),
+        allowNull: false,
+        defaultValue: 'user'
+    },
     telefone: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -36,16 +41,12 @@ const User = sequelize.define('User', {
         type: DataTypes.ENUM('masculino','feminino','outro'),
         allowNull: true
     },
-    foto_perfil: {
-        type: DataTypes.TEXT,
-        allowNull: true
-    }, 
-    ativo: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
+    status: {
+        type: DataTypes.ENUM("Ativo", "Inativo"),
+        defaultValue: "Ativo"
     }
 }, {
-    tableName: 'usuarios',
+    tableName: 'usuario',
     timestamps: true,
     createdAt: 'criado_em',   
     updatedAt: 'atualizado_em'
