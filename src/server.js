@@ -15,8 +15,8 @@ app.listen(3333, async() => {
         await sequelize.authenticate();
         console.log('Conectado com o banco!!');
 
-        await sequelize.sync({ force: true });
-        console.log('Tabelas sincronizadas com sucesso!');
+        // await sequelize.sync({ force: true });
+        // console.log('Tabelas sincronizadas com sucesso!');
     }catch(error){
         console.error('Erro ao conectar ou sincronizar com o banco', error);
     }

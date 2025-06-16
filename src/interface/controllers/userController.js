@@ -1,4 +1,4 @@
-const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers, serviceFindById} = require("../../application/services/userServices.js"); 
+const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers, serviceFindById, serviceChangePasswordUser} = require("../../application/services/userServices.js"); 
 const bcrypt = require("bcrypt"); 
 const jwt = require("jsonwebtoken");
 const DatabaseErrors = require("../../utils/databaseErrors.js");
@@ -6,13 +6,13 @@ const StatusCode = require("../../utils/status-code.js");
 
 
 const getRegisterUser = async (req, res) => {
-  const { nome, email, senha, telefone, data_nascimento, genero, foto_perfil } = req.body;
+  const { nome, email, senha, telefone, data_nascimento, genero} = req.body;
 
   // criptografando a senha com o salt = 10
   const senhaHash = await bcrypt.hash(senha, 10);
 
   try{
-    const userId = await serviceInsertUser({ nome, email, senha: senhaHash, telefone, data_nascimento, genero, foto_perfil }, res);
+    const userId = await serviceInsertUser({ nome, email, senha: senhaHash, telefone, data_nascimento, genero});
     res.status(StatusCode.CREATED).json({ message: "Sucesso ao inserir usuário" });
 
   }catch(err){
@@ -100,9 +100,24 @@ const getFindById = async (req, res) => {
   }
 }
 
+  const getChangePasswordUser = async (req, res) => {
+    const { currentPassword, newPassword, confirmNewPassword } = req.body;
+    const userId = req.user.id;
+
+    try{
+      const response = await serviceChangePasswordUser({userId, currentPassword, newPassword, confirmNewPassword});
+
+      res.status(200).json({ response: response });
+  }catch(err){
+    console.error(err);
+    
+  }
+}
+
 module.exports = {
   getAuthenticateUser,
   getListAllUsers,
   getRegisterUser,
-  getFindById
+  getFindById,
+  getChangePasswordUser
 }
