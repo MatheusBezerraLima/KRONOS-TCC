@@ -34,7 +34,8 @@ const serviceAuthenticateUser = async (data) => {
     // Criando um "corpo" para o token de autenticação
     const payload = {
       id: user.id,
-      email: user.email
+      email: user.email,
+      role: user.role
     }
 
     // Criando o token utilizando o  payload e a chave secreta 
@@ -46,34 +47,31 @@ const serviceAuthenticateUser = async (data) => {
 };
 
 const serviceChangePasswordUser = async(data) => {
-  // Verificar qual usuário solicitou a alteração 
   const user = await UserDAO.findById(data.userId);
-
   if(!user){
-    throw new Error("O que vc faz aqui? Token expirado? Segurança fraca?");
+    throw new Error("Usuário não encontrado.");
   }
-  
-  const passwordIsMatch = await bcrypt.compare(data.currentPassword, user.senha);
 
+  // Verificando a senha com bycript
+  const passwordIsMatch = await bcrypt.compare(data.currentPassword, user.senha);
   if(!passwordIsMatch){
     throw new Error("Senha inválida");
   }
 
+  // Confirmação de nova senha falhou
   if(data.newPassword !== data.confirmNewPassword){
-    throw new Error("As senhas devem ser iguais");
+    throw new Error("A senha atual está incorreta.");
   }
 
-  if(data.newPassword.length <= 6){
-    throw new Error("Senha muito fraca, deve haver mais de 6 caracteres");
+  // Senhas com menos de 8 caracteres serão consideradas inseguras
+  if(data.newPassword.length < 8){
+    throw new Error("A nova senha deve ter no mínimo 8 caracteres.");
   }
 
-  const result = UserDAO.changePassword(user, data.newPassword);
+  // Chamando o DAO com 'await' para salvar o resultado
+  const updatedUser = await UserDAO.changePassword(user, data.newPassword);
 
-  if(!result){
-    throw new Error("Erro ao atualizar senha");
-  }
-
-  return result.atualizado_em
+  return updatedUser;
 }
 
 // const serviceListAllUsers = async (req, res) => {
@@ -108,10 +106,22 @@ const serviceFindById = async (id) => {
   return user;
 }
 
+const serviceFindByEmail = async(email) => {  
+  const user = UserDAO.findByEmail(email);
+
+  if(!user){
+    throw new Error("Usuário não encontrado")
+  }
+
+  return user;
+
+}
+
 module.exports = {
   serviceAuthenticateUser,
   serviceInsertUser,
   // serviceListAllUsers,
   serviceFindById,
+  serviceFindByEmail,
   serviceChangePasswordUser
 }

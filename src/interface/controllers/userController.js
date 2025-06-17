@@ -1,4 +1,4 @@
-const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers, serviceFindById, serviceChangePasswordUser} = require("../../application/services/userServices.js"); 
+const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers, serviceFindById, serviceChangePasswordUser, serviceFindByEmail} = require("../../application/services/userServices.js"); 
 const bcrypt = require("bcrypt"); 
 const jwt = require("jsonwebtoken");
 const DatabaseErrors = require("../../utils/databaseErrors.js");
@@ -92,11 +92,21 @@ const getFindById = async (req, res) => {
 
   try{
     const user = await serviceFindById(id)
-    console.log(user);
     
-    res.status(200).json({ user : user })
+    res.status(StatusCode.OK).json({ user : user })
   }catch(err){
     console.error("Erro ao Buscar por ID:", err)
+  }
+}
+
+const getFindByEmail = async(req, res) => {
+  const { email } = req.body;  
+
+  try{
+    const user = await serviceFindByEmail(email);
+    res.status(StatusCode.OK).json({ response: user });
+  }catch(err){
+    console.error("Erro ao Buscar por Email:", err);
   }
 }
 
@@ -107,10 +117,9 @@ const getFindById = async (req, res) => {
     try{
       const response = await serviceChangePasswordUser({userId, currentPassword, newPassword, confirmNewPassword});
 
-      res.status(200).json({ response: response });
+      res.status(StatusCode.OK).json({ response: response });
   }catch(err){
     console.error(err);
-    
   }
 }
 
@@ -119,5 +128,6 @@ module.exports = {
   getListAllUsers,
   getRegisterUser,
   getFindById,
+  getFindByEmail,
   getChangePasswordUser
 }

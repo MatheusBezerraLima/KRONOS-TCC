@@ -38,7 +38,7 @@ class UserDAO {
     async changePassword(user, newPassword){
         const newPasswordHash = await bycript.hash(newPassword, 10);
         user.senha = newPasswordHash;
-        return await user.save()
+        return await user.save();
     }
 }
 
