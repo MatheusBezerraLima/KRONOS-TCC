@@ -34,7 +34,8 @@ const serviceAuthenticateUser = async (data) => {
     // Criando um "corpo" para o token de autenticação
     const payload = {
       id: user.id,
-      email: user.email
+      email: user.email,
+      role: user.role
     }
 
     // Criando o token utilizando o  payload e a chave secreta 
@@ -105,10 +106,22 @@ const serviceFindById = async (id) => {
   return user;
 }
 
+const serviceFindByEmail = async(email) => {  
+  const user = UserDAO.findByEmail(email);
+
+  if(!user){
+    throw new Error("Usuário não encontrado")
+  }
+
+  return user;
+
+}
+
 module.exports = {
   serviceAuthenticateUser,
   serviceInsertUser,
   // serviceListAllUsers,
   serviceFindById,
+  serviceFindByEmail,
   serviceChangePasswordUser
 }
