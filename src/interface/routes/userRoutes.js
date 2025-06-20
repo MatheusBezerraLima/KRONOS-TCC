@@ -25,10 +25,6 @@ routes.post('/register', async (req , res) => {
     await getRegisterUser(req, res);
 })
 
-routes.get('/list', verifyAuthToken, async(req, res) => {
-    await getListAllUsers(req, res)
-})
-
 routes.get('/email', (req, res) => {
     res.sendFile(path.join(__dirname, '../../../public/html/findEmail.html'));
 });
@@ -36,10 +32,6 @@ routes.get('/email', (req, res) => {
 routes.post('/email', validate(findByEmailUserSchema), async(req, res) => {
     await getFindByEmail(req, res);
 });
-
-// routes.get('/:id', async(req, res) => {
-//     await getFindById(req, res);
-// })
 
 routes.get('/change-password', async(req, res) => {
     res.sendFile(path.join(__dirname, '../../../public/html/alterPassword.html'));
