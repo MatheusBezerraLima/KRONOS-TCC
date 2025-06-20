@@ -15,14 +15,19 @@ class UserDAO {
         return await User.findByPk(id);
     }
 
-    async findByAll(){
-        return await User.findByAll();
+    async findAll(){
+        return await User.findAll({
+           attributes: ["id", "nome", "email", "status", "role"],
+           where: {
+            status: "ativo" 
+           }
+        });
     }
 
     async findByName(nome){
         return await User.findByAll({
             nome: nome,
-            ativo: 1
+            status: "ativo"
         })
     }
 
@@ -39,6 +44,16 @@ class UserDAO {
         const newPasswordHash = await bycript.hash(newPassword, 10);
         user.senha = newPasswordHash;
         return await user.save();
+    }
+
+    async update(user, dataToUpdate){
+        await user.set(dataToUpdate);
+        await user.save()
+        return user;
+    }
+
+    async delete(user){
+        return await user.destroy();
     }
 }
 

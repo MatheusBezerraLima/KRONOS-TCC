@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form action="" method="">
+      <input type="email" name="email" />
+      <button type="submit"></button>
+    </form>
+    <% if(users && users.length > 0){ %>
+    <table>
+      <thead>
+        <th>iD</th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Role</th>
+        <th colspan="3">Funções</th>
+      </thead>
+
+      <tbody>
+        <%  users.forEach( user => { %>
+        <tr>
+        <td><%=user.id%></td>
+        <td><%=user.nome%></td>
+        <td><%=user.email%></td>
+        <td><%=user.status%></td>
+        <td><%=user.role%></td>
+        <td><button class="btn-friendly" data-user-id="<%= user.id %>" data-user-name="<%= user.nome %>">Amizade</button></td>
+        <td>
+            <form action="/admin/promote-user/<%= user.id %>" method="get">
+                <button type="submit" class="btn-update" data-user-id="<%= user.id %>" data-user-name="<%= user.nome %>">atualizar</button>
+            </form>
+        </td>
+        <td>
+            <form action="/admin/users/<%= user.id %>?_method=DELETE" method="POST">
+                <button type="submit" class="btn-delete" onclick="return confirm('Tem certeza que deseja deletar o usuário <%= user.nome %>?')">delete</button>
+            </form>
+        </td>
+        </tr>
+        <%})%>
+      </tbody>
+    </table>
+    <%}%>
+
+    <!-- <script>
+      // Seleciona todos os botões de deletar
+      const deleteButtons = document.querySelectorAll(".btn-delete");
+      const updateButtons = document.querySelectorAll(".btn-update");
+    
+      // Adiciona um "ouvinte" de clique para cada botão
+      deleteButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          // Pega o ID e o nome do usuário a partir dos data-attributes
+          const userId = this.dataset.userId;
+          const userName = this.dataset.userName;
+            
+          // 1. Pede confirmação ao admin - ESSENCIAL PARA AÇÕES DESTRUTIVAS
+          const isConfirmed = confirm(
+            `Tem certeza que deseja deletar o usuário "${userName}"? Esta ação não pode ser desfeita.`
+          );
+
+          if (isConfirmed) {
+            // 2. Se confirmado, envia a requisição DELETE usando a API Fetch
+            fetch(`/admin/users/${userId}`, {
+              method: "DELETE",
+            })
+              .then((response) => {
+                // 3. Verifica se a requisição foi bem-sucedida
+                if (response.ok) {
+                  // Se deu certo, recarrega a página para ver a lista atualizada
+                  // ou remove a linha da tabela dinamicamente para uma UX melhor.
+                  alert("Usuário deletado com sucesso!");
+                  window.location.reload(); // Forma mais simples
+                  // this.closest('tr').remove(); // Forma mais avançada (remove a linha da tabela sem recarregar)
+                } else {
+                  // Se o servidor retornou um erro (ex: 403, 500)
+                  alert("Falha ao deletar o usuário.");
+                }
+              })
+              .catch((error) => {
+                // Se houve um erro de rede
+                console.error("Erro de rede:", error);
+                alert("Erro de conexão ao tentar deletar o usuário.");
+              });
+          }
+        });
+      });
+      
+      updateButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const userId = this.dataset.userId;
+            
+            fetch(`/admin/promote-user/${userId}`, {
+                method: "get"
+            });
+            
+        });
+      })
+    </script> -->
+  </body>
+</html>

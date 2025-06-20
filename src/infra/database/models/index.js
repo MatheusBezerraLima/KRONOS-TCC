@@ -17,6 +17,7 @@ const ChatProjectMessage = require("./ChatProjectMessage");
 const PrivateChat = require("./PrivateChat");
 const PrivateMessage = require("./PrivateMessage");
 const  SubTask = require("./SubTask");
+const Friendship = require("./Friendship ");
 
 const  db = {
     sequelize,
@@ -35,7 +36,8 @@ const  db = {
     BoardColumn,
     ChatProjectMessage,
     PrivateChat,
-    PrivateMessage
+    PrivateMessage,
+    Friendship
 }
 
 const applyAssociations = require("./associations");

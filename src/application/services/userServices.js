@@ -74,21 +74,15 @@ const serviceChangePasswordUser = async(data) => {
   return updatedUser;
 }
 
-// const serviceListAllUsers = async (req, res) => {
-//   try {
-//     const con = await connectToDatabase();
-//     const sql = "SELECT * FROM users";
-//     const [rows] = await con.execute(sql);
+const serviceListAllUsers = async () => {
+  const listUsers = await UserDAO.findAll();
 
-//     if(rows.length === 0){
-//       return { content: false, listUsers: []};
-//     }
+  if(!listUsers){
+    throw new Error("nenhum Usuário");
+  }
 
-//     return { content: true, listUsers: rows}
-//   } catch (err) {
-//     throw new Error(err.code);
-//   }
-// };
+  return listUsers;
+}
 
 const serviceFindById = async (id) => {
   const numericId = parseInt(id, 10);
@@ -120,7 +114,7 @@ const serviceFindByEmail = async(email) => {
 module.exports = {
   serviceAuthenticateUser,
   serviceInsertUser,
-  // serviceListAllUsers,
+  serviceListAllUsers,
   serviceFindById,
   serviceFindByEmail,
   serviceChangePasswordUser

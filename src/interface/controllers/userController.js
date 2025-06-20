@@ -65,13 +65,13 @@ const getAuthenticateUser = async (req, res) => {
 const getListAllUsers = async (req, res) => {
 
   try{
-    const {content, listUsers} = await serviceListAllUsers(req, res);
+    const listUsers = await serviceListAllUsers();
 
-    if(!content){
+    if(!listUsers){
       res.status(StatusCode.OK).json({ message: "Nenhum usuário encontrado" });
     }
 
-    res.status(StatusCode.OK).json({ List: listUsers });
+    res.redirect('');
 
   }catch(err){
 
