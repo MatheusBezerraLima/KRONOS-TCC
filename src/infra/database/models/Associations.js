@@ -19,7 +19,8 @@ const applyAssociations = (db) => {
         BoardColumn,
         ChatProjectMessage,
         PrivateChat,
-        PrivateMessage
+        PrivateMessage,
+        Friendship
     }  = db;
 
     // Task --> StatusTask (N:1)
@@ -33,6 +34,20 @@ const applyAssociations = (db) => {
     // Task --> User (N:N); 
     Task.belongsToMany(User, { through: assignmentTask, foreignKey: "tarefa_id", otherKey: "usuario_id"});
     User.belongsToMany(Task, {through: assignmentTask, foreignKey: "usuario_id", otherKey: "tarefa_id"});
+
+    // User --> User (N:N)
+    User.belongsToMany(User , {  as: 'SentRequestsTo', through: Friendship, foreignKey: "requester_id", otherKey: "addressee_id" });
+    User.belongsToMany(User , {  as: 'ReceivedRequestsFrom', through: Friendship, foreignKey: "addressee_id", otherKey: "requester_id" });
+
+    Friendship.belongsTo(User, {
+        as: 'Requester', // Apelido para o usuário que enviou o pedido
+        foreignKey: 'requester_id'
+    });
+    
+    Friendship.belongsTo(User, {
+        as: 'Addressee', // Apelido para o usuário que recebeu o pedido
+        foreignKey: 'addressee_id'
+    });
 
     //  Task -->  Project (N:1)
     Task.belongsTo(Project, { foreignKey: "projeto_id" });

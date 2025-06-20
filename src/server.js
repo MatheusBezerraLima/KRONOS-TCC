@@ -3,19 +3,40 @@ const app = require('./config/express')();
 const path = require('path');
 const { sequelize } = require('./infra/database/models');
 const userRoutes = require('./interface/routes/userRoutes');
+const adminRoutes = require('./interface/routes/adminRoutes');
+const { createServer } = require('node:http');
+const { Server } = require("socket.io");
 
-app.use('/user', userRoutes);
 
-app.get('/', (req, res) => {
-    console.log('API rodando!!');
+app.use('/user', userRoutes);   
+app.use('/admin', adminRoutes)
+
+const server = createServer(app);
+const io = new Server(server, {
+    // Recurso para armazenar temporariamente os eventos enviados pelo servidor.
+    connectionStateRecovery: {}
 });
 
-app.listen(3333, async() => {
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/html/index.html'));
+});
+
+// Log para conecão de um novo usuário 
+io.on("connection", (socket) => {
+    console.log("Usuário logado, ID:", socket.id);
+
+    // Log para desconecção 
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
+
+server.listen(3333, async() => {
     try{
         await sequelize.authenticate();
         console.log('Conectado com o banco!!');
 
-        // await sequelize.sync({ force: true });
+        // await sequelize.sync({ alter: true });
         // console.log('Tabelas sincronizadas com sucesso!');
     }catch(error){
         console.error('Erro ao conectar ou sincronizar com o banco', error);
