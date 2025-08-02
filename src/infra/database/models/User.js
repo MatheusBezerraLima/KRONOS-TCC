@@ -8,6 +8,21 @@ const User = sequelize.define('User', {
         autoIncrement: true,
         primaryKey: true
     },
+    googleId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+    },
+    githubId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+    },
+    linkedinId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+    },
     nome: {
        type: DataTypes.STRING,
         allowNull: false
@@ -35,14 +50,6 @@ const User = sequelize.define('User', {
     telefone: {                         
         type: DataTypes.STRING,
         allowNull: true,
-    },
-    data_nascimento: {
-           type: DataTypes.DATE,
-        allowNull: true,
-    },
-    genero: {
-        type: DataTypes.ENUM('masculino','feminino','outro'),
-        allowNull: true
     },
     status: {
         type: DataTypes.ENUM("Ativo", "Inativo"),
