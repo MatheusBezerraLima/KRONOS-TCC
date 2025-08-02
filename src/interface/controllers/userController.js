@@ -6,13 +6,13 @@ const StatusCode = require("../../utils/status-code.js");
 
 
 const getRegisterUser = async (req, res) => {
-  const { nome, email, senha, telefone, data_nascimento, genero} = req.body;
+  const { nome, email, senha, telefone } = req.body;
 
   // criptografando a senha com o salt = 10
   const senhaHash = await bcrypt.hash(senha, 10);
 
   try{
-    const userId = await serviceInsertUser({ nome, email, senha: senhaHash, telefone, data_nascimento, genero});
+    const userId = await serviceInsertUser({ nome, email, senha: senhaHash, telefone});
     res.status(StatusCode.CREATED).json({ message: "Sucesso ao inserir usuário" });
 
   }catch(err){

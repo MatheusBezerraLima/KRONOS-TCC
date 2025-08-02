@@ -40,5 +40,5 @@ routes.get('/change-password', async(req, res) => {
 routes.post('/change-password', verifyAuthToken, async(req, res) => {
     await getChangePasswordUser(req, res);
 });
- 
+
 module.exports = routes;

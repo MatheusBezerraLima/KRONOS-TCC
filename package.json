@@ -17,6 +17,7 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
+    "google-auth-library": "^10.1.0",
     "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "mysql": "^2.18.1",
@@ -24,5 +25,8 @@
     "sequelize": "^6.37.7",
     "socket.io": "^4.8.1",
     "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.3"
   }
 }
