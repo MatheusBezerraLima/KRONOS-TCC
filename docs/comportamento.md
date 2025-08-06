@@ -15,3 +15,5 @@
 res.clearCookie("authToken");
 res.status(200).json({ message: "Logout realizado com sucesso" });
 ```
+
+Hello world
