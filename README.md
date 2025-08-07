@@ -1,4 +1,4 @@
-**KRONOS - Gerenciador de Projetos Acadêmicos**
+***KRONOS - Gerenciador de Projetos Acadêmicos***
 
 🟩 Sobre o Projeto
 KRONOS é uma plataforma web desenvolvida para auxiliar estudantes a superarem a sobrecarga e a desorganização em suas rotinas. O objetivo é centralizar a gestão de tarefas, projetos e prazos acadêmicos em um ambiente acessível, intuitivo e que promova a comunicação e a transparência entre equipes.
