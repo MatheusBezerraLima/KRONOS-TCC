@@ -6,10 +6,12 @@ const userRoutes = require('./interface/routes/userRoutes');
 const adminRoutes = require('./interface/routes/adminRoutes');
 const { createServer } = require('node:http');
 const { Server } = require("socket.io");
+const taskRoutes = require('./interface/routes/taskRoutes');
 
 
 app.use('/user', userRoutes);   
 app.use('/admin', adminRoutes)
+app.use('/tasks', taskRoutes);
 
 const server = createServer(app);
 const io = new Server(server, {
