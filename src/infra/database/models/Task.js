@@ -24,7 +24,7 @@ const Task = sequelize.define("Task", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    status: {
+    status_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -32,7 +32,7 @@ const Task = sequelize.define("Task", {
             key: "id"
         }
     },
-    categoria: {
+    categoria_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
@@ -44,14 +44,6 @@ const Task = sequelize.define("Task", {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: "Média"    
-    },
-    coluna_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: "coluna_board",
-            key: "id"
-        }
     },
     criado_em: {
         type: DataTypes.DATE,

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarefas</title>
+</head>
+<body>
+   <form action="/tasks/" method="post">
+    <div>
+        <label for="titulo">Titulo:</label>
+        <input type="text" id="titulo" name="titulo" required>
+    </div>
+    <div>
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao"></textarea>
+    </div>
+
+    <div>
+        <label for="categoria">Categoria:</label>
+        <select id="categoria" name="categoria_id"> <option value="">Selecione uma categoria</option>
+            <% categorias.forEach(categoria => { %>
+                <option value="<%= categoria.id %>"><%= categoria.nome %></option>
+            <% }); %>
+        </select>
+    </div>
+    
+    <div>
+        <label for="status">Status:</label>
+        <select id="status" name="status_id"> <option value="">Selecione um status</option>
+            <% statusDisponiveis.forEach(status => { %>
+                <option value="<%= status.id %>"><%= status.nome %></option>
+            <% }); %>
+        </select>
+    </div>
+
+    <div>
+        <label for="prioridade">Prioridade:</label>
+        <select id="prioridade" name="prioridade">
+            <option value="Baixa">Baixa</option>
+            <option value="Média" selected>Média</option>
+            <option value="Alta">Alta</option>
+        </select>
+    </div>
+
+    <input type="submit" value="Criar Tarefa">
+</form>
+</body>
+</html>

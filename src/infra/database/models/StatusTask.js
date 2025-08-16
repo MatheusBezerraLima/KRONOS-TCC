@@ -10,6 +10,18 @@ const StatusTask = sequelize.define("StatusTask", {
     nome: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    projeto_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: "projeto",
+            key: "id"
+        },
+    },
+    ordem: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
     }
 }, {
     tableName: "status_tarefa",
