@@ -1,10 +1,11 @@
 const express = require('express');
 const routes = express.Router();
+const verifyAuthToken = require('../middlewares/authenticateToken');
 const tasksController = require('../controllers/tasksController');
 
 // Renderização
-routes.get('/', async(req,res) => {
-    await tasksController.listTasks(req, res);
+routes.get('/', verifyAuthToken, async(req,res) => {
+    await tasksController.listGeneralTasks(req, res);
 });
 
 routes.post('/', async(req, res) => {
@@ -18,3 +19,5 @@ routes.put('/:id', async(req, res) => {
 routes.patch('/:id/delete', async(req, res) => {
     await tasksController.deleteTask(req, res);
 })
+
+module.exports = routes;

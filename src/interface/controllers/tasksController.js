@@ -1,12 +1,23 @@
-
+const taskServices = require('../../application/services/tasksServices');
 
 class TasksController{
 
-    async listTasks(req, res){
-
+    async listGeneralTasks(req, res){
+        try{
+            const tasksByCat = await taskServices.listAndGroupGeneralTasks();
+            console.log(tasksByCat);
+        }catch(err){
+            console.log("erro na listagem de tarefas");
+        }
     }
 
     async createTask(req, res){
+        try{
+            const dataForm = req.body;
+
+        }catch(err){
+            console.log("Erro a criar tarefa");
+        }     
 
     }
 
