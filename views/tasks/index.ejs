@@ -6,6 +6,18 @@
     <title>Tarefas</title>
 </head>
 <body>
+    <% if(generalTasks && generalTasks.length > 0){ %>
+        <% generalTasks.forEach(task => { %>
+            <div>
+                <h2>Titulo: <%=task.titulo %></h2>
+                <p>Descrição: <%=task.descricao %></p>
+                <ul>
+                    <li>Categoria: <%=task.categoria %></li>
+                    <li>Status: <%=task.status %></li>
+                </ul>
+            </div>
+        <% })%>
+    <%}%>
    <form action="/tasks/" method="post">
     <div>
         <label for="titulo">Titulo:</label>
@@ -19,18 +31,18 @@
     <div>
         <label for="categoria">Categoria:</label>
         <select id="categoria" name="categoria_id"> <option value="">Selecione uma categoria</option>
-            <% categorias.forEach(categoria => { %>
-                <option value="<%= categoria.id %>"><%= categoria.nome %></option>
-            <% }); %>
+            <% allCategories.forEach(categoria => { %>
+                <option value="<%=categoria.id %>"><%=categoria.nome %></option>
+            <% }) %>
         </select>
     </div>
     
     <div>
         <label for="status">Status:</label>
         <select id="status" name="status_id"> <option value="">Selecione um status</option>
-            <% statusDisponiveis.forEach(status => { %>
-                <option value="<%= status.id %>"><%= status.nome %></option>
-            <% }); %>
+            <% allStatus.forEach(status => { %>
+                <option value="<%=status.id %>"><%=status.nome %></option>
+            <% }) %>
         </select>
     </div>
 
