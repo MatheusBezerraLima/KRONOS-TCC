@@ -2,12 +2,12 @@ const taskServices = require('../../application/services/tasksServices');
 
 class TasksController{
 
-    async listGeneralTasks(req, res){
+    async prepareTasksPageData(req, res){
         try{
-            const tasksByCat = await taskServices.listAndGroupGeneralTasks();
-            console.log(tasksByCat);
+            const {groupedTasks, allCategories, allStatus} = await taskServices.prepareTasksPageData();
+            res.render('tasks/index', {generalTasks: groupedTasks, allCategories: allCategories, allStatus: allStatus});
         }catch(err){
-            console.log("erro na listagem de tarefas");
+            console.log("erro na listagem de tarefas", err);
         }
     }
 
@@ -15,6 +15,7 @@ class TasksController{
         try{
             const dataForm = req.body;
 
+            
         }catch(err){
             console.log("Erro a criar tarefa");
         }     

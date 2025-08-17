@@ -37,7 +37,7 @@ routes.get('/change-password', async(req, res) => {
     res.sendFile(path.join(__dirname, '../../../public/html/alterPassword.html'));
 });
 
-routes.post('/change-password', cc, async(req, res) => {
+routes.post('/change-password', verifyAuthToken, async(req, res) => {
     await getChangePasswordUser(req, res);
 });
 

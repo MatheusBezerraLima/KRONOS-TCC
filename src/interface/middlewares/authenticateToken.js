@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const StatusCode = require('../../utils/status-code');
 
 const verifyAuthToken = async(req, res, next) => {
   // capturando o token do cookie

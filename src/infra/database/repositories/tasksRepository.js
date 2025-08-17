@@ -4,7 +4,7 @@ class TasksDAO{
     async findAllGeneralTasks(){
         return await Task.findAll({
             where: {
-                projeto_id: { [Op.is]: null}
+                projeto_id: null
             },
             include: [{
                 model: CategoryTask,

@@ -45,6 +45,14 @@ const Task = sequelize.define("Task", {
         allowNull: false,
         defaultValue: "Média"    
     },
+    criador: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: "usuario",
+            key: "id"
+        }
+    },
     criado_em: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
