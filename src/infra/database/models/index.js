@@ -11,7 +11,7 @@ const Notificacao = require("./Notificacao");
 const ProfileUser = require("./ProfileUser");
 const Project = require("./Project");
 const UserProjectRole = require("./UserProjectRole");
-const assignmentTask = require("./assignmentTask");
+const assignmentTask = require("./AssignmentTask");
 const BoardColumn = require("./BoardColumn");
 const ChatProjectMessage = require("./ChatProjectMessage");
 const PrivateChat = require("./PrivateChat");
@@ -40,7 +40,7 @@ const  db = {
     Friendship
 }
 
-const applyAssociations = require("./associations");
+const applyAssociations = require("./Associations");
 applyAssociations(db); // Definindo as relações
 
 module.exports  = db;
