@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # Serviço da aplicação Node.js
+  app:
+    build: . #Controi a imagem a partir do Dockerfile da pasta atual.
+    container_name: kronos-app
+    restart: unless-stopped
+    ports:
+      - "3333:3333" #Porta do host - Porta do container
+    environment:
+      # Variáveis do meu .env
+      - DB_HOST=db # IMPORTANTE: O host é o nome do serviço do banco!
+      - DB_NAME=kronos_db
+      - DB_USER=root
+      - DB_PASSWORD=06030312
+      - PORT=3333
+      - SECRET=a8f9!sdh3$$Fje8d$$bd&Fj^1w32Wz*
+      - GOOGLE_SECRET_KEY=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
+      - GOOGLE_CLIENT_ID=379521108672-jk6vqonhl95510kmbrdfqjqphiimlu8m.apps.googleusercontent.com
+      - GITHUB_SECRET_KEY=4424b15917c2750a0e91520254550b7bda9ff56c
+      - GITHUB_CLIENT_ID=Ov23livE20VhiKhRKSrR
+    depends_on:
+      - db # Garantindo que o container do banco inicie antes do da minha aplicação
+
+  # Serviços do Banco de Dados MySQL   
+  db:
+    image: mysql:8.0
+    container_name: kronos-db
+    restart: unless-stopped
+    environment:
+      # Essas variáveis são usadas pela imagem do MySQL para a inicialização.
+      MYSQL_DATABASE: kronos_db
+      MYSQL_ROOT_PASSWORD: "06030312"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  # Declaração do volume nomeado que será gerenciado pelo Docker.
+volumes:
+  mysql-data:

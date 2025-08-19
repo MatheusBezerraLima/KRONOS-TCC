@@ -33,7 +33,7 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(3333, async() => {
+server.listen(3000, async() => {
     try{
         await sequelize.authenticate();
         console.log('Conectado com o banco!!');
