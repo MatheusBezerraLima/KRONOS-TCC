@@ -1,4 +1,7 @@
-FROM node:latest 
+FROM node:20.17.0 
+
+# Instala o utilitário dos2unix para corrigir quebras de linha
+RUN apt-get update && apt-get install -y dos2unix
 
 # Diretório de trabalho dentro do container
 WORKDIR /usr/src/app
@@ -11,6 +14,9 @@ RUN npm install
 
 # Copiando o restante dos arquivos para o containder
 COPY . .
+
+# Converte o arquivo de entrypoint para o formato Unix (LF)
+RUN dos2unix /usr/src/app/entrypoint.sh
 
 # Dando permissão de execução para o script de entrypoint.
 RUN chmod +x /usr/src/app/entrypoint.sh

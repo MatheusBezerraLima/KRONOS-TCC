@@ -1,4 +1,4 @@
-const { Task, CategoryTask } = require('../models');
+const { Task, CategoryTask, StatusTask } = require('../models');
 
 class TasksDAO{
     async findAllGeneralTasks(){
@@ -6,9 +6,14 @@ class TasksDAO{
             where: {
                 projeto_id: null
             },
-            include: [{
-                model: CategoryTask,
-            }]
+            include: [
+                {
+                    model: CategoryTask, 
+                },
+                {
+                    model: StatusTask,
+                }
+            ]
         });
     };
 }

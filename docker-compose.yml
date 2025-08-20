@@ -22,6 +22,13 @@ services:
       - GITHUB_CLIENT_ID=Ov23livE20VhiKhRKSrR
     depends_on:
       - db # Garantindo que o container do banco inicie antes do da minha aplicação
+    volumes:
+      # Mapeia a pasta atual (.) local para /usr/src/app no container
+      - .:/usr/src/app
+      # Isso evita conflitos de sistema operacional (Windows vs. Linux).
+      - /usr/src/app/node_modules
+
+    command: /bin/sh -c "dos2unix /usr/src/app/entrypoint.sh && /usr/src/app/entrypoint.sh"
 
   # Serviços do Banco de Dados MySQL   
   db:
@@ -33,7 +40,7 @@ services:
       MYSQL_DATABASE: kronos_db
       MYSQL_ROOT_PASSWORD: "06030312"
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
 

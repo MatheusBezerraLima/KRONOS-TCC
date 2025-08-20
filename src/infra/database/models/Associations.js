@@ -24,16 +24,16 @@ const applyAssociations = (db) => {
     }  = db;
 
     // Task --> StatusTask (N:1)
-    Task.belongsTo(StatusTask, { foreignKey: "status" });
-    StatusTask.hasMany(Task, { foreignKey: "status" });
+    Task.belongsTo(StatusTask, { foreignKey: "status_id" });
+    StatusTask.hasMany(Task, { foreignKey: "status_id" });
 
     // Task - User 
     Task.belongsTo(User, { foreignKey: "criador"});
     User.hasMany(Task, { foreignKey: "criador"});
 
     // Task --> CategoryTask (N:1)
-    Task.belongsTo(CategoryTask, { foreignKey: "categoria" });
-    CategoryTask.hasMany(Task, { foreignKey: "categoria" });
+    Task.belongsTo(CategoryTask, { foreignKey: "categoria_id" });
+    CategoryTask.hasMany(Task, { foreignKey: "categoria_id" });
 
     // Task --> User (N:N); 
     Task.belongsToMany(User, { through: assignmentTask, foreignKey: "tarefa_id", otherKey: "usuario_id"});

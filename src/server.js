@@ -8,6 +8,7 @@ const { createServer } = require('node:http');
 const { Server } = require("socket.io");
 const taskRoutes = require('./interface/routes/taskRoutes');
 
+const PORT = process.env.PORT || 3000;
 
 app.use('/user', userRoutes);   
 app.use('/admin', adminRoutes)
@@ -33,13 +34,12 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(3000, async() => {
+server.listen(PORT, '0.0.0.0', async() => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+    
     try{
         await sequelize.authenticate();
         console.log('Conectado com o banco!!');
-
-        // await sequelize.sync({ alter: true });
-        // console.log('Tabelas sincronizadas com sucesso!');
     }catch(error){
         console.error('Erro ao conectar ou sincronizar com o banco', error);
     }

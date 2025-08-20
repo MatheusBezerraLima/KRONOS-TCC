@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --env-file=.env src/server.js",
-    "watch": "node --watch  --env-file=.env src/server.js",
-    "makemigrations": "npx sequelize-mg -m"
+    "start:watch": "node --watch  --env-file=.env src/server.js"
   },
   "keywords": [],
   "author": "",
