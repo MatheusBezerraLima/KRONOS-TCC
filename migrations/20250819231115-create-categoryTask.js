@@ -12,6 +12,14 @@ module.exports = {
       nome: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      usuario_id:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "usuario",
+          key: "id"
+        }
       }
     });
   },

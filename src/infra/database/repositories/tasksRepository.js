@@ -1,10 +1,11 @@
 const { Task, CategoryTask, StatusTask } = require('../models');
 
 class TasksDAO{
-    async findAllGeneralTasks(){
+    async findAllGeneralTasks(userId){
         return await Task.findAll({
             where: {
-                projeto_id: null
+                projeto_id: null,
+                criador_id: userId
             },
             include: [
                 {
@@ -16,6 +17,10 @@ class TasksDAO{
             ]
         });
     };
+
+    async createNewTask(data){
+        return await Task.create(data);
+    }
 }
 
 module.exports = new TasksDAO();

@@ -46,7 +46,7 @@ module.exports = {
         allowNull: false,
         defaultValue: "Média"
       },
-      criador: {
+      criador_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

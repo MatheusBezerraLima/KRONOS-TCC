@@ -24,8 +24,15 @@ module.exports = {
       ordem: {
         type: Sequelize.INTEGER,
         defaultValue: 0
-      }
-    });
+      },
+       usuario_id:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "usuario",
+          key: "id"
+        }
+    }});
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('status_tarefa');

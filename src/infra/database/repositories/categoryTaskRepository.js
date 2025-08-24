@@ -1,8 +1,12 @@
 const { CategoryTask } = require('../models/index');
 
 class CategoryTaskDAO{
-    async findAllCategories(){
-        return await CategoryTask.findAll();
+    async findAllCategories(userId){
+        return await CategoryTask.findAll({
+            where: {
+                usuario_id: userId
+            }
+        });
     }
 }
 

@@ -10,6 +10,14 @@ const CategoryTask = sequelize.define("CategoryTask", {
     nome: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    usuario_id:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "usuario",
+          key: "id"
+        }
     }
 }, {
     tableName: "categoria_tarefa",

@@ -45,7 +45,7 @@ const Task = sequelize.define("Task", {
         allowNull: false,
         defaultValue: "Média"    
     },
-    criador: {
+    criador_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

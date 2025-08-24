@@ -6,18 +6,33 @@
     <title>Tarefas</title>
 </head>
 <body>
-    <% if(generalTasks && generalTasks.length > 0){ %>
-        <% generalTasks.forEach(task => { %>
-            <div>
-                <h2>Titulo: <%=task.titulo %></h2>
-                <p>Descrição: <%=task.descricao %></p>
-                <ul>
-                    <li>Categoria: <%=task.categoria %></li>
-                    <li>Status: <%=task.status %></li>
-                </ul>
-            </div>
-        <% })%>
-    <%}%>
+    <% const categoryNames = Object.keys(generalTasks); %>
+    <% if (categoryNames.length > 0) { %>
+        <% categoryNames.forEach(categoryName => { %>
+
+        <div class="category-column" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
+            
+            <h2><%= categoryName %></h2> <% generalTasks[categoryName].forEach(task => { %>
+            
+                <div class="task-card" style="border: 1px solid #eee; padding: 10px; margin-top: 10px;">
+                    <h3><%= task.titulo %></h3>
+                    <p>Descrição: <%= task.descricao %></p>
+                    <ul>
+                        <li>Status: <%= task.StatusTask ? task.StatusTask.nome : 'Sem Status' %></li>
+                        <li>Prioridade: <%= task.prioridade %></li>
+                    </ul>
+                </div>
+
+            <% }); %>
+
+        </div>
+
+    <% }); %>
+
+<% } else { %>
+    <p>Nenhuma tarefa para exibir.</p>
+<% } %>
+
    <form action="/tasks/" method="post">
     <div>
         <label for="titulo">Titulo:</label>

@@ -11,6 +11,14 @@ const StatusTask = sequelize.define("StatusTask", {
         type: DataTypes.STRING,
         allowNull: false
     },
+    usuario_id:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "usuario",
+          key: "id"
+        }
+    },
     projeto_id: {
         type: DataTypes.INTEGER,
         allowNull: true,

@@ -4,7 +4,8 @@ class TasksController{
 
     async prepareTasksPageData(req, res){
         try{
-            const {groupedTasks, allCategories, allStatus} = await taskServices.prepareTasksPageData();
+            const userId = req.user.id            
+            const {groupedTasks, allCategories, allStatus} = await taskServices.prepareTasksPageData(userId);            
             res.render('tasks/index', {generalTasks: groupedTasks, allCategories: allCategories, allStatus: allStatus});
         }catch(err){
             console.log("erro na listagem de tarefas", err);
@@ -14,10 +15,16 @@ class TasksController{
     async createTask(req, res){
         try{
             const dataForm = req.body;
-
+            dataForm.criador_id = req.user.id
+            console.log(dataForm);
             
+            // Chamar o serviço de criação aqui - ANTES VERIFICAR SE TODOS OS DADOS NECESSÁRIOS ESTÃO SENDO ENVIADOS
+            const taskCreated = await taskServices.createTask(dataForm);
+             
+            res.redirect('/tasks');
+
         }catch(err){
-            console.log("Erro a criar tarefa");
+            console.log("Erro:", err);
         }     
 
     }

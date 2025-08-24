@@ -8,7 +8,7 @@ class UserDAO {
             role: "user",
             status: "ativo"     
         } 
-        return User.create(userData);
+        return await User.create(userData);
     }
 
     async findById(id) {

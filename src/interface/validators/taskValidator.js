@@ -1,7 +1,6 @@
 const { z } = require('zod');
 
 const createTaskSchema = z.object({
-    body: z.object({
         // Titulo
         titulo: z.string({ 
             required_error: "O título é obrigatório.", 
@@ -25,8 +24,7 @@ const createTaskSchema = z.object({
         .optional(),
 
         // Categoria (categoria_id)
-        categoria_id: z
-        .number({
+        categoria_id: z.coerce.number({
             invalid_type_error: 'O ID da categoria deve ser um número.',
         })
         .int()
@@ -35,8 +33,7 @@ const createTaskSchema = z.object({
         .nullable(),
 
         // Status (status_id)
-        status_id: z
-        .number({
+        status_id: z.coerce.number({
             invalid_type_error: 'O ID do status deve ser um número.',
         })
         .int()
@@ -45,8 +42,7 @@ const createTaskSchema = z.object({
         .nullable(),
 
         // Projeto (projeto_id)
-        projeto_id: z
-        .number({
+        projeto_id: z.coerce.number({
             invalid_type_error: 'O ID do projeto deve ser um número.',
         })
         .int()
@@ -56,18 +52,15 @@ const createTaskSchema = z.object({
 
         // Usuários Atribuídos (assignment)
         // array de IDs de usuário
-        usuarios_atribuidos: z
-        .array(
-            z.number({
-            invalid_type_error: 'Cada ID de usuário deve ser um número.',
-            }).int().positive(),
-            {
-            invalid_type_error: 'A lista de usuários atribuídos deve ser um array de números.',
-            }
-        )
-        .optional(),
-    })
-    
-});
+        // usuarios_atribuidos: z.array(
+        //     z.number({
+        //     invalid_type_error: 'Cada ID de usuário deve ser um número.',
+        //     }).int().positive(),
+        //     {
+        //     invalid_type_error: 'A lista de usuários atribuídos deve ser um array de números.',
+        //     }
+        // )
+        // .optional(),
+    });
 
 module.exports = createTaskSchema;

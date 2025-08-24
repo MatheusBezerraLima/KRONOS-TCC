@@ -28,8 +28,8 @@ const applyAssociations = (db) => {
     StatusTask.hasMany(Task, { foreignKey: "status_id" });
 
     // Task - User 
-    Task.belongsTo(User, { foreignKey: "criador"});
-    User.hasMany(Task, { foreignKey: "criador"});
+    Task.belongsTo(User, { foreignKey: "criador_id"});
+    User.hasMany(Task, { foreignKey: "criador_id"});
 
     // Task --> CategoryTask (N:1)
     Task.belongsTo(CategoryTask, { foreignKey: "categoria_id" });

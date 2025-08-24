@@ -1,16 +1,30 @@
 const categoryTaskDAO = require('../../infra/database/repositories/categoryTaskRepository');
 const tasksDAO = require('../../infra/database/repositories/tasksRepository');
 const statusTaskDAO = require('../../infra/database/repositories/statusTaskRepository');
+const userDAO = require("../../infra/database/repositories/userRepository");
 
 class TaskServices{
-    async prepareTasksPageData(){
+    async prepareTasksPageData(userId){
+
+        if(!userId){
+            throw new Error("Id do usuário inconsistente");
+        }
+
+        const loggedUser = await userDAO.findById(userId);
+
+        if(!loggedUser){
+            throw new Error("Necessário autenticação");
+        }
+
         // Buscando no banco todos os dados necessarios
-        const [generalTasks, allCategories, allStatus] = await Promise.all([
-            tasksDAO.findAllGeneralTasks(),
-            categoryTaskDAO.findAllCategories(),
+        const [generalTasksInstances, allCategories, allStatus] = await Promise.all([
+            tasksDAO.findAllGeneralTasks(userId),
+            categoryTaskDAO.findAllCategories(userId),
             statusTaskDAO.findAllStatusTask()
         ]);
-
+        
+        const generalTasks = generalTasksInstances.map(instance => instance.get({ plain: true }));
+        
         // Chamando uma função privada para organizar as tarefas por cateorias
         const groupedTasks = this._groupTasksByCategory(generalTasks);
 
@@ -35,6 +49,47 @@ class TaskServices{
             return acc;
         }, {});
     }
+
+    async createTask(data){
+        // --- Regra de Autorização --
+        if(!data.criador_id){
+            throw new Error("Sem usuário vinculado! Realize login novamente!");
+        }
+
+        const loggedUser = await userDAO.findById(data.criador_id);
+
+        if(!loggedUser){
+            throw new Error("Usuário sem permissão!");
+        }
+
+        // Verificando se a tarefa é de um projeto ou individual7
+        // Trabalhar nessa verificação posteriormente
+        if(data.projeto_id){
+            const response = this._createTaskOfProject(data);
+
+            if(!response){
+                throw new Error('Erro ao criar tarefa para o projeto');
+            }
+
+            return response;
+        }
+
+        const taskCreated = await tasksDAO.createNewTask(data);
+
+        if(!taskCreated){
+            throw new Error("Erro ao criar tarefa!");
+        }
+
+        return taskCreated;
+
+        // --- Regra de Integridade --
+    }
+
+    // _createIndividualTask(dataTask){
+
+    // }
+
+    _createTaskOfProject(){}
 
 }
 
