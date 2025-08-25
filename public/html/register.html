@@ -5,46 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro | Usuário</title>
     <link rel="stylesheet" href="/public/css/register.css">
+    <script src="/public/javascript/registerLogin.js" defer></script> 
   </head>
   <body>
     <main>
-        <div class="formularioImagem">
-          <div class="imagem">
-            <img src="/public/images/QUEEN EVE.jpg" alt="">
+      <div class="card cadastroActive">
+        <div class="esquerdaLogin">
+          
+          <div class="formLogin">
+            <p class="titulo">Faça o Login</p>
+            <form action="" method="POST">
+              <input type="email" id="email" name="email" required placeholder="Email"/>
+
+              <input type="password" id="senha" name="senha" required minlength="6" placeholder="Senha" />
+
+              <input type="submit" value="Faça o Login"></input>
+
+            </form>
+          </div> <!-- formLogin -->
+
+          <div class="facaLogin">
+            <h2>Já tem um conta?</h2>
+            <br>
+            <button class="loginButton">Faça o login</button>
           </div>
-        </div> 
 
-        <div class="formularioInfo">
-          <p class = "titulo">Cadastrar-se</p>
-          <form action="/user/register" method="post">
-            <label for="nome">Nome completo</label>
-            <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo" />
+        <div class="direitaCadastro">
+          
+          <div class="formCadastro">
+            <p class = "titulo">Cadastrar-se</p>
+            <form action="/user/register" method="post">
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required placeholder="Digite seu email"/>
+              <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo" />
 
-            <label for="senha">Senha</label>
-            <input type="password" id="senha" name="senha" required minlength="6" placeholder="Digite sua senha" />
+              <input type="email" id="email" name="email" required placeholder="Digite seu email"/>
 
-            <label for="telefone">Telefone</label>
-            <input type="tel" id="telefone" name="telefone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Digite seu telefoneg"/>
+              <input type="password" id="senha" name="senha" required minlength="6" placeholder="Digite sua senha" />
 
-            <div class="termos">
-              <input type="checkbox">
-              <p class="termosTxt">Eu concordo com os <a href="">termos e condiçoes</a></p>
-            </div>
-              
-            <button type="submit">Cadastrar</button>
-          </form>
+              <input type="tel" id="telefone" name="telefone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Digite seu telefoneg"/>
 
-          <p class="ou">ou</p>
-          <div class="redesLogin">
-            <img src="/public/images/icons8-google-logo-48.png" alt="Google">
-            <img src="/public/images/icons8-github-48.png" alt="Google">
-            <img src="/public/images/icons8-linkedin-48.png" alt="Google">
+              <div class="termos">
+                <input type="checkbox">
+                <p class="termosTxt">Eu concordo com os <a href="">termos e condiçoes</a></p>
+              </div>
+                
+              <input type="submit" value="Cadastre-se"></input>
+            </form>
 
+            <p class="ou">ou</p>
+            <div class="redesLogin">
+              <img src="/public/images/icons8-google-logo-48.png" alt="Google">
+              <img src="/public/images/icons8-github-48.png" alt="Google">
+              <img src="/public/images/icons8-linkedin-48.png" alt="Google">
+            </div> <!-- redesLogin -->
+          </div> <!-- formCadastro-->
+
+          <div class="facaCadastro">
+             <h2>Nao tem uma conta?</h2>
+            <br>
+            <button class="cadastroButton">Faça o cadastro</button>
           </div>
-        </div>
+        </div> <!-- direiraCadastro -->
+      </div> <!-- card -->
     </main>
   </body>
 </html>
