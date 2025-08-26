@@ -19,7 +19,7 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 70%;
+    width: 60%;
     height: 85vh;
     background-color: #F5F5F5;
     border-radius: 32px;
@@ -43,6 +43,20 @@ main{
     align-items: center;
     flex-direction: column;
 }
+
+.facaLogin, .facaCadastro{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color:#FFFF;
+
+    .titulo-facaLogin/registrar{
+        color:#FFFF;
+        font-size:310px;
+    }
+
+}
+
 .titulo{
     font-size:30px;
     align-self: center;
@@ -57,7 +71,8 @@ form{
     
         input{
             display: flex;
-            padding: 10px 20px;
+            padding: 10px 22px;
+            width:280px;
             border-radius:8px;
             border: 1px solid rgba(128, 128, 128, 0.655);
         }
@@ -121,6 +136,24 @@ button{
     width:30px;
 }
 
+/* background móvel */
+
+ .card::after{
+    background-image: url(/public/images/imagem.png);
+    width: 100%; 
+    height: 100%;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    border-top-left-radius: 32px;
+    border-bottom-left-radius: 32px;
+     border-top-right-radius: 32px;
+    border-bottom-right-radius: 32px;
+} 
 
 
 /* Login Active */
@@ -187,21 +220,6 @@ button{
     transition: all .5s .1s;
     opacity: 1;
 }
-
-/* background móvel */
-
- .card::after{
-    background-image: url(/public/images/QUEEN\ EVE.jpg);
-    width: 100%;
-    height: 100%;
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-size: cover;
-    background-position: center;
-    z-index: 0;
-} 
 
 /* Transitions */
 
