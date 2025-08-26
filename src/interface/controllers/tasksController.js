@@ -34,7 +34,13 @@ class TasksController{
     }
 
     async deleteTask(req, res){
-        
+        try{
+            const { taskId } = req.params
+
+            console.log(taskId);            
+        }catch(err){
+            
+        }
     }
 }
 
