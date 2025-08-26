@@ -85,9 +85,34 @@ class TaskServices{
         // --- Regra de Integridade --
     }
 
-    // _createIndividualTask(dataTask){
+    async deleteTask(taskId, userId){
+        if(!userId || !taskId){
+            throw new Error("Erro ao indentificar usuário ou tarefa!");
+        }
+        console.log("2");
 
-    // }
+        // const task = await tasksDAO.findById(taskId);
+        const [ user, task ] = await Promise.all([
+            userDAO.findById(userId),
+            tasksDAO.findById(taskId)
+        ]);
+        
+        if(!user){
+            throw new Error("Usuário inexistente!");
+        }
+
+        if(!task){
+            throw new Error('Tarefa inexistente');
+        }
+
+        if(task.criador_id != userId){
+            throw new Error("Somente o criador da tarefa pode apaga-la");
+        }
+
+        await tasksDAO.deleteTask(task);
+
+        return;
+    }
 
     _createTaskOfProject(){}
 

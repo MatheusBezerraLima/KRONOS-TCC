@@ -22,7 +22,6 @@ class TasksController{
             const taskCreated = await taskServices.createTask(dataForm);
              
             res.redirect('/tasks');
-
         }catch(err){
             console.log("Erro:", err);
         }     
@@ -35,9 +34,14 @@ class TasksController{
 
     async deleteTask(req, res){
         try{
-            const { taskId } = req.params
+            const { id } = req.params
+            console.log("1");
+            
+            await taskServices.deleteTask(id, 1);
+            
+            console.log("tarefa apagada!");
+            res.json({ response: "Tarefa apagada!!"})    
 
-            console.log(taskId);            
         }catch(err){
             
         }

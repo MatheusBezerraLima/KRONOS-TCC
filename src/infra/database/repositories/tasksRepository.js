@@ -20,6 +20,14 @@ class TasksDAO{
 
     async createNewTask(data){
         return await Task.create(data);
+    };
+
+    async findById(taskId){
+        return await Task.findByPk(taskId);
+    }
+
+    async deleteTask(task){
+        return await task.destroy();
     }
 }
 
