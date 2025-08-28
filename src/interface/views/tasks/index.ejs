@@ -22,9 +22,10 @@
                         <li>Prioridade: <%= task.prioridade %></li>
                     </ul>
                 </div>
-
+                <form action="/tasks/<%=task.id%>/delete?_method=DELETE" method="POST">
+                    <input type="submit" value="excluir">
+                </form>
             <% }); %>
-
         </div>
 
     <% }); %>

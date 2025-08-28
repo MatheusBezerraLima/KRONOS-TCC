@@ -18,7 +18,7 @@
         await tasksController.updateTask(req, res)
     });
 
-    routes.delete('/:id/delete', async(req, res) => {
+    routes.delete('/:id/delete', verifyAuthToken, async(req, res) => {
         await tasksController.deleteTask(req, res);
     })
 

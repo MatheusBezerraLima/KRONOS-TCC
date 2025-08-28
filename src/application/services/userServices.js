@@ -1,18 +1,44 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const UserDAO = require('../../infra/database/repositories/userRepository');
+const sequelize = require("../../config/database");
+const categoryTask = require("../../infra/database/repositories/categoryTaskRepository");
 
 const serviceInsertUser = async (data) => {
   try {
    // Aplicar regras de negócio aqui...
-    // await validateRequiredFields(data)
+    
+   // Iniciando uma transação
+    const t = await sequelize.transaction();
 
-    const resultInsert = await UserDAO.create(data) 
+    // Criptografando a senha
+    const senhaHash = await bcrypt.hash(data.senha, 10);
+    data.senha = senhaHash;
 
-    return resultInsert.id;
+    const newUser = await UserDAO.create(data, { transaction: t });
+    
+    const defaultCategories = [
+      {nome: "Pessoal", usuario_id: newUser.id},
+      {nome: "Estudos", usuario_id: newUser.id},
+      {nome: "Trabalho", usuario_id: newUser.id},
+    ];
+
+    // Insere todas as categorias de uma vez (bulkCreate) DENTRO da transação
+    await categoryTask.bulkCreate(defaultCategories, { transaction: t });
+
+    // Se tudo der  certo aqui, confirma a transação
+    await t.commit();
+
+    // Retorna o usuário criado (sem a senha, por segurança)
+    const result = newUser.get({ plain: true });
+    delete result.senha;
+
+    return result;
 
   } catch (err) {
-    throw new Error(err);
+    await t.rollback();
+    console.error("Erro ao criar usuário e categorias:", err);
+    throw new Error(`Não foi possível criar o usuário: ${err.message}`);
   }
 };
 

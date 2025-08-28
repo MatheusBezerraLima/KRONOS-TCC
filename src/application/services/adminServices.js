@@ -46,7 +46,6 @@ class AdminServices{
         if(!updatedUser){
             throw new Error("Não atualizado");
         }
-        console.log(updatedUser);
         
         return updatedUser;
     }

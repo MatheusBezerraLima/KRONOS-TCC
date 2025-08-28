@@ -64,10 +64,10 @@ class AdminController {
   }
 
   async updateUser(req, res){
-    const { userId} = req.params;
+    const { userId } = req.params;
     const { nome, email, role } = req.body;
         
-    const updateUser = await AdminServices.updateUser(userId, {nome: nome, email: email, role: role});
+    const updateUser = await AdminServices.updateUser(userId, {nome, email, role});
     
     if(!updateUser){
       res.status(404).json("Erro ao atualizar user");

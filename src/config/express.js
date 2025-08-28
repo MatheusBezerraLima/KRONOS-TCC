@@ -7,7 +7,7 @@ var app = express()
 
 // Setando a engine que estou utilizando no projeto.
 app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set('views', path.join(__dirname, '..', 'interface', 'views'));
 
 app.use(express.urlencoded( {extended: true}));
 app.use(methodOverride('_method'));

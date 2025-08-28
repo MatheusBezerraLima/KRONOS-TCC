@@ -8,12 +8,9 @@ const StatusCode = require("../../utils/status-code.js");
 const getRegisterUser = async (req, res) => {
   const { nome, email, senha, telefone } = req.body;
 
-  // criptografando a senha com o salt = 10
-  const senhaHash = await bcrypt.hash(senha, 10);
-
   try{
-    const userId = await serviceInsertUser({ nome, email, senha: senhaHash, telefone});
-    res.status(StatusCode.CREATED).json({ message: "Sucesso ao inserir usuário" });
+    const newUser = await serviceInsertUser({ nome, email, senha, telefone});
+    res.status(StatusCode.CREATED).redirect('/user/login');
 
   }catch(err){
 
@@ -48,7 +45,7 @@ const getAuthenticateUser = async (req, res) => {
         maxAge:  30 * 60 * 1000                           // Tempo de duração em milisegundos 
     });    
 
-    res.status(StatusCode.OK).json({ message: "Login bem sucedido!" });
+    res.status(StatusCode.OK).redirect('/');
     
   } catch (err) {
     if (err.message === "USER_NOT_FOUND") {

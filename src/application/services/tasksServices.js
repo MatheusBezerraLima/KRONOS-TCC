@@ -86,10 +86,12 @@ class TaskServices{
     }
 
     async deleteTask(taskId, userId){
+        console.log(taskId, userId);
+        
         if(!userId || !taskId){
+            console.log("Usuario nao identificado");
             throw new Error("Erro ao indentificar usuário ou tarefa!");
         }
-        console.log("2");
 
         // const task = await tasksDAO.findById(taskId);
         const [ user, task ] = await Promise.all([
@@ -98,14 +100,17 @@ class TaskServices{
         ]);
         
         if(!user){
+            console.log("Usuário inexistente");
             throw new Error("Usuário inexistente!");
         }
 
         if(!task){
+            console.log("Tarefa inexistente");
             throw new Error('Tarefa inexistente');
         }
 
         if(task.criador_id != userId){
+            console.log("Não é o criador");
             throw new Error("Somente o criador da tarefa pode apaga-la");
         }
 

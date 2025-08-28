@@ -18,7 +18,6 @@ class TasksController{
             dataForm.criador_id = req.user.id
             console.log(dataForm);
             
-            // Chamar o serviço de criação aqui - ANTES VERIFICAR SE TODOS OS DADOS NECESSÁRIOS ESTÃO SENDO ENVIADOS
             const taskCreated = await taskServices.createTask(dataForm);
              
             res.redirect('/tasks');
@@ -35,13 +34,13 @@ class TasksController{
     async deleteTask(req, res){
         try{
             const { id } = req.params
-            console.log("1");
+            const userId = req.user.id
+            console.log(userId);
             
-            await taskServices.deleteTask(id, 1);
+            await taskServices.deleteTask(id, userId);
+            console.log("resposta de apagar");
             
-            console.log("tarefa apagada!");
-            res.json({ response: "Tarefa apagada!!"})    
-
+            res.redirect('/tasks');
         }catch(err){
             
         }
