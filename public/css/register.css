@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    padding: 0;
+    margin:0;
+    box-sizing: border-box;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height: 100vh;
+    background-color: #EBEBEB;
+    font-family: "Poppins", sans-serif;
+}
+.card{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    height: 85vh;
+    background-color: #FFFF;
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 3px 15px rgba(105, 105, 105, 0.5);
+}
+.esquerdaLogin, .direitaCadastro{
+    width: 50%;
+    height:100%;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction: column;
+    position:relative;
+    z-index: 1;
+}
+
+.formLogin, .facaLogin, .formCadastro, .facaCadastro{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.facaLogin, .facaCadastro{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color:#FFFF;
+    gap:25px;
+
+    .titulo{
+        color:#FFFF;
+        font-size:30px;
+        font-weight: bold;
+    }
+
+    .texto{
+        font-size: 12px;
+        width: 256px;
+        text-align: center;
+    }
+
+    button{
+    width:300px;
+    height: 42px;
+    background-color: #ffffff;
+    opacity: 75%;
+    border-radius: 32px;
+    border-style: none;
+    font-weight: bolder;
+    font-family: "poppins";
+    font-size: 15px;
+    color:#000;
+    cursor: pointer;
+
+   
+}
+
+ button:hover{
+        transform: translateY(-2px);
+        transition: all 0.3s;
+         background-color: #ffffff;
+         opacity: 85%;
+
+    }
+}
+
+.tituloForm{
+    font-size:30px;
+    align-self: center;
+    font-weight: bold;
+    margin-bottom:20px;
+
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap:20px; 
+    
+        input{
+            display: flex;
+            padding: 10px 22px;
+            width:300px;
+            height: 40px;
+            border-radius:20px;
+            border: 1px solid #9E9E9E;
+        }
+        input:focus {
+        outline: none; 
+        border: 2px solid #9E9E9E; 
+        
+}
+
+        input[type="submit"]{
+            padding: 10px 30px;
+            height: 42px;
+            background-color: #2B00FF;
+            border-radius: 32px;
+            color:#FFFF;
+            font-weight: bold;
+            font-family: "poppins";
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        
+        input[type="submit"]:hover{
+            background-color: #2404c5;
+            transform: translateY(-1px);
+        }
+
+        input::placeholder {
+            color: #9E9E9E;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+}
+
+.termos{
+    display:flex;
+    align-items:center;
+    flex-direction:row;
+}
+
+.termosTxt {
+  font-size: 12px;
+  margin-left:8px;
+}
+
+.checkbox-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left:5px;
+}
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checkmark {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #9E9E9E;
+  border-radius: 5px;  
+  transition: all 0.3s;
+}
+
+.checkbox-container:hover .checkmark {
+  background-color: #ddd;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #2B00FF;
+  border-color: #2B00FF;
+}
+
+.checkmark::after {
+  content: "";
+  position: relative;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark::after {
+  display: block;
+  left: 5px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+
+
+.redesLogin{
+    max-width:300px;
+    width:100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+
+        .divOu{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            height:50%;
+            width: 100%;
+            font-size: 12px;
+
+            .linha{
+                width:90px;
+                height:1px;
+                background-color: #CDCDCD;
+            }
+        }
+
+        .logoRedes{
+            height:50%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+
+            
+        }
+}
+
+.logoRedes img{
+    width: 28px;
+    cursor: pointer;
+}
+
+/* background móvel */
+
+ .card::after{
+    background-image: url(/public/images/imagem.png);
+    width: 100%; 
+    height: 100%;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    border-top-left-radius: 32px;
+    border-bottom-left-radius: 32px;
+     border-top-right-radius: 32px;
+    border-bottom-right-radius: 32px;
+} 
+
+
+/* Login Active */
+
+.facaLogin, .facaCadastro{
+    position: absolute; 
+
+    h2{
+        color:white;
+    }
+}
+
+.card.loginActive .facaLogin{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.card.loginActive .facaCadastro{
+    transform: translateX(0);
+    transition: all .5s .1s;
+    opacity: 1;
+}
+
+.card.loginActive .formLogin{
+    transform: translateX(0);
+    transition: all .5s .1s;
+    opacity: 1;
+}
+
+.card.loginActive .formCadastro{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.card.loginActive::after{
+    transform: translateX(50%);
+}
+
+
+/* Cadastro Active */
+ 
+.card.cadastroActive .facaCadastro{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.card.cadastroActive .formLogin{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.card.cadastroActive::after{
+    transform: translateX(-50%);
+}
+
+.card.cadastroActive .facaLogin{
+    transform: translateX(0);
+    transition: all .5s .1s;
+    opacity: 1;
+}
+
+.card.cadastroActive .formCadastro{
+    transform: translateX(0);
+    transition: all .5s .1s;
+    opacity: 1;
+}
+
+/* Transitions */
+
+.card::after{
+    transition: all 0.5s;
+}
+
+.facaCadastro{
+    transform: translateX(200%);
+    transition: all .5s 0;
+    opacity: 0;
+}
+
+.formLogin{
+    opacity: 0;
+    transition: all .5s 0;
+}
+
+.facaLogin{
+    transform: translateX(-200%);
+    transition: all .5s 0;
+    opacity: 0;
+}
+
+.formCadastro{
+    opacity: 0;
+    transition: all .5s 0;
+}

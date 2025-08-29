@@ -4,22 +4,94 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro | Usuário</title>
+    <link rel="stylesheet" href="/public/css/register.css">
+    <script src="/public/javascript/registerLogin.js" defer></script> 
   </head>
   <body>
-    <form action="/user/register" method="post">
-      <label for="nome">Nome completo:</label>
-      <input type="text" id="nome" name="nome" required />
+    <main>
+      <div class="card cadastroActive">
+        <div class="esquerdaLogin">
+          <div class="formLogin">
+            <p class="tituloForm">Faça o Login</p>
+            <form action="" method="POST">
+              <input type="email" id="email" name="email" required placeholder="Email"/>
+              <input type="password" id="senha" name="senha" required minlength="6" placeholder="Senha" />
+              <input type="submit" value="Faça o Login"></input>
+            </form>
+             <div class="redesLogin">
+              <div class="divOu">
+                <div class="linha"></div>
+                <p class="ou">ou</p>
+                <div class="linha"></div>
+              </div>
+              <div class="logoRedes">
+                <img src="/public/images/icons8-google-logo-48.png" alt="Google">
+                <img src="/public/images/icons8-github-48.png" alt="Google">
+                <img src="/public/images/icons8-linkedin-48.png" alt="Google">
+              </div>
+            </div> <!-- redesLogin -->
+          </div> <!-- formLogin -->
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
+          <div class="facaLogin">
+            <p class="titulo">Já possui o login?</p>
+            <p class="texto">Entre para ter acesso aos seus projetos e ver o andamento dos seus projetos em time</p>
+            <button class="loginButton">Entrar</button>
+          </div>
+        </div>
 
-      <label for="senha">Senha:</label>
-      <input type="password" id="senha" name="senha" required minlength="6" />
+        <div class="direitaCadastro">
+          
+          <div class="formCadastro">
+            <p class = "tituloForm">Cadastrar-se</p>
+            <form action="/user/register" method="post">
+              <input type="text" id="nome" name="nome" required placeholder="Nome completo" />
+              <input type="email" id="email" name="email" required placeholder="Email"/>
+              <input type="password" id="senha" name="senha" required minlength="6" placeholder="Senha" />
+              <input type="tel" id="telefone" name="telefone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Telefone"/>
 
+<<<<<<< HEAD
       <label for="telefone">Telefone:</label>
       <input type="tel" id="telefone" name="telefone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}"/>
      
       <button type="submit">Cadastrar</button>
     </form>
+=======
+              <div class="termos">
+                <label class="checkbox-container">
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                  <span class="termosTxt">Eu concordo com os <a href="">termos e condições</a></span>
+                </label>
+              </div>
+
+              <input type="submit" value="Cadastrar"></input>
+
+            </form>
+
+            <div class="redesLogin">
+              <div class="divOu">
+                <div class="linha"></div>
+                <p class="ou">ou</p>
+                <div class="linha"></div>
+              </div>
+              <div class="logoRedes">
+                <img src="/public/images/icons8-google-logo-48.png" alt="Google">
+                <img src="/public/images/icons8-github-48.png" alt="Google">
+                <img src="/public/images/icons8-linkedin-48.png" alt="Google">
+              </div>
+            </div> <!-- redesLogin -->
+          </div> <!-- formCadastro-->
+
+          <div class="facaCadastro">
+            <p class="titulo">Não tem uma conta?</p>
+            <p class="texto">Entre para ter acesso aos seus projetos e ver o andamento dos seus projetos em time</p>
+            <button class="cadastroButton">Faça o cadastro</button>
+          </div>
+        </div> <!-- direiraCadastro -->
+      </div> <!-- card -->
+    </main>
+>>>>>>> feature/front/login-register
   </body>
 </html>
+
+
