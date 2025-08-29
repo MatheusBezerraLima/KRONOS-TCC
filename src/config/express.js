@@ -11,7 +11,8 @@ app.set('views', path.join(__dirname, '..', 'interface', 'views'));
 
 app.use(express.urlencoded( {extended: true}));
 app.use(methodOverride('_method'));
-app.use(express.static(path.resolve(__dirname, '..', 'public')));
+
+app.use(express.static(path.resolve(__dirname, '..', '..', 'public')));
 app.use(cookieParser()); // <- Isso é essencial para req.cookies funcionar
 
 const config = () => {

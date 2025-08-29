@@ -15,9 +15,10 @@ const verifyRoleUser = async(req, res, next) => {
             return res.status(StatusCode.UNAUTHORIZED).json({ message: "Acesso negado. Ambiente Privado!" });
         }
 
-        req.user = user;
         next()
     }catch(err){
         return res.status(StatusCode.FORBIDDEN).json({ message: "Token inválido ou expirado. "});
     }
 }
+
+module.exports = verifyRoleUser;
