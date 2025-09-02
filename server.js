@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 const jwt = require("jsonwebtoken");
 const verifyAuthToken = require('./src/interface/middlewares/authenticateToken');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3333;
 const server = createServer(app); // Criando um servidor http usando o app Express.
 
 // Criando um instancia do socket.io atrelada ao servidor http
@@ -70,8 +70,6 @@ app.use('/admin', adminRoutes)
 app.use('/tasks', taskRoutes);
 
 app.get('/', indexController.renderDashboard);
-
-
 
 server.listen(PORT, '0.0.0.0', async() => {
     console.log(`Servidor rodando na porta ${PORT}`);

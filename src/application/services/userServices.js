@@ -8,12 +8,11 @@ const serviceInsertUser = async (data) => {
   // Iniciando uma transação
     const t = await sequelize.transaction();
   try {
-   // Aplicar regras de negócio aqui...
-   const userExist = UserDAO.findByEmail(data.email);
-
-   if(userExist){
-     throw new Error("ER_DUP_ENTRY");
-   }   
+    // Aplicar regras de negócio aqui... 
+    const user = await UserDAO.findByEmail(data.email);
+    if(user){
+      throw new Error("Usuário já existe");
+    }
 
     // Criptografando a senha
     const senhaHash = await bcrypt.hash(data.senha, 10);

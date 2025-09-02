@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 
 var app = express()
 
+app.use(express.json());
 // Setando a engine que estou utilizando no projeto.
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '..', 'interface', 'views'));

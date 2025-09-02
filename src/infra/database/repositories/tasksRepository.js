@@ -18,7 +18,7 @@ class TasksDAO{
         });
     };
 
-    async createNewTask(data){
+    async create(data){
         return await Task.create(data);
     };
 
@@ -26,8 +26,14 @@ class TasksDAO{
         return await Task.findByPk(taskId);
     }
 
-    async deleteTask(task){
+    async delete(task){
         return await task.destroy();
+    }
+
+    async update(task, dataToUpdate){
+        await task.set(dataToUpdate);
+        await task.save()
+        return task;
     }
 }
 

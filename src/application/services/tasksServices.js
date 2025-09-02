@@ -2,6 +2,7 @@ const categoryTaskDAO = require('../../infra/database/repositories/categoryTaskR
 const tasksDAO = require('../../infra/database/repositories/tasksRepository');
 const statusTaskDAO = require('../../infra/database/repositories/statusTaskRepository');
 const userDAO = require("../../infra/database/repositories/userRepository");
+const { th } = require('zod/v4/locales');
 
 class TaskServices{
     async prepareTasksPageData(userId){
@@ -74,7 +75,7 @@ class TaskServices{
             return response;
         }
 
-        const taskCreated = await tasksDAO.createNewTask(data);
+        const taskCreated = await tasksDAO.create(data);
 
         if(!taskCreated){
             throw new Error("Erro ao criar tarefa!");
@@ -86,14 +87,12 @@ class TaskServices{
     }
 
     async deleteTask(taskId, userId){
-        console.log(taskId, userId);
         
         if(!userId || !taskId){
             console.log("Usuario nao identificado");
             throw new Error("Erro ao indentificar usuário ou tarefa!");
         }
 
-        // const task = await tasksDAO.findById(taskId);
         const [ user, task ] = await Promise.all([
             userDAO.findById(userId),
             tasksDAO.findById(taskId)
@@ -114,9 +113,41 @@ class TaskServices{
             throw new Error("Somente o criador da tarefa pode apaga-la");
         }
 
-        await tasksDAO.deleteTask(task);
+        await tasksDAO.delete(task);
 
         return;
+    }
+
+    async updateTask(taskId, userId, dataToUpdate){
+        if(!userId || !taskId){
+            console.log("Usuario nao identificado");
+            throw new Error("Erro ao indentificar usuário ou tarefa!");
+        }
+        const [task, user] = await Promisse.all([
+            tasksDAO.findById(taskId),
+            userDAO.findById(userId)
+        ]);
+
+        if(!user){
+            throw new Error("Usuário não encontrado!");
+        }
+
+        if(!task){
+            throw new Error("Tarefa não existe");
+        }
+
+        // 🟨 Verificar isso posteriormente para o caso de a tarefa ser de um projeto
+        if(task.criador_id != user.id){
+            throw new Error("Somente o criador da tarefa pode atualizar")
+        }
+
+        const updatedTask = await tasksDAO.update(task, dataToUpdate);
+
+        if(!updatedTask){
+            throw new Error("Erro ao atualizar tarefa");
+        }
+
+        return updatedTask;
     }
 
     _createTaskOfProject(){}
