@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro | Usuário</title>
-    <link rel="stylesheet" href="/public/css/register.css">
-    <script src="/public/javascript/registerLogin.js" defer></script> 
+    <link rel="stylesheet" href="../css/register.css">
+    <script src="../javascript/registerLogin.js" defer></script> 
   </head>
   <body>
     <main>
@@ -13,7 +13,7 @@
         <div class="esquerdaLogin">
           <div class="formLogin">
             <p class="tituloForm">Faça o Login</p>
-            <form action="" method="POST">
+            <form action="/user/login" method="POST">
               <input type="email" id="email" name="email" required placeholder="Email"/>
               <input type="password" id="senha" name="senha" required minlength="6" placeholder="Senha" />
               <input type="submit" value="Faça o Login"></input>
@@ -25,9 +25,9 @@
                 <div class="linha"></div>
               </div>
               <div class="logoRedes">
-                <img src="/public/images/icons8-google-logo-48.png" alt="Google">
-                <img src="/public/images/icons8-github-48.png" alt="Google">
-                <img src="/public/images/icons8-linkedin-48.png" alt="Google">
+                <img src="../images/icons8-google-logo-48.png" alt="Google">
+                <img src="../images/icons8-github-48.png" alt="Google">
+                <img src="../images/icons8-linkedin-48.png" alt="Google">
               </div>
             </div> <!-- redesLogin -->
           </div> <!-- formLogin -->
@@ -48,11 +48,8 @@
               <input type="email" id="email" name="email" required placeholder="Email"/>
               <input type="password" id="senha" name="senha" required minlength="6" placeholder="Senha" />
               <input type="tel" id="telefone" name="telefone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Telefone"/>
-
-      <label for="telefone">Telefone:</label>
-      <input type="tel" id="telefone" name="telefone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}"/>
-     
-      <button type="submit">Cadastrar</button>
+      <input class="inputSubmit" type="submit" value="Cadastrar"/>
+      <!-- <br> -->
     </form>
               <div class="termos">
                 <label class="checkbox-container">
@@ -61,8 +58,6 @@
                   <span class="termosTxt">Eu concordo com os <a href="">termos e condições</a></span>
                 </label>
               </div>
-
-              <input type="submit" value="Cadastrar"></input>
 
             </form>
 
@@ -73,9 +68,9 @@
                 <div class="linha"></div>
               </div>
               <div class="logoRedes">
-                <img src="/public/images/icons8-google-logo-48.png" alt="Google">
-                <img src="/public/images/icons8-github-48.png" alt="Google">
-                <img src="/public/images/icons8-linkedin-48.png" alt="Google">
+                <img src="../images/icons8-google-logo-48.png" alt="Google">
+                <img src="../images/icons8-github-48.png" alt="Google">
+                <img src="../images/icons8-linkedin-48.png" alt="Google">
               </div>
             </div> <!-- redesLogin -->
           </div> <!-- formCadastro-->

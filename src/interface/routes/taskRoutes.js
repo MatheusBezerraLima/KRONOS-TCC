@@ -14,7 +14,7 @@
         await tasksController.createTask(req, res);
     })
 
-    routes.put('/:id', async(req, res) => {
+    routes.put('/:id', verifyAuthToken, async(req, res) => {
         await tasksController.updateTask(req, res)
     });
 

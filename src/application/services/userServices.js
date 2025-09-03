@@ -5,11 +5,14 @@ const sequelize = require("../../config/database");
 const categoryTask = require("../../infra/database/repositories/categoryTaskRepository");
 
 const serviceInsertUser = async (data) => {
-  try {
-   // Aplicar regras de negócio aqui...
-    
-   // Iniciando uma transação
+  // Iniciando uma transação
     const t = await sequelize.transaction();
+  try {
+    // Aplicar regras de negócio aqui... 
+    const user = await UserDAO.findByEmail(data.email);
+    if(user){
+      throw new Error("Usuário já existe");
+    }
 
     // Criptografando a senha
     const senhaHash = await bcrypt.hash(data.senha, 10);

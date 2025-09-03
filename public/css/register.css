@@ -246,7 +246,7 @@ form{
 /* background móvel */
 
  .card::after{
-    background-image: url(/public/images/imagem.png);
+    background-image: url(..//images/imagem.png);
     width: 100%; 
     height: 100%;
     content: "";
@@ -354,4 +354,8 @@ form{
 .formCadastro{
     opacity: 0;
     transition: all .5s 0;
+}
+
+.inputSubmit{
+    margin-bottom: 15px;
 }

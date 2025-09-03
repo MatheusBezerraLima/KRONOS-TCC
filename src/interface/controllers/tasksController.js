@@ -16,10 +16,8 @@ class TasksController{
         try{
             const dataForm = req.body;
             dataForm.criador_id = req.user.id
-            console.log(dataForm);
-            
+
             const taskCreated = await taskServices.createTask(dataForm);
-             
             res.redirect('/tasks');
         }catch(err){
             console.log("Erro:", err);
@@ -28,21 +26,31 @@ class TasksController{
     }
 
     async updateTask(req, res){
+        try{
+            const id = req.params.id;
+            const dataTask = req.body;
+            const userId = req.user.id;
 
+            const updatedTask = await taskServices.updateTask(id, userId, dataTask);
+            res.status(201).json({"Status" : "Sucesso", "Task": updatedTask});
+
+        }catch(err){
+            console.log("Erro ao atualizar tarefa", err);
+            res.status(400).json({"Controller": "UpdateTask" ,"Erro": err})
+        }
     }
 
     async deleteTask(req, res){
         try{
             const { id } = req.params
             const userId = req.user.id
-            console.log(userId);
             
             await taskServices.deleteTask(id, userId);
             console.log("resposta de apagar");
             
             res.redirect('/tasks');
         }catch(err){
-            
+            res.status(400).json({"Controller": "DeleteTask" ,"Erro": err})
         }
     }
 }

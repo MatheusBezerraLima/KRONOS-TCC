@@ -12,7 +12,7 @@ module.exports = {
             nome: "Matheus",
             email: "matheus@gmail.com",
             senha: await bcrypt.hash("123456", 10),
-            role: "user",
+            role: "admin",
             telefone: "11974746352",
             status: "Ativo",
             criado_em: new Date(),       

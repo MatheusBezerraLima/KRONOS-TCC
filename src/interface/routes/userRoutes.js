@@ -9,7 +9,7 @@ const { createUserSchema, loginUserSchema, changePasswordUserSchema, findByNameU
 
 // Pronta
 routes.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../../public/html/login.html'));
+    res.sendFile(path.join(__dirname, '../../../public/html/register.html'));
 })
 
 // Pronta

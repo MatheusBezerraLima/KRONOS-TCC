@@ -25,4 +25,4 @@ RUN chmod +x /usr/src/app/entrypoint.sh
 ENTRYPOINT  [ "/usr/src/app/entrypoint.sh"]
 
 # Difinindo o comando padrão para iniciar a aplicação 
-CMD ["node", "src/server.js"]
+CMD ["node", "server.js"]

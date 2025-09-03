@@ -10,8 +10,13 @@ const getRegisterUser = async (req, res) => {
 
   try{
     const newUser = await serviceInsertUser({ nome, email, senha, telefone});
-    res.status(StatusCode.CREATED).redirect('/user/login');
 
+    if(!newUser || newUser == null){
+      console.log("Error ao registrar usuario");
+    }
+
+    getAuthenticateUser(req, res);
+    
   }catch(err){
 
     if (err.code === DatabaseErrors.DUPLICATE_ENTRY) {
