@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
     });
 });
 
-app.use('/user', userRoutes);   
+app.use('/', userRoutes);   
 app.use('/admin', adminRoutes)
 app.use('/tasks', taskRoutes);
 
