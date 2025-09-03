@@ -7,7 +7,6 @@
     <title>Index</title>
 </head>
 <body>
-    
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io(); // Iniciando a conexão com o servidor
@@ -15,5 +14,16 @@
             console.log("Conectado ao servidor via websocket com o ID:", socket.id);
         })
     </script>
+
+    <main>
+        <head>
+            <nav>
+                <ul>
+                    <li><a href="pagetask.html">Tarefas</a></li>
+                    <li><a href="register.html">Entrar/Cadastrar</a></li>
+                </ul>
+            </nav>
+        </head>
+    </main>
 </body>
 </html>
