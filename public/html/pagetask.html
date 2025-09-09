@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Tarefas </title>
     <link rel="stylesheet" href="/public/css/pagetask.css">
+    <script src="/public/javascript/modalCreate.js"></script>
 </head>
 <body>
     <div class="container">
@@ -15,7 +16,7 @@
                 </div>
 
                 <div class="container-searchbar">
-                    <input type="search" class="searchbar">
+                    <input type="search" class="searchbar" placeholder="Pesquise aqui" >
                 </div>
 
                 <div class="user-notification-profile">
@@ -32,21 +33,31 @@
         <div class="containerAsideMain">
             <aside>
                 <nav>
-                    <button>Criar Projeto</button>
+
+                    <button class="buttonCreate" data-modal="modal-1">Criar Projeto</button>
+
+                    <dialog id="modal-1">
+                        teste
+                    </dialog>
+                    
                     <ul>
                         <div class="links">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                         <li><a href="#" >Home</a></li>
                         </div>
 
                         <div class="links">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-kanban-icon lucide-folder-kanban"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><path d="M8 10v4"/><path d="M12 10v2"/><path d="M16 10v6"/></svg>
                         <li><a href="#">Projetos</a></li>
                         </div>
 
                         <div class="links">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-todo-icon lucide-list-todo"><path d="M13 5h8"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="m3 17 2 2 4-4"/><rect x="3" y="4" width="6" height="6" rx="1"/></svg>
                         <li><a href="#">Tarefas</a></li>
                         </div>
 
                         <div class="links">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-icon lucide-calendar"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
                         <li><a href="#">Calendário</a></li>
                         </div>
                     </ul>
@@ -57,6 +68,9 @@
 
                 <div class="contentMain">
                     <div class="titulo">
+                        <div class="pagesPath">
+
+                        </div>
                         <h1>Projetos</h1>
                     </div>
                     
