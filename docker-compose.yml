@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   # Serviço da aplicação Node.js
@@ -27,8 +26,6 @@ services:
       - .:/usr/src/app
       # Isso evita conflitos de sistema operacional (Windows vs. Linux).
       - /usr/src/app/node_modules
-
-    command: /bin/sh -c "dos2unix /usr/src/app/entrypoint.sh && /usr/src/app/entrypoint.sh"
 
   # Serviços do Banco de Dados MySQL   
   db:

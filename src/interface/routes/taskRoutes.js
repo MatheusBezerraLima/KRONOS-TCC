@@ -6,19 +6,19 @@
     const validate = require('../middlewares/validate');
 
     // Renderização
-    routes.get('/', verifyAuthToken, async(req,res) => {
+    routes.get('/tasks', verifyAuthToken, async(req,res) => {
         await tasksController.prepareTasksPageData(req, res);
     });
 
-    routes.post('/', verifyAuthToken, validate(createTaskSchema), async(req, res) => {
+    routes.post('/tasks', verifyAuthToken, validate(createTaskSchema), async(req, res) => {
         await tasksController.createTask(req, res);
     })
 
-    routes.put('/:id', verifyAuthToken, async(req, res) => {
+    routes.put('/tasks/:id', verifyAuthToken, async(req, res) => {
         await tasksController.updateTask(req, res)
     });
 
-    routes.delete('/:id/delete', verifyAuthToken, async(req, res) => {
+    routes.delete('/tasks/:id/delete', verifyAuthToken, async(req, res) => {
         await tasksController.deleteTask(req, res);
     })
 

@@ -24,7 +24,7 @@ const SubTask = sequelize.define("SubTask", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    status: {
+    status_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

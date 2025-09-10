@@ -89,7 +89,7 @@ const serviceChangePasswordUser = async(data) => {
 
   // Confirmação de nova senha falhou
   if(data.newPassword !== data.confirmNewPassword){
-    throw new Error("A senha atual está incorreta.");
+    throw new Error("As senhas devem ser iguais.");
   }
 
   // Senhas com menos de 8 caracteres serão consideradas inseguras

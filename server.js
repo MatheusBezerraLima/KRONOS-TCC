@@ -1,16 +1,14 @@
-require('dotenv').config();
 const app = require('./src/config/express')();
-const path = require('path');
 const { sequelize } = require('./src/infra/database/models');
 const userRoutes = require('./src/interface/routes/userRoutes');
 const adminRoutes = require('./src/interface/routes/adminRoutes');
+const projectRoutes = require('./src/interface/routes/projecRoutes');
 const indexController = require('./src/interface/controllers/indexController');
 const { createServer } = require('node:http'); // Importando o módulo http.createServer nativo do Node
 const { Server } = require("socket.io"); // Importando o server do socket.io
 const taskRoutes = require('./src/interface/routes/taskRoutes');
 const cookieParser = require('cookie-parser');
 const jwt = require("jsonwebtoken");
-const verifyAuthToken = require('./src/interface/middlewares/authenticateToken');
 
 const PORT = process.env.PORT || 3333;
 const server = createServer(app); // Criando um servidor http usando o app Express.
@@ -67,7 +65,8 @@ io.on("connection", (socket) => {
 
 app.use('/', userRoutes);   
 app.use('/admin', adminRoutes)
-app.use('/tasks', taskRoutes);
+app.use('/api', taskRoutes);
+app.use('/api', projectRoutes);
 
 app.get('/', indexController.renderDashboard);
 
