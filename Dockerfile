@@ -1,8 +1,9 @@
 FROM node:20.17.0 
 
 # Instala o utilitário dos2unix para corrigir quebras de linha
-RUN apt-get update && apt-get install -y dos2unix
-
+RUN sed -i 's|http://deb.debian.org|http://ftp.br.debian.org|g' /etc/apt/sources.list.d/debian.sources && \ 
+    apt-get update && apt-get install -y dos2unix
+    
 # Diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 

@@ -20,7 +20,8 @@ const applyAssociations = (db) => {
         ChatProjectMessage,
         PrivateChat,
         PrivateMessage,
-        Friendship
+        Friendship,
+        ProjectInvitations
     }  = db;
 
     // Task --> StatusTask (N:1)
@@ -51,6 +52,26 @@ const applyAssociations = (db) => {
     Friendship.belongsTo(User, {
         as: 'Addressee', // Apelido para o usuário que recebeu o pedido
         foreignKey: 'addressee_id'
+    });
+
+    // 1. Um convite pertence a um Projeto
+    ProjectInvitation.belongsTo(Project, {
+        foreignKey: 'project_id'
+    });
+    Project.hasMany(ProjectInvitation, {
+        foreignKey: 'project_id'
+    });
+
+    // 2. Um convite tem um remetente (Inviter) - que é um Usuário
+    ProjectInvitation.belongsTo(User, {
+        as: 'Inviter', // Apelido para a relação "quem convidou"
+        foreignKey: 'inviter_id'
+    });
+
+    // Um usuário pode ter enviado vários convites
+    User.hasMany(ProjectInvitation, {
+        as: 'SentProjectInvitations',
+        foreignKey: 'inviter_id'
     });
 
     //  Task -->  Project (N:1)

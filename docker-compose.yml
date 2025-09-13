@@ -1,46 +1,54 @@
-
 services:
   # Serviço da aplicação Node.js
   app:
-    build: . #Controi a imagem a partir do Dockerfile da pasta atual.
+    build: . # Constrói a imagem a partir do Dockerfile da pasta atual.
     container_name: kronos-app
     restart: unless-stopped
     ports:
-      - "3333:3333" #Porta do host - Porta do container
+      - "3333:3333" # Porta do host -> Porta do container
     environment:
-      # Variáveis do meu .env
-      - DB_HOST= ${DB_HOST} # IMPORTANTE: O host é o nome do serviço do banco!
-      - DB_NAME= ${DB_NAME}
-      - DB_USER= ${DB_USER}
-      - DB_PASSWORD= ${DB_PASSWORD}
-      - PORT= ${PORT}
-      - SECRET= ${SECRET}
-      - GOOGLE_SECRET_KEY= ${GOOGLE_SECRET_KEY}
-      - GOOGLE_CLIENT_ID= ${GOOGLE_CLIENT_ID}
-      - GITHUB_SECRET_KEY= ${GITHUB_SECRET_KEY}
-      - GITHUB_CLIENT_ID= ${GITHUB_CLIENT_ID}
+      # Variáveis do .env. Note a mudança no DB_HOST.
+      - DB_HOST=db # O host É o nome do serviço do banco de dados!
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - PORT=${PORT}
+      - SECRET=${SECRET}
+      - GOOGLE_SECRET_KEY=${GOOGLE_SECRET_KEY}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GITHUB_SECRET_KEY=${GITHUB_SECRET_KEY}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
     depends_on:
-      - db # Garantindo que o container do banco inicie antes do da minha aplicação
+      db:
+        # A condição service_healthy espera o healthcheck do serviço 'db' passar.
+        condition: service_healthy
     volumes:
       # Mapeia a pasta atual (.) local para /usr/src/app no container
       - .:/usr/src/app
-      # Isso evita conflitos de sistema operacional (Windows vs. Linux).
+      # Isso evita que a node_modules local sobrescreva a do container.
       - /usr/src/app/node_modules
 
-  # Serviços do Banco de Dados MySQL   
+  # Serviços do Banco de Dados MySQL
   db:
     image: mysql:8.0
     container_name: kronos-db
     restart: unless-stopped
     environment:
-      # Essas variáveis são usadas pela imagem do MySQL para a inicialização.
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+    # ---- NOVO ----
+    # Healthcheck para verificar se o MySQL está realmente pronto.
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
-  # Declaração do volume nomeado que será gerenciado pelo Docker.
+# Declaração do volume nomeado que será gerenciado pelo Docker.
 volumes:
   mysql-data:

@@ -22,6 +22,10 @@ const Project = sequelize.define("Project", {
         key: "id"
       }
     },
+    data_termino: {
+      type: DataTypes.DATE,
+      allowNull: true 
+    },
     criado_em: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW

@@ -1,11 +1,13 @@
-const { where } = require("sequelize");
+const { where, Transaction } = require("sequelize");
 const { Project } = require("../models/index");
 
 class ProjectDAO{
-    async create(data){
-        return await Project.create(data);
+    async create(projectData, options = {}){
+        return await Project.create(projectData, { transaction: options.transaction});
     }
-    
+    async findById(projectId){
+        return await Project.findByPk(projectId);
+    }
 }
 
-module.exports = ProjectDAO;
+module.exports = new ProjectDAO();

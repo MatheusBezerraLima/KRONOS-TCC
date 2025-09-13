@@ -22,10 +22,14 @@ const UserProjectRole = sequelize.define("UserProjectRole", {
             model: "projeto",
             key: "id"
         }
+    },
+    role: {
+        type: DataTypes.ENUM("Criador", "Administrador", "Membro"),
+        allowNull: false
     }
 }, {
     tableName: "usuario_projeto_papel",
-    timestamp: false
+    timestamps: false
 });
 
 module.exports = UserProjectRole;
