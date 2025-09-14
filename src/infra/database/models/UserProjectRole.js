@@ -26,10 +26,12 @@ const UserProjectRole = sequelize.define("UserProjectRole", {
     role: {
         type: DataTypes.ENUM("Criador", "Administrador", "Membro"),
         allowNull: false
-    }
+    },
 }, {
     tableName: "usuario_projeto_papel",
-    timestamps: false
+    timestamps: true,
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 });
 
 module.exports = UserProjectRole;

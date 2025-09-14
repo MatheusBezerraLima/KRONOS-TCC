@@ -15,7 +15,7 @@ module.exports = {
       descricao: {
         type: Sequelize.TEXT
       },
-      criado_por: {
+      criador_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -23,9 +23,19 @@ module.exports = {
           key: "id"
         }
       },
-      criado_em: {
+      data_termino: {
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        allowNull: true 
+      },
+      createdAt: { 
+      allowNull: false,
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      updatedAt: { 
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

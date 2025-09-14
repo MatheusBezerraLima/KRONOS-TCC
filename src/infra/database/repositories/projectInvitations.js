@@ -6,15 +6,21 @@ class ProjectInvitationsDAO {
     }
 
     async findPendingEmailsByProjectId(projectId) {
-        const invitations = await ProjectInvitations.findAll({
-            where: {
-                project_id: projectId,
-                status: 'pending'
-            },
-            attributes: ['invitee_email']
-        });
-        // Retorna um array simples de strings de e-mail
-        return invitations.map(inv => inv.invitee_email);
+        try{
+            const invitations = await ProjectInvitations.findAll({
+                where: {
+                    project_id: projectId,
+                    status: 'pending'
+                },
+                attributes: ['invitee_email']
+            });            
+            // Retorna um array simples de strings de e-mail
+            return invitations.map(inv => inv.invitee_email);
+        }catch(error){
+             console.error(`Erro no DAO ao buscar convites pendentes: ${error.message}`);
+            throw error;
+        }
+        
     }
 
     async createBulk(invitationsData, options = {}){

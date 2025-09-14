@@ -4,10 +4,10 @@
 module.exports = {
   // Migration para constraint COMPOSTA (usuário + nome)
   async up (queryInterface, Sequelize) {
-      await queryInterface.addConstraint('categoria_tarefa', {
+      await queryInterface.addConstraint('status_tarefa', {
         fields: ['usuario_id', 'nome'], // A COMBINAÇÃO das duas colunas deve ser única
         type: 'unique',
-        name: 'unique_category_name_per_user'
+        name: 'unique_status_name_per_user'
       });
   },
   async down (queryInterface, Sequelize) {

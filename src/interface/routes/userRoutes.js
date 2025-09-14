@@ -8,12 +8,12 @@ const validate = require("../middlewares/validate");
 const { createUserSchema, loginUserSchema, changePasswordUserSchema, findByNameUserSchema, findByEmailUserSchema} = require("../validators/userValidator");
 
 // Pronta
-routes.get('login', (req, res) => {
+routes.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../../../public/html/register.html'));
 })
 
 // Pronta
-routes.post('login', async(req, res) => {
+routes.post('/login', async(req, res) => {
     await getAuthenticateUser(req, res);
 })
 

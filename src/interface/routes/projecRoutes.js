@@ -3,8 +3,9 @@ const projectController = require('../controllers/projectController');
 const routes = express.Router();
 const verifyAuthToken = require('../middlewares/authenticateToken');
 
-routes.post('/projetos', verifyAuthToken, projectController.create);
-
-routes.post('/:projectId/invites', verifyAuthToken, projectController.inviteMembers);
+// Colocar verificação aqui 
+routes.post('/projetos', projectController.create);
+// Colocar verificação aqui 
+routes.post('/:projectId/invites', projectController.inviteMembers);
 
 module.exports = routes;

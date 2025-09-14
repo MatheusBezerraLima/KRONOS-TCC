@@ -15,8 +15,8 @@ module.exports = {
             role: "admin",
             telefone: "11974746352",
             status: "Ativo",
-            criado_em: new Date(),       
-            atualizado_em: new Date()  
+            createdAt: new Date(),   
+            updatedAt: new Date() 
       }
     ])
   },

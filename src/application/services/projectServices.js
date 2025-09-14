@@ -4,7 +4,7 @@ const userDAO = require("../../infra/database/repositories/userRepository");
 const projectDAO = require("../../infra/database/repositories/projectRepository");
 const userProjectRoleDAO = require('../../infra/database/repositories/userProjectRoleRepository');
 const projectInvitationsDAO = require('../../infra/database/repositories/projectInvitations');
-
+const emailService = require("./emailServices");
 
 class ProjectServices{
     
@@ -26,7 +26,7 @@ class ProjectServices{
 
             await userProjectRoleDAO.create({
                 "usuario_id": userId,
-                "project_id": newProject.id,
+                "projeto_id": newProject.id,
                 "role": "Criador" 
             }, { transaction: t });
 
@@ -42,28 +42,35 @@ class ProjectServices{
     }
 
     async addMember(projectId, userIdToAdd, currentUserId, role ){
-        
-        // O usuário atual tem permissão de adicionar novos membros? 
-        const currentUserRole = await userProjectRoleDAO.findByUserAndProject(currentUserId, projectId);
+        try{
+            // O usuário atual tem permissão de adicionar novos membros? 
+            const currentUserRole = await userProjectRoleDAO.findByUserAndProject(currentUserId, projectId);
 
-        if (!currentUserRole || !['Criador', 'Administrador'].includes(currentUserRole.role)) {
-            throw new Error("Acesso negado: você não tem permissão para adicionar membros a este projeto.");
-        }
+            if (!currentUserRole || !['Criador', 'Administrador'].includes(currentUserRole.role)) {
+                throw new Error("Acesso negado: você não tem permissão para adicionar membros a este projeto.");
+            }
 
-         // O usuário a ser adicionado já é membro do projeto?
-        const existingAssociation = await userProjectRoleDAO.findByUserAndProject(userIdToAdd, projectId);
+            // O usuário a ser adicionado já é membro do projeto?
+            const existingAssociation = await userProjectRoleDAO.findByUserAndProject(userIdToAdd, projectId);
 
-        if (existingAssociation) {
-            throw new Error("Este usuário já é membro do projeto.");
-        }
+            if (existingAssociation) {
+                throw new Error("Este usuário já é membro do projeto.");
+            }
 
-        const newMember = await userProjectRoleDAO.create({
-            usuario_id: userIdToAdd,
-            project_id: projectId,
-            role: role || "Membro"
-        });
+            const t = await sequelize.transaction();
+            
+            const newMember = await userProjectRoleDAO.create({
+                usuario_id: userIdToAdd,
+                project_id: projectId,
+                role: role || "Membro"
+            }, { transaction: t });
 
-        return newMember.get({plain: true});
+            return newMember.get({plain: true});
+        }catch(error){
+            await t.rollback();
+            console.error("Falha ao adicionar membro:", error);
+            throw new Error("Não foi possível adicionar o membro ao projeto.");
+        };
     }
 
     async inviteMembersToProject(projectId, emails, role, inviterId){
@@ -73,7 +80,7 @@ class ProjectServices{
             const error = new Error("Acesso negado: Você não tem permissão para convidar membros");
             error.statusCode = 403; // Forbidden
             throw error;
-        }
+        }        
 
         // 2. LIMPANDO DADOS: Remove emails duplicados e o próprio email do remetente
         const inviter = await userDAO.findById(inviterId);
@@ -88,7 +95,8 @@ class ProjectServices{
             userProjectRoleDAO.findMemberEmailsByProjectId(projectId),
             projectInvitationsDAO.findPendingEmailsByProjectId(projectId)
         ]);
-
+     
+        
         const existingMembersSet = new Set(existingMemberEmails);
         const pendingInvitesSet = new Set(pendingInviteEmails);
 
@@ -110,7 +118,8 @@ class ProjectServices{
                 emailsToInvite.push(email);
             }
         }
-
+           console.log("👣");
+            console.log("emails para convidar", emailsToInvite);
         // 5. AÇÃO DO BANCO: Cria apenas os convites válidos
         if(emailsToInvite.length > 0){
             const invitationsData = emailsToInvite.map(email => ({
@@ -122,15 +131,34 @@ class ProjectServices{
             }));
 
             const newInvitations = await projectInvitationsDAO.createBulk(invitationsData);
-            results.invitationsSent = newInvitations.map( email => inv.invitee_email);
+            console.log("🟨");
+            
+            results.invitationsSent = newInvitations.map( inv => inv.invitee_email);
+            
+            console.log("newInvitations", newInvitations);
+            
+            const project = await projectDAO.findById(projectId);
+            console.log("project", project);
+            
 
             // 6. ENVIO DE E-MAILS: Dispara os e-mails (pode ser em segundo plano)
-            // for (const invitation of newInvitations) {
-            //     await emailService.sendProjectInvitation(invitation);
-            // }
-        }
+            for (const invitation of newInvitations) {
+                console.log("🟩");
+                
+                const inviteLink = `https://kronosapp.com.br/invites/accept?token=${invitation.token}`;
+
+                const emailData = {
+                    inviterName: inviter.nome,
+                    projectName: project.titulo,
+                    inviteLink: inviteLink
+                }
+
+                await emailService.sendProjectInvitation(invitation.invitee_email, emailData);
+            }
+        // }
 
         return results;
+    }
     }
 }
 

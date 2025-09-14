@@ -40,13 +40,19 @@ const ProjectInvitations = sequelize.define("ProjectInvitations", {
         defaultValue: "Membro"
     },
     token: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            unique: true
-    }
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        unique: true
+    },
+    expires_at: {
+        allowNull: true,
+        type: DataTypes.DATE
+    },
 }, {
     tableName: "convites_projeto",
-    timestamps: true
+    timestamps: true,
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 });
 
 module.exports = ProjectInvitations;

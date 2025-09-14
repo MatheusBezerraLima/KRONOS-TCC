@@ -18,6 +18,7 @@ services:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GITHUB_SECRET_KEY=${GITHUB_SECRET_KEY}
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
     depends_on:
       db:
         # A condição service_healthy espera o healthcheck do serviço 'db' passar.

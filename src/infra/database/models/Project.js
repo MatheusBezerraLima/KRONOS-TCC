@@ -14,7 +14,7 @@ const Project = sequelize.define("Project", {
     descricao: {
       type: DataTypes.TEXT
     },
-    criado_por : {
+    criador_id : {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -26,13 +26,11 @@ const Project = sequelize.define("Project", {
       type: DataTypes.DATE,
       allowNull: true 
     },
-    criado_em: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
-    }
   }, {
     tableName: 'projeto',
-    timestamps: false  
+    timestamps: true,
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 });
 
 module.exports  = Project;

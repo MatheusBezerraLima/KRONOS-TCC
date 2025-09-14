@@ -1,8 +1,9 @@
 const { UserProjectRole } = require("../models/index");
+const { User } = require("../models/index");
 
 class UserProjectRoleDAO{
-    async create(data){
-        return await UserProjectRole.create(data);
+    async create(data,  options = {}){
+        return await UserProjectRole.create(data, { transaction: options.transaction });
     }
 
     async findByUserAndProject(userId, projectId){
@@ -10,7 +11,7 @@ class UserProjectRoleDAO{
             const association = await UserProjectRole.findOne({
                 where: {
                     usuario_id: userId,
-                    project_id: projectId
+                    projeto_id: projectId
                 }
             });
             return association;

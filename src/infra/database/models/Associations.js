@@ -55,21 +55,21 @@ const applyAssociations = (db) => {
     });
 
     // 1. Um convite pertence a um Projeto
-    ProjectInvitation.belongsTo(Project, {
+    ProjectInvitations.belongsTo(Project, {
         foreignKey: 'project_id'
     });
-    Project.hasMany(ProjectInvitation, {
+    Project.hasMany(ProjectInvitations, {
         foreignKey: 'project_id'
     });
 
     // 2. Um convite tem um remetente (Inviter) - que é um Usuário
-    ProjectInvitation.belongsTo(User, {
+    ProjectInvitations.belongsTo(User, {
         as: 'Inviter', // Apelido para a relação "quem convidou"
         foreignKey: 'inviter_id'
     });
 
     // Um usuário pode ter enviado vários convites
-    User.hasMany(ProjectInvitation, {
+    User.hasMany(ProjectInvitations, {
         as: 'SentProjectInvitations',
         foreignKey: 'inviter_id'
     });
@@ -139,8 +139,8 @@ const applyAssociations = (db) => {
     User.hasMany(PrivateMessage, { foreignKey: "rementente_id"});
 
     // Project --> User (N:1)
-    Project.belongsTo(User, { foreignKey: "usuario_id" });
-    User.hasMany(Project, { foreignKey: "usuario_id" });
+    Project.belongsTo(User, { foreignKey: "criador_id" });
+    User.hasMany(Project, { foreignKey: "criador_id" });
 
     // SubTask --> Task (N:1)
     SubTask.belongsTo(Task, { foreignKey: "tarefa_id" });

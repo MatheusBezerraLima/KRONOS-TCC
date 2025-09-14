@@ -1,4 +1,4 @@
-'use strict';
+'use-strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -15,15 +15,33 @@ module.exports = {
         references: {
           model: "usuario",
           key: "id"
-        }
+        },
+        onDelete: 'CASCADE', 
+        onUpdate: 'CASCADE'
       },
       projeto_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "projeto",
+          model: "projeto", 
           key: "id"
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      },
+      role: {
+        type: Sequelize.ENUM("Criador", "Administrador", "Membro"),
+        allowNull: false
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') 
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },
