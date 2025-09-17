@@ -143,7 +143,6 @@ class ProjectServices{
 
             // 6. ENVIO DE E-MAILS: Dispara os e-mails (pode ser em segundo plano)
             for (const invitation of newInvitations) {
-                console.log("🟩");
                 
                 const inviteLink = `https://kronosapp.com.br/invites/accept?token=${invitation.token}`;
 
@@ -153,9 +152,12 @@ class ProjectServices{
                     inviteLink: inviteLink
                 }
 
-                await emailService.sendProjectInvitation(invitation.invitee_email, emailData);
+                const result = await emailService.sendProjectInvitation(invitation.invitee_email, emailData);
+                //Tratar erros de envio de email aqui
+                if (result.success === false){
+                    console.log(result);
+                }
             }
-        // }
 
         return results;
     }

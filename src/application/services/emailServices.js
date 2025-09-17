@@ -2,6 +2,9 @@ const sgMail = require("@sendgrid/mail");
 const { success } = require("zod/v4");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+console.log(process.env.SENDGRID_API_KEY);
+
+
 const FROM_EMAIL_NO_REPLAY = 'no-reply@kronosapp.com.br';
 const REPLY_TO_EMAIL_SUPPORT = 'suporte@kronosapp.com.br';
 
@@ -13,7 +16,7 @@ class EmailService{
             console.log(`E-mail enviado com sucesso para ${message.to}`);
             return { success: true };
         }catch(error){
-            console.error(`Erro ao enviar e-mail para ${message.to}`);
+            console.error(`Erro ao enviar e-mail para ${message.to}`, error);
             return { success: false, error: error};
         }
     }

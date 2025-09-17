@@ -2,28 +2,44 @@ const { Task, CategoryTask, StatusTask } = require('../models');
 
 class TasksDAO{
     async findAllGeneralTasks(userId){
-        return await Task.findAll({
-            where: {
-                projeto_id: null,
-                criador_id: userId
-            },
-            include: [
-                {
-                    model: CategoryTask, 
+        try{
+            return await Task.findAll({
+                where: {
+                    projeto_id: null,
+                    criador_id: userId
                 },
-                {
-                    model: StatusTask,
-                }
-            ]
-        });
+                include: [
+                    {
+                        model: CategoryTask, 
+                    },
+                    {
+                        model: StatusTask,
+                    }
+                ]
+            });
+        }catch(error){
+            console.error(`Erro ao buscar todas as tasks ${error.message}`);
+            throw error;           
+        }
+        
     };
 
     async create(data){
-        return await Task.create(data);
+        try{
+            return await Task.create(data);
+        }catch(error){
+            console.error(`Erro no DAO ao criar Tarefa ${error.message}`);
+            throw error;
+        }
     };
 
     async findById(taskId){
-        return await Task.findByPk(taskId);
+        try{
+            return await Task.findByPk(taskId);
+        }catch(error){
+            console.error(`Erro no DAO de Tarefa ao buscar por ID ${error.message}`);
+            throw error;
+        }
     }
 
     async delete(task){

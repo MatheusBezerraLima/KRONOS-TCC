@@ -2,7 +2,12 @@ const { ProjectInvitations } = require("../models/index");
 
 class ProjectInvitationsDAO {
     async create(data){
-        return await ProjectInvitations.create(data);
+        try{
+            return await ProjectInvitations.create(data);
+        }catch(error){
+            console.error(`Erro no DAO ao criar Convite de Projeto ${error.message}`);
+            throw error;
+        }
     }
 
     async findPendingEmailsByProjectId(projectId) {
@@ -17,7 +22,7 @@ class ProjectInvitationsDAO {
             // Retorna um array simples de strings de e-mail
             return invitations.map(inv => inv.invitee_email);
         }catch(error){
-             console.error(`Erro no DAO ao buscar convites pendentes: ${error.message}`);
+            console.error(`Erro no DAO ao buscar convites pendentes: ${error.message}`);
             throw error;
         }
         

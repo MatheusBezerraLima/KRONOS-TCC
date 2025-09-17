@@ -6,7 +6,7 @@ class CategoryTaskDAO{
             const newCategories = await CategoryTask.bulkCreate(categoriesData, {
                 transaction: options.transaction,
             });
-        return newCategories;
+            return newCategories;
         }catch(error){
             console.error(`Erro no DAO ao criar categorias em massa: ${error.message}`);
             throw error;
@@ -15,11 +15,16 @@ class CategoryTaskDAO{
     }
 
     async findAllCategories(userId){
-        return await CategoryTask.findAll({
-            where: {
-                usuario_id: userId
-            }
-        });
+        try{
+            return await CategoryTask.findAll({
+                where: {
+                    usuario_id: userId
+                }
+            });
+        }catch(error){
+            console.error(`Erro no DAO ao listar categorias: ${error.message}`);
+                throw error;
+        }
     }
 
 }
