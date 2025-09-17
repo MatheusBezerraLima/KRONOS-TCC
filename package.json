@@ -19,6 +19,7 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
+    "git-filter-repo": "^0.0.30",
     "google-auth-library": "^10.1.0",
     "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
