@@ -8,27 +8,34 @@
     <script src="/public/javascript/boardPage.js" defer></script>
 </head>
 <body>
+
+    <!--Side Header-->
     <header>
         <div class="logo">
             <a href="#" aria-label="Página principal">LOGO</a>
         </div>
-        
+
+        <!--Side Header Links-->
         <nav>
             <ul>
                 <div class="selection-menu selected">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
                     <li class="headerLink"><a href="#">Board</a></li>
                 </div>
 
                 <div class="selection-menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-icon lucide-message-circle"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/></svg>
                     <li class="headerLink"><a href="#">Chat</a></li>
                 </div>
                 
                 <div class="selection-menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity-icon lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
                     <li class="headerLink"><a href="#">Atividade</a></li>
                 </div>
             </ul>
         </nav>
 
+        <!-- Members Section-->
         <section class="members">
             <h4>Membros</h4>
             <div class="container-memberTasks">
@@ -52,16 +59,29 @@
                     <div class="taskInfo">
                         <input type="checkbox"> 
                         <p>oi</p>
-                    </div>
-                    
-                    
+                    </div>    
                 </div> <!--Tasks-->
             </div> <!--container-memberTask-->
-        </section>
+        </section> <!-- members -->
     </header>
-    <div class="menu-top">
 
-    </div>
+    <!--Superior Menu-->
+    <div class="menu-top">
+        <div class="breadcrumbs">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+            <a href="#">Home</a> / <a href="#">Projetos</a> / <a href="#">Board</a>
+        </div> <!-- breadcrumbs-->
+
+        <div class="headerUtilities">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+            
+            <div class="userProfile">
+
+            </div> <!-- userProfile -->
+        </div> <!-- headerUtilities -->
+    </div> <!--menu-top-->
 
 </body>
 </html>
