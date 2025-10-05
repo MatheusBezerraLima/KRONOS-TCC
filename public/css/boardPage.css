@@ -12,23 +12,28 @@ body{
     height: 100vh;
     width: 100vw;
     font-size: 1em;
+    overflow: hidden;
 }
 
 /*Variavéis */
 :root{
-    --border-color: "#ECECEC";
+    --border-color-aside: "#ECECEC";
+    --border-color: "#d3d3d3";
     --selected-color: rgba(42, 0, 255, 0.05);
     --blue: #000080;
     --black: #000000;
     --main-color: #FFFFFF;
     --secundary-color: #F7F6FF;
+    --lightGrey: #E6E6E6;
+    --transparent-purple: rgba(215, 130, 239, 0.5);
+    --purple: "#8601AB";
+    --taskBoardIcon-color: "#3F3F3F";
 }
 
 /* Menu lateral */
-
-header{
+aside{
     display: flex;
-    flex-direction: column  ;
+    flex-direction: column ;
     width:200px;
     height: 100%;
     border-right: 1px solid #ECECEC;
@@ -65,7 +70,7 @@ nav{
    
 }
 
-.selection-menu{
+.selection-aside{
     width:100%;
     height:40px;
     display: flex;
@@ -87,18 +92,19 @@ nav{
   text-decoration: none;
 }
 
-.selection-menu.selected .headerLink a {
+.selection-aside.selected .headerLink a {
   color: var(--blue);
   font-weight: bold;
   
 }
-.selection-menu svg{
+.selection-aside svg{
      width: 20px;
      height: 20px;
 }
-.selection-menu.selected svg {
+.selection-aside.selected svg {
   color: var(--blue);  
 }
+
 /* Membros */
 
 .members{
@@ -153,10 +159,16 @@ input[type=checkbox]{
     gap:5px;
 }
 
-
 /* Menu Superior */
 
-.menu-top{
+.main-content{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+header{
     display: flex;
     align-items: center;
     width: 100%;
@@ -171,6 +183,8 @@ input[type=checkbox]{
     display: flex;
     align-items: center;
     font-size: 0.9rem;
+    gap:5px;
+
 }
 
 .breadcrumbs a{
@@ -193,4 +207,313 @@ input[type=checkbox]{
     height: 30px;
     border-radius: 50%;
     background-color: aqua;
+}
+
+/* Main */
+
+main{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: var(--secundary-color);
+    padding: 20px;
+    gap:20px;
+}
+
+/*Header Board*/
+
+.boardHeader{
+    width: 100%;
+    height: 100px;
+    border-bottom: 1px solid #d3d3d3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Parte de cima do header board: titulo, membros, add, botão*/
+
+.mainBoardHeaderInfo{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* membros, add, botão*/
+
+.boardActions{
+    display: flex;
+    align-items: center;
+    gap:10px;
+}
+
+.lineBoardHeader{
+    width: 1px;
+    height: 40px;
+    background-color: #d3d3d3;
+}
+
+.membersIconandQuantity{
+    display: flex;
+}
+
+.membersIconHeaderBoard{
+    display: flex;
+    gap:10px;
+}
+
+.memberIcon{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-left: -10px;
+    border: 1px solid white; 
+}
+
+.memberIconAdd:first-child{
+    margin-left:0;
+}
+
+.membersQuantity{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-left: -10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    background-color: var(--lightGrey);
+    border: 1px solid white; 
+
+}
+
+.addMoreMembers{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--lightGrey);
+}
+
+.addMoreMembers svg{
+    width: 20px;
+    height: 20px;
+
+}
+
+.addTask{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 40px;
+    background-color: var(--blue);
+    border-radius: 10px;
+    color: var(--main-color);
+    border-width: 0;
+    gap:5px;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.addTask svg{
+    width: 20px;
+    height:20px;
+    fill: var(--main-color);
+}
+
+/* Parte de baixo do header do board */
+
+.boardCategory{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    gap:30px;
+}
+
+.category{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100%;
+    gap:5px;
+    border-bottom:2px solid transparent;
+    cursor: pointer;
+}
+
+.category:hover{
+    color: var(--blue);
+}
+
+.selectedCategory{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100%;
+    border-bottom:2px solid #000080;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+/* Colunas do scrum board */
+
+.boardColumns{
+    width: 100%;
+    height: 100%;
+    background-color: #d3d3d3;
+    overflow: scroll;
+}
+
+.toDoColumn{
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    height: 100%;
+    gap: 10px;
+    
+}
+.columnHeader{
+    width: 250px;
+    height: 40px;
+    min-width: 250px;
+    min-height: 40px;
+    background-color: var(--main-color);
+    border-radius: 10px;
+    display: flex;
+}
+
+.columnTaskQuantity{
+    width: 16px;
+    height: 16px;
+    background-color: var(--blue);
+    border-radius: 50% ;
+    color: var(--main-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.tasksToDoBoard{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 250px;
+    height: 200px;
+    min-width: 250px;
+    min-height: 200px;
+    background-color: var(--main-color);
+    border-radius: 10px;
+}
+
+.topTaskSection{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    padding: 20px 15px ;
+    
+}
+.taskTop{
+    display: flex;
+    justify-content: space-between;
+    color: #3f3f3f;
+}
+
+.tag{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75px;
+    height: 20px;
+    border-radius: 5px;
+    background-color: var(--transparent-purple);
+    font-size: 0.8rem;
+    color: #8601AB;
+    font-weight: bold;
+}
+
+.boardTaskInfo{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    
+}
+
+.progressBarContainer{
+    display: flex;
+    align-items: center;
+    gap:5px;
+    font-size: 0.8rem;
+}
+.progressBar{
+    width: 100%;
+    height: 10px;
+    border-radius: 10px;
+    background-color: grey;
+}
+
+.taskFooterInfo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 35px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-top: 1px solid #D3D3D3;
+}
+
+.taskMetrics{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap:10px;
+    font-size:0.8rem;
+}
+
+.commentStatus, .attachmentStatus{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:2px;
+    color: #3F3F3F;
+}
+
+.commentStatus svg{
+    width: 20px;
+    height: 20px;
+    color: #3F3F3F;
+}
+
+.attachmentStatus svg{
+    width: 20px;
+    height: 20px;
+    color: #3F3F3F;
+}
+
+.taskMembersandQuantity{
+    display: flex;
+}
+
+.memberIconTask{
+    width: 22px;
+    height: 22px;
+    background-color: #3F3F3F;
+    border-radius: 50%;
+}
+
+.taskQuantityMembers{
+     width: 22px;
+    height: 22px;
+    background-color: var(--lightGrey);
+    border-radius: 50%;
 }
