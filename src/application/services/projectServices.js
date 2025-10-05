@@ -1,13 +1,131 @@
 
 const sequelize = require("../../config/database");
+const jwt = require("jsonwebtoken");
 const userDAO = require("../../infra/database/repositories/userRepository");
 const projectDAO = require("../../infra/database/repositories/projectRepository");
+const taskDAO = require('../../infra/database/repositories/tasksRepository');
+const boardColumnDAO = require('../../infra/database/repositories/boardColumnRepository');
 const userProjectRoleDAO = require('../../infra/database/repositories/userProjectRoleRepository');
-const projectInvitationsDAO = require('../../infra/database/repositories/projectInvitations');
+const projectInvitationsDAO = require('../../infra/database/repositories/projectInvitationsRepository');
 const emailService = require("./emailServices");
 
 class ProjectServices{
+    async preparePageData(projectId){
+        if(!projectId){
+            const error = new Error("Projeto não especificado");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const project = await projectDAO.findById(projectId);
+        // verificar
+        const tasks = await taskDAO.findByProjectId(projectId);
+        // verificar
+        // Corrigir esse bloco de baixo (Gemini) ⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕ 
+            const subTasks = await tasks.map(task => {
+                return subTasks.findByTask(task.id);
+            })
+        // ⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕ 
+        const percentageTask = this._calcPercentage(subTasks);
+
+        const members = await userProjectRoleDAO.findMemberByProjectId(projectId);
+        // verificar
+        const columns = await  boardColumnDAO.findByProjectId(projectId);
+        // verificar
+
+        const shapedColumns = await this._shapeTasksByColumns(columns, tasks);
+        
+        
+    }
     
+    _shapeTasksByColumns(columns, tasks){
+        const tasksByColumnId = tasks.reduce((acc, task) => {
+            const columnId = task.coluna_id;
+            if(!acc[columnId]){
+                acc[columnId] = []
+            }
+            acc[columnId].push(task);
+            return acc;
+        }, {}); // { 10: [tarefaA, tarefaC], 11: [tarefaB] }
+
+        const shapedColumns = columns.map(column => {
+            const tasksForColumn = tasksByColumnId[column.id] ?? [];
+            
+            return {
+                id: column.id,
+                title: column.nome,
+                order: column.ordem,
+                tasks: tasksForColumn
+            };
+        });
+
+        return shapedColumns;
+    }
+
+    _createResponseContract(){
+        /** 
+         * {
+               "project": {
+                   "id": project.id
+                   "titulo": project.titulo
+                   "owner": project.criador_id      
+                },
+              
+               "members": [
+                  {"id": member.id, "name": member.name, "avatarUrl": member.foto_perfil}    
+                {"id": member.id, "name": member.name, "avatarUrl": member.foto_perfil}    
+                ],
+         
+                "colums": [
+                 {
+                    "id": colum.id,
+                    "title": colum.name,
+                    "order": colum.order,
+                  
+                    "tasks": [
+                        {
+                        "id": task.id,
+                        "title": task.titulo,
+                        "tags": ["UX/UI", "Frontend"], 
+                        "progress": 20, xxxxxxxxxxxxxxxxx
+                        "assignedMembers": [ // Apenas o suficiente para os avatares no card
+                            { "id": member.id, "avatarUrl": "/path/to/ana.png" }, xxxxxxxxx
+                            { "id": member.id, "avatarUrl": "/path/to/carlos.png" } xxxxxxxxxx
+                        ],
+                        "counts": { // Contagens importantes, mas sem os dados completos
+                            "comments": comments.quantity,
+                            "attachments": 2
+                        }
+                        },
+                        // ... outras tarefas
+                    ]
+         *       ] 
+         *          
+         * }
+         * 
+         */
+    }
+
+    _calcPercentage(subTasks) {
+        // Isto também evita a divisão por zero.
+        if (!subTasks || subTasks.length === 0) {
+            return 0;
+        }
+
+        const totalDeSubtarefas = subTasks.length;
+        const valorPercentualUnitario = 100 / totalDeSubtarefas;
+        
+        let porcentagemTotal = 0;
+
+        for (const subTask of subTasks) {
+            if (subTask.status == 1) { //  status 1 = concluído
+                porcentagemTotal = porcentagemTotal + valorPercentualUnitario;
+            }
+        }
+
+        return porcentagemTotal;
+    }
+
     async create({titulo, descricao, dataTermino}, userId){
         if(!userId){
             throw new Error("ID do usuário não fornecido");
@@ -30,7 +148,37 @@ class ProjectServices{
                 "role": "Criador" 
             }, { transaction: t });
 
+            const defaultColums = [
+                {
+                    nome: 'A Fazer',
+                    ordem: 1,
+                    project_id: newProject.id,
+                    // O Sequelize espera que estas colunas existam, adicione-as se for o caso
+                    // Se a sua migration não criou 'createdAt' e 'updatedAt', pode remover estas duas linhas.
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    nome: 'Fazendo',
+                    ordem: 2,
+                    project_id: newProject.id,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    nome: 'Concluído',
+                    ordem: 3,
+                    project_id: newProject.id,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            ]
+
+            await boardColumnDAO.createBulk(defaultColums, { transaction: t });
+
             await t.commit();
+
+
 
             return newProject.get({plain: true});
         }catch(error){
@@ -118,8 +266,9 @@ class ProjectServices{
                 emailsToInvite.push(email);
             }
         }
-           console.log("👣");
-            console.log("emails para convidar", emailsToInvite);
+
+        // console.log("emails para convidar", emailsToInvite);
+
         // 5. AÇÃO DO BANCO: Cria apenas os convites válidos
         if(emailsToInvite.length > 0){
             const invitationsData = emailsToInvite.map(email => ({
@@ -127,41 +276,55 @@ class ProjectServices{
                 inviter_id: inviterId,
                 invitee_email: email,
                 role_to_assign: role || "Membro",
-                status: "pending"
+                status: "not confirmed"
             }));
 
             const newInvitations = await projectInvitationsDAO.createBulk(invitationsData);
-            console.log("🟨");
             
             results.invitationsSent = newInvitations.map( inv => inv.invitee_email);
-            
-            console.log("newInvitations", newInvitations);
-            
+                        
             const project = await projectDAO.findById(projectId);
-            console.log("project", project);
             
 
             // 6. ENVIO DE E-MAILS: Dispara os e-mails (pode ser em segundo plano)
             for (const invitation of newInvitations) {
-                
-                const inviteLink = `https://kronosapp.com.br/invites/accept?token=${invitation.token}`;
+                try{
 
-                const emailData = {
-                    inviterName: inviter.nome,
-                    projectName: project.titulo,
-                    inviteLink: inviteLink
-                }
+                    const payload = {
+                        invitationId: invitation.id
+                    }
 
-                const result = await emailService.sendProjectInvitation(invitation.invitee_email, emailData);
-                //Tratar erros de envio de email aqui
-                if (result.success === false){
-                    console.log(result);
+                    const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "7d"}); 
+
+                    const inviteLink = `localhost:3333/invites/accept?token=${token}`;
+                    // const inviteLink = `https://kronosapp.com.br/invites/accept?token=${token}`;
+
+                    const emailData = {
+                        inviterName: inviter.nome,
+                        projectName: project.titulo,
+                        inviteLink: inviteLink
+                    }
+                    
+                    await emailService.sendProjectInvitation(invitation.invitee_email, emailData);
+                    await projectInvitationsDAO.updateStatus(invitation.id, "pending");
+                    console.log(`✅ E-mail para ${invitation.invitee_email} enviado. Status: pendente.`);
+
+                }catch(error){
+                    console.error(`❌ Falha ao processar convite ${invitation.id} para ${invitation.invitee_email}. Analisando o erro...`);
+
+                    if (error.errorType === 'permanent') {
+                        // Marcamos o convite como "falhou" para que o nosso sistema saiba que não deve tentar novamente.
+                        await projectInvitationsDAO.updateStatus(invitation.id, "failed");
+                        console.log(`- Causa: Falha permanente (${error.message}). Status atualizado para 'failed'.`);
+
+                    } else {
+                        console.log(`- Causa: Falha temporária (${error.message}). O convite permanece 'não confirmado' para retentativa.`);
+                    }
                 }
             }
+        }
+    }
 
-        return results;
-    }
-    }
 }
 
 module.exports = new ProjectServices();

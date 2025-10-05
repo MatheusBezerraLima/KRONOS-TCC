@@ -2,11 +2,17 @@ const sgMail = require("@sendgrid/mail");
 const { success } = require("zod/v4");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-console.log(process.env.SENDGRID_API_KEY);
-
-
 const FROM_EMAIL_NO_REPLAY = 'no-reply@kronosapp.com.br';
 const REPLY_TO_EMAIL_SUPPORT = 'suporte@kronosapp.com.br';
+
+class EmailError extends Error {
+    constructor(message, errorType = 'temporary', originalError = null) {
+        super(message);
+        this.name = 'EmailError';
+        this.errorType = errorType; // 'temporary' ou 'permanent'
+        this.originalError = originalError;
+    }
+}
 
 class EmailService{
 
@@ -14,10 +20,23 @@ class EmailService{
         try{
             await sgMail.send(message);
             console.log(`E-mail enviado com sucesso para ${message.to}`);
-            return { success: true };
         }catch(error){
             console.error(`Erro ao enviar e-mail para ${message.to}`, error);
-            return { success: false, error: error};
+            
+            let errorType = 'temporary'; 
+            let errorMessage = 'Falha na comunicação com o serviço de e-mail.';
+
+            // O objeto de erro do SendGrid geralmente tem um 'response' com mais detalhes
+            if (error.response) {
+                const statusCode = error.response.statusCode;
+                errorMessage = error.response.body.errors[0]?.message || 'Erro desconhecido do SendGrid.';
+
+                if (statusCode >= 400 && statusCode < 500 && statusCode !== 429) {
+                    errorType = 'permanent';
+                }
+            }
+            // Isto torna o código que chama este serviço muito mais limpo
+            throw new EmailError(errorMessage, errorType, error);
         }
     }
 

@@ -3,6 +3,7 @@ const { sequelize } = require('./src/infra/database/models');
 const userRoutes = require('./src/interface/routes/userRoutes');
 const adminRoutes = require('./src/interface/routes/adminRoutes');
 const projectRoutes = require('./src/interface/routes/projecRoutes');
+const inviteRoutes = require('./src/interface/routes/inviteRoutes');
 const indexController = require('./src/interface/controllers/indexController');
 const { createServer } = require('node:http'); // Importando o módulo http.createServer nativo do Node
 const { Server } = require("socket.io"); // Importando o server do socket.io
@@ -67,6 +68,7 @@ app.use('/', userRoutes);
 app.use('/admin', adminRoutes);
 app.use('/api', taskRoutes);
 app.use('/api', projectRoutes);
+app.use('/invites', inviteRoutes )
 
 app.get('/', indexController.renderDashboard);
 

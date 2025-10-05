@@ -37,6 +37,34 @@ class ProjectInvitationsDAO {
             throw error;
         }
     }
+
+    async updateStatus(invitationId, newStatus){
+       try {
+            const [affectedRows] = await ProjectInvitations.update(
+                { status: newStatus }, // Os campos a serem atualizados
+                { where: { id: invitationId } } // A condição para encontrar o registo
+            );
+
+            if (affectedRows === 0) {
+                console.warn(`Tentativa de atualizar o status do convite ID ${invitationId}, mas ele não foi encontrado.`);
+            }
+
+            return { affectedRows };
+        } catch (error) {
+            console.error(`Erro no DAO (Sequelize) ao atualizar status do convite ${invitationId}:`, error);
+            throw error;
+        }
+    }
+
+    async findById(invitationId){
+        try{
+           return await ProjectInvitations.findByPk(invitationId);
+        }catch(error){
+            console.error(`Erro no DAO (Sequelize) ao buscar convite por token, ${error.message}`);
+            throw error;
+        }   
+        
+    }
 }
 
 module.exports = new ProjectInvitationsDAO();

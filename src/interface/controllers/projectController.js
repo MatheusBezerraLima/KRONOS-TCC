@@ -1,6 +1,20 @@
 const projectServices = require("../../application/services/projectServices");
 
 class ProjectController{
+    async preparePageData(req, res){
+        try{    
+            const { projectId } = req.params;
+
+            const pageData = await projectServices.preparePageData(projectId);
+
+            res.json()
+        }catch(error){
+            console.error("Erro no fluxo de preparar a página do projeto:", error);
+            const statusCode = error.statusCode || 500;
+            res.status(statusCode).send(error.message);
+        }
+    }
+
     async create(req, res){
         try{
             const {titulo, descricao, dataTermino} = req.body;

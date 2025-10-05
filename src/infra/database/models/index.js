@@ -16,7 +16,7 @@ const BoardColumn = require("./BoardColumn");
 const ChatProjectMessage = require("./ChatProjectMessage");
 const PrivateChat = require("./PrivateChat");
 const PrivateMessage = require("./PrivateMessage");
-const  SubTask = require("./SubTask");
+const SubTask = require("./SubTask");
 const Friendship = require("./Friendship");
 const ProjectInvitations = require('./ProjectInvitations');
 

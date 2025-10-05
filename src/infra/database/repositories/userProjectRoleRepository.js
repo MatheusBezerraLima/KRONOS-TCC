@@ -33,6 +33,21 @@ class UserProjectRoleDAO{
         // Retorna um array simples de strings de e-mail
         return associations.map(assoc => assoc.User.email);
     }
+
+    async findMemberByProjectId(projectId){
+        try{
+            return await UserProjectRole.findAll({
+                where: { projeto_id: projectId },
+                include: [{
+                    model: User,
+                }]
+            });
+        }catch(error){
+            console.error(`Erro no DAO (Role) ao buscar membros de um projeto ${error.message}`);
+            throw error;
+        }
+
+    }
 }
 
 module.exports = new UserProjectRoleDAO();

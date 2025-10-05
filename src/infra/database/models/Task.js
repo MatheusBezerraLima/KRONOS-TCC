@@ -32,6 +32,14 @@ const Task = sequelize.define("Task", {
             key: "id"
         }
     },
+    coluna_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: "coluna_board",
+            key: "id"
+        }
+    },
     categoria_id: {
         type: DataTypes.INTEGER,
         allowNull: true,

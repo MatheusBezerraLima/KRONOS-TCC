@@ -1,3 +1,4 @@
+const { includes } = require('zod/v4');
 const { Task, CategoryTask, StatusTask } = require('../models');
 
 class TasksDAO{
@@ -40,6 +41,28 @@ class TasksDAO{
             console.error(`Erro no DAO de Tarefa ao buscar por ID ${error.message}`);
             throw error;
         }
+    }
+     
+    async findByProjectId(projectId){
+        try{
+             return await Task.findAll({
+                where: {
+                    projeto_id: projectId
+                },
+                includes: [
+                    {
+                     model: CategoryTask    
+                    },
+                    {
+                     model: StatusTask    
+                    },
+                ]
+            })
+        }catch(error){
+            console.error(`Erro no DAO (Sequelize) ao buscar tarefas por id do projeto, ${error.message}` );
+            throw error;
+        }
+       
     }
 
     async delete(task){

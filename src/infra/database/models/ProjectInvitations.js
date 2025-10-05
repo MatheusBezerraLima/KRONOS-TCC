@@ -30,7 +30,7 @@ const ProjectInvitations = sequelize.define("ProjectInvitations", {
         }
     },
     status: {
-        type: DataTypes.ENUM("pending", "accepted", "declined"),
+        type: DataTypes.ENUM("not confirmed" ,"pending", "accepted", "declined", "failed"),
         allowNull: false,
         defaultValue: 'pending'
     },
