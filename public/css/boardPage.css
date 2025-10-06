@@ -366,9 +366,12 @@ main{
 .boardColumns{
     width: 100%;
     height: 100%;
+    min-width: 100%;
     background-color: #d3d3d3;
-    overflow: scroll;
+    overflow: auto;
 }
+
+/* Coluna A FAZER  */
 
 .toDoColumn{
     display: flex;
@@ -385,20 +388,37 @@ main{
     min-height: 40px;
     background-color: var(--main-color);
     border-radius: 10px;
+    display: flex;  
+    align-items: center;
+    padding: 15px;
+    justify-content: space-between;
+}
+
+.columnHeader svg{
+    color: #3F3F3F;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+
+}
+
+.statusColumnHeader{
     display: flex;
+    gap:8px;
+    align-items: center;
 }
 
 .columnTaskQuantity{
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     background-color: var(--blue);
     border-radius: 50% ;
     color: var(--main-color);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0.8rem;
-    font-weight: bold;
+    font-size: 0.9rem;
+    font-weight: 500 ;
 }
 
 .tasksToDoBoard{
@@ -413,17 +433,22 @@ main{
     border-radius: 10px;
 }
 
+/* Parte de cima do card de tarefas, tag e icones */
+
 .topTaskSection{
     display: flex;
     flex-direction: column;
     gap:5px;
-    padding: 20px 15px ;
-    
+    padding: 20px 15px ;    
 }
 .taskTop{
     display: flex;
     justify-content: space-between;
     color: #3f3f3f;
+}
+
+.taskTop svg{
+    cursor: pointer;
 }
 
 .tag{
@@ -437,7 +462,10 @@ main{
     font-size: 0.8rem;
     color: #8601AB;
     font-weight: bold;
+    cursor: pointer;
 }
+
+/* Parte de meio do card de tarefas, titulo, descrição, barra de progresso */
 
 .boardTaskInfo{
     display: flex;
@@ -458,6 +486,8 @@ main{
     border-radius: 10px;
     background-color: grey;
 }
+
+/* Parte de baixo do card de task: comentarios, fixar links e membros atribuidos */
 
 .taskFooterInfo{
     display: flex;
@@ -492,12 +522,14 @@ main{
     width: 20px;
     height: 20px;
     color: #3F3F3F;
+    cursor: pointer;
 }
 
 .attachmentStatus svg{
     width: 20px;
     height: 20px;
     color: #3F3F3F;
+    cursor: pointer;
 }
 
 .taskMembersandQuantity{
@@ -505,15 +537,23 @@ main{
 }
 
 .memberIconTask{
-    width: 22px;
-    height: 22px;
+    width: 25px;
+    height: 25px;
     background-color: #3F3F3F;
     border-radius: 50%;
+    border: 1px solid white;
+    margin-left:-8px;
 }
 
 .taskQuantityMembers{
-     width: 22px;
-    height: 22px;
+    width: 25px;
+    height: 25px;
     background-color: var(--lightGrey);
     border-radius: 50%;
+    margin-left:-8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size:0.8rem;
 }
