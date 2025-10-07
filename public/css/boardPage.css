@@ -19,17 +19,19 @@ body{
 
 /*Variavéis */
 :root{
-    --border-color-aside: "#ECECEC";
-    --border-color: "#d3d3d3";
+    --border-color-aside: #ECECEC;
+    --border-color: #d3d3d3;
     --selected-color: rgba(42, 0, 255, 0.05);
     --blue: #000080;
+    --transparent-blue: rgba(42, 0, 255, 0.1);
     --black: #000000;
     --main-color: #FFFFFF;
     --secundary-color: #F7F6FF;
     --lightGrey: #E6E6E6;
     --transparent-purple: rgba(215, 130, 239, 0.5);
-    --purple: "#8601AB";
-    --taskBoardIcon-color: "#3F3F3F";
+    --purple: #8601AB;
+    --taskBoardIcon-color: #3F3F3F;
+    --shadow: rgb(198, 198, 198, 0.5);
 }
 
 /* Menu lateral */
@@ -293,7 +295,6 @@ main{
     font-size: 0.8rem;
     background-color: var(--lightGrey);
     border: 1px solid white; 
-
 }
 
 .addMoreMembers{
@@ -303,7 +304,12 @@ main{
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    cursor:pointer;
+}
+
+.addMoreMembers:hover{
     background-color: var(--lightGrey);
+
 }
 
 .addMoreMembers svg{
@@ -316,15 +322,20 @@ main{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 110px;
+    width: 120px;
     height: 40px;
     background-color: var(--blue);
     border-radius: 10px;
     color: var(--main-color);
     border-width: 0;
-    gap:5px;
-    font-weight: bold;
-    padding: 5px;
+    gap:2px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor:pointer;
+}
+
+.addTask:hover{
+    background-color: #010155;
 }
 
 .addTask svg{
@@ -375,8 +386,11 @@ main{
     height: 100%;
     min-width: 100px;
     overflow: auto;
+    scrollbar-width: none;
     display: flex;
-    gap:50px;
+    gap:40px;
+    padding-left: 2px;
+    padding-top: 2px;
 }
 
 /* Coluna A FAZER  */
@@ -387,7 +401,7 @@ main{
     width: 250px;
     height: 100%;
     min-width: 250px;
-    gap: 10px;
+    gap: 20px;
     
 }
 .columnHeader{
@@ -401,6 +415,9 @@ main{
     align-items: center;
     padding: 15px;
     justify-content: space-between;
+    box-shadow: 1px 1px 5px var(--shadow);
+
+    
 }
 
 .columnHeader svg{
@@ -440,6 +457,8 @@ main{
     min-height: 200px;
     background-color: var(--main-color);
     border-radius: 10px;
+    box-shadow: 1px 1px 8px var(--shadow);
+
 }
 
 /* Parte de cima do card de tarefas, tag e icones */
@@ -569,7 +588,22 @@ main{
 
 /* coluna FAZENDO */
 
-.doingColumn{
+.addColumnHeader{
+    width: 250px;
+    height: 40px;
+    background-color: var(--transparent-blue);
+    border-radius: 10px;
+    min-width: 250px;
+    min-height: 40px;
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+}
 
+.addColumnHeader svg{
+    width: 24px;
+    height: 24px;
 }
 
