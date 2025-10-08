@@ -1,8 +1,7 @@
 const menuLinksSelection = document.querySelectorAll("ul .selection-aside")
 const categoryBoardSelection = document.querySelectorAll(".category")
-
-
-
+const closeMenu = document.querySelector(".toggleIcon")
+const sideMenu = document.querySelector("aside")
 
 // Função de seleção dos links do menu lateral
 
@@ -21,6 +20,8 @@ menuLinksSelection.forEach(item => {
     });
 });
 
+// Função de seleção dos links de categoria do board
+
 categoryBoardSelection.forEach(item => {
     item.addEventListener("click", () => {
         
@@ -31,6 +32,20 @@ categoryBoardSelection.forEach(item => {
         item.classList.add("selectedCategory");
     });
 });
+
+// Função de fechar e abrir menu
+
+closeMenu.addEventListener("click", toggleMenu);
+
+function toggleMenu() {
+    sideMenu.classList.toggle("asideClosed");
+}
+
+
+
+
+
+
 
 
 

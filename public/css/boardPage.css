@@ -32,32 +32,97 @@ body{
     --purple: #8601AB;
     --taskBoardIcon-color: #3F3F3F;
     --shadow: rgb(198, 198, 198, 0.5);
+    --transparentBlack: rgba(0, 0, 0, 0.4);
 }
 
+/* Filtro do modal */
+.filter{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--transparentBlack);
+}
 /* Menu lateral */
-aside{
+.aside{
     display: flex;
     flex-direction: column ;
     width:200px;
     height: 100%;
     border-right: 1px solid #ECECEC;
     min-width: 200px;
+    transition: width .3s ease, min-width .3s ease;
+}
+
+/*Fechar e abrir menu lateral*/
+
+.asideClosed .selection-aside{
+    display: flex;
+    padding-left: 0;
+    justify-content: center;
+}
+
+.asideClosed .selection-aside svg {
+    width: 22px;
+    height: 22px;
+}
+
+.asideClosed .headerLink {
+    display: none; 
+}
+
+.asideClosed .members{
+    display: none;
+}
+
+.asideClosed .logo{
+     padding: 0;
+     display: flex;
+     justify-content: center;
+}
+
+.asideClosed .logo a{
+    display: none;
+}
+
+.asideClosed .logo .toggleIcon{
+    transform: rotate(180deg); 
+}
+
+.asideClosed{
+    width: 60px;
+    min-width: 60px;   
 }
 
 .logo{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 20px;
     width:100%;
-    height:70px;
+    height:60px;
     border-bottom: 1px solid #ECECEC;
-    
 }
 
 .logo a{
     text-decoration: none;
     color: var(--black);
     font-weight: bold;
+}
+
+.logo .toggleIcon{
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    transition: transform 0.3 ease;
+}
+
+.logo svg:hover{
+    width: 25px;
+    height: 25px;
+    background-color: var(--lightGrey);
+    border-radius: 5px ;
 }
 
 /* Navegação Lateral */
@@ -74,7 +139,6 @@ nav{
     }
    
 }
-
 .selection-aside{
     width:100%;
     height:40px;
@@ -84,12 +148,15 @@ nav{
     cursor: pointer;
     gap:5px;
 }
-
+.selection-aside:hover{
+    background-color: var(--selected-color);
+    width: 100%;
+    height:40px;
+}
 .selected{
     background-color: var(--selected-color);
     width: 100%;
     height:40px;
-    
 }
 
 .headerLink a {
@@ -103,8 +170,8 @@ nav{
   
 }
 .selection-aside svg{
-     width: 20px;
-     height: 20px;
+     width: 22px;
+     height: 22px;
 }
 .selection-aside.selected svg {
   color: var(--blue);  
@@ -208,6 +275,19 @@ header{
     gap:20px;
 }
 
+.headerUtilitiesHover{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    transition: .3s ease;
+}
+.headerUtilitiesHover:hover{
+    background-color: var(--lightGrey);
+}
+
 .userProfile{
     width: 30px;
     height: 30px;
@@ -305,6 +385,8 @@ main{
     height: 30px;
     border-radius: 50%;
     cursor:pointer;
+    transition: .3s ease;
+
 }
 
 .addMoreMembers:hover{
@@ -332,6 +414,8 @@ main{
     font-weight: 500;
     font-size: 0.9rem;
     cursor:pointer;
+    transition: .3s ease;
+
 }
 
 .addTask:hover{
