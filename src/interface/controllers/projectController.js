@@ -19,7 +19,7 @@ class ProjectController{
         try{
             const {titulo, descricao, dataTermino} = req.body;
             // const user = req.user.id;
-            const userId = 1;   
+            const userId = 11;   
             const newProject = await  projectServices.create({titulo, descricao, dataTermino}, userId);
             res.status(200).json({"Sucess": true, "Result:": newProject});
         }catch(error){

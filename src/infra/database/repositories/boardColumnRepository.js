@@ -34,3 +34,5 @@ class BoardColumnDAO {
         
     }
 }
+
+module.exports = new BoardColumnDAO();

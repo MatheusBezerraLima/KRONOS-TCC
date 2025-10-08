@@ -6,6 +6,7 @@ const verifyAuthToken = require('../middlewares/authenticateToken');
 const verifyRole = require('../middlewares/authorizeAdmin');
 const validate = require("../middlewares/validate");
 const { createUserSchema, loginUserSchema, changePasswordUserSchema, findByNameUserSchema, findByEmailUserSchema} = require("../validators/userValidator");
+const profileUserDAO = require('../../infra/database/repositories/profileUserRepository');
 
 // Pronta
 routes.get('/login', (req, res) => {
@@ -40,5 +41,7 @@ routes.get('/change-password', async(req, res) => {
 routes.post('/change-password', verifyAuthToken, async(req, res) => {
     await getChangePasswordUser(req, res);
 });
+
+routes.get("/listar-perfis", profileUserDAO.findAll);
 
 module.exports = routes;

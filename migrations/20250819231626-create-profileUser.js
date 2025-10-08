@@ -11,11 +11,14 @@ module.exports = {
       },
       usuario_id: {
         type: Sequelize.INTEGER,
+        unique: true,
         allowNull: false,
         references: {
           model: "usuario",
           key: "id"
-        }
+        },
+        onDelete: 'CASCADE', 
+        onUpdate: 'CASCADE'
       },
       bio: {
         type: Sequelize.STRING,
@@ -40,6 +43,16 @@ module.exports = {
       linkedin: {
         type: Sequelize.STRING,
         allowNull: true
+      },
+      createdAt: { 
+      allowNull: false,
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      updatedAt: { 
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

@@ -104,7 +104,7 @@ const applyAssociations = (db) => {
 
     //ProfileUser --> User (1:1)
     ProfileUser.belongsTo(User, { foreignKey: "usuario_id" });
-    User.hasOne(ProfileUser, { foreignKey: "usuario_id" });
+    User.hasOne(ProfileUser, { foreignKey: "usuario_id", as: "perfil"});
 
     // UserProjectRole --> User (1:N)
     UserProjectRole.belongsTo(User, {foreignKey: "usuario_id" });

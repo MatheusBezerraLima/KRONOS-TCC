@@ -38,10 +38,12 @@ const ProfileUser = sequelize.define("ProfileUser", {
     linkedin: {
         type: DataTypes.STRING,
         allowNull: true
-    }
+    },
 },{
     tableName: "perfil_publico",
-    timestamp: false
+    timestamps: true,
+    createdAt: 'createdAt',   
+    updatedAt: 'updatedAt'
 });
 
 module.exports  = ProfileUser;

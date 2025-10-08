@@ -20,21 +20,9 @@ const SubTask = sequelize.define("SubTask", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    descricao: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
     status_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: "status_tarefa",
-            key: "id"
-        }
-    },
-    data_entrega: {
-        type: DataTypes.DATE,
-        allowNull: false
     },
     criado_em: {
         type: DataTypes.DATE,

@@ -1,8 +1,10 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const UserDAO = require('../../infra/database/repositories/userRepository');
+const profileUserDAO = require('../../infra/database/repositories/profileUserRepository');
 const sequelize = require("../../config/database");
 const categoryTask = require("../../infra/database/repositories/categoryTaskRepository");
+
 
 const serviceInsertUser = async (data) => {
   // Iniciando uma transação
@@ -15,11 +17,17 @@ const serviceInsertUser = async (data) => {
     }
 
     // Criptografando a senha
-    const senhaHash = await bcrypt.hash(data.senha, 10);
-    data.senha = senhaHash;
+    const passwordHash = await bcrypt.hash(data.password, 10);
+    data.password = passwordHash;
 
     const newUser = await UserDAO.create(data, { transaction: t });
+
+    // Criando o perfil do usuário
+    const imageUrl = `https://ui-avatars.com/api/?name=${newUser.nome}&background=random`
+    const profileUser = await profileUserDAO.create({usuario_id: newUser.id, foto_perfil: imageUrl}, {transaction: t});
     
+    console.log("Profile", profileUser);
+      
     const defaultCategories = [
       {nome: "Pessoal", usuario_id: newUser.id},
       {nome: "Estudos", usuario_id: newUser.id},
@@ -54,7 +62,7 @@ const serviceAuthenticateUser = async (data) => {
     }
 
     // verificando compatibilidade da senha
-    const passwordIsMatch = await bcrypt.compare(data.senha, user.senha);
+    const passwordIsMatch = await bcrypt.compare(data.password, user.senha);
 
     if(!passwordIsMatch){
       throw new Error("INVALID_PASSWORD");
@@ -71,7 +79,7 @@ const serviceAuthenticateUser = async (data) => {
     const token = jwt.sign(payload, process.env.SECRET, {
       expiresIn: '30m'
     })
-      
+    
     return {user, token};
 };
 

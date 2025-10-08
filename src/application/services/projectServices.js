@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const userDAO = require("../../infra/database/repositories/userRepository");
 const projectDAO = require("../../infra/database/repositories/projectRepository");
 const taskDAO = require('../../infra/database/repositories/tasksRepository');
+const subTaskDAO = require("../../infra/database/repositories/subTaskRepository");
 const boardColumnDAO = require('../../infra/database/repositories/boardColumnRepository');
 const userProjectRoleDAO = require('../../infra/database/repositories/userProjectRoleRepository');
 const projectInvitationsDAO = require('../../infra/database/repositories/projectInvitationsRepository');
@@ -17,25 +18,36 @@ class ProjectServices{
             throw error;
         }
 
-        const project = await projectDAO.findById(projectId);
-        // verificar
-        const tasks = await taskDAO.findByProjectId(projectId);
-        // verificar
-        // Corrigir esse bloco de baixo (Gemini) ⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕ 
-            const subTasks = await tasks.map(task => {
-                return subTasks.findByTask(task.id);
-            })
-        // ⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕⭕ 
-        const percentageTask = this._calcPercentage(subTasks);
+        // Adicionar a busca de Contagem de mensagens e contagem de atividades
+        const [project, tasks, members, columns] = await Promise.all([
+            projectDAO.findById(projectId),
+            taskDAO.findByProjectId(projectId),
+            userProjectRoleDAO.findMemberByProjectId(projectId),
+            boardColumnDAO.findByProjectId(projectId),
+        ])
+      
+        const taskIds = tasks.map(task => task.id);
 
-        const members = await userProjectRoleDAO.findMemberByProjectId(projectId);
-        // verificar
-        const columns = await  boardColumnDAO.findByProjectId(projectId);
-        // verificar
+        const allSubTasks = await subTaskDAO.findAllByTaskIds(taskIds);
+       
+        const enrichedTasks  = this._enrichTasksWithProgress(tasks, allSubTasks);
 
-        const shapedColumns = await this._shapeTasksByColumns(columns, tasks);
+        const shapedColumns = await this._shapeTasksByColumns(columns, enrichedTasks);
         
-        
+        const pageData = {
+            project: {
+                id: project.id,
+                title: project.titulo,
+            },
+            members: members, // O DAO já deve retornar apenas os dados necessários
+            columns: shapedColumns,
+            // unreadCounts: {
+            //     chatMessages: unreadMessagesCount,
+            //     activityNotifications: unreadActivitiesCount
+            // }
+        }
+
+        console.log(pageData);
     }
     
     _shapeTasksByColumns(columns, tasks){
@@ -106,24 +118,44 @@ class ProjectServices{
          */
     }
 
+    _enrichTasksWithProgress(tasks, allSubTasks) {
+        // Passo A: Crie um mapa para acesso rápido às subtarefas de cada tarefa
+        const subTasksByTaskId = allSubTasks.reduce((acc, subTask) => {
+            const taskId = subTask.task_id; // Verifique se o nome da coluna está correto
+            if (!acc[taskId]) {
+                acc[taskId] = [];
+            }
+            acc[taskId].push(subTask);
+            return acc;
+        }, {});
+
+        // Passo B: Percorra cada tarefa e adicione a sua percentagem
+        return tasks.map(task => {
+            const tasksSubTasks = subTasksByTaskId[task.id] || []; // Pega nas subtarefas desta tarefa
+            const progressPercentage = this._calcPercentage(tasksSubTasks); // Usa a sua função já criada!
+
+            return {
+                ...task.toJSON(), // Converte a instância do Sequelize para um objeto simples
+                progress: progressPercentage
+            };
+        });
+    }
+
     _calcPercentage(subTasks) {
-        // Isto também evita a divisão por zero.
         if (!subTasks || subTasks.length === 0) {
             return 0;
         }
 
         const totalDeSubtarefas = subTasks.length;
-        const valorPercentualUnitario = 100 / totalDeSubtarefas;
-        
-        let porcentagemTotal = 0;
 
-        for (const subTask of subTasks) {
-            if (subTask.status == 1) { //  status 1 = concluído
-                porcentagemTotal = porcentagemTotal + valorPercentualUnitario;
-            }
-        }
+        // 1. Conta quantas tarefas estão concluídas usando o método 'filter'.
+        const tarefasConcluidas = subTasks.filter(subTask => subTask.status == 1).length;
 
-        return porcentagemTotal;
+        // 2. Calcula a percentagem final de uma só vez.
+        const porcentagem = (tarefasConcluidas / totalDeSubtarefas) * 100;
+
+        // 3. Arredonde o resultado para o número inteiro mais próximo,
+        return Math.round(porcentagem);
     }
 
     async create({titulo, descricao, dataTermino}, userId){
@@ -152,23 +184,21 @@ class ProjectServices{
                 {
                     nome: 'A Fazer',
                     ordem: 1,
-                    project_id: newProject.id,
-                    // O Sequelize espera que estas colunas existam, adicione-as se for o caso
-                    // Se a sua migration não criou 'createdAt' e 'updatedAt', pode remover estas duas linhas.
+                    projeto_id: newProject.id,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 },
                 {
                     nome: 'Fazendo',
                     ordem: 2,
-                    project_id: newProject.id,
+                    projeto_id: newProject.id,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 },
                 {
                     nome: 'Concluído',
                     ordem: 3,
-                    project_id: newProject.id,
+                    projeto_id: newProject.id,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 }

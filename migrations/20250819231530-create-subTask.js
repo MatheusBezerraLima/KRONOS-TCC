@@ -21,21 +21,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      descricao: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
       status: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: "status_tarefa",
-          key: "id"
-        }
-      },
-      data_entrega: {
-        type: Sequelize.DATE,
-        allowNull: false
+        defaultValue: 0
       },
       criado_em: {
         type: Sequelize.DATE,

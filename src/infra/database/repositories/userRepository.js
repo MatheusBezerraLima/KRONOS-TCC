@@ -2,13 +2,22 @@ const { User } = require('../models');
 const bycript = require('bcrypt');
 
 class UserDAO {
-    async create(data){
-        const userData = {
-            ...data,
-            role: "user",
-            status: "ativo"     
-        } 
-        return await User.create(userData);
+    async create(data, options = {}){
+        try{
+            const userData = {
+                nome: data.name,
+                email: data.email,
+                senha: data.password,
+                telefone: data.phone,
+                role: "user",
+                status: "ativo"     
+            } 
+            return await User.create(userData,{ transaction: options.transaction});
+        }catch(error){
+            console.error("Erro ao criar usuário:", err);
+            throw new Error(`Não foi possível criar o usuário: ${err.message}`);
+        }
+       
     }
 
     async findById(id) {

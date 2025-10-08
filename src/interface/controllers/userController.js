@@ -3,20 +3,19 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const DatabaseErrors = require("../../utils/databaseErrors.js");
 const StatusCode = require("../../utils/status-code.js");
-
+const profileUserService = require("../../application/services/profileUserServices.js");
 
 const getRegisterUser = async (req, res) => {
-  const { nome, email, senha, telefone } = req.body;
+  const { name, email, password, phone } = req.body;
 
   try{
-    const newUser = await serviceInsertUser({ nome, email, senha, telefone});
+    const newUser = await serviceInsertUser({ name, email, password, phone});
 
     if(!newUser || newUser == null){
       console.log("Error ao registrar usuario");
     }
-
+  
     getAuthenticateUser(req, res);
-    
   }catch(err){
 
     if (err.code === DatabaseErrors.DUPLICATE_ENTRY) {
@@ -38,10 +37,10 @@ const getRegisterUser = async (req, res) => {
 };
 
 const getAuthenticateUser = async (req, res) => {
-  const { email, senha } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const { user, token } = await serviceAuthenticateUser({ email, senha });
+    const { user, token } = await serviceAuthenticateUser({ email, password });
     
     res.cookie("authToken", token, {
         httpOnly: true,                                   // Bloqueia o acesso por meio do JS pelo lado do usuário

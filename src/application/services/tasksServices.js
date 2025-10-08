@@ -72,7 +72,6 @@ class TaskServices{
                 throw new Error('Erro ao criar tarefa para o projeto');
             }
 
-            return response;
         }
 
         const taskCreated = await tasksDAO.create(data);
@@ -150,7 +149,9 @@ class TaskServices{
         return updatedTask;
     }
 
-    _createTaskOfProject(){}
+    _createTaskOfProject(data){
+        
+    }
 
 }
 

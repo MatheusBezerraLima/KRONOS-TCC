@@ -15,7 +15,7 @@ const BoardColumn = sequelize.define("BoardColumn", {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    project_id: {
+    projeto_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

@@ -1,4 +1,7 @@
 'use strict';
+
+const { DataTypes } = require('sequelize');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -38,6 +41,14 @@ module.exports = {
         allowNull: true,
         references: {
           model: "categoria_tarefa",
+          key: "id"
+        }
+      },
+      coluna_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "coluna_board",
           key: "id"
         }
       },
