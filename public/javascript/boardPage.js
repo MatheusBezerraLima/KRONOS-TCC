@@ -2,6 +2,10 @@ const menuLinksSelection = document.querySelectorAll("ul .selection-aside")
 const categoryBoardSelection = document.querySelectorAll(".category")
 const closeMenu = document.querySelector(".toggleIcon")
 const sideMenu = document.querySelector("aside")
+const filter = document.querySelector(".filter")
+const addTaskModal = document.querySelector(".addTaskModal")
+const addTaskButton = document.querySelector(".addTask")
+const closeModalIcon = document.querySelector(".closeModalIcon")
 
 // Função de seleção dos links do menu lateral
 
@@ -40,6 +44,32 @@ closeMenu.addEventListener("click", toggleMenu);
 function toggleMenu() {
     sideMenu.classList.toggle("asideClosed");
 }
+
+// Função para abrir o modal
+
+addTaskButton.addEventListener("click", openModalTask);
+
+function openModalTask() {
+    filter.classList.add("filterOn")
+    addTaskModal.classList.add("modalOn")
+}
+
+// Função para fechar modal clicando no icone
+
+closeModalIcon.addEventListener("click", closeModalTask);
+filter.addEventListener("click", closeModalTask);
+
+function closeModalTask() {
+    filter.classList.remove("filterOn")
+    addTaskModal.classList.remove("modalOn")
+}
+
+
+
+
+
+
+
 
 
 
