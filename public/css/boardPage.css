@@ -740,11 +740,28 @@ main{
 .dateFormModal, .categoryFormModal, .statusFormModal, .linksFormModal, .atribuitionFormModal {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     height: 40px;
     background-color: red;
 }
 
+.categoryTitle, .dateTitle, .statusTitle, .linksTitle, .atribuitionTitle{
+    width:30%;
+    background-color: #3F3F3F
+}
+
+.selectInput{
+    width: 75px;
+    height: 25px;
+}
 .atribuitionMembersModal{
     display: flex;
+}
+
+.formModalInfo{
+    display: flex;
+    width: 70%;
+    margin: 0;
+    gap:20px;
 }
