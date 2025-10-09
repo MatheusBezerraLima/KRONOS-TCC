@@ -713,6 +713,7 @@ main{
     display: none;
     border-radius:10px;
     padding: 20px;
+    overflow: hidden;
 }
 
 .modalOn{
@@ -723,6 +724,7 @@ main{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    
 }
 
 .modalTop svg{
@@ -733,35 +735,106 @@ main{
     display: flex;
     flex-direction: column;
     width: 100%;
-    background-color: #000080;
-    gap:20px
+    height: 45%;
+    gap:10px;
+    margin-top: 10px;
+    background-color: #d3d3d3;
 }
 
 .dateFormModal, .categoryFormModal, .statusFormModal, .linksFormModal, .atribuitionFormModal {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     width: 100%;
     height: 40px;
-    background-color: red;
 }
 
 .categoryTitle, .dateTitle, .statusTitle, .linksTitle, .atribuitionTitle{
     width:30%;
-    background-color: #3F3F3F
+    font-size: 0.9rem;
+    color: var(--taskBoardIcon-color);
+    font-weight: 500;
+}
+
+.addMoreMembersModal{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius:50%;
+    background-color: var(--lightGrey);
+}
+
+.addMoreMembersModal svg{
+    width: 20px;
+    height: 20px;
+}
+
+.memberIconModal{
+    width: 25px;
+    height: 25px;
+    border-radius:50%;
+    margin-left:-10px;
+}
+
+.memberIconModal:first-child{
+    margin-left:0;
 }
 
 .selectInput{
     width: 75px;
     height: 25px;
 }
+
+.memberModal{
+    display: flex;
+}
 .atribuitionMembersModal{
     display: flex;
+    gap:10px;
 }
 
 .formModalInfo{
     display: flex;
+    align-items: center;
     width: 70%;
     margin: 0;
     gap:20px;
 }
+
+/* Parte de baixo do modal: subtarefas, comentários */
+
+.interactionModal{
+    width:100%;
+    height: 55%;
+}
+
+.titleModal{
+    display:flex;
+    align-items: flex-end;
+    justify-content: center;
+    width:100px;
+    border-bottom: 1px solid var(--blue)
+}
+
+.titleInteractionModal{
+    display: flex;
+    gap: 40px;
+    width: 100%;
+    height: 50px;
+    background-color: #8601AB;
+    display: flex;
+}
+
+.subtask{
+    display: flex;
+    gap:5px;
+}
+
+.interactionModalContent{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+
