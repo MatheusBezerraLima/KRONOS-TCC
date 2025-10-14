@@ -42,9 +42,31 @@
                      <div class="statusTitle">
                         <p>Status</p>
                     </div>
-                    <div class="formModalInfo">
-                        <input class="selectInput" type="select" name="" id="">
-                    </div>
+
+                    <div class="formModalInfo"> 
+    
+                        <!-- Caixinha para escolher status do projeto -->
+                        <div class="selectCategory" id="selectOptions">
+                            <div class="toDoCategoryContainerSelect " id="currentCategory">
+                                <div class="toDoCategory">
+                                    <p>A fazer </p>
+                                </div> <!-- toDoCategory  -->
+                            </div> <!-- toDoCategorySelect-->
+
+                            <div class="doingCategoryContainer">
+                                <div class="doingCategory">
+                                    <p>Fazendo</p>
+                                </div> <!-- doingCategoryContainer -->
+                            </div> <!-- doingCategory -->
+
+                            <div class="doneCategoryContainer" id="selectedInput">
+                                <div class="doneCategory">
+                                    <p>Concluído</p>
+                                </div> <!-- doneCategory -->
+                            </div> <!-- doneCategoryContainer -->
+
+                        </div> <!-- selectCategory -->
+                    </div> <!-- formModalInfo -->
                 </div> <!-- categoryFormModal -->
 
                 <div class="linksFormModal">
@@ -550,5 +572,5 @@
             </main>
             </div>
         </div> <!-- main-content -->
-</body>
+    </body>
 </html>

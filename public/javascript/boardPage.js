@@ -6,7 +6,8 @@ const filter = document.querySelector(".filter")
 const addTaskModal = document.querySelector(".addTaskModal")
 const addTaskButton = document.querySelector(".addTask")
 const closeModalIcon = document.querySelector(".closeModalIcon")
-
+const selectCategory= document.querySelector(".selectCategory")
+const currentStatus = document.querySelector(".toDoCategoryContainer")
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -64,6 +65,13 @@ function closeModalTask() {
     addTaskModal.classList.remove("modalOn")
 }
 
+// Mudar status da tarefa
+
+currentStatus.addEventListener("click", changeStatus);
+
+function changeStatus(){
+    selectCategory.classList.remove("hidden")
+}
 
 
 

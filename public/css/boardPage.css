@@ -33,6 +33,12 @@ body{
     --taskBoardIcon-color: #3F3F3F;
     --shadow: rgb(198, 198, 198, 0.5);
     --transparentBlack: rgba(0, 0, 0, 0.4);
+    --toDo-color: rgba(64, 64, 64, 0.4);
+    --toDoFont-color: #404040;
+    --doing-color: rgb(3, 44, 166, 0.5);
+    --doingFont-color: #032CA6;
+    --done-color: rgb(17, 149, 0, 0.5);
+    doneFont-color: #119500;
 }
 
 /* Menu lateral */
@@ -738,7 +744,7 @@ main{
     height: 45%;
     gap:10px;
     margin-top: 10px;
-    background-color: #d3d3d3;
+    
 }
 
 .dateFormModal, .categoryFormModal, .statusFormModal, .linksFormModal, .atribuitionFormModal {
@@ -746,7 +752,7 @@ main{
     align-items: flex-end;
     justify-content: space-between;
     width: 100%;
-    height: 40px;
+    height: 40px;   
 }
 
 .categoryTitle, .dateTitle, .statusTitle, .linksTitle, .atribuitionTitle{
@@ -764,6 +770,12 @@ main{
     height: 25px;
     border-radius:50%;
     background-color: var(--lightGrey);
+}
+
+#selectedInput{
+    width: min-content !important;
+    height: min-content !important;
+    padding-left:0px !important;
 }
 
 .addMoreMembersModal svg{
@@ -797,10 +809,117 @@ main{
 
 .formModalInfo{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     width: 70%;
+    height: 25px;
+    min-height: 25px;
     margin: 0;
     gap:20px;
+}
+
+/* Modal para selecionar status*/
+
+.selectCategory{
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    height: min-content;
+    position: absolute;
+    background-color: #F2F2F2;
+    border-radius:5px;
+
+}
+.hidden{
+    visibility: hidden;
+    display:none;
+}
+.toDoCategory{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85px;
+    height: 28px;
+    background-color: var(--toDo-color);
+    border-radius:5px;
+    color: var(--toDoFont-color);
+    font-weight: 500;
+}
+
+.toDoCategoryContainerSelect{
+    display: flex;
+    align-items: center;
+    width: 150px;
+    height: 40px;
+    padding-left:10px;
+    background-color: #D9D9D9;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    font-size:0.9rem;
+    display: none;
+}
+
+.toDoCategoryContainer{
+    display: flex;
+    align-items: center;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    cursor: pointer;
+}
+
+.doingCategoryContainer{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    border-top: 1px solid #d3d3d3;
+    border-bottom: 1px solid #d3d3d3;
+    padding-left:10px;
+    display: none;
+}
+
+.doingCategoryContainer:hover{
+    background-color: #D9D9D9;
+    transition: .2s ease;
+}
+
+.doingCategory{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85px;
+    height: 28px;
+    border-radius: 5px;
+    background-color: var(--doing-color);
+    color: var(--doingFont-color);
+    font-weight: 500;
+    font-size:0.9rem;
+}
+
+.doneCategoryContainer{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    padding-left:10px;
+
+}
+
+.doneCategoryContainer:hover{
+    background-color: #D9D9D9;
+    transition: .2s ease;
+}
+
+.doneCategory{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85px;
+    height: 28px;
+    border-radius: 5px;
+    background-color: var(--done-color);
+    color: var(--doneFont-color);
+    font-weight: 500;
+    font-size:0.9rem;
 }
 
 /* Parte de baixo do modal: subtarefas, comentários */
@@ -815,7 +934,7 @@ main{
     align-items: flex-end;
     justify-content: center;
     width:100px;
-    border-bottom: 1px solid var(--blue)
+    border-bottom: 2px solid var(--blue)
 }
 
 .titleInteractionModal{
@@ -823,7 +942,6 @@ main{
     gap: 40px;
     width: 100%;
     height: 50px;
-    background-color: #8601AB;
     display: flex;
 }
 
@@ -837,4 +955,5 @@ main{
     flex-direction: column;
     gap:10px;
 }
+
 
