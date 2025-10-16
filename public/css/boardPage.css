@@ -38,7 +38,7 @@ body{
     --doing-color: rgb(3, 44, 166, 0.5);
     --doingFont-color: #032CA6;
     --done-color: rgb(17, 149, 0, 0.5);
-    doneFont-color: #119500;
+    --doneFont-color: #119500;
 }
 
 /* Menu lateral */
@@ -772,12 +772,6 @@ main{
     background-color: var(--lightGrey);
 }
 
-#selectedInput{
-    width: min-content !important;
-    height: min-content !important;
-    padding-left:0px !important;
-}
-
 .addMoreMembersModal svg{
     width: 20px;
     height: 20px;
@@ -818,34 +812,50 @@ main{
 }
 
 /* Modal para selecionar status*/
-
-.selectCategory{
+.selectStatusModal{
     display: flex;
     flex-direction: column;
-    width: 150px;
+    width: min-content;
     height: min-content;
     position: absolute;
-    background-color: #F2F2F2;
-    border-radius:5px;
+    cursor: pointer;
 
 }
-.hidden{
-    visibility: hidden;
-    display:none;
+
+.selectOptionModal.statusSelector--open {
+    width: 150px; 
+    background-color: #F2F2F2;
 }
-.toDoCategory{
+
+/* Estilização das etiquetas */
+.statusBadge{
     display: flex;
     justify-content: center;
     align-items: center;
     width: 85px;
     height: 28px;
-    background-color: var(--toDo-color);
     border-radius:5px;
-    color: var(--toDoFont-color);
     font-weight: 500;
 }
 
-.toDoCategoryContainerSelect{
+/* Estilização das cores das etiquetas */
+.toDoBadge{
+    background-color: var(--toDo-color);
+    color: var(--toDoFont-color);
+}
+
+.doingBadge{
+    background-color: var(--doing-color);
+    color: var(--doingFont-color);
+}
+
+.doneBadge{
+    background-color: var(--done-color);
+    color: var(--doneFont-color);
+}
+
+/* Container que fica as etiquetas quando o modal esta aberto */
+.statusOption{
     display: flex;
     align-items: center;
     width: 150px;
@@ -855,71 +865,35 @@ main{
     border-top-left-radius:5px;
     border-top-right-radius:5px;
     font-size:0.9rem;
+}
+
+/* As que nao estao selecionadas */
+.statusOption:not(.statusSelected){
     display: none;
 }
 
-.toDoCategoryContainer{
-    display: flex;
-    align-items: center;
-    border-top-left-radius:5px;
-    border-top-right-radius:5px;
-    cursor: pointer;
+/* Quando o modal esta aberto todos as etiquetas estao abertas*/
+.selectStatusnModal.statusSelector--open .statusOption{
+    display:flex;
 }
 
-.doingCategoryContainer{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 50px;
-    border-top: 1px solid #d3d3d3;
-    border-bottom: 1px solid #d3d3d3;
-    padding-left:10px;
-    display: none;
+/* Estilo da etiqueta selecionada, sem o modal */
+.statusOption.statusSelected{
+    padding: 0;
+    width: min-content;
+    height: min-content;
 }
 
-.doingCategoryContainer:hover{
+/* Hover nas etiquetas nao selecionadas*/
+.selectStatusModal.statusSelector--open .statusOption:hover:not(.statusSelected){
     background-color: #D9D9D9;
-    transition: .2s ease;
+    transform: .2s ease;
 }
 
-.doingCategory{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 85px;
-    height: 28px;
-    border-radius: 5px;
-    background-color: var(--doing-color);
-    color: var(--doingFont-color);
-    font-weight: 500;
-    font-size:0.9rem;
-}
-
-.doneCategoryContainer{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 50px;
-    padding-left:10px;
-
-}
-
-.doneCategoryContainer:hover{
+/*Estilo da etiqueta selecionada*/
+.selectStatusModal.statusSelector--open .statusOption.statusSelected{
     background-color: #D9D9D9;
-    transition: .2s ease;
-}
-
-.doneCategory{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 85px;
-    height: 28px;
-    border-radius: 5px;
-    background-color: var(--done-color);
-    color: var(--doneFont-color);
-    font-weight: 500;
-    font-size:0.9rem;
+    border: 5px;
 }
 
 /* Parte de baixo do modal: subtarefas, comentários */
@@ -955,5 +929,3 @@ main{
     flex-direction: column;
     gap:10px;
 }
-
-

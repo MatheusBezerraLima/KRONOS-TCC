@@ -6,8 +6,12 @@ const filter = document.querySelector(".filter")
 const addTaskModal = document.querySelector(".addTaskModal")
 const addTaskButton = document.querySelector(".addTask")
 const closeModalIcon = document.querySelector(".closeModalIcon")
-const selectCategory= document.querySelector(".selectCategory")
-const currentStatus = document.querySelector(".toDoCategoryContainer")
+const selector= document.getElementById("statusSelector")
+const statusOptions = document.querySelectorAll(".statusOption")
+let selectedStatusValue = selector.querySelector(".statusSelected")
+
+
+
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -55,7 +59,7 @@ function openModalTask() {
     addTaskModal.classList.add("modalOn")
 }
 
-// Função para fechar modal clicando no icone
+// Função para fechar modal de criação de tarefas clicando no icone X
 
 closeModalIcon.addEventListener("click", closeModalTask);
 filter.addEventListener("click", closeModalTask);
@@ -65,13 +69,16 @@ function closeModalTask() {
     addTaskModal.classList.remove("modalOn")
 }
 
-// Mudar status da tarefa
+// Abrir e fechar dropdown de escolher o status
 
-currentStatus.addEventListener("click", changeStatus);
+selector.addEventListener("click", (event) =>{
+    if (!event.target.closest(".statusOption")) {
+        selector.classList.toggle('statusSelector--open')
+    }
+});
 
-function changeStatus(){
-    selectCategory.classList.remove("hidden")
-}
+
+
 
 
 

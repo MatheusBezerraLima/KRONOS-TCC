@@ -44,26 +44,25 @@
                     </div>
 
                     <div class="formModalInfo"> 
-    
                         <!-- Caixinha para escolher status do projeto -->
-                        <div class="selectCategory" id="selectOptions">
-                            <div class="toDoCategoryContainerSelect " id="currentCategory">
-                                <div class="toDoCategory">
+                        <div class="selectStatusModal" id="statusSelector">
+                            <div class="statusOption toDoStatus statusSelected" data-status="to-do">
+                                <div class="statusBadge toDoBadge">
                                     <p>A fazer </p>
                                 </div> <!-- toDoCategory  -->
-                            </div> <!-- toDoCategorySelect-->
+                            </div> <!-- statusOption toDoStatus-->
 
-                            <div class="doingCategoryContainer">
-                                <div class="doingCategory">
+                            <div class="statusOption doingStatus" data-status="doing">
+                                <div class="statusBadge doingBadge">
                                     <p>Fazendo</p>
                                 </div> <!-- doingCategoryContainer -->
-                            </div> <!-- doingCategory -->
+                            </div> <!-- statusOption doingStatus -->
 
-                            <div class="doneCategoryContainer" id="selectedInput">
-                                <div class="doneCategory">
+                            <div class="statusOption doneStatus" data-status="done">
+                                <div class="statusBadge doneBadge">
                                     <p>Concluído</p>
                                 </div> <!-- doneCategory -->
-                            </div> <!-- doneCategoryContainer -->
+                            </div> <!-- statusOption doneStatus -->
 
                         </div> <!-- selectCategory -->
                     </div> <!-- formModalInfo -->
@@ -98,35 +97,6 @@
                     </div> <!-- formModalInfo -->
                 </div> <!-- atribuitionFormModal -->
             </div> <!-- formModal -->
-            <section class="interactionModal">
-                <div class="titleInteractionModal">
-                    <div class="titleModal">
-                        <p>Subtarefas</p>
-                    </div>
-                    <div class="titleModal">
-                        <p>Comentários</p>
-                    </div>
-                </div> <!-- titleInteractionModal-->
-                <div class="interactionModalContent">
-                    <p>Subtarefas 0/2</p>
-                    <div class="subtask">
-                        <input type="checkbox">
-                        <p>Fazer um botão</p>
-                    </div>
-
-                    <div class="subtask">
-                        <input type="checkbox">
-                        <p>Fazer links</p>
-                    </div>
-
-                    <div class="subtask">
-                        <input type="checkbox">
-                        <p>Fazer fundo</p>
-                    </div>
-        
-                </div> <!-- interactionModalContent -->
-            </section> <!-- interactionModal -->
-
         </section>
 
         <aside class="aside">
@@ -183,7 +153,6 @@
                 </div> <!--container-memberTask-->
             </section> <!-- members -->
         </aside>
-
 
         <div class="main-content">
             <header>
