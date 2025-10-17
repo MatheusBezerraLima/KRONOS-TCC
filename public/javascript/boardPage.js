@@ -72,11 +72,41 @@ function closeModalTask() {
 
 //Abrir e fechar dropDown de status da tarefa
 
-statusOptions.forEach(item => {
-    item.addEventListener("click", ()=>{
-        dropDownStatus.classList.add("statusOpen")
-    }) 
+// statusOptions.forEach(item => {
+//     item.addEventListener("click", ()=>{
+//         dropDownStatus.classList.add("statusOpen")
+//     }) 
+// });
+
+dropDownStatus.addEventListener("click", (event) => {
+     
+    dropDownStatus.classList.toggle("statusOpen");
+
+    event.stopPropagation();
 });
+
+document.addEventListener('click', (event) => {
+    // Fecha se o clique for fora do dropdown E ele estiver aberto
+    if (!dropDownStatus.contains(event.target) && dropDownStatus.classList.contains('statusOpen')) {
+        dropDownStatus.classList.remove('statusOpen');
+    }    
+});
+
+// Mudar status
+
+statusOptions.forEach(option => {
+    option.addEventListener("click", () =>{
+        if (dropDownStatus.classList.contains("statusOpen")) {
+
+            statusOptions.forEach(opt => opt.classList.remove("statusSelected"));
+            
+            option.classList.add("statusSelected");
+
+            selectedStatusValue = option.getAttribute("data-status");
+        }
+    })
+})
+
 
 
 
