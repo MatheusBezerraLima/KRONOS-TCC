@@ -6,11 +6,12 @@ const filter = document.querySelector(".filter")
 const addTaskModal = document.querySelector(".addTaskModal")
 const addTaskButton = document.querySelector(".addTask")
 const closeModalIcon = document.querySelector(".closeModalIcon")
-const openDropDownStatus= document.querySelector(".statusOpen")
 const dropDownStatus = document.querySelector(".selectStatusModal")
 const statusOptions = document.querySelectorAll(".statusOption")
 let selectedStatusValue = document.querySelector(".statusSelected")
-
+const dropDownCategory = document.querySelector(".selectCategoryModal")
+const categoryOptions = document.querySelectorAll(".categoryOption")
+let selectedCategoryValue = document.querySelectorAll(".categorySelected")
 
 // Função de seleção dos links do menu lateral
 
@@ -69,14 +70,7 @@ function closeModalTask() {
     addTaskModal.classList.remove("modalOn")
 }
 
-
-//Abrir e fechar dropDown de status da tarefa
-
-// statusOptions.forEach(item => {
-//     item.addEventListener("click", ()=>{
-//         dropDownStatus.classList.add("statusOpen")
-//     }) 
-// });
+//---------------------- Abrir e fechar dropdown do status ----------------------
 
 dropDownStatus.addEventListener("click", (event) => {
      
@@ -107,6 +101,36 @@ statusOptions.forEach(option => {
     })
 })
 
+//---------------------- Abrir e fechar dropdown de categoria ----------------------
+
+dropDownCategory.addEventListener("click", (event) => {
+     
+    dropDownCategory.classList.toggle("categoryOpen");
+
+    event.stopPropagation();
+});
+
+document.addEventListener('click', (event) => {
+    // Fecha se o clique for fora do dropdown E ele estiver aberto
+    if (!dropDownCategory.contains(event.target) && dropDownCategory.classList.contains('categoryOpen')) {
+        dropDownCategory.classList.remove('categoryOpen');
+    }
+});
+
+// Mudar categoria
+
+categoryOptions.forEach(option => {
+    option.addEventListener("click", () =>{
+        if (dropDownCategory.classList.contains("categoryOpen")) {
+
+            categoryOptions.forEach(opt => opt.classList.remove("categorySelected"));
+            
+            option.classList.add("categorySelected");
+
+            selectedCategoryValue = option.getAttribute("data-category");
+        }
+    })
+})
 
 
 

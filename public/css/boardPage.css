@@ -699,7 +699,7 @@ main{
     height: 100%;
     background-color: var(--transparentBlack);
     z-index: 1000;
-    display: none;
+    /* display: none; */
 }
 
 .filterOn{
@@ -716,7 +716,7 @@ main{
     background-color: var(--main-color);
     z-index: 1001;
     transform: translate(-50%, -50%);
-    display: none;
+    /* display: none; */
     border-radius:10px;
     padding: 20px;
     overflow: hidden;
@@ -752,7 +752,7 @@ main{
     align-items: flex-end;
     justify-content: space-between;
     width: 100%;
-    height: 40px;   
+    height: 40px; 
 }
 
 .categoryTitle, .dateTitle, .statusTitle, .linksTitle, .atribuitionTitle{
@@ -809,6 +809,103 @@ main{
     min-height: 25px;
     margin: 0;
     gap:20px;
+}
+
+/* ------------------------ Modal para selecionar categoria ------------------------ */
+
+
+.selectCategoryModal{
+    display: flex;
+    flex-direction: column;
+    width: min-content;
+    height: min-content;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+.selectCategoryModal.categoryOpen{
+    width: 150px; 
+    background-color: #F2F2F2;
+    z-index: 10;
+}
+
+/* Estilização das etiquetas */
+.categoryBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85px;
+    height: 28px;
+    border-radius:5px;
+    font-weight: 500;
+}
+
+/* Estilização das cores das etiquetas */
+.designBadge{
+    background-color: var(--toDo-color);
+    color: var(--toDoFont-color);
+}
+
+.frontendBadge{
+    background-color: var(--doing-color);
+    color: var(--doingFont-color);
+}
+
+.backendBadge{
+    background-color: var(--done-color);
+    color: var(--doneFont-color);
+}
+
+/* Container que fica as etiquetas quando o modal esta aberto */
+.categoryOption{
+    display: flex;
+    align-items: center;
+    width: 150px;
+    height: 40px;
+    padding-left:10px;
+    font-size:0.9rem;
+}
+
+.selectCategoryModal.categoryOpen .categoryOption:first-child{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.selectCategoryModal.categoryOpen .categoryOption:last-child{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* As que nao estao selecionadas */
+.categoryOption:not(.categorySelected){
+    display: none;
+}
+
+/* Quando o modal esta aberto todos as etiquetas estao abertas*/
+.selectCategoryModal.categoryOpen .categoryOption{
+    display:flex;
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+}
+
+/* Estilo da etiqueta selecionada, sem o modal */
+.categoryOption.categorySelected{
+    padding: 0;
+    width: min-content;
+    height: min-content;
+}
+
+/* Hover nas etiquetas nao selecionadas*/
+.selectCategoryModal.categoryOpen .categoryOption:hover:not(.categorySelected){
+    transform: .2s ease;
+    background-color: #d3d3d3;
+}
+
+/*Estilo da etiqueta selecionada*/
+.selectCategoryModal.categoryOpen .categoryOption.categorySelected{
+    background-color: #D9D9D9;
 }
 
 /* ------------------------ Modal para selecionar status ------------------------ */
