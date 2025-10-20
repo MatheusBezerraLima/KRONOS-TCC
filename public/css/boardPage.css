@@ -803,7 +803,7 @@ main{
 
 .formModalInfo{
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     width: 70%;
     height: 25px;
     min-height: 25px;
@@ -811,8 +811,103 @@ main{
     gap:20px;
 }
 
-/* ------------------------ Modal para selecionar categoria ------------------------ */
+/* ------------------------ Estilização da input de data ------------------------ */
 
+.selectDate{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.98rem;
+    width: 175px;
+    height: 23px;
+    cursor: pointer;
+    position: relative;
+}
+
+.selectDate:hover{
+    width: 175px;
+    height: 23px;
+    background-color: var(--lightGrey);
+    border-radius: 5px;
+}
+
+.selectDate.placeholder{
+    color: var(--toDoFont-color);
+}
+
+.selectDate.withValue{
+    color: #000000;
+}
+
+/* --- Estilos para Reduzir o Flatpickr e Manter a Legibilidade --- */
+
+.flatpickr-calendar {
+    display: flex;
+    font-size: 12px; 
+    width: 220px;    
+    max-width: 220px;
+    height: 280px;
+    margin-top:25px;
+}
+
+.flatpickr-rContainer{
+    width: 220px;
+    height: 220px;
+}
+
+.flatpickr-weekdaycontainer {
+    padding: 0; /* Adiciona um pouco de padding lateral para não colar nas bordas */
+}
+
+.flatpickr-weekdays{
+    width: 100%;
+    font-size: 12px;
+}
+
+.flatpickr-months{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 100%;
+}
+
+.flatpickr-innerContainer{
+    width: 100%;
+    height: 85%;
+}
+
+.flatpickr-month{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flatpickr-current-month{
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:10px;
+}
+
+.dayContainer{
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.flatpickr-days{
+    width: 100%;
+}
+.flatpickr-day {
+    height: 35px;       /* Altura menor para as células */
+    line-height: 35px;  /* Mantém o número centralizado verticalmente */
+    width: 20px;        /* Largura menor para as células */  /* Espaçamento pequeno entre os números */
+}
+
+
+
+/* ------------------------ Modal para selecionar categoria ------------------------ */
 
 .selectCategoryModal{
     display: flex;
@@ -822,6 +917,7 @@ main{
     cursor: pointer;
     background-color: transparent;
     border-radius: 5px;
+    align-self: flex-start;
 }
 
 .selectCategoryModal.categoryOpen{
@@ -918,6 +1014,8 @@ main{
     cursor: pointer;
     background-color: transparent;
     border-radius: 5px;
+    align-self: flex-start;
+
 }
 
 .selectStatusModal.statusOpen {

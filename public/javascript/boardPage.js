@@ -1,3 +1,5 @@
+// const { localsName } = require("ejs")
+
 const menuLinksSelection = document.querySelectorAll("ul .selection-aside")
 const categoryBoardSelection = document.querySelectorAll(".category")
 const closeMenu = document.querySelector(".toggleIcon")
@@ -12,7 +14,9 @@ let selectedStatusValue = document.querySelector(".statusSelected")
 const dropDownCategory = document.querySelector(".selectCategoryModal")
 const categoryOptions = document.querySelectorAll(".categoryOption")
 let selectedCategoryValue = document.querySelectorAll(".categorySelected")
-
+const selectDate = document.querySelector(".selectDate")
+const invisibleDateInput = document.querySelector(".invisibleDateInput")
+const dateValue = document.querySelector(".dateValue")
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -131,6 +135,52 @@ categoryOptions.forEach(option => {
         }
     })
 })
+
+//---------------------- Selecionar data ----------------------
+
+function brazilDateFormat(dataObj) {
+    if (!dataObj) return "Nenhuma data definida";
+
+    const options = {day: "numeric", month: "long", year: "numeric"};
+
+    return new Intl.DateTimeFormat("pt-br", options).format(dataObj);
+}
+
+function dateUpdate(dataObj){
+    formattedDate = brazilDateFormat(dataObj);
+    dateValue.textContent = formattedDate;
+
+    if (dataObj){
+        dateValue.classList.remove("placeholder")
+        dateValue.classList.add("withValue")
+    } else {
+        dateValue.classList.remove("withValue")
+        dateValue.classList.add("placeholder")
+    }
+}
+
+const fp = flatpickr(invisibleDateInput, {
+    dateFormat: "d.m.y",
+    allowInput: false,
+    locale: flatpickr.l10ns.pt,
+
+    appendTo: selectDate, 
+    position: "below",
+
+    onChange: function(selectedDates, dateStr, instance) {
+        const selectedDate = selectedDates[0];
+        dateUpdate(selectedDate);
+    }
+})
+
+console.log(fp);
+
+dateUpdate(null);
+
+selectDate.addEventListener("click", () =>{
+    fp.open()
+})
+
 
 
 

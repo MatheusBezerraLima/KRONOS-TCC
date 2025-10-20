@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Board</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script> 
+    
     <link rel="stylesheet" href="/public/css/boardPage.css">
+    
     <script src="/public/javascript/boardPage.js" defer></script>
 </head>
 <body>
@@ -22,7 +29,10 @@
                         <p>Data</p>
                     </div>
                     <div class="formModalInfo">
-                        <p class="date"> 3 de março de 2025 </p>
+                        <div class="selectDate">
+                            <span class="dateValue">Nenhuma data definida</span>
+                        </div>
+                        <input type="text" class="invisibleDateInput" style="display: none;">
                     </div>
                 </div> <!-- dateFormModal -->
 
@@ -57,7 +67,6 @@
                      <div class="statusTitle">
                         <p>Status</p>
                     </div>
-
                     <div class="formModalInfo"> 
                         <!-- Caixinha para escolher status do projeto -->
                         <div class="selectStatusModal" id="statusSelector">
@@ -81,15 +90,6 @@
                         </div> <!-- selectStatusModal -->
                     </div> <!-- formModalInfo -->
                 </div> <!-- categoryFormModal -->
-
-                <div class="linksFormModal">
-                    <div class="linksTitle">
-                        <p>Links</p>
-                    </div>
-                    <div class="formModalInfo">
-                        <input class="selectInput" type="select" name="" id="">
-                    </div>
-                </div> <!-- linksFormModal -->
 
                 <div class="atribuitionFormModal">
                     <div class="atribuitionTitle">
