@@ -18,8 +18,12 @@ const selectDate = document.querySelector(".selectDate")
 const invisibleDateInput = document.querySelector(".invisibleDateInput")
 const dateValue = document.querySelector(".dateValue")
 const activitysModalSections = document.querySelectorAll(".activityTitle")
-const subtaskContainer = document.querySelector(".subtask")
+const subtaskContainer = document.querySelector(".listSubtasks")
 const createSubtask = document.querySelector(".createSubtasks")
+const taskNameContainer = document.querySelector(".taskNameContainer")
+const taskName = document.querySelector(".taskName")
+const invisibleTaskNameInput = document.querySelector(".invisibleTaskNameInput")
+
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -204,6 +208,7 @@ function addCheckEvent () {
             }
         });
     });
+
 }
 
 
@@ -217,6 +222,8 @@ activitysModalSections.forEach(section => {
         section.classList.add("activitySectionSelected")
     })
 });
+
+//----------------------  Nome da tarefa  ----------------------
 
 //---------------------- Criação de novas tarefas ----------------------
 
@@ -236,17 +243,22 @@ createSubtask.addEventListener("click", ()=>{
                     `
     // inserir estrutura HTML dentro da div subtasks depois de qualquer conteúdo existente dentro dela
     subtaskContainer.insertAdjacentHTML("beforeend", newTask)
-
+    console.log(subtaskContainer);
+    console.log("PASSOUUU");
+    
     // armazenando em uma variavel o novo HTML adicionado a classe subtaskContainer
     const newSubtaskRow = subtaskContainer.querySelector(".subtask.editing")
-
+    console.log(newSubtaskRow);
+    
     // armazenando o elemento input, onde irá ser o campo que o usuário digita
     const inputField = newSubtaskRow.querySelector(".insertNameInput")
 
     // adiciona o foco do cursor no elemento (o negocinho piscando) 
     inputField.focus()
 
-    setListenerandConversion(newSubtaskRow, inputField)
+    if(newSubtaskRow){
+            setListenerandConversion(newSubtaskRow, inputField)
+    }
 })
 
 function setListenerandConversion(newSubtaskRow, inputField){
@@ -283,11 +295,19 @@ function setListenerandConversion(newSubtaskRow, inputField){
                                 </span>
 
                                 <span class="subtaskName">${subtaskName}</span>
+
+                                <svg class = "deleteSubtask" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+
                             </div> <!-- subtask -->
                             `
-    newSubtaskRow.classList.remove("editing")
-    newSubtaskRow.innerHTML = finalSubtaskHTML
-    
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = finalSubtaskHTML.trim(); // .trim() é opcional, mas ajuda na limpeza
+
+    // 2. Selecione o elemento filho real (a div.subtask finalizada)
+    const finalSubtaskElement = tempElement.firstElementChild;
+
+    // 3. Substitua o elemento de edição original pelo novo elemento finalizado
+    newSubtaskRow.replaceWith(finalSubtaskElement); 
+   
     addCheckEvent() 
-    
 }

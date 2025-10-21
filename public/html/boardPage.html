@@ -20,9 +20,12 @@
         <div class="filter"></div>
         <section class="addTaskModal">
             <div class="modalTop">
-                <h2>Faça uma landing page</h1>
+                <div class="taskNameContainer">
+                    <h2 class="taskName">Nova tarefa</h2>
+                    <input type="text" class="invisibleTaskNameInput" style="display: none;">
+                </div>
                 <svg class="closeModalIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </div>
+            </div> <!-- taskNameContainer -->
             <div class="formModal">
                 <div class="dateFormModal">
                     <div class="dateTitle">
@@ -131,19 +134,12 @@
                          </button>
                     </span>
 
-                    <div class="subtask">
-                            <input class= "subtaskCheckbox" type="checkbox">
-
-                            <span class="checkboxCustom">
-                                <svg class="checkIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
-                            </span>
-
-                             <span class="subtaskName">Fazer botão</span>
+                    <div class="listSubtasks">
+                         
                     </div> <!-- subtask -->
 
                 </div> <!-- ContainerSubtask -->
 
-             
             </div> <!-- activitysTaskModal -->
         </section>
 
