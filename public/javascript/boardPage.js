@@ -17,7 +17,6 @@ let selectedCategoryValue = document.querySelectorAll(".categorySelected")
 const selectDate = document.querySelector(".selectDate")
 const invisibleDateInput = document.querySelector(".invisibleDateInput")
 const dateValue = document.querySelector(".dateValue")
-const customCheckboxes = document.querySelectorAll('.checkboxCustom');
 const activitysModalSections = document.querySelectorAll(".activityTitle")
 const subtaskContainer = document.querySelector(".subtask")
 const createSubtask = document.querySelector(".createSubtasks")
@@ -188,7 +187,9 @@ selectDate.addEventListener("click", () =>{
 
 //---------------------- Seleçao das checkboxs ----------------------
 
-customCheckboxes.forEach(customBox => {
+function addCheckEvent () {
+    const customCheckboxes = document.querySelectorAll('.checkboxCustom');
+    customCheckboxes.forEach(customBox => {
         customBox.addEventListener('click', () => {
             // Encontra o input que é o irmão anterior (previousElementSibling)
             const inputCheckbox = customBox.previousElementSibling;
@@ -203,6 +204,8 @@ customCheckboxes.forEach(customBox => {
             }
         });
     });
+}
+
 
 //---------------------- Seleção das seções Subtarefas e Comentários ----------------------
 
@@ -252,7 +255,7 @@ function setListenerandConversion(newSubtaskRow, inputField){
             const subtaskName = inputField.value.trim() // o metodo trim tira todos os espaços em branco
 
         if (subtaskName){
-                convertToFinalSubtask(newSubtaskRow, inputField)
+                convertToFinalSubtask(newSubtaskRow, subtaskName)
             } else  {
                 newSubtaskRow.remove()
             }
@@ -264,12 +267,15 @@ function setListenerandConversion(newSubtaskRow, inputField){
 
         if(subtaskName === "") {
             newSubtaskRow.remove()
+        } else {
+            convertToFinalSubtask(newSubtaskRow, subtaskName)   
+
         }
     })
 }
-function convertToFinalSubtask(newSubtaskRow, inputField){
+ function convertToFinalSubtask(newSubtaskRow, subtaskName){
     const finalSubtaskHTML = `
-                            div class="subtask">
+                            <div class="subtask">
                                 <input class= "subtaskCheckbox" type="checkbox">
 
                                 <span class="checkboxCustom">
@@ -281,5 +287,7 @@ function convertToFinalSubtask(newSubtaskRow, inputField){
                             `
     newSubtaskRow.classList.remove("editing")
     newSubtaskRow.innerHTML = finalSubtaskHTML
-
+    
+    addCheckEvent() 
+    
 }
