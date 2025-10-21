@@ -20,9 +20,6 @@ const dateValue = document.querySelector(".dateValue")
 const activitysModalSections = document.querySelectorAll(".activityTitle")
 const subtaskContainer = document.querySelector(".listSubtasks")
 const createSubtask = document.querySelector(".createSubtasks")
-const taskNameContainer = document.querySelector(".taskNameContainer")
-const taskName = document.querySelector(".taskName")
-const invisibleTaskNameInput = document.querySelector(".invisibleTaskNameInput")
 
 // Função de seleção dos links do menu lateral
 
@@ -143,6 +140,54 @@ categoryOptions.forEach(option => {
     })
 })
 
+//---------------------- Nome da tarefa ----------------------
+
+document.addEventListener('DOMContentLoaded', () => {
+    const taskNameHeading = document.querySelector('.taskName');
+    const taskNameInput = document.querySelector('.invisibleTaskNameInput');
+    
+    const defaultPlaceholderText = 'Nova tarefa'; 
+
+    taskNameHeading.addEventListener('click', () => {
+        
+        taskNameHeading.style.display = 'none';
+
+        taskNameInput.style.display = 'block'; 
+
+     
+        if (taskNameHeading.textContent.trim() === defaultPlaceholderText) {
+            taskNameInput.value = ''; 
+        } else {
+            taskNameInput.value = taskNameHeading.textContent.trim();
+        }
+
+        taskNameInput.focus();
+    });
+
+    // Lógica para quando o usuário terminar de digitar (Perder o foco ou Pressionar Enter)
+    taskNameInput.addEventListener('blur', () => {
+        const newTaskName = taskNameInput.value.trim();
+        
+        // Se o usuário não digitar nada, volta para o texto padrão/placeholder
+        if (newTaskName === '') {
+            taskNameHeading.textContent = defaultPlaceholderText; 
+        } else {
+            taskNameHeading.textContent = newTaskName;
+        }
+
+        // Esconde o input e mostra o h2
+        taskNameInput.style.display = 'none';
+        taskNameHeading.style.display = 'block';
+    });
+
+    taskNameInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            taskNameInput.blur();
+        }
+    });
+
+});
+
 //---------------------- Selecionar data ----------------------
 
 function brazilDateFormat(dataObj) {
@@ -188,10 +233,9 @@ selectDate.addEventListener("click", () =>{
     fp.open()
 })
 
-
 //---------------------- Seleçao das checkboxs ----------------------
 
-function addCheckEvent () {
+function addCheckEvent (newSubtaskRow) {
     const customCheckboxes = document.querySelectorAll('.checkboxCustom');
     customCheckboxes.forEach(customBox => {
         customBox.addEventListener('click', () => {
@@ -208,7 +252,6 @@ function addCheckEvent () {
             }
         });
     });
-
 }
 
 
@@ -243,8 +286,6 @@ createSubtask.addEventListener("click", ()=>{
                     `
     // inserir estrutura HTML dentro da div subtasks depois de qualquer conteúdo existente dentro dela
     subtaskContainer.insertAdjacentHTML("beforeend", newTask)
-    console.log(subtaskContainer);
-    console.log("PASSOUUU");
     
     // armazenando em uma variavel o novo HTML adicionado a classe subtaskContainer
     const newSubtaskRow = subtaskContainer.querySelector(".subtask.editing")
@@ -309,5 +350,5 @@ function setListenerandConversion(newSubtaskRow, inputField){
     // 3. Substitua o elemento de edição original pelo novo elemento finalizado
     newSubtaskRow.replaceWith(finalSubtaskElement); 
    
-    addCheckEvent() 
+    addCheckEvent(newSubtaskRow) 
 }

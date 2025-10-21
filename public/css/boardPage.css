@@ -818,14 +818,6 @@ main{
     height: 30px;
     border-radius: 5px;
 }
-
-.taskName.taskNamePlaceholder{
-    color: #3f3f3f;
-}
-
-.taskName.taskNameWithValue{
-    color:#000000;
-}
 .taskNameContainer:hover{
      background-color: #99999942;
      transition: .2s ease;
