@@ -720,6 +720,7 @@ main{
     border-radius:10px;
     padding: 20px;
     overflow: hidden;
+    user-select: none;
 }
 
 .modalOn{
@@ -822,6 +823,7 @@ main{
     height: 23px;
     cursor: pointer;
     position: relative;
+    color: #3F3F3F;
 }
 
 .selectDate:hover{
@@ -856,7 +858,7 @@ main{
 }
 
 .flatpickr-weekdaycontainer {
-    padding: 0; /* Adiciona um pouco de padding lateral para não colar nas bordas */
+    padding: 0; 
 }
 
 .flatpickr-weekdays{
@@ -904,8 +906,6 @@ main{
     line-height: 35px;  /* Mantém o número centralizado verticalmente */
     width: 20px;        /* Largura menor para as células */  /* Espaçamento pequeno entre os números */
 }
-
-
 
 /* ------------------------ Modal para selecionar categoria ------------------------ */
 
@@ -1101,36 +1101,140 @@ main{
     background-color: #D9D9D9;
 }
 
-/* Parte de baixo do modal: subtarefas, comentários */
+/* ------------------------ Estilização da parte de subtarefas, comentarios... do modal ------------------------ */
 
-.interactionModal{
-    width:100%;
-    height: 55%;
-}
-
-.titleModal{
-    display:flex;
-    align-items: flex-end;
-    justify-content: center;
-    width:100px;
-    border-bottom: 2px solid var(--blue)
-}
-
-.titleInteractionModal{
-    display: flex;
-    gap: 40px;
+.activitysTaskModal{
     width: 100%;
-    height: 50px;
+    height: 55%;
+    padding-top: 20px;
+}
+
+.sectionsTitleActivitys{
     display: flex;
+    width: 100%;
+    height: 10%;
+    gap:25px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.activityTitle{
+    width: auto;
+    height: 100%;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    border-bottom: 2px solid transparent;
+
+}
+
+.activitySectionSelected{
+    border-bottom: 2px solid #000080;
+    color: var(--blue);
+    font-weight: 500;
+}
+
+.subtaskQuantitysandButton{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-top: 10px;
+    justify-content: space-between;
+    font-weight: 500;
+}
+
+.createSubtasks{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 25px;
+    background-color: var(--blue);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.createSubtasks svg{
+    stroke: #FFFF;
+    width: 20px;
+    height: 20px;
+}
+
+/* Parte da estilização dos containers do checkbox e das checkboxs */
+.ContainerSubtask{
+    display: flex;
+    width: 100%;
+    height: 80%;
+    flex-direction: column;
+    gap:5px;
+    overflow: scroll;
+    overflow-x: hidden;
+
 }
 
 .subtask{
     display: flex;
+    align-items: flex-end;
     gap:5px;
+    width: 100%;
+    height: 30px;
+}
+/* Input escondida */
+
+.subtaskCheckbox {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
 }
 
-.interactionModalContent{
+/* Estilo da input falsa */
+.checkboxCustom{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap:10px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.checkIcon{
+    width: 100%;
+    height: 100%;
+    stroke: #FFFFFF;
+    fill: none; 
+    transform: scale(0); 
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Estilo da checkbox depois de marcada */
+.subtaskCheckbox:checked + .checkboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+/* Estilo de como vai aparecer a checkbox  e o icone depois de marcada */
+.subtaskCheckbox:checked + .checkboxCustom .checkIcon {
+    transform: scale(1); 
+}
+
+/*Estilo de risquinho no nome da tarefa */
+.subtaskCheckbox:checked ~ .subtaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
+.subtaskName{
+    color: #3F3F3F;
+    font-size:0.95rem;
 }

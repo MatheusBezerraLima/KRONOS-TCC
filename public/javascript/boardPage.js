@@ -17,6 +17,10 @@ let selectedCategoryValue = document.querySelectorAll(".categorySelected")
 const selectDate = document.querySelector(".selectDate")
 const invisibleDateInput = document.querySelector(".invisibleDateInput")
 const dateValue = document.querySelector(".dateValue")
+const customCheckboxes = document.querySelectorAll('.checkboxCustom');
+const activitysModalSections = document.querySelectorAll(".activityTitle")
+const subtaskContainer = document.querySelector(".subtask")
+const createSubtask = document.querySelector(".createSubtasks")
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -182,27 +186,100 @@ selectDate.addEventListener("click", () =>{
 })
 
 
+//---------------------- Seleçao das checkboxs ----------------------
 
+customCheckboxes.forEach(customBox => {
+        customBox.addEventListener('click', () => {
+            // Encontra o input que é o irmão anterior (previousElementSibling)
+            const inputCheckbox = customBox.previousElementSibling;
+            
+            // confere se realmente o irmão anterior (subtaskCheckbox) é uma checkbox
+            if (inputCheckbox && inputCheckbox.type === 'checkbox') {
+                // Alterna o estado "checked" do input real
+                inputCheckbox.checked = !inputCheckbox.checked;
+                
+                // Dispara o evento 'change' (útil se o seu código depender dele)
+                inputCheckbox.dispatchEvent(new Event('change'));
+            }
+        });
+    });
 
+//---------------------- Seleção das seções Subtarefas e Comentários ----------------------
 
+activitysModalSections.forEach(section => {
+    section.addEventListener("click", () => {
+        activitysModalSections.forEach(i => {
+            i.classList.remove("activitySectionSelected")
+        })
+        section.classList.add("activitySectionSelected")
+    })
+});
 
+//---------------------- Criação de novas tarefas ----------------------
 
+createSubtask.addEventListener("click", ()=>{
 
+    const newTask = `
+                    <div class="subtask editing">
+                            <input class= "subtaskCheckbox" type="checkbox">
 
+                            <span class="checkboxCustom">
+                                <svg class="checkIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+                            </span>
 
+                             <input class= "insertNameInput" type="text" placeholder="Nova subtarefa">
 
+                    </div> <!-- subtask -->
+                    `
+    // inserir estrutura HTML dentro da div subtasks depois de qualquer conteúdo existente dentro dela
+    subtaskContainer.insertAdjacentHTML("beforeend", newTask)
 
+    // armazenando em uma variavel o novo HTML adicionado a classe subtaskContainer
+    const newSubtaskRow = subtaskContainer.querySelector(".subtask.editing")
 
+    // armazenando o elemento input, onde irá ser o campo que o usuário digita
+    const inputField = newSubtaskRow.querySelector(".insertNameInput")
 
+    // adiciona o foco do cursor no elemento (o negocinho piscando) 
+    inputField.focus()
 
+    setListenerandConversion(newSubtaskRow, inputField)
+})
 
+function setListenerandConversion(newSubtaskRow, inputField){
+    inputField.addEventListener("keypress", (event) =>{
+        if (event.key === "Enter") {
+            const subtaskName = inputField.value.trim() // o metodo trim tira todos os espaços em branco
 
+        if (subtaskName){
+                convertToFinalSubtask(newSubtaskRow, inputField)
+            } else  {
+                newSubtaskRow.remove()
+            }
+        }        
+    })
 
+    inputField.addEventListener("blur", () => {
+        const subtaskName = inputField.value.trim() // o metodo trim tira todos os espaços em branco
 
+        if(subtaskName === "") {
+            newSubtaskRow.remove()
+        }
+    })
+}
+function convertToFinalSubtask(newSubtaskRow, inputField){
+    const finalSubtaskHTML = `
+                            div class="subtask">
+                                <input class= "subtaskCheckbox" type="checkbox">
 
+                                <span class="checkboxCustom">
+                                    <svg class="checkIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+                                </span>
 
+                                <span class="subtaskName">${subtaskName}</span>
+                            </div> <!-- subtask -->
+                            `
+    newSubtaskRow.classList.remove("editing")
+    newSubtaskRow.innerHTML = finalSubtaskHTML
 
-
-
-
-
+}
