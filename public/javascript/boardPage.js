@@ -22,6 +22,10 @@ const subtaskContainer = document.querySelector(".listSubtasks")
 const createSubtask = document.querySelector(".createSubtasks")
 const taskNameInput = document.querySelector('.invisibleTaskNameInput');
 const defaultPlaceholderText = 'Nova tarefa';
+const openMembersModal = document.querySelector(".addMoreMembers")
+const memberModal = document.querySelector(".addMemberModal")
+const closeMemberModal = document.querySelector(".closeMemberModal")
+const searchMembersInput = document.querySelector(".searchMembers")
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -65,9 +69,9 @@ function toggleMenu() {
 addTaskButton.addEventListener("click", openModalTask);
 
 function openModalTask() {
-    taskNameInput.focus()
     filter.classList.add("filterOn")
     addTaskModal.classList.add("modalOn")
+    taskNameInput.focus()
 }
 
 // Função para fechar modal de criação de tarefas clicando no icone X
@@ -146,8 +150,6 @@ categoryOptions.forEach(option => {
  
 
     taskNameInput.style.display = 'block'; 
-
-    taskNameInput.focus();
     
     taskNameInput.addEventListener('click', () => {
         
@@ -259,8 +261,6 @@ activitysModalSections.forEach(section => {
     })
 });
 
-//----------------------  Nome da tarefa  ----------------------
-
 //---------------------- Criação de novas tarefas ----------------------
 
 createSubtask.addEventListener("click", ()=>{
@@ -362,3 +362,17 @@ function addDeleteListener(subtaskElement) {
 
     addDeleteListener(finalSubtaskElement);
 }
+
+//----------------------  Modal add membros no projeto ----------------------
+
+openMembersModal.addEventListener("click", ()=> {
+    memberModal.classList.add("memberModalOpen")
+    searchMembersInput.focus()
+
+})
+
+closeMemberModal.addEventListener("click", ()=>{
+        memberModal.classList.remove("memberModalOpen")
+
+})
+
