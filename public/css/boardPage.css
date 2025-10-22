@@ -318,11 +318,20 @@ main{
     justify-content: space-between;
 }
 
+.menuType{
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 50%;
+    position: relative;
+}
+
 /* Parte de cima do header board: titulo, membros, add, botão*/
 
 .mainBoardHeaderInfo{
     display: flex;
     justify-content: space-between;
+    height:50%;
 }
 
 /* membros, add, botão*/
@@ -331,6 +340,7 @@ main{
     display: flex;
     align-items: center;
     gap:10px;
+    height: 100%;
 }
 
 .lineBoardHeader{
@@ -341,11 +351,15 @@ main{
 
 .membersIconandQuantity{
     display: flex;
+    height: 100%;
+    align-items: center;
 }
 
 .membersIconHeaderBoard{
     display: flex;
     gap:10px;
+    align-items: center;
+    height: 100%;
 }
 
 .memberIcon{
@@ -459,6 +473,92 @@ main{
     font-weight: bold;
     color: var(--blue);
 }
+
+/* Modal de adicionar membros */
+
+.addMemberModal{
+    padding:10px;
+    position: absolute;
+    width: 300px;
+    height: 200px;
+    background-color: white;
+    right: 0;
+    top: 10px;
+    border-radius:10px;  
+}
+
+.memberModalHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.iconModalMember{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--lightGrey);
+}
+.memberModalHeader svg{
+    width: 14px;
+    cursor: pointer;
+}
+
+.searchMembersandAddContainer{
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    width: 100%;
+    margin-top: 10px;
+    background-color: #119500;
+}
+
+.searchMembersandAdd{
+    display: flex;
+    justify-content: space-between;
+}
+
+.searchMembers{
+    width: 200px;
+    height: 25px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+}
+
+.inviteMember{
+    width: 65px;
+    height: 25px;
+    border-radius:5px;
+    border: none;
+}
+
+.memberAddedContainer{
+    margin-top: 10px;
+    width: 100%;
+}
+
+.memberAdded{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    background-color: #010155;
+}
+
+.addedMemberIcon{
+    width: 35px;
+    height: 35px;
+    border-radius:50%;
+    background-color: #119500;
+}
+
+
 
 /* Colunas do scrum board */
 
@@ -699,7 +799,7 @@ main{
     height: 100%;
     background-color: var(--transparentBlack);
     z-index: 1000;
-    /* display: none; */
+    display: none;
 }
 
 .filterOn{
@@ -716,7 +816,7 @@ main{
     background-color: var(--main-color);
     z-index: 1001;
     transform: translate(-50%, -50%);
-    /* display: none; */
+    display: none;
     border-radius:10px;
     padding: 20px;
     overflow: hidden;
@@ -816,11 +916,19 @@ main{
 .taskNameContainer{
     width: 300px;
     height: 30px;
-    border-radius: 5px;
 }
-.taskNameContainer:hover{
-     background-color: #99999942;
-     transition: .2s ease;
+
+.invisibleTaskNameInput{
+    outline: none;
+    height: 100%;
+    width: 100%;
+    font-size:1.7rem;
+    font-weight: bold;
+    border: none;
+}
+
+.invisibleCursor{
+    caret-color: transparent !important;
 }
 
 /* ------------------------ Estilização da input de data ------------------------ */
@@ -1187,12 +1295,13 @@ main{
 .subtask{
     display: flex;
     align-items: flex-end;
+    justify-content: space-between;
     gap:5px;
     width: 100%;
     height: 30px;
 }
-/* Input escondida */
 
+/* Input escondida */
 .subtaskCheckbox {
     -webkit-appearance: none; 
     -moz-appearance: none;
@@ -1246,6 +1355,23 @@ main{
 }
 
 .subtaskName{
-    color: #3F3F3F;
-    font-size:0.95rem;
+    font-size:1rem;
+}  
+
+.insertNameInput{
+    outline: none;
+    border: none;
+    font-size:1rem;
+}
+
+.checkboxAndNameContainer{
+    display: flex;
+    gap:10px;
+}
+
+.deleteSubtask{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    stroke: #999;
 }

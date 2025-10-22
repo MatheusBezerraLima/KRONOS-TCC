@@ -20,7 +20,8 @@ const dateValue = document.querySelector(".dateValue")
 const activitysModalSections = document.querySelectorAll(".activityTitle")
 const subtaskContainer = document.querySelector(".listSubtasks")
 const createSubtask = document.querySelector(".createSubtasks")
-
+const taskNameInput = document.querySelector('.invisibleTaskNameInput');
+const defaultPlaceholderText = 'Nova tarefa';
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -64,6 +65,7 @@ function toggleMenu() {
 addTaskButton.addEventListener("click", openModalTask);
 
 function openModalTask() {
+    taskNameInput.focus()
     filter.classList.add("filterOn")
     addTaskModal.classList.add("modalOn")
 }
@@ -141,52 +143,43 @@ categoryOptions.forEach(option => {
 })
 
 //---------------------- Nome da tarefa ----------------------
+ 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const taskNameHeading = document.querySelector('.taskName');
-    const taskNameInput = document.querySelector('.invisibleTaskNameInput');
+    taskNameInput.style.display = 'block'; 
+
+    taskNameInput.focus();
     
-    const defaultPlaceholderText = 'Nova tarefa'; 
-
-    taskNameHeading.addEventListener('click', () => {
+    taskNameInput.addEventListener('click', () => {
         
-        taskNameHeading.style.display = 'none';
-
-        taskNameInput.style.display = 'block'; 
-
-     
-        if (taskNameHeading.textContent.trim() === defaultPlaceholderText) {
+        if (taskNameInput.textContent.trim() === defaultPlaceholderText) {
             taskNameInput.value = ''; 
         } else {
-            taskNameInput.value = taskNameHeading.textContent.trim();
+            taskNameInput.value = taskNameInput.textContent.trim();
         }
-
-        taskNameInput.focus();
     });
 
     // Lógica para quando o usuário terminar de digitar (Perder o foco ou Pressionar Enter)
     taskNameInput.addEventListener('blur', () => {
         const newTaskName = taskNameInput.value.trim();
-        
+        // taskNameInput.classList.add(".invisibleCursor")
         // Se o usuário não digitar nada, volta para o texto padrão/placeholder
         if (newTaskName === '') {
-            taskNameHeading.textContent = defaultPlaceholderText; 
+            taskNameInput.textContent = defaultPlaceholderText; 
         } else {
-            taskNameHeading.textContent = newTaskName;
+            taskNameInput.textContent = newTaskName;
         }
 
         // Esconde o input e mostra o h2
-        taskNameInput.style.display = 'none';
-        taskNameHeading.style.display = 'block';
     });
 
     taskNameInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
+            // taskNameInput.classList.add(".invisibleCursor")
             taskNameInput.blur();
+
         }
     });
 
-});
 
 //---------------------- Selecionar data ----------------------
 
@@ -274,6 +267,7 @@ createSubtask.addEventListener("click", ()=>{
 
     const newTask = `
                     <div class="subtask editing">
+                            <div class="checkboxAndNameContainer">
                             <input class= "subtaskCheckbox" type="checkbox">
 
                             <span class="checkboxCustom">
@@ -281,7 +275,7 @@ createSubtask.addEventListener("click", ()=>{
                             </span>
 
                              <input class= "insertNameInput" type="text" placeholder="Nova subtarefa">
-
+                            </div>
                     </div> <!-- subtask -->
                     `
     // inserir estrutura HTML dentro da div subtasks depois de qualquer conteúdo existente dentro dela
@@ -326,9 +320,23 @@ function setListenerandConversion(newSubtaskRow, inputField){
         }
     })
 }
+
+function addDeleteListener(subtaskElement) {
+    // 1. Encontra o ícone 'X' (deleteSubtask) dentro da nova subtarefa
+    const deleteIcon = subtaskElement.querySelector(".deleteSubtask");
+    
+    if (deleteIcon) {
+        // 2. Adiciona o evento de clique
+        deleteIcon.addEventListener("click", () => {
+            // 3. Remove todo o elemento pai (a div.subtask)
+            subtaskElement.remove(); 
+        });
+    }
+}
  function convertToFinalSubtask(newSubtaskRow, subtaskName){
     const finalSubtaskHTML = `
                             <div class="subtask">
+                                <div class="checkboxAndNameContainer">
                                 <input class= "subtaskCheckbox" type="checkbox">
 
                                 <span class="checkboxCustom">
@@ -336,7 +344,7 @@ function setListenerandConversion(newSubtaskRow, inputField){
                                 </span>
 
                                 <span class="subtaskName">${subtaskName}</span>
-
+                                </div>
                                 <svg class = "deleteSubtask" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
 
                             </div> <!-- subtask -->
@@ -350,5 +358,7 @@ function setListenerandConversion(newSubtaskRow, inputField){
     // 3. Substitua o elemento de edição original pelo novo elemento finalizado
     newSubtaskRow.replaceWith(finalSubtaskElement); 
    
-    addCheckEvent(newSubtaskRow) 
+    addCheckEvent() 
+
+    addDeleteListener(finalSubtaskElement);
 }
