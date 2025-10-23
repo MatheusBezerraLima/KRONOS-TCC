@@ -640,14 +640,70 @@ main{
 
 /* Coluna A FAZER  */
 
-.toDoColumn, .doingColumn, .doneColumn, .addColumn{
+.column{
     display: flex;
     flex-direction: column;
     width: 250px;
     height: 100%;
     min-width: 250px;
     gap: 20px;
-    
+    position: relative;
+}
+
+.actionsColumn{
+    right:-40px;
+    top:45px;
+    width: 120px;
+    height: 80px;
+    background-color: #FFFF;
+    position: absolute;
+    box-shadow: 1px 1px 8px var(--shadow);
+    border-radius: 10px;
+    display: none;
+}
+
+.actions{
+    padding: 10px;
+    gap:10px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+    border-top: 1px solid var(--border-color-aside);
+    cursor: pointer;
+    z-index: 10;
+}
+
+.openActions{
+    display: block;
+}
+
+.actions:first-child{
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.actions:last-child{
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.actions:hover{
+    background-color: var(--lightGrey);
+}
+
+.optionsName{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap:5px;
+}
+
+.actions svg{
+    width: 20px;
+}
+.actions:first-child{
+    border-top: none;
 }
 .columnHeader{
     width: 250px;
@@ -662,7 +718,6 @@ main{
     justify-content: space-between;
     box-shadow: 1px 1px 5px var(--shadow);
 
-    
 }
 
 .columnHeader svg{

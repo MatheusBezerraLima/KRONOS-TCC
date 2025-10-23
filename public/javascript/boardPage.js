@@ -26,6 +26,8 @@ const openMembersModal = document.querySelector(".addMoreMembers")
 const memberModal = document.querySelector(".addMemberModal")
 const closeMemberModal = document.querySelector(".closeMemberModal")
 const searchMembersInput = document.querySelector(".searchMembers")
+const seeColumnOptions = document.querySelectorAll(".seeColumnOptions")
+const columnOptionsModal = document.querySelectorAll(".actionsColumn")
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -375,4 +377,46 @@ closeMemberModal.addEventListener("click", ()=>{
         memberModal.classList.remove("memberModalOpen")
 
 })
+
+//----------------------  Modal de opções da coluna: deletar e renomear ----------------------
+
+
+document.addEventListener('click', (event) => {
+    
+    const modalAberto = document.querySelector('.actionsColumn.openActions');
+
+    if (modalAberto) {
+        
+        const isClickOutsideModal = !modalAberto.contains(event.target);
+        
+        const isClickOnOpenIcon = event.target.closest('.seeColumnOptions');
+
+        if (isClickOutsideModal && !isClickOnOpenIcon) {
+            modalAberto.classList.remove('openActions');
+        }
+    }
+});
+
+
+// 2. Lógica para ABRIR e Fechar Outros Modais
+seeColumnOptions.forEach((item) => {
+    
+    item.addEventListener("click", (event) => {
+        const columnContainer = item.closest(".column");
+        const targetModal = columnContainer ? columnContainer.querySelector(".actionsColumn") : null;
+        
+        if (targetModal) {
+            
+            document.querySelectorAll('.actionsColumn.openActions').forEach(openModal => {
+                if (openModal !== targetModal) {
+                    openModal.classList.remove('openActions');
+                }
+            });
+            
+            targetModal.classList.toggle("openActions");
+        }
+    });
+});
+
+
 
