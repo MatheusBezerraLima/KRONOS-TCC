@@ -50,6 +50,19 @@ services:
       retries: 5
       start_period: 30s
 
+  n8n:
+    image: n8nio/n8n
+    container_name: kronos_n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+    volumes:
+      - n8n_data:/home/node/.n8n
+
 # Declaração do volume nomeado que será gerenciado pelo Docker.
 volumes:
   mysql-data:
+  n8n_data:
+

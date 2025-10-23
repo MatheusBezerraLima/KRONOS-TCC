@@ -5,6 +5,7 @@ const userDAO = require("../../infra/database/repositories/userRepository");
 const projectDAO = require("../../infra/database/repositories/projectRepository");
 const taskDAO = require('../../infra/database/repositories/tasksRepository');
 const subTaskDAO = require("../../infra/database/repositories/subTaskRepository");
+const sprintDAO = require('../../infra/database/repositories/sprintRepository');
 const boardColumnDAO = require('../../infra/database/repositories/boardColumnRepository');
 const userProjectRoleDAO = require('../../infra/database/repositories/userProjectRoleRepository');
 const projectInvitationsDAO = require('../../infra/database/repositories/projectInvitationsRepository');
@@ -29,9 +30,9 @@ class ProjectServices{
         const taskIds = tasks.map(task => task.id);
 
         const allSubTasks = await subTaskDAO.findAllByTaskIds(taskIds);
-       
-        const enrichedTasks  = this._enrichTasksWithProgress(tasks, allSubTasks);
 
+        const enrichedTasks  = this._enrichTasksWithProgress(tasks, allSubTasks);
+        
         const shapedColumns = await this._shapeTasksByColumns(columns, enrichedTasks);
         
         const pageData = {
@@ -47,7 +48,7 @@ class ProjectServices{
             // }
         }
 
-        console.log(pageData);
+        return pageData
     }
     
     _shapeTasksByColumns(columns, tasks){
@@ -119,24 +120,27 @@ class ProjectServices{
     }
 
     _enrichTasksWithProgress(tasks, allSubTasks) {
-        // Passo A: Crie um mapa para acesso rápido às subtarefas de cada tarefa
+        // Passo A: O seu mapa de subtarefas já estava correto.
         const subTasksByTaskId = allSubTasks.reduce((acc, subTask) => {
-            const taskId = subTask.task_id; // Verifique se o nome da coluna está correto
+            // Usamos .toJSON() para garantir que estamos a lidar com objetos simples
+            const plainSubTask = subTask.get({ plain: true });
+            const taskId = plainSubTask.tarefa_id;
             if (!acc[taskId]) {
                 acc[taskId] = [];
             }
-            acc[taskId].push(subTask);
+            acc[taskId].push(plainSubTask);
             return acc;
         }, {});
 
-        // Passo B: Percorra cada tarefa e adicione a sua percentagem
+        // Passo B: Percorre cada tarefa para adicionar o progresso e as subtarefas
         return tasks.map(task => {
-            const tasksSubTasks = subTasksByTaskId[task.id] || []; // Pega nas subtarefas desta tarefa
-            const progressPercentage = this._calcPercentage(tasksSubTasks); // Usa a sua função já criada!
+            const tasksSubTasks = subTasksByTaskId[task.id] || [];
+            const progressPercentage = this._calcPercentage(tasksSubTasks);
 
             return {
-                ...task.toJSON(), // Converte a instância do Sequelize para um objeto simples
-                progress: progressPercentage
+                ...task.get({ plain: true }), // Garante que estamos a lidar com um objeto simples
+                progress: progressPercentage,
+                subTasks: tasksSubTasks // <<< CORREÇÃO 1: Adiciona as subtarefas ao objeto
             };
         });
     }
@@ -148,14 +152,82 @@ class ProjectServices{
 
         const totalDeSubtarefas = subTasks.length;
 
-        // 1. Conta quantas tarefas estão concluídas usando o método 'filter'.
-        const tarefasConcluidas = subTasks.filter(subTask => subTask.status == 1).length;
+        // Usar 'filter' é uma forma mais limpa de contar os itens concluídos
+        const tarefasConcluidas = subTasks.filter(subTask => subTask.status_id === 1).length; // <<< CORREÇÃO 2
 
-        // 2. Calcula a percentagem final de uma só vez.
         const porcentagem = (tarefasConcluidas / totalDeSubtarefas) * 100;
 
-        // 3. Arredonde o resultado para o número inteiro mais próximo,
         return Math.round(porcentagem);
+    }
+
+    async prepareSprintViewData(projectId) {
+        if (!projectId) {
+            const error = new Error("Projeto não especificado");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const [project, tasks, members, sprints] = await Promise.all([
+            projectDAO.findById(projectId),
+            taskDAO.findByProjectId(projectId), // Garanta que este método retorna o sprint_id
+            userProjectRoleDAO.findMemberByProjectId(projectId),
+            sprintDAO.findAllByProjectId(projectId) // Novo método necessário no SprintDAO
+        ]);
+
+        if (!project) {
+            const error = new Error("Projeto não encontrado");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const taskIds = tasks.map(task => task.id);
+        const allSubTasks = await subTaskDAO.findAllByTaskIds(taskIds);
+
+        const enrichedTasks = this._enrichTasksWithProgress(tasks, allSubTasks);
+        
+        const { shapedSprints, backlogTasks } = this._shapeTasksBySprint(sprints, enrichedTasks);
+
+        const sprintViewData = {
+            project: {
+                id: project.id,
+                title: project.titulo,
+            },
+            members: members,
+            sprints: shapedSprints,
+            backlogTasks: backlogTasks
+        };
+
+        return sprintViewData;
+    }
+
+ 
+    _shapeTasksBySprint(sprints, tasks) {
+        const tasksBySprintId = {};
+        const backlogTasks = [];
+
+        // Primeiro, agrupa todas as tarefas pelo sprint_id
+        for (const task of tasks) {
+            const sprintId = task.sprint_id;
+            if (sprintId === null || sprintId === undefined) {
+                backlogTasks.push(task); // Tarefas sem sprint vão para o backlog
+            } else {
+                if (!tasksBySprintId[sprintId]) {
+                    tasksBySprintId[sprintId] = [];
+                }
+                tasksBySprintId[sprintId].push(task);
+            }
+        }
+
+        // Depois, formata o array de sprints, adicionando as tarefas correspondentes
+        const shapedSprints = sprints.map(sprint => ({
+            id: sprint.id,
+            sprintNumber: sprint.sprint_number,
+            startDate: sprint.start_date,
+            endDate: sprint.end_date,
+            tasks: tasksBySprintId[sprint.id] || [] // Pega nas tarefas do mapa ou retorna [] se não houver
+        }));
+
+        return { shapedSprints, backlogTasks };
     }
 
     async create({titulo, descricao, dataTermino}, userId){
@@ -220,7 +292,12 @@ class ProjectServices{
     }
 
     async addMember(projectId, userIdToAdd, currentUserId, role ){
+        let t = null;
+        console.log(projectId);
+        
         try{
+            const t = await sequelize.transaction();
+
             // O usuário atual tem permissão de adicionar novos membros? 
             const currentUserRole = await userProjectRoleDAO.findByUserAndProject(currentUserId, projectId);
 
@@ -234,20 +311,29 @@ class ProjectServices{
             if (existingAssociation) {
                 throw new Error("Este usuário já é membro do projeto.");
             }
-
-            const t = await sequelize.transaction();
             
             const newMember = await userProjectRoleDAO.create({
                 usuario_id: userIdToAdd,
-                project_id: projectId,
+                projeto_id: projectId,
                 role: role || "Membro"
             }, { transaction: t });
 
+            await t.commit();
+
             return newMember.get({plain: true});
         }catch(error){
-            await t.rollback();
+            if(t){
+                await t.rollback();
+            }
+            
+            // Relança o erro para o controller tratar
+            if (error.statusCode) {
+                throw error;
+            }
             console.error("Falha ao adicionar membro:", error);
-            throw new Error("Não foi possível adicionar o membro ao projeto.");
+            const serverError = new Error("Não foi possível adicionar o membro ao projeto.");
+            serverError.statusCode = 500;
+            throw serverError;
         };
     }
 

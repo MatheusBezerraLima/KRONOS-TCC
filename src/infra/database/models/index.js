@@ -19,6 +19,7 @@ const PrivateMessage = require("./PrivateMessage");
 const SubTask = require("./SubTask");
 const Friendship = require("./Friendship");
 const ProjectInvitations = require('./ProjectInvitations');
+const Sprint = require("./Sprint");
 
 const  db = {
     sequelize,
@@ -39,7 +40,8 @@ const  db = {
     PrivateChat,
     PrivateMessage,
     Friendship,
-    ProjectInvitations
+    ProjectInvitations,
+    Sprint
 }
 
 const applyAssociations = require("./Associations");

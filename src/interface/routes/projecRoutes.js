@@ -11,4 +11,8 @@ routes.post('/projetos', projectController.create);
 // Colocar verificação aqui 
 routes.post('/:projectId/invites', projectController.inviteMembers);
 
+routes.post('/projetos/:projectId/membros', projectController.addMember)
+
+routes.get('/projetos/:projectId/sprint-view', projectController.getSprintViewData)
+
 module.exports = routes;

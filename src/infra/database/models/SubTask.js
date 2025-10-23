@@ -10,7 +10,7 @@ const SubTask = sequelize.define("SubTask", {
     },
     tarefa_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
             model: "tarefa",
             key: "id"
@@ -23,13 +23,14 @@ const SubTask = sequelize.define("SubTask", {
     status_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0
     },
     criado_em: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
     }
 }, {
-    taableName: "subtarefa",
+    tableName: "subtarefa",
     timestamps: false
 });
 

@@ -21,8 +21,13 @@ const applyAssociations = (db) => {
         PrivateChat,
         PrivateMessage,
         Friendship,
-        ProjectInvitations
+        ProjectInvitations,
+        Sprint
     }  = db;
+
+
+    Project.hasMany(Sprint, { foreignKey: 'projeto_id', as: 'sprints' });
+    Sprint.belongsTo(Project, {foreignKey: 'projeto_id', as: 'project'});
 
     // Task --> StatusTask (N:1)
     Task.belongsTo(StatusTask, { foreignKey: "status_id" });
@@ -41,8 +46,8 @@ const applyAssociations = (db) => {
     CategoryTask.hasMany(Task, { foreignKey: "categoria_id" });
 
     // Task --> User (N:N); 
-    Task.belongsToMany(User, { through: assignmentTask, foreignKey: "tarefa_id", otherKey: "usuario_id"});
-    User.belongsToMany(Task, {through: assignmentTask, foreignKey: "usuario_id", otherKey: "tarefa_id"});
+    Task.belongsToMany(User, { through: assignmentTask, foreignKey: "tarefa_id", otherKey: "usuario_id", as: "assignedMembers"});
+    User.belongsToMany(Task, {through: assignmentTask, foreignKey: "usuario_id", otherKey: "tarefa_id", as: "assignedTasks"});
 
     // User --> User (N:N)
     User.belongsToMany(User , {  as: 'SentRequestsTo', through: Friendship, foreignKey: "requester_id", otherKey: "addressee_id" });
@@ -148,7 +153,7 @@ const applyAssociations = (db) => {
 
     // SubTask --> Task (N:1)
     SubTask.belongsTo(Task, { foreignKey: "tarefa_id" });
-    Task.hasMany(SubTask, { foreignKey: "taarefa_id" }); 
+    Task.hasMany(SubTask, { foreignKey: "tarefa_id" }); 
 };
 
 module.exports = applyAssociations;

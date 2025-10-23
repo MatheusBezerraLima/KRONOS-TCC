@@ -11,7 +11,7 @@ module.exports = {
       },
       tarefa_id: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
           model: "tarefa",
           key: "id"
@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      status: {
+      status_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0

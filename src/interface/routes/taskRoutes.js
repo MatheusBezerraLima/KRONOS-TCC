@@ -6,20 +6,24 @@
     const validate = require('../middlewares/validate');
 
     // Renderização
-    routes.get('/tasks', verifyAuthToken, async(req,res) => {
-        await tasksController.prepareTasksPageData(req, res);
-    });
+    routes.get('/tasks', verifyAuthToken, tasksController.prepareTasksPageData);
 
-    routes.post('/tasks', verifyAuthToken, validate(createTaskSchema), async(req, res) => {
-        await tasksController.createTask(req, res);
-    })
+    // Autenticação
+    routes.post('/tasks', validate(createTaskSchema), tasksController.createTask)
 
-    routes.put('/tasks/:id', verifyAuthToken, async(req, res) => {
-        await tasksController.updateTask(req, res)
-    });
+    routes.put('/tasks/:id', verifyAuthToken, tasksController.updateTask);
 
-    routes.delete('/tasks/:id/delete', verifyAuthToken, async(req, res) => {
-        await tasksController.deleteTask(req, res);
-    })
+    routes.delete('/tasks/:id/delete', tasksController.deleteTask)
+
+    routes.patch('/tasks/:taskId/move', tasksController.moveTask);
+
+    routes.patch('/tasks/:taskId/assign-sprint',
+        (req, res, next) => {
+        console.log('--- ROTA /assign-sprint ACIONADA ---');
+        console.log('Headers recebidos:', JSON.stringify(req.headers, null, 2));
+        console.log('Corpo (req.body) recebido ANTES do controller:', JSON.stringify(req.body, null, 2));
+        // Se req.body estiver vazio aqui, o problema é 100% no middleware express.json() ou na sua ordem.
+        next(); // Passa para o próximo handler (o controller)
+    },  tasksController.assignSprint)
 
     module.exports = routes;

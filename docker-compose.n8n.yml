@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  n8n:
+    image: n8nio/n8n
+    container_name: kronos_n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      # Define o fuso horário para o Brasil para que os agendamentos funcionem corretamente.
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:

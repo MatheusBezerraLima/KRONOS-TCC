@@ -16,6 +16,15 @@ const Task = sequelize.define("Task", {
             key: "id"
         }
     },
+    data_termino:{
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    sprint_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: { model: "sprint", key: "id"}
+    },
     titulo: {
         type: DataTypes.STRING,
         allowNull: false,

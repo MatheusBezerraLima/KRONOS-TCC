@@ -45,10 +45,18 @@ module.exports = {
         }
       },
       coluna_id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: true,
         references: {
           model: "coluna_board",
+          key: "id"
+        }
+      },
+      sprint_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: "sprint",
           key: "id"
         }
       },
