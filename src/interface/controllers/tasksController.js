@@ -15,13 +15,14 @@ class TasksController{
     async createTask(req, res){
         try{
             const dataForm = req.body;
-            // dataForm.criador_id = req.user.id
+            // dataForm.criador_id = 3;
             // dataForm.criador_id = 11
 
             const taskCreated = await taskServices.createTask(dataForm);
             res.json(taskCreated);
         }catch(err){
             console.log("Erro:", err);
+            return err;
         }     
 
     }

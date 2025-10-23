@@ -2,8 +2,10 @@ const express = require('express');
 const projectController = require('../controllers/projectController');
 const routes = express.Router();
 const verifyAuthToken = require('../middlewares/authenticateToken');
+const path = require("path");
 
-routes.get('/projetos/:projectId', projectController.preparePageData);
+
+routes.get('/projetos/:projectId/', projectController.preparePageData);
 
 // Colocar verificação aqui 
 routes.post('/projetos', projectController.create);

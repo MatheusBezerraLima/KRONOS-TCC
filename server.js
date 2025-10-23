@@ -6,6 +6,7 @@ const projectRoutes = require('./src/interface/routes/projecRoutes');
 const inviteRoutes = require('./src/interface/routes/inviteRoutes');
 const boardColumnRoutes = require('./src/interface/routes/boardColumnRoutes');
 const indexController = require('./src/interface/controllers/indexController');
+const path = require('path')
 
 const { createServer } = require('node:http'); // Importando o módulo http.createServer nativo do Node
 const { Server } = require("socket.io"); // Importando o server do socket.io
@@ -77,6 +78,9 @@ app.use('/api/projetos/:projectId/colunas', boardColumnRoutes);
 
 
 app.get('/', indexController.renderDashboard);
+app.get('/projetos/:projectId/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'boardPage.html'))
+});
 
 server.listen(PORT, '0.0.0.0', async() => {
     console.log(`Servidor rodando na porta ${PORT}`);

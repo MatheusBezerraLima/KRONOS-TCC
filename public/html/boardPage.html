@@ -10,9 +10,10 @@
     
     <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script> 
     
-    <link rel="stylesheet" href="/public/css/boardPage.css">
+    <link rel="stylesheet" href="/css/boardPage.css">
     
-    <script src="/public/javascript/boardPage.js" defer></script>
+    <script src="/javascript/boardPageApi.js" defer></script>
+    <script src="/javascript/boardPage.js" defer></script>
 </head>
 <body>
 
@@ -20,6 +21,7 @@
         <div class="filter"></div>
         <section class="addTaskModal">
             <div class="modalTop">
+                <button onclick="requestCreateTask()">Criar</button>
                 <div class="taskNameContainer">
                     <input type="text" class="invisibleTaskNameInput" placeholder="Nova tarefa" style="display: none;">
                 </div> <!-- taskNameContainer -->
@@ -44,7 +46,7 @@
                     </div>
                     <div class="formModalInfo">
                         <div class="selectCategoryModal">
-                            <div class="categoryOption designCategory categorySelected" data-category="design">
+                            <div class="categoryOption designCategory categorySelected" data-category="1">
                                 <div class="categoryBadge designBadge">
                                     <p>Design</p>
                                 </div> <!-- designBadge  -->
@@ -72,7 +74,7 @@
                     <div class="formModalInfo"> 
                         <!-- Caixinha para escolher status do projeto -->
                         <div class="selectStatusModal" id="statusSelector">
-                            <div class="statusOption toDoStatus statusSelected" data-status="to-do">
+                            <div class="statusOption toDoStatus statusSelected" data-status="1">
                                 <div class="statusBadge toDoBadge">
                                     <p>A fazer </p>
                                 </div> <!-- toDoCategory  -->
