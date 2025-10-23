@@ -758,7 +758,7 @@ main{
     background-color: var(--main-color);
     border-radius: 10px;
     box-shadow: 1px 1px 8px var(--shadow);
-
+    gap: 20px
 }
 
 /* Parte de cima do card de tarefas, tag e icones */
