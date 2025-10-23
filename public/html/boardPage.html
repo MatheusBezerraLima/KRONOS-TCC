@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Board</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script> 
+    
+    <link rel="stylesheet" href="/public/css/boardPage.css">
+    
+    <script src="/public/javascript/boardPage.js" defer></script>
+</head>
+<body>
+
+        <!-- Side Menu -->
+        <div class="filter"></div>
+        <section class="addTaskModal">
+            <div class="modalTop">
+                <div class="taskNameContainer">
+                    <input type="text" class="invisibleTaskNameInput" placeholder="Nova tarefa" style="display: none;">
+                </div> <!-- taskNameContainer -->
+                <svg class="closeModalIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </div> <!-- modalTop -->
+            <div class="formModal">
+                <div class="dateFormModal">
+                    <div class="dateTitle">
+                        <p>Data</p>
+                    </div>
+                    <div class="formModalInfo">
+                        <div class="selectDate">
+                            <span class="dateValue">Nenhuma data definida</span>
+                        </div>
+                        <input type="text" class="invisibleDateInput" style="display: none;">
+                    </div>
+                </div> <!-- dateFormModal -->
+
+                <div class="modalForm categoryFormModal">
+                    <div class="categoryTitle">
+                        <p>Categoria</p>
+                    </div>
+                    <div class="formModalInfo">
+                        <div class="selectCategoryModal">
+                            <div class="categoryOption designCategory categorySelected" data-category="design">
+                                <div class="categoryBadge designBadge">
+                                    <p>Design</p>
+                                </div> <!-- designBadge  -->
+                            </div> <!-- categoryOption designCategory-->
+
+                            <div class="categoryOption backendCategory" data-category="backend">
+                                <div class="categoryBadge backendBadge">
+                                    <p>Backend</p>
+                                </div> <!-- backendBadge -->
+                            </div> <!-- categoryOption backendCategory -->
+
+                            <div class="categoryOption frontendCategory" data-category="frontend">
+                                <div class="categoryBadge frontendBadge">
+                                    <p>Frontend</p>
+                                </div> <!-- frontendBadge -->
+                            </div> <!--categoryOption frontendCategory-->
+                        </div> <!-- selectCategoryModal -->
+                    </div> <!-- formModalInfo -->
+                </div> <!-- categoryFormModal -->
+
+                <div class="modalForm statusFormModal">
+                     <div class="statusTitle">
+                        <p>Status</p>
+                    </div>
+                    <div class="formModalInfo"> 
+                        <!-- Caixinha para escolher status do projeto -->
+                        <div class="selectStatusModal" id="statusSelector">
+                            <div class="statusOption toDoStatus statusSelected" data-status="to-do">
+                                <div class="statusBadge toDoBadge">
+                                    <p>A fazer </p>
+                                </div> <!-- toDoCategory  -->
+                            </div> <!-- statusOption toDoStatus-->
+
+                            <div class="statusOption doingStatus" data-status="doing">
+                                <div class="statusBadge doingBadge">
+                                    <p>Fazendo</p>
+                                </div> <!-- doingCategoryContainer -->
+                            </div> <!-- statusOption doingStatus -->
+
+                            <div class="statusOption doneStatus" data-status="done">
+                                <div class="statusBadge doneBadge">
+                                    <p>Concluído</p>
+                                </div> <!-- doneCategory -->
+                            </div> <!-- statusOption doneStatus -->
+                        </div> <!-- selectStatusModal -->
+                    </div> <!-- formModalInfo -->
+                </div> <!-- categoryFormModal -->
+
+                <div class="atribuitionFormModal">
+                    <div class="atribuitionTitle">
+                        <p>Atribuições</p>
+                    </div>
+
+                    <div class="formModalInfo">
+                        <div class="atribuitionMembersModal">
+                            <div class="memberModal">
+                                <div class="memberIconModal" style="background-color: pink;"></div>
+                                <div class="memberIconModal" style="background-color: red;"></div>
+                                <div class="memberIconModal" style="background-color: blue;"></div>
+                            </div>
+
+                                <div class="addMoreMembersModal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                </div> <!-- addMoreMembers -->
+                        </div> <!-- atribuitionMembersModal -->
+                    </div> <!-- formModalInfo -->
+                </div> <!-- atribuitionFormModal -->
+            </div> <!-- formModal -->
+
+            <div class="activitysTaskModal">
+                <div class="sectionsTitleActivitys">
+                    <div class="activityTitle activitySectionSelected">
+                        <p>Subtarefas</p>
+                    </div> <!-- subtasksTitle-->
+
+                    <div class="activityTitle">
+                        <p>Comentários</p>
+                    </div> <!-- Comentários -->
+                </div> <!--sectionsTitleActivitys -->
+
+                <div class="ContainerSubtask">
+                    <span class="subtaskQuantitysandButton">
+                         Subtarefas 1/20
+                         <button class="createSubtasks">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                         </button>
+                    </span>
+
+                    <div class="listSubtasks">
+                         
+                    </div> <!-- subtask -->
+
+                </div> <!-- ContainerSubtask -->
+
+            </div> <!-- activitysTaskModal -->
+        </section>
+
+        <aside class="aside">
+            <div class="logo">
+                <a href="#" aria-label="Página principal">LOGO</a>
+                <svg class="toggleIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-left-icon lucide-chevrons-left"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
+            </div> <!-- Logo -->
+            <!--Side Menu Links-->
+            <nav>
+                <ul>
+                    <div class="selection-aside selected">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <li class="headerLink"><a href="#">Board</a></li>
+                    </div>
+
+                    <div class="selection-aside">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-icon lucide-message-circle"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/></svg>
+                        <li class="headerLink"><a href="#">Chat</a></li>
+                    </div>
+                    
+                    <div class="selection-aside">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity-icon lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
+                        <li class="headerLink"><a href="#">Atividade</a></li>
+                    </div>
+                </ul>
+            </nav>
+
+            <!-- Members Section-->
+            <section class="members">
+                <h4>Membros</h4>
+                <div class="container-memberTasks">
+
+                    <div class="memberInfo">
+                        <img class="memberPhoto src="#" alt=""> <p class="memberName">Ana</p>
+                    </div> <!--memberInfo-->
+
+                    <div class="tasks">
+
+                        <div class="taskInfo">
+                            <input type="checkbox"> 
+                            <p>oi</p>
+                        </div>
+
+                        <div class="taskInfo">
+                            <input type="checkbox"> 
+                            <p>oi</p>
+                        </div>
+
+                        <div class="taskInfo">
+                            <input type="checkbox"> 
+                            <p>oi</p>
+                        </div>    
+                    </div> <!--Tasks-->
+                </div> <!--container-memberTask-->
+            </section> <!-- members -->
+        </aside>
+
+        <div class="main-content">
+            <header>
+                <div class="breadcrumbs">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+                    <div class="navigation">
+                        <a href="#">Home</a> / <a href="#">Projetos</a> / <a href="#">Board</a>
+                    </div>
+                </div> <!-- breadcrumbs-->
+
+                <div class="headerUtilities">
+                    <div class="headerUtilitiesHover"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></div>
+                    <div class="headerUtilitiesHover"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></div>
+                        
+                    <div class="userProfile">
+
+                    </div> <!-- userProfile -->
+                </div> <!-- headerUtilities -->
+            </header> <!--menu-top-->
+
+            <main>
+                <section class="boardHeader">
+                    <div class="mainBoardHeaderInfo">
+                        <h1 class="projectName">Desenvolvimento do site</h1>
+
+                        <div class="boardActions">
+                            <div class="membersIconHeaderBoard">
+                                <div class ="membersIconandQuantity">
+                                    <div class="memberIcon" style="background-color: pink;"></div>
+                                    <div class="memberIcon" style="background-color: red;"></div>
+                                    <div class="memberIcon" style="background-color: blue;"></div>
+                                    <div class="membersQuantity">+5</div>
+                                
+                                
+                                </div> <!--membersIconandQuantity-->
+
+                                <div class="addMoreMembers">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                </div> <!-- addMoreMembers -->
+        
+                            </div> <!--membersIconHeaderBoard-->
+
+                            <div class="lineBoardHeader"></div>
+                            <button class="addTask">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                <p>Criar tarefa </p>
+                            </button>
+                        </div> <!-- boardActions-->
+                    </div> <!-- mainBoardHeaderInfo-->
+                    <div class="menuType">
+                        <div class="boardCategory">
+
+                            <div class="category selectedCategory">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-kanban-icon lucide-square-kanban"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 7v7"/><path d="M12 7v4"/><path d="M16 7v9"/></svg>
+                                <p>Kanban</p>
+                            </div>
+
+                            <div class="category">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-minus-icon lucide-list-minus"><path d="M16 5H3"/><path d="M11 12H3"/><path d="M16 19H3"/><path d="M21 12h-6"/></svg>
+                                <p>Scrum</p>
+                            </div>
+                        </div> <!--boardCategory-->
+
+                        <div class="addMemberModal">
+                            <div class="memberModalHeader">
+                                <p>Adicionar membros</p>
+                                    <svg class="closeMemberModal"xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                            </div> <!-- memberModalHeader -->
+    
+                            <div class="searchMembersandAddContainer">
+                                <p>Email</p>
+                                <div class="searchMembersandAdd">
+                                    <input type="text" class="searchMembers" placeholder="Convide um membro">
+                                    <button class="inviteMember">Convidar</button>
+                                </div>
+                            </div>  
+                            
+                            <div class="memberAddedContainer">
+                                <p>Members</p>
+                                <div class="membersList">
+                                    <div class="memberAdded">
+                                        <div class="addedMemberIcon"></div>
+                                        <div class="addedMemberEmailContainer">
+                                            <div class="addedMemberEmail">
+                                                <span>kamillyr93@gmail.com</span>
+                                            </div>
+                                            <div class="addedMemberStatus">
+                                                <span>Convite pendente</span>
+                                            </div>
+                                        </div>
+                                    </div> <!-- memberAdded -->
+                                    <div class="memberAdded">
+                                        <div class="addedMemberIcon"></div>
+                                        <div class="addedMemberEmailContainer">
+                                            <div class="addedMemberEmail">
+                                                <span>kamillyr93@gmail.com</span>
+                                            </div>
+                                            <div class="addedMemberStatus">
+                                                <span>Convite pendente</span>
+                                            </div>
+                                        </div>
+                                    </div> <!-- memberAdded -->
+                                    <div class="memberAdded">
+                                        <div class="addedMemberIcon"></div>
+                                        <div class="addedMemberEmailContainer">
+                                            <div class="addedMemberEmail">
+                                                <span>kamillyr93@gmail.com</span>
+                                            </div>
+                                            <div class="addedMemberStatus">
+                                                <span>Convite pendente</span>
+                                            </div>
+                                        </div>
+                                    </div> <!-- memberAdded -->
+                                    <div class="memberAdded">
+                                        <div class="addedMemberIcon"></div>
+                                        <div class="addedMemberEmailContainer">
+                                            <div class="addedMemberEmail">
+                                                <span>kamillyr93@gmail.com</span>
+                                            </div>
+                                            <div class="addedMemberStatus">
+                                                <span>Convite pendente</span>
+                                            </div>
+                                        </div>
+                                    </div> <!-- memberAdded -->
+                                </div> <!-- membersList -->
+                            </div> <!-- memberAddedContainer -->
+                        </div> <!-- addMemberModal -->
+                    </div> <!-- menuType -->
+                </section> <!--boardHeader-->
+
+                <section class="boardColumns">
+
+                    <!-- Aqui começa a coluna de A FAZER -->
+                    <section class="column toDoColumn">
+                        <div class="actionsColumn">
+                                <div class="actions deleteColumnContainer">
+                                    <div class="optionsName">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        <span>Deletar</span>
+                                    </div>
+                                </div>
+                            <div class="actions renameColumnContainer">
+                                <div class="optionsName">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-line-icon lucide-pencil-line"><path d="M13 21h8"/><path d="m15 5 4 4"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg>
+                                    <span>Renomear</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columnHeader">
+                            <div class="statusColumnHeader">
+                                <h4>A FAZER</h4>
+                                <div class="columnTaskQuantity"> 1 </div>
+                            </div> <!-- statusColumnHeader -->
+                            
+                            <div class="iconsColumnHeader">
+                                <svg class="addTaskToTheColumn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                <svg class="seeColumnOptions"xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                            </div> <!-- iconsColumnHeader -->
+
+                        </div> <!-- columnHeader-->
+
+                        <div class="tasksToDoBoard">
+                            <div class="topTaskSection">
+                                <div class="taskTop">
+                                    <div class="tag">UX/UI</div>
+                                    <div class="taskHeaderIcons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                    </div> <!-- taskHeaderIcons -->
+                                </div> <!-- taskTop-->
+
+                                <div class="boardTaskInfo">
+                                    <h4>Faça uma landing page</h4>
+                                    <p class="taskDescription"> Faça uma landing page com fundo e botões</p>
+                                    
+                                    <div class="progressBarContainer">
+                                        <div class="progressBar"></div>
+                                        <p>50%</p>
+                                    </div>
+                                
+                                </div> <!-- boarTaskInfo -->
+                            </div> <!--topTaskSection-->
+
+                            <div class="taskFooterInfo">
+                                <div class="taskMetrics">
+                                    <div class="commentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more-icon lucide-message-circle-more"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+                                        <p>0</p>
+                                    </div> <!--commentStatus-->
+                                    <div class="attachmentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip-icon lucide-paperclip"><path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/></svg>
+                                        <p>0</p>
+                                    </div>
+                                </div> <!--taskMetrics-->
+
+                                <div class="taskMembersandQuantity">
+                                    <div class="memberIconTask" style="background-color: aquamarine;"></div>
+                                    <div class="memberIconTask" style="background-color: blueviolet;"></div>
+                                    <div class="memberIconTask" style="background-color: blue;"></div>
+                                    <div class="taskQuantityMembers">
+                                        +2
+                                    </div>
+                                </div> <!-- taskMembersandQuantity -->
+
+
+
+                            </div> <!--taskFooterInfo-->
+                        </div> <!-- tasksToDoBoard -->
+                    </section> <!--toDoColumn-->
+
+                    <!-- Aqui começa a coluna de FAZENDO -->  
+                    <section class="column doingColumn">
+                         <div class="actionsColumn">
+                                <div class="actions deleteColumnContainer">
+                                    <div class="optionsName">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        <span>Deletar</span>
+                                    </div>
+                                </div>
+                            <div class="actions renameColumnContainer">
+                                <div class="optionsName">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-line-icon lucide-pencil-line"><path d="M13 21h8"/><path d="m15 5 4 4"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg>
+                                    <span>Renomear</span>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="columnHeader">
+                            <div class="statusColumnHeader">
+                                <h4>FAZENDO</h4>
+                                <div class="columnTaskQuantity"> 1 </div>
+                            </div> <!-- statusColumnHeader -->
+                            
+                            <div class="iconsColumnHeader">
+                                <svg class="addTaskToTheColumn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                <svg class="seeColumnOptions" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                            </div> <!-- iconsColumnHeader -->
+                        </div> <!-- columnHeader-->
+
+                        <div class="tasksToDoBoard">
+                            <div class="topTaskSection">
+                                <div class="taskTop">
+                                    <div class="tag">UX/UI</div>
+                                    <div class="taskHeaderIcons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                    </div> <!-- taskHeaderIcons -->
+                                </div> <!-- taskTop-->
+
+                                <div class="boardTaskInfo">
+                                    <h4>Faça uma landing page</h4>
+                                    <p class="taskDescription"> Faça uma landing page com fundo e botões</p>
+                                    
+                                    <div class="progressBarContainer">
+                                        <div class="progressBar"></div>
+                                        <p>50%</p>
+                                    </div>
+                                
+                                </div> <!-- boarTaskInfo -->
+                            </div> <!--topTaskSection-->
+
+                            <div class="taskFooterInfo">
+                                <div class="taskMetrics">
+                                    <div class="commentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more-icon lucide-message-circle-more"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+                                        <p>0</p>
+                                    </div> <!--commentStatus-->
+                                    <div class="attachmentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip-icon lucide-paperclip"><path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/></svg>
+                                        <p>0</p>
+                                    </div>
+                                </div> <!--taskMetrics-->
+
+                                <div class="taskMembersandQuantity">
+                                    <div class="memberIconTask" style="background-color: aquamarine;"></div>
+                                    <div class="memberIconTask" style="background-color: blueviolet;"></div>
+                                    <div class="memberIconTask" style="background-color: blue;"></div>
+                                    <div class="taskQuantityMembers">
+                                        +2
+                                    </div>
+                                </div> <!-- taskMembersandQuantity -->
+                            </div> <!--taskFooterInfo-->
+                        </div> <!-- tasksToDoBoard -->
+                        <div class="tasksToDoBoard">
+                            <div class="topTaskSection">
+                                <div class="taskTop">
+                                    <div class="tag">UX/UI</div>
+                                    <div class="taskHeaderIcons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                    </div> <!-- taskHeaderIcons -->
+                                </div> <!-- taskTop-->
+
+                                <div class="boardTaskInfo">
+                                    <h4>Faça uma landing page</h4>
+                                    <p class="taskDescription"> Faça uma landing page com fundo e botões</p>
+                                    
+                                    <div class="progressBarContainer">
+                                        <div class="progressBar"></div>
+                                        <p>50%</p>
+                                    </div>
+                                
+                                </div> <!-- boarTaskInfo -->
+                            </div> <!--topTaskSection-->
+
+                            <div class="taskFooterInfo">
+                                <div class="taskMetrics">
+                                    <div class="commentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more-icon lucide-message-circle-more"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+                                        <p>0</p>
+                                    </div> <!--commentStatus-->
+                                    <div class="attachmentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip-icon lucide-paperclip"><path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/></svg>
+                                        <p>0</p>
+                                    </div>
+                                </div> <!--taskMetrics-->
+
+                                <div class="taskMembersandQuantity">
+                                    <div class="memberIconTask" style="background-color: aquamarine;"></div>
+                                    <div class="memberIconTask" style="background-color: blueviolet;"></div>
+                                    <div class="memberIconTask" style="background-color: blue;"></div>
+                                    <div class="taskQuantityMembers">
+                                        +2
+                                    </div>
+                                </div> <!-- taskMembersandQuantity -->
+                            </div> <!--taskFooterInfo-->
+                        </div> <!-- tasksToDoBoard -->
+                    </section> <!--doingColumn-->
+                   
+                    <section class="column doneColumn">
+                         <div class="actionsColumn">
+                                <div class="actions deleteColumnContainer">
+                                    <div class="optionsName">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        <span>Deletar</span>
+                                    </div>
+                                </div>
+                            <div class="actions renameColumnContainer">
+                                <div class="optionsName">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-line-icon lucide-pencil-line"><path d="M13 21h8"/><path d="m15 5 4 4"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg>
+                                    <span>Renomear</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columnHeader">
+                            <div class="statusColumnHeader">
+                                <h4>CONCLUÍDO</h4>
+                                <div class="columnTaskQuantity"> 1 </div>
+                            </div> <!-- statusColumnHeader -->
+                            
+                            <div class="iconsColumnHeader">
+                                <svg class="addTaskToTheColumn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                <svg class= "seeColumnOptions" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                            </div> <!-- iconsColumnHeader -->
+                        </div> <!-- columnHeader-->
+                        <div class="tasksToDoBoard">
+                            <div class="topTaskSection">
+                                <div class="taskTop">
+                                    <div class="tag">UX/UI</div>
+                                    <div class="taskHeaderIcons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                    </div> <!-- taskHeaderIcons -->
+                                </div> <!-- taskTop-->
+
+                                <div class="boardTaskInfo">
+                                    <h4>Faça uma landing page</h4>
+                                    <p class="taskDescription"> Faça uma landing page com fundo e botões</p>
+                                    
+                                    <div class="progressBarContainer">
+                                        <div class="progressBar"></div>
+                                        <p>50%</p>
+                                    </div>
+                                
+                                </div> <!-- boarTaskInfo -->
+                            </div> <!--topTaskSection-->
+
+                            <div class="taskFooterInfo">
+                                <div class="taskMetrics">
+                                    <div class="commentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more-icon lucide-message-circle-more"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+                                        <p>0</p>
+                                    </div> <!--commentStatus-->
+                                    <div class="attachmentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip-icon lucide-paperclip"><path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/></svg>
+                                        <p>0</p>
+                                    </div>
+                                </div> <!--taskMetrics-->
+
+                                <div class="taskMembersandQuantity">
+                                    <div class="memberIconTask" style="background-color: aquamarine;"></div>
+                                    <div class="memberIconTask" style="background-color: blueviolet;"></div>
+                                    <div class="memberIconTask" style="background-color: blue;"></div>
+                                    <div class="taskQuantityMembers">
+                                        +2
+                                    </div>
+                                </div> <!-- taskMembersandQuantity -->
+                            </div> <!--taskFooterInfo-->
+                        </div> <!-- tasksToDoBoard -->
+                        <div class="tasksToDoBoard">
+                            <div class="topTaskSection">
+                                <div class="taskTop">
+                                    <div class="tag">UX/UI</div>
+                                    <div class="taskHeaderIcons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                    </div> <!-- taskHeaderIcons -->
+                                </div> <!-- taskTop-->
+
+                                <div class="boardTaskInfo">
+                                    <h4>Faça uma landing page</h4>
+                                    <p class="taskDescription"> Faça uma landing page com fundo e botões</p>
+                                    
+                                    <div class="progressBarContainer">
+                                        <div class="progressBar"></div>
+                                        <p>50%</p>
+                                    </div>
+                                
+                                </div> <!-- boarTaskInfo -->
+                            </div> <!--topTaskSection-->
+
+                            <div class="taskFooterInfo">
+                                <div class="taskMetrics">
+                                    <div class="commentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more-icon lucide-message-circle-more"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+                                        <p>0</p>
+                                    </div> <!--commentStatus-->
+                                    <div class="attachmentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip-icon lucide-paperclip"><path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/></svg>
+                                        <p>0</p>
+                                    </div>
+                                </div> <!--taskMetrics-->
+
+                                <div class="taskMembersandQuantity">
+                                    <div class="memberIconTask" style="background-color: aquamarine;"></div>
+                                    <div class="memberIconTask" style="background-color: blueviolet;"></div>
+                                    <div class="memberIconTask" style="background-color: blue;"></div>
+                                    <div class="taskQuantityMembers">
+                                        +2
+                                    </div>
+                                </div> <!-- taskMembersandQuantity -->
+                            </div> <!--taskFooterInfo-->
+                        </div> <!-- tasksToDoBoard -->
+                        <div class="tasksToDoBoard">
+                            <div class="topTaskSection">
+                                <div class="taskTop">
+                                    <div class="tag">UX/UI</div>
+                                    <div class="taskHeaderIcons">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                    </div> <!-- taskHeaderIcons -->
+                                </div> <!-- taskTop-->
+
+                                <div class="boardTaskInfo">
+                                    <h4>Faça uma landing page</h4>
+                                    <p class="taskDescription"> Faça uma landing page com fundo e botões</p>
+                                    
+                                    <div class="progressBarContainer">
+                                        <div class="progressBar"></div>
+                                        <p>50%</p>
+                                    </div>
+                                
+                                </div> <!-- boarTaskInfo -->
+                            </div> <!--topTaskSection-->
+
+                            <div class="taskFooterInfo">
+                                <div class="taskMetrics">
+                                    <div class="commentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more-icon lucide-message-circle-more"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+                                        <p>0</p>
+                                    </div> <!--commentStatus-->
+                                    <div class="attachmentStatus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip-icon lucide-paperclip"><path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/></svg>
+                                        <p>0</p>
+                                    </div>
+                                </div> <!--taskMetrics-->
+
+                                <div class="taskMembersandQuantity">
+                                    <div class="memberIconTask" style="background-color: aquamarine;"></div>
+                                    <div class="memberIconTask" style="background-color: blueviolet;"></div>
+                                    <div class="memberIconTask" style="background-color: blue;"></div>
+                                    <div class="taskQuantityMembers">
+                                        +2
+                                    </div>
+                                </div> <!-- taskMembersandQuantity -->
+                            </div> <!--taskFooterInfo-->
+                        </div> <!-- tasksToDoBoard -->
+                    </section> <!--doneColumn-->
+
+                    <section class="addColumn">
+                          <div class="addColumnHeader">
+                            <div class="statusColumnHeader">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+
+                                <h4>CONCLUÍDO</h4>
+                            </div> <!-- statusColumnHeader -->
+                        </div> <!-- columnHeader-->
+                    </section> <!--addColumn-->
+                    
+
+                </section> <!--boardColumns-->
+            </main>
+            </div>
+        </div> <!-- main-content -->
+    </body>
+</html>
