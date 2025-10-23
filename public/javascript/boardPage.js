@@ -28,6 +28,9 @@ const closeMemberModal = document.querySelector(".closeMemberModal")
 const searchMembersInput = document.querySelector(".searchMembers")
 const seeColumnOptions = document.querySelectorAll(".seeColumnOptions")
 const columnOptionsModal = document.querySelectorAll(".actionsColumn")
+const taskOptionsModal = document.querySelectorAll(".actionsTask")
+const seeTaskOptions = document.querySelectorAll(".seeTaskOptions")
+
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -417,6 +420,59 @@ seeColumnOptions.forEach((item) => {
         }
     });
 });
+
+//----------------------  Modal de opções da tarefa: deletar e renomear ----------------------
+
+document.addEventListener('click', (event) => {
+    
+    const modalAberto = document.querySelector('.actionsTask.openActions');
+
+    if (modalAberto) {
+        
+        const isClickOutsideModal = !modalAberto.contains(event.target);
+        
+        const isClickOnOpenIcon = event.target.closest('.seeTaskOptions');
+
+        if (isClickOutsideModal && !isClickOnOpenIcon) {
+            modalAberto.classList.remove('openActions');
+        }
+    }
+});
+
+seeTaskOptions.forEach((item) => {
+    
+    item.addEventListener("click", (event) => {
+        // 1. Encontra o container da TAREFA clicada (o elemento pai que contém o ícone)
+        const taskContainer = item.closest('.tasksToDoBoard'); 
+        
+        // 2. Procura o modal DENTRO DESTE container ESPECÍFICO
+        const targetModal = taskContainer ? taskContainer.querySelector(".actionsTask") : null;
+        
+        if (targetModal) {
+            
+            // 3. Fecha todos os outros modais abertos
+            document.querySelectorAll('.actionsTask.openActions').forEach(openModal => {
+                // Remove a classe de modais que NÃO são o alvo atual
+                if (openModal !== targetModal) {
+                    openModal.classList.remove('openActions');
+                    
+                    // (Opcional) Se estiver usando o status no ícone, remova-o aqui
+                    const associatedIcon = openModal.closest('.tasksToDoBoard')?.querySelector('.seeTaskOptions');
+                    if (associatedIcon) {
+                        associatedIcon.classList.remove('activeOptionsIcon');
+                    }
+                }
+            });
+            
+            // 4. Abre/Fecha o modal alvo
+            targetModal.classList.toggle("openActions");
+            
+            // (Opcional) Adiciona/Remove o status no ícone clicado
+            item.classList.toggle("activeOptionsIcon"); 
+        }
+    });
+});
+
 
 
 

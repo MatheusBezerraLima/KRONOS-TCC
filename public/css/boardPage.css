@@ -208,14 +208,15 @@ nav{
     background-color: #d3d3d3;
 }
 
-.tasks{
+.listTasksContainer{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap:10px;
     width: 100%;
-    height:auto;
+    height:min-content;
     padding-left: 5px;
+    background-color: #000080;
 }
 
 input[type=checkbox]{
@@ -223,9 +224,24 @@ input[type=checkbox]{
     height: 20px;
 }
 
-.taskInfo{
+.taskContainer{
     display: flex;
+    flex-direction: column;
     gap:5px;
+    background-color: #3F3F3F;
+    width: 100%;
+}
+
+.task{
+    display: flex;
+    background-color: #999;
+    width: 100%;
+}
+
+.subtask{
+    padding-left:20px;
+    height: min-content;
+    background-color: #119500;
 }
 
 /* Menu Superior */
@@ -662,6 +678,19 @@ main{
     display: none;
 }
 
+.actionsTask{
+    position: absolute;
+    width: 120px;
+    height: 80px;
+    background-color: #FFFF;
+    right:-70px;
+    top:110px;
+    box-shadow: 1px 1px 8px var(--shadow);
+    border-radius: 10px;
+    z-index: 10;
+    display: none;
+}
+
 .actions{
     padding: 10px;
     gap:10px;
@@ -705,6 +734,12 @@ main{
 .actions:first-child{
     border-top: none;
 }
+
+.iconsColumnHeader{
+    display: flex;
+    gap:5px;
+}
+
 .columnHeader{
     width: 250px;
     height: 40px;
@@ -719,11 +754,50 @@ main{
     box-shadow: 1px 1px 5px var(--shadow);
 
 }
+.iconsColumnHeaderHover{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+}
 
+.iconsColumnHeaderHover:hover{
+     background-color: var(--lightGrey);
+     transition: .2s ease;
+}
+
+.iconColumnHeaderSelected{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    background-color: var(--lightGrey);
+}
+
+.taskHeaderIcons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+}
+
+.taskHeaderIcons:hover{
+    background-color: var(--lightGrey);
+}
+.taskHeaderIcons svg{
+    color: #3F3F3F;
+    width: 20px;
+    cursor: pointer;
+}
 .columnHeader svg{
     color: #3F3F3F;
-    width: 24px;
-    height: 24px;
+    width: 20px;
     cursor: pointer;
 
 }
@@ -901,6 +975,12 @@ main{
     padding: 15px;
     cursor: pointer;
 }
+
+.addColumnHeader:hover{
+    background-color: rgba(24, 2, 134, 0.199);
+    transition: .2s ease;
+}
+
 
 .addColumnHeader svg{
     width: 24px;
