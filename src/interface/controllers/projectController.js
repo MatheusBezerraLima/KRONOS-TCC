@@ -45,7 +45,7 @@ class ProjectController{
             const { projectId } = req.params; // Id do projeto vindo da URL
             const{  emails, role } = req.body;
             // const inviterId = req.user.id;
-            const inviterId = 11;
+            const inviterId = 3;
             
             if (!emails || !Array.isArray(emails) || emails.length === 0) {
                 return res.status(400).json({ message: 'A lista de e-mails é obrigatória.' });

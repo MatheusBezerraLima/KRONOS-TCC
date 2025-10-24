@@ -31,10 +31,10 @@ class TasksController{
         try{
             const id = req.params.id;
             const dataTask = req.body;
-            const userId = req.user.id;
+            const userId = 3;
 
             const updatedTask = await taskServices.updateTask(id, userId, dataTask);
-            res.status(201).json({"Status" : "Sucesso", "Task": updatedTask});
+            res.status(201).json(updatedTask);
 
         }catch(err){
             console.log("Erro ao atualizar tarefa", err);
@@ -101,6 +101,18 @@ class TasksController{
             // 6. Trata os erros enviados pelo serviço
             console.error("Erro no Controller ao atribuir sprint:", error.message);
             res.status(error.statusCode || 500).json({ message: error.message });
+        }
+    }
+
+    async findTask(req, res){
+        try{
+        const {taskId} = req.params;        
+        const task = await taskServices.findTask(taskId)
+        console.log(task);
+            
+        res.status(200).json(task)
+        }catch(error){
+            res.status(400).json({"Controller": "FindTask" ,"Erro": err})
         }
     }
 }

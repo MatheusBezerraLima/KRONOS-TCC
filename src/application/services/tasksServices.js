@@ -106,7 +106,7 @@ class TaskServices{
             console.log("Usuario nao identificado");
             throw new Error("Erro ao indentificar usuário ou tarefa!");
         }
-        const [task, user] = await Promisse.all([
+        const [task, user] = await Promise.all([
             tasksDAO.findById(taskId),
             userDAO.findById(userId)
         ]);
@@ -120,9 +120,9 @@ class TaskServices{
         }
 
         // 🟨 Verificar isso posteriormente para o caso de a tarefa ser de um projeto
-        if(task.criador_id != user.id){
-            throw new Error("Somente o criador da tarefa pode atualizar")
-        }
+        // if(task.criador_id != user.id){
+        //     throw new Error("Somente o criador da tarefa pode atualizar")
+        // }
 
         const updatedTask = await tasksDAO.update(task, dataToUpdate);
 
@@ -316,6 +316,45 @@ class TaskServices{
             serverError.statusCode = 500;
             throw serverError;
         }
+    }
+
+    async findTask(taskId){
+        if (!taskId ) {
+            const error = new Error("ID da tarefa não fornecido.");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        // 1. Busca a tarefa no DAO com todos os seus dados (subtarefas, membros, etc.)
+        const task = await tasksDAO.findByIdWithDetails(taskId);
+
+        if (!task) {
+            const error = new Error("Tarefa não encontrada.");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        // 2. VERIFICAÇÃO DE PERMISSÃO (AUTORIZAÇÃO)
+        // if (task.projeto_id) {
+        //     // Se for uma tarefa de projeto, verifica se o usuário é membro
+        //     const membership = await userProjectRoleDAO.findByUserAndProject(currentUserId, task.projeto_id);
+        //     if (!membership) {
+        //         const error = new Error("Acesso negado: você não é membro do projeto desta tarefa.");
+        //         error.statusCode = 403; // Forbidden
+        //         throw error;
+        //     }
+        // } else {
+        //     // Se for uma tarefa pessoal, verifica se o usuário é o criador
+        //     if (task.criador_id !== currentUserId) {
+        //         const error = new Error("Acesso negado: esta tarefa pessoal não pertence a você.");
+        //         error.statusCode = 403; // Forbidden
+        //         throw error;
+        //     }
+        // }
+
+        // 3. Se passou pelas verificações, retorna a tarefa
+
+        return task.get({ plain: true });
     }
 
 }

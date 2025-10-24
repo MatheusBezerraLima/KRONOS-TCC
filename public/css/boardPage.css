@@ -216,6 +216,15 @@ nav{
     width: 100%;
     height:auto;
     padding-left: 5px;
+    cursor: pointer;
+}
+
+.task-card-draggable{
+    cursor: pointer;
+}
+
+.task-card-draggable:hover{
+    background-color: #f4f2f2;
 }
 
 input[type=checkbox]{
@@ -254,6 +263,10 @@ header{
     align-items: center;
     font-size: 0.9rem;
     gap:5px;
+}
+
+.navigation a{
+        color: black;
 
 }
 
@@ -289,7 +302,7 @@ header{
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: aqua;
+    background-color: rgb(0, 0, 0);
 }
 
 /* Main */
@@ -367,7 +380,41 @@ main{
     height: 30px;
     border-radius: 50%;
     margin-left: -10px;
-    border: 1px solid white; 
+    border: 1px solid white;
+    background-position: center;
+    background-size: cover; 
+}
+
+.Design{
+        background-color: rgba(189, 39, 84, 0.425);
+    color: rgba(189, 39, 84, 0.969);
+}
+
+.Frontend{
+    background-color: var(--doing-color);
+    color: var(--doingFont-color);
+
+}
+
+.Backend{
+    background-color: var(--done-color);
+    color: var(--doneFont-color);
+}
+
+.buttonModal{
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    background-color: var(--doingFont-color);
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+
+}
+
+.buttonModal:hover{
+    background-color: rgba(5, 34, 119, 0.631);
+
 }
 
 .memberIconAdd:first-child{
@@ -734,6 +781,7 @@ main{
     align-items: center;
 }
 
+
 .columnTaskQuantity{
     width: 20px;
     height: 20px;
@@ -743,7 +791,7 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 500 ;
 }
 
@@ -786,9 +834,9 @@ main{
     width: 75px;
     height: 20px;
     border-radius: 5px;
-    background-color: var(--transparent-purple);
+   
     font-size: 0.8rem;
-    color: #8601AB;
+    
     font-weight: bold;
     cursor: pointer;
 }
@@ -802,6 +850,12 @@ main{
     
 }
 
+.boardTaskInfo h4{
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     overflow: hidden;
+}
+
 .progressBarContainer{
     display: flex;
     align-items: center;
@@ -813,6 +867,72 @@ main{
     height: 10px;
     border-radius: 10px;
     background-color: grey;
+}
+
+.progressBarContainer {
+  position: relative;
+  width: 100%; /* Pode ajustar a largura se precisar */
+  max-width: 300px; /* Exemplo: limite a largura para não ficar gigante */
+  height: 10px; /* Altura da barra */
+  background-color: #e9ecef; /* Cor do trilho de fundo (cinza claro) */
+  border-radius: 10px;
+  overflow: hidden; /* Garante que as listras não saiam das bordas */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Sombra interna suave */
+}
+
+.progressBarContainer p {
+  /* Posiciona o texto "Carregando..." no centro */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-size: 0.75rem; /* 12px */
+  font-weight: bold;
+  color: #ffffff; /* Texto branco para contrastar com a barra */
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.6); /* Sombra para melhorar a legibilidade */
+  z-index: 2; /* Garante que o texto fique acima da barra animada */
+  white-space: nowrap; /* Evita quebra de linha para o texto */
+}
+
+/* --- Estilo para o estado de "Carregando" --- */
+.progressBarContainer.loading .progressBar {
+  height: 100%;
+  width: 100%; /* A barra interna ocupa 100% do container */
+  
+  /* Cor de fundo da barra animada */
+  background-color: #007bff; /* Um azul padrão, você pode mudar */
+
+  /* Padrão de listras semi-transparentes */
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  
+  /* Tamanho das listras */
+  background-size: 40px 40px; 
+  
+  /* Animação das listras */
+  animation: progress-bar-stripes 2s linear infinite;
+  
+  /* (Opcional) Leve brilho/sombra para dar profundidade */
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Definição da animação das listras */
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 40px 0; /* Começa com as listras deslocadas */
+  }
+  to {
+    background-position: 0 0; /* Move as listras até a posição inicial */
+  }
 }
 
 /* Parte de baixo do card de task: comentarios, fixar links e membros atribuidos */
@@ -921,12 +1041,39 @@ main{
     display: none;
 }
 
+.filterEd{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--transparentBlack);
+    z-index: 1000;
+    display: none;
+}
+
 .filterOn{
     display: block;
 }
 
 
 .addTaskModal{
+    position: fixed;
+    top:50%;
+    left:50%;
+    width: 500px;
+    height: 490px;
+    background-color: var(--main-color);
+    z-index: 1001;
+    transform: translate(-50%, -50%);
+    display: none;
+    border-radius:10px;
+    padding: 20px;
+    overflow: hidden;
+    user-select: none;
+}
+
+.editTaskModal{
     position: fixed;
     top:50%;
     left:50%;
@@ -1177,7 +1324,7 @@ main{
 
 /* Estilização das cores das etiquetas */
 .designBadge{
-    background-color: var(--toDo-color);
+    background-color: rgb(231, 53, 106);
     color: var(--toDoFont-color);
 }
 
@@ -1274,17 +1421,17 @@ main{
 }
 
 /* Estilização das cores das etiquetas */
-.toDoBadge{
+.afazerBadge{
     background-color: var(--toDo-color);
     color: var(--toDoFont-color);
 }
 
-.doingBadge{
+.fazendoBadge{
     background-color: var(--doing-color);
     color: var(--doingFont-color);
 }
 
-.doneBadge{
+.concluídoBadge{
     background-color: var(--done-color);
     color: var(--doneFont-color);
 }

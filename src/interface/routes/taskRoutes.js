@@ -5,13 +5,14 @@
     const createTaskSchema = require('../validators/taskValidator');
     const validate = require('../middlewares/validate');
 
+    routes.get('/tasks/:taskId', tasksController.findTask )
     // Renderização
-    routes.get('/tasks', verifyAuthToken, tasksController.prepareTasksPageData);
+    routes.get('/tasks', tasksController.prepareTasksPageData);
 
     // Autenticação
     routes.post('/tasks', validate(createTaskSchema), tasksController.createTask)
 
-    routes.put('/tasks/:id', verifyAuthToken, tasksController.updateTask);
+    routes.patch('/tasks/:id', tasksController.updateTask);
 
     routes.delete('/tasks/:id/delete', tasksController.deleteTask)
 
