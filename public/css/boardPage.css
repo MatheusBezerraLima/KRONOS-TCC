@@ -189,21 +189,27 @@ nav{
     height: auto;
     display: flex;
     flex-direction: column;
-    padding-top:10px;
     gap:15px;
+    margin-top: 20px;
+    padding-top:10px;
+    border-top: 1px solid var(--border-color-aside);
 }
 
+/* First of type é usado para remover o border-top apenas do primeiro elemento que possue essa classe*/
+.container-memberTasks:first-of-type{
+    border-top: none;
+}
 .memberInfo{
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     width: 100%;
     height: 10%;
-    gap:10px;
+    gap:10px; 
 }
 
 .memberPhoto{
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
     background-color: #d3d3d3;
 }
@@ -216,33 +222,167 @@ nav{
     width: 100%;
     height:min-content;
     padding-left: 5px;
-    background-color: #000080;
 }
 
-input[type=checkbox]{
-    width:20px;
-    height: 20px;
-}
 
-.taskContainer{
+.asideTaskContainer{
     display: flex;
     flex-direction: column;
-    gap:5px;
-    background-color: #3F3F3F;
+    gap:15px;
     width: 100%;
-}
-
-.task{
-    display: flex;
-    background-color: #999;
-    width: 100%;
-}
-
-.subtask{
-    padding-left:20px;
+    min-width: 100%;
     height: min-content;
-    background-color: #119500;
 }
+
+.taskAside{
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    gap:5px;
+    font-weight: 400;
+    font-size:0.95;
+}
+
+.subtaskAside{
+    display: flex;
+    align-items: flex-end;
+    padding-left:15px;
+    font-size:0.9rem;
+    font-weight: 400;
+    gap:5px;
+}
+
+.taskAsidecheckboxCustom{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.checkIcon{
+    width: 100%;
+    height: 100%;
+    stroke: #FFFFFF;
+    fill: none; 
+    transform: scale(0); 
+    transition: transform 0.2s ease-in-out;
+}
+
+.taskCheckboxAside{
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+/* Estilo da checkbox depois de marcada */
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+/* Estilo de como vai aparecer a checkbox  e o icone depois de marcada */
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom .checkIcon {
+    transform: scale(1); 
+}
+
+/*Estilo de risquinho no nome da tarefa */
+.taskCheckboxAside:checked ~ .asideTaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
+.subtaskCheckboxAside {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+
+/* Opcional: Mudar o estilo quando a subtarefa estiver marcada */
+.subtaskAside input:checked + .asideSubtaskName::before {
+    background-color: #000080;
+    border-color: #000080;
+    /* Você pode adicionar um ícone de "check" aqui se desejar */
+}
+
+/* --- ESTILOS DE TAREFA (mantidos) --- */
+.taskCheckboxAside {
+    /* Torna a checkbox real invisível */
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom .checkIcon {
+    transform: scale(1); 
+}
+.taskCheckboxAside:checked ~ .asideTaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
+.subtaskCheckboxAside {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+.subtaskAsidecheckboxCustom {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.subtaskCheckboxAside:checked + .subtaskAsidecheckboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+.subtaskCheckboxAside:checked + .subtaskAsidecheckboxCustom .checkIcon {
+    transform: scale(1); 
+}
+.subtaskCheckboxAside:checked ~ .asideSubtaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
 
 /* Menu Superior */
 
@@ -270,7 +410,10 @@ header{
     align-items: center;
     font-size: 0.9rem;
     gap:5px;
+}
 
+.navigation{
+    display: flex;
 }
 
 .breadcrumbs a{
@@ -285,15 +428,15 @@ header{
 .headerUtilities{
     display: flex;
     align-items: center;
-    gap:20px;
+    gap:15px;
 }
 
 .headerUtilitiesHover{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 5px;
     transition: .3s ease;
 }
@@ -410,7 +553,7 @@ main{
     align-items: center;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
+    border-radius: 5px;
     cursor:pointer;
     transition: .3s ease;
 
@@ -468,7 +611,7 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: min-content;
     height: 100%;
     gap:5px;
     border-bottom:2px solid transparent;
@@ -483,7 +626,7 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: min-content;
     height: 100%;
     border-bottom:2px solid #000080;
     font-weight: bold;
@@ -503,6 +646,7 @@ main{
     border-radius:10px;  
     box-shadow: 1px 1px 8px var(--shadow);
     display: none;
+    z-index:100;
 }
 
 .memberModalOpen{

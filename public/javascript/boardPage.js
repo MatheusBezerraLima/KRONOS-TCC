@@ -381,6 +381,22 @@ closeMemberModal.addEventListener("click", ()=>{
 
 })
 
+
+document.addEventListener('click', (event) => {
+    
+    const modalAberto = document.querySelector('.addMemberModal.memberModalOpen');
+
+    if (modalAberto) {
+        
+        const isClickOutsideModal = !modalAberto.contains(event.target);
+        
+        const isClickOnOpenIcon = event.target.closest('.addMoreMembers');
+
+        if (isClickOutsideModal && !isClickOnOpenIcon) {
+            modalAberto.classList.remove('memberModalOpen');
+        }
+    }
+});
 //----------------------  Modal de opções da coluna: deletar e renomear ----------------------
 
 
@@ -442,21 +458,16 @@ document.addEventListener('click', (event) => {
 seeTaskOptions.forEach((item) => {
     
     item.addEventListener("click", (event) => {
-        // 1. Encontra o container da TAREFA clicada (o elemento pai que contém o ícone)
         const taskContainer = item.closest('.tasksToDoBoard'); 
         
-        // 2. Procura o modal DENTRO DESTE container ESPECÍFICO
         const targetModal = taskContainer ? taskContainer.querySelector(".actionsTask") : null;
         
         if (targetModal) {
             
-            // 3. Fecha todos os outros modais abertos
             document.querySelectorAll('.actionsTask.openActions').forEach(openModal => {
-                // Remove a classe de modais que NÃO são o alvo atual
                 if (openModal !== targetModal) {
                     openModal.classList.remove('openActions');
                     
-                    // (Opcional) Se estiver usando o status no ícone, remova-o aqui
                     const associatedIcon = openModal.closest('.tasksToDoBoard')?.querySelector('.seeTaskOptions');
                     if (associatedIcon) {
                         associatedIcon.classList.remove('activeOptionsIcon');
@@ -464,15 +475,45 @@ seeTaskOptions.forEach((item) => {
                 }
             });
             
-            // 4. Abre/Fecha o modal alvo
             targetModal.classList.toggle("openActions");
             
-            // (Opcional) Adiciona/Remove o status no ícone clicado
             item.classList.toggle("activeOptionsIcon"); 
         }
     });
 });
 
+function setupAsideCheckboxes() {
+    
+    const taskCheckboxesCustom = document.querySelectorAll('.taskAsidecheckboxCustom');
+
+    taskCheckboxesCustom.forEach(customBox => {
+        customBox.addEventListener('click', () => {
+            // A checkbox real é o irmão anterior (previousElementSibling)
+            const inputCheckbox = customBox.previousElementSibling;
+            
+            if (inputCheckbox && inputCheckbox.type === 'checkbox') {
+                // Alterna o estado 'checked'. O CSS se encarrega do resto.
+                inputCheckbox.checked = !inputCheckbox.checked;
+            }
+        });
+    });
+
+    const subtaskCheckboxesCustom = document.querySelectorAll('.subtaskAsidecheckboxCustom');
+
+    subtaskCheckboxesCustom.forEach(customBox => {
+        customBox.addEventListener('click', () => {
+            // A checkbox real é o irmão anterior (previousElementSibling)
+            const inputCheckbox = customBox.previousElementSibling;
+            
+            if (inputCheckbox && inputCheckbox.type === 'checkbox') {
+                // Alterna o estado 'checked'. O CSS se encarrega do resto.
+                inputCheckbox.checked = !inputCheckbox.checked;
+            }
+        });
+    });
+}
 
 
+// Chame a função para anexar os eventos de clique quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', setupAsideCheckboxes);
 
