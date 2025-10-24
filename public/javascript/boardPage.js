@@ -28,6 +28,9 @@ const closeMemberModal = document.querySelector(".closeMemberModal")
 const searchMembersInput = document.querySelector(".searchMembers")
 const seeColumnOptions = document.querySelectorAll(".seeColumnOptions")
 const columnOptionsModal = document.querySelectorAll(".actionsColumn")
+const taskOptionsModal = document.querySelectorAll(".actionsTask")
+const seeTaskOptions = document.querySelectorAll(".seeTaskOptions")
+
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -378,6 +381,22 @@ closeMemberModal.addEventListener("click", ()=>{
 
 })
 
+
+document.addEventListener('click', (event) => {
+    
+    const modalAberto = document.querySelector('.addMemberModal.memberModalOpen');
+
+    if (modalAberto) {
+        
+        const isClickOutsideModal = !modalAberto.contains(event.target);
+        
+        const isClickOnOpenIcon = event.target.closest('.addMoreMembers');
+
+        if (isClickOutsideModal && !isClickOnOpenIcon) {
+            modalAberto.classList.remove('memberModalOpen');
+        }
+    }
+});
 //----------------------  Modal de opções da coluna: deletar e renomear ----------------------
 
 
@@ -418,5 +437,83 @@ seeColumnOptions.forEach((item) => {
     });
 });
 
+//----------------------  Modal de opções da tarefa: deletar e renomear ----------------------
 
+document.addEventListener('click', (event) => {
+    
+    const modalAberto = document.querySelector('.actionsTask.openActions');
+
+    if (modalAberto) {
+        
+        const isClickOutsideModal = !modalAberto.contains(event.target);
+        
+        const isClickOnOpenIcon = event.target.closest('.seeTaskOptions');
+
+        if (isClickOutsideModal && !isClickOnOpenIcon) {
+            modalAberto.classList.remove('openActions');
+        }
+    }
+});
+
+seeTaskOptions.forEach((item) => {
+    
+    item.addEventListener("click", (event) => {
+        const taskContainer = item.closest('.tasksToDoBoard'); 
+        
+        const targetModal = taskContainer ? taskContainer.querySelector(".actionsTask") : null;
+        
+        if (targetModal) {
+            
+            document.querySelectorAll('.actionsTask.openActions').forEach(openModal => {
+                if (openModal !== targetModal) {
+                    openModal.classList.remove('openActions');
+                    
+                    const associatedIcon = openModal.closest('.tasksToDoBoard')?.querySelector('.seeTaskOptions');
+                    if (associatedIcon) {
+                        associatedIcon.classList.remove('activeOptionsIcon');
+                    }
+                }
+            });
+            
+            targetModal.classList.toggle("openActions");
+            
+            item.classList.toggle("activeOptionsIcon"); 
+        }
+    });
+});
+
+function setupAsideCheckboxes() {
+    
+    const taskCheckboxesCustom = document.querySelectorAll('.taskAsidecheckboxCustom');
+
+    taskCheckboxesCustom.forEach(customBox => {
+        customBox.addEventListener('click', () => {
+            // A checkbox real é o irmão anterior (previousElementSibling)
+            const inputCheckbox = customBox.previousElementSibling;
+            
+            if (inputCheckbox && inputCheckbox.type === 'checkbox') {
+                // Alterna o estado 'checked'. O CSS se encarrega do resto.
+                inputCheckbox.checked = !inputCheckbox.checked;
+            }
+        });
+    });
+
+    const subtaskCheckboxesCustom = document.querySelectorAll('.subtaskAsidecheckboxCustom');
+
+    subtaskCheckboxesCustom.forEach(customBox => {
+        customBox.addEventListener('click', () => {
+            // A checkbox real é o irmão anterior (previousElementSibling)
+            const inputCheckbox = customBox.previousElementSibling;
+            
+            if (inputCheckbox && inputCheckbox.type === 'checkbox') {
+                // Alterna o estado 'checked'. O CSS se encarrega do resto.
+                inputCheckbox.checked = !inputCheckbox.checked;
+            }
+        });
+    });
+}
+
+
+// Chame a função para anexar os eventos de clique quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', setupAsideCheckboxes);
 

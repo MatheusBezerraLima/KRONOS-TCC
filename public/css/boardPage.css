@@ -189,44 +189,200 @@ nav{
     height: auto;
     display: flex;
     flex-direction: column;
-    padding-top:10px;
     gap:15px;
+    margin-top: 20px;
+    padding-top:10px;
+    border-top: 1px solid var(--border-color-aside);
 }
 
+/* First of type é usado para remover o border-top apenas do primeiro elemento que possue essa classe*/
+.container-memberTasks:first-of-type{
+    border-top: none;
+}
 .memberInfo{
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     width: 100%;
     height: 10%;
-    gap:10px;
+    gap:10px; 
 }
 
 .memberPhoto{
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
     background-color: #d3d3d3;
 }
 
-.tasks{
+.listTasksContainer{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap:10px;
     width: 100%;
-    height:auto;
+    height:min-content;
     padding-left: 5px;
 }
 
-input[type=checkbox]{
-    width:20px;
-    height: 20px;
+
+.asideTaskContainer{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    width: 100%;
+    min-width: 100%;
+    height: min-content;
 }
 
-.taskInfo{
+.taskAside{
     display: flex;
+    align-items: flex-end;
+    width: 100%;
+    gap:5px;
+    font-weight: 400;
+    font-size:0.95;
+}
+
+.subtaskAside{
+    display: flex;
+    align-items: flex-end;
+    padding-left:15px;
+    font-size:0.9rem;
+    font-weight: 400;
     gap:5px;
 }
+
+.taskAsidecheckboxCustom{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.checkIcon{
+    width: 100%;
+    height: 100%;
+    stroke: #FFFFFF;
+    fill: none; 
+    transform: scale(0); 
+    transition: transform 0.2s ease-in-out;
+}
+
+.taskCheckboxAside{
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+/* Estilo da checkbox depois de marcada */
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+/* Estilo de como vai aparecer a checkbox  e o icone depois de marcada */
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom .checkIcon {
+    transform: scale(1); 
+}
+
+/*Estilo de risquinho no nome da tarefa */
+.taskCheckboxAside:checked ~ .asideTaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
+.subtaskCheckboxAside {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+
+/* Opcional: Mudar o estilo quando a subtarefa estiver marcada */
+.subtaskAside input:checked + .asideSubtaskName::before {
+    background-color: #000080;
+    border-color: #000080;
+    /* Você pode adicionar um ícone de "check" aqui se desejar */
+}
+
+/* --- ESTILOS DE TAREFA (mantidos) --- */
+.taskCheckboxAside {
+    /* Torna a checkbox real invisível */
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom .checkIcon {
+    transform: scale(1); 
+}
+.taskCheckboxAside:checked ~ .asideTaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
+.subtaskCheckboxAside {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+.subtaskAsidecheckboxCustom {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.subtaskCheckboxAside:checked + .subtaskAsidecheckboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+.subtaskCheckboxAside:checked + .subtaskAsidecheckboxCustom .checkIcon {
+    transform: scale(1); 
+}
+.subtaskCheckboxAside:checked ~ .asideSubtaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
 
 /* Menu Superior */
 
@@ -254,7 +410,10 @@ header{
     align-items: center;
     font-size: 0.9rem;
     gap:5px;
+}
 
+.navigation{
+    display: flex;
 }
 
 .breadcrumbs a{
@@ -269,15 +428,15 @@ header{
 .headerUtilities{
     display: flex;
     align-items: center;
-    gap:20px;
+    gap:15px;
 }
 
 .headerUtilitiesHover{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 5px;
     transition: .3s ease;
 }
@@ -394,7 +553,7 @@ main{
     align-items: center;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
+    border-radius: 5px;
     cursor:pointer;
     transition: .3s ease;
 
@@ -452,7 +611,7 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: min-content;
     height: 100%;
     gap:5px;
     border-bottom:2px solid transparent;
@@ -467,7 +626,7 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: min-content;
     height: 100%;
     border-bottom:2px solid #000080;
     font-weight: bold;
@@ -487,6 +646,7 @@ main{
     border-radius:10px;  
     box-shadow: 1px 1px 8px var(--shadow);
     display: none;
+    z-index:100;
 }
 
 .memberModalOpen{
@@ -662,6 +822,19 @@ main{
     display: none;
 }
 
+.actionsTask{
+    position: absolute;
+    width: 120px;
+    height: 80px;
+    background-color: #FFFF;
+    right:-70px;
+    top:110px;
+    box-shadow: 1px 1px 8px var(--shadow);
+    border-radius: 10px;
+    z-index: 10;
+    display: none;
+}
+
 .actions{
     padding: 10px;
     gap:10px;
@@ -705,6 +878,12 @@ main{
 .actions:first-child{
     border-top: none;
 }
+
+.iconsColumnHeader{
+    display: flex;
+    gap:5px;
+}
+
 .columnHeader{
     width: 250px;
     height: 40px;
@@ -719,11 +898,50 @@ main{
     box-shadow: 1px 1px 5px var(--shadow);
 
 }
+.iconsColumnHeaderHover{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+}
 
+.iconsColumnHeaderHover:hover{
+     background-color: var(--lightGrey);
+     transition: .2s ease;
+}
+
+.iconColumnHeaderSelected{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    background-color: var(--lightGrey);
+}
+
+.taskHeaderIcons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+}
+
+.taskHeaderIcons:hover{
+    background-color: var(--lightGrey);
+}
+.taskHeaderIcons svg{
+    color: #3F3F3F;
+    width: 20px;
+    cursor: pointer;
+}
 .columnHeader svg{
     color: #3F3F3F;
-    width: 24px;
-    height: 24px;
+    width: 20px;
     cursor: pointer;
 
 }
@@ -901,6 +1119,12 @@ main{
     padding: 15px;
     cursor: pointer;
 }
+
+.addColumnHeader:hover{
+    background-color: rgba(24, 2, 134, 0.199);
+    transition: .2s ease;
+}
+
 
 .addColumnHeader svg{
     width: 24px;
