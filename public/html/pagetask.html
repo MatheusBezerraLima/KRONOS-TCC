@@ -1,212 +1,84 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Tarefas </title>
+    <title>Página de tarefa</title>
     <link rel="stylesheet" href="/public/css/pagetask.css">
+    <script src="/public/javascript/pagetask.js" defer ></script>
 </head>
 <body>
-    <div class="container">
-        <header>
+     <aside class="aside">
+            <div class="logo">
+                <a href="#" aria-label="Página principal">LOGO</a>
+                <svg class="toggleIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-left-icon lucide-chevrons-left"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
+            </div> <!-- Logo -->
+            <!--Side Menu Links-->
             <nav>
-                <div class="logo">
-                    <h3>KRONOS</h3>
-                </div>
+                <ul>
+                    <div class="selection-aside selected">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <li class="headerLink"><a href="#">Home</a></li>
+                    </div>
 
-                <div class="container-searchbar">
-                    <input type="search" class="searchbar">
-                </div>
-
-                <div class="user-notification-profile">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
-
-                        <div class="profile">
-
-                        </div> <!--profile-->    
-                </div>
-
-            </nav>
-        </header>
-
-        <div class="containerAsideMain">
-            <aside>
-                <nav>
-                    <button>Criar Projeto</button>
-                    <ul>
-                        <div class="links">
-                        <li><a href="#" >Home</a></li>
-                        </div>
-
-                        <div class="links">
-                        <li><a href="#">Projetos</a></li>
-                        </div>
-
-                        <div class="links">
-                        <li><a href="#">Tarefas</a></li>
-                        </div>
-
-                        <div class="links">
-                        <li><a href="#">Calendário</a></li>
-                        </div>
-                    </ul>
-                </nav>
-            </aside>
-
-            <div class="containerMain">
-
-                <div class="contentMain">
-                    <div class="titulo">
-                        <h1>Projetos</h1>
+                    <div class="selection-aside">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-icon lucide-message-circle"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/></svg>
+                        <li class="headerLink"><a href="#">Projetos</a></li>
                     </div>
                     
-                    <div class="containerCards">
-
-                      <div class="cards">
-                            <div class="imageCard">
-                                  <div class="membersProject">
-                                    <div class="member" style="background-color: aliceblue;"></div>
-                                    <div class="member" style="background-color: pink;"></div>
-                                    <div class="member" style="background-color: blue;"></div>
-                                    <div class="more"></div>
-                                </div>
-                            </div>
-                            <div class="descriptionCard">
-                                <div class="projectName">
-                                    <h4>Trabalho de Ingles</h4>
-                                </div>  
-                                <div class="projectDate">
-                                    <p style="font-size:10px">para 14 de agosto</p>
-                                </div>
-                            </div>
-                        </div> <!-- Cards-->
-
-                        <div class="cards">
-                            <div class="imageCard">
-                                <div class="membersProject">
-                                    <div class="member"></div>
-                                    <div class="member"></div>
-                                    <div class="member"></div>
-                                </div>
-                            </div>
-
-                            <div class="descriptionCard">
-                                <div class="projectName">
-                                    <h5>Trabalho de Ingles</h5>
-                                </div>
-                                <div class="projectDate">
-                                    <p style="font-size:10px">para 14 de agosto</p>
-                                </div>
-                            </div>
-                        </div> <!-- Cards-->
-
-                         <div class="cards">
-                            <div class="imageCard">
-                                  <div class="membersProject">
-                                    <div class="member" style="background-color: aliceblue;"></div>
-                                    <div class="member" style="background-color: pink;"></div>
-                                    <div class="member" style="background-color: blue;"></div>
-                                    <div class="more"></div>
-                                </div>
-                            </div>
-                            <div class="descriptionCard">
-                                <div class="projectName">
-                                    <h4>Trabalho de Ingles</h4>
-                                </div>  
-                                <div class="projectDate">
-                                    <p style="font-size:10px">para 14 de agosto</p>
-                                </div>
-                            </div>
-                        </div> <!-- Cards-->
-
-                         <div class="cards">
-                            <div class="imageCard">
-                                  <div class="membersProject">
-                                    <div class="member" style="background-color: aliceblue;"></div>
-                                    <div class="member" style="background-color: pink;"></div>
-                                    <div class="member" style="background-color: blue;"></div>
-                                    <div class="more"></div>
-                                </div>
-                            </div>
-                            <div class="descriptionCard">
-                                <div class="projectName">
-                                    <h4>Trabalho de Ingles</h4>
-                                </div>  
-                                <div class="projectDate">
-                                    <p style="font-size:10px">para 14 de agosto</p>
-                                </div>
-                            </div>
-                        </div> <!-- Cards-->
-
-                         <div class="cards">
-                            <div class="imageCard">
-                                  <div class="membersProject">
-                                    <div class="member" style="background-color: aliceblue;"></div>
-                                    <div class="member" style="background-color: pink;"></div>
-                                    <div class="member" style="background-color: blue;"></div>
-                                    <div class="more"></div>
-                                </div>
-                            </div>
-                            <div class="descriptionCard">
-                                <div class="projectName">
-                                    <h4>Trabalho de Ingles</h4>
-                                </div>  
-                                <div class="projectDate">
-                                    <p style="font-size:10px">para 14 de agosto</p>
-                                </div>
-                            </div>
-                        </div> <!-- Cards-->
-
-                            <div class="cards">
-                            <div class="imageCard">
-                                  <div class="membersProject">
-                                    <div class="member" style="background-color: aliceblue;"></div>
-                                    <div class="member" style="background-color: pink;"></div>
-                                    <div class="member" style="background-color: blue;"></div>
-                                    <div class="more"></div>
-                                </div>
-                            </div>
-                            <div class="descriptionCard">
-                                <div class="projectName">
-                                    <h4>Trabalho de Ingles</h4>
-                                </div>  
-                                <div class="projectDate">
-                                    <p style="font-size:10px">para 14 de agosto</p>
-                                </div>
-                            </div>
-                        </div> <!-- Cards-->
-
-                            <div class="cards">
-                            <div class="imageCard">
-                                  <div class="membersProject">
-                                    <div class="member" style="background-color: aliceblue;"></div>
-                                    <div class="member" style="background-color: pink;"></div>
-                                    <div class="member" style="background-color: blue;"></div>
-                                    <div class="more"></div>
-                                </div>
-                            </div>
-                            <div class="descriptionCard">
-                                <div class="projectName">
-                                    <h4>Trabalho de Ingles</h4>
-                                </div>  
-                                <div class="projectDate">
-                                    <p style="font-size:10px">para 14 de agosto</p>
-                                </div>
-                            </div>
-                        </div> <!-- Cards-->
-
-
-
-
+                    <div class="selection-aside">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity-icon lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
+                        <li class="headerLink"><a href="#">Tarefas</a></li>
                     </div>
-                </div> <!-- contentMain-->
-            </div> <!-- containerMain -->
 
-        </div> <!-- containerAsideMain -->
+                    <div class="selection-aside">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity-icon lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
+                        <li class="headerLink"><a href="#">PDI</a></li>
+                    </div>
+                </ul>
+            </nav>
+        </aside>
 
-    </div>
+        <div class="main-content">
+            <header>
+                <div class="breadcrumbs">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+                    <div class="navigation">
+                        <a href="#">Home</a> / <a href="#">Projetos</a> / <a href="#">Board</a>
+                    </div>
+                </div> <!-- breadcrumbs-->
+
+                <div class="headerUtilities">
+                    <div class="headerUtilitiesHover"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></div>
+                    <div class="headerUtilitiesHover"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></div>
+                        
+                    <div class="userProfile">
+
+                    </div> <!-- userProfile -->
+                </div> <!-- headerUtilities -->
+            </header> <!--menu-top-->
+
+            <main>
+                <section class="taskHeader">
+                    <div class="mainTaskHeaderInfo">
+                        <h1 class="taskPageTitle">Tarefas</h1>
+
+                        <div class="pageTaskActions">
+
+                            <div class="searchTask">
+                                <p>Pesquisar</p>
+                            </div>
+
+                            <div class="filterTasks">
+                                <p>Filtro</p>
+                            </div>
+
+                            <button class="createTask"></button>
+                        </div>
+                    </div> <!-- mainBoardHeaderInfo-->
+                </section> <!--boardColumns-->
+            </main>
+        </div> <!-- main-content -->
 </body>
-
-
-
 </html>

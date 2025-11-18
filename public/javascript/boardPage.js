@@ -94,8 +94,12 @@ function closeModalTask() {
 dropDownStatus.addEventListener("click", (event) => {
      
     dropDownStatus.classList.toggle("statusOpen");
-
+ 
     event.stopPropagation();
+
+    const turnOffStatusStyle = document.querySelectorAll(".statusBadgeContainer")
+    turnOffStatusStyle.classList.add("turnOffstatusBadgeContainer")
+
 });
 
 document.addEventListener('click', (event) => {

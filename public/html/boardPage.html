@@ -14,8 +14,8 @@
     
     <script src="/public/javascript/boardPage.js" defer></script>
 </head>
-<body>
 
+    <body>
         <!-- Side Menu -->
         <div class="filter"></div>
         <section class="addTaskModal">
@@ -45,9 +45,13 @@
                     <div class="formModalInfo">
                         <div class="selectCategoryModal">
                             <div class="categoryOption designCategory categorySelected" data-category="design">
-                                <div class="categoryBadge designBadge">
-                                    <p>Design</p>
-                                </div> <!-- designBadge  -->
+                                <!-- <div class="badgeCategoryContainer"> -->
+                                    <div class="categoryBadgeContainer">
+                                        <div class="categoryBadge designBadge">
+                                            <p>Design</p>
+                                        </div> <!-- designBadge  -->
+                                    </div>
+                                <!-- </div> -->
                             </div> <!-- categoryOption designCategory-->
 
                             <div class="categoryOption backendCategory" data-category="backend">
@@ -73,21 +77,27 @@
                         <!-- Caixinha para escolher status do projeto -->
                         <div class="selectStatusModal" id="statusSelector">
                             <div class="statusOption toDoStatus statusSelected" data-status="to-do">
-                                <div class="statusBadge toDoBadge">
-                                    <p>A fazer </p>
-                                </div> <!-- toDoCategory  -->
+                                <div class="statusBadgeContainer">
+                                    <div class="statusBadge toDoBadge">
+                                        <p>A fazer </p>
+                                    </div> <!-- toDoCategory  -->
+                                </div>
                             </div> <!-- statusOption toDoStatus-->
 
                             <div class="statusOption doingStatus" data-status="doing">
-                                <div class="statusBadge doingBadge">
-                                    <p>Fazendo</p>
-                                </div> <!-- doingCategoryContainer -->
+                                <div class="statusBadgeContainer">
+                                    <div class="statusBadge doingBadge">
+                                        <p>Fazendo</p>
+                                    </div> <!-- doingCategoryContainer -->
+                                </div>
                             </div> <!-- statusOption doingStatus -->
 
                             <div class="statusOption doneStatus" data-status="done">
-                                <div class="statusBadge doneBadge">
-                                    <p>Concluído</p>
-                                </div> <!-- doneCategory -->
+                                 <div class="statusBadgeContainer">
+                                    <div class="statusBadge doneBadge">
+                                        <p>Concluído</p>
+                                    </div> <!-- doneCategory -->
+                                </div>
                             </div> <!-- statusOption doneStatus -->
                         </div> <!-- selectStatusModal -->
                     </div> <!-- formModalInfo -->
