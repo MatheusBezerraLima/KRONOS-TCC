@@ -1,6 +1,15 @@
 const projectServices = require("../../application/services/projectServices");
 
 class ProjectController{
+    async listProjects(req, res){
+        // const userId = req.user.id;
+        const userId = 3;
+
+        const projects = await projectServices.listProjectsForUser(userId);
+
+        res.status(200).json({ Projetos: projects});
+    }
+
     async preparePageData(req, res){
         try{    
             const { projectId } = req.params;

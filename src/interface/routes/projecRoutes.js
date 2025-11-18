@@ -4,6 +4,7 @@ const routes = express.Router();
 const verifyAuthToken = require('../middlewares/authenticateToken');
 const path = require("path");
 
+routes.get('/projetos', projectController.listProjects)
 
 routes.get('/projetos/:projectId/', projectController.preparePageData);
 

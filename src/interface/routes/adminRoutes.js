@@ -3,7 +3,7 @@ const routes = express.Router();
 const AdminController = require("../controllers/adminController");
 const verifyIsAdmin = require('../middlewares/authorizeAdmin'); 
 
-routes.get("/users", verifyIsAdmin,AdminController.listAllUsers);
+routes.get("/users", AdminController.listAllUsers);
 
 routes.delete("/users/:userId", verifyIsAdmin, AdminController.deleteUser);
 

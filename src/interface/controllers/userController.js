@@ -14,7 +14,7 @@ const getRegisterUser = async (req, res) => {
     if(!newUser || newUser == null){
       console.log("Error ao registrar usuario");
     }
-  
+
     getAuthenticateUser(req, res);
   }catch(err){
 
@@ -49,7 +49,8 @@ const getAuthenticateUser = async (req, res) => {
         maxAge:  30 * 60 * 1000                           // Tempo de duração em milisegundos 
     });    
 
-    res.status(StatusCode.OK).redirect('/');
+    // res.status(StatusCode.OK).redirect('/');
+    res.status(StatusCode.OK).json("Usuário Logado!");
     
   } catch (err) {
     if (err.message === "USER_NOT_FOUND") {

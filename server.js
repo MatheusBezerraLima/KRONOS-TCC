@@ -5,6 +5,7 @@ const adminRoutes = require('./src/interface/routes/adminRoutes');
 const projectRoutes = require('./src/interface/routes/projecRoutes');
 const inviteRoutes = require('./src/interface/routes/inviteRoutes');
 const boardColumnRoutes = require('./src/interface/routes/boardColumnRoutes');
+const friendshipRoutes = require('./src/interface/routes/friendshipRoutes');
 const indexController = require('./src/interface/controllers/indexController');
 const path = require('path')
 
@@ -75,7 +76,7 @@ app.use('/api', subTaskRoutes);
 app.use('/api', projectRoutes);
 app.use('/invites', inviteRoutes)
 app.use('/api/projetos/:projectId/colunas', boardColumnRoutes);
-
+app.use('/api/friendships', friendshipRoutes);
 
 app.get('/', indexController.renderDashboard);
 app.get('/projetos/:projectId/', (req, res) => {

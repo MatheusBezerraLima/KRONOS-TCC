@@ -441,6 +441,17 @@ class ProjectServices{
         }
     }
 
+    async listProjectsForUser(userId){
+        if(!userId){
+            const error = new Error("Usuário não especificado");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const projects = await userProjectRoleDAO.findProjectForUser(userId);
+
+        return projects;
+    }
 }
 
 module.exports = new ProjectServices();

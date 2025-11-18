@@ -50,8 +50,8 @@ const applyAssociations = (db) => {
     User.belongsToMany(Task, {through: assignmentTask, foreignKey: "usuario_id", otherKey: "tarefa_id", as: "assignedTasks"});
 
     // User --> User (N:N)
-    User.belongsToMany(User , {  as: 'SentRequestsTo', through: Friendship, foreignKey: "requester_id", otherKey: "addressee_id" });
-    User.belongsToMany(User , {  as: 'ReceivedRequestsFrom', through: Friendship, foreignKey: "addressee_id", otherKey: "requester_id" });
+    User.belongsToMany(User , {  as: 'Requester', through: Friendship, foreignKey: "requester_id", otherKey: "addressee_id" });
+    User.belongsToMany(User , {  as: 'Addressee', through: Friendship, foreignKey: "addressee_id", otherKey: "requester_id" });
 
     Friendship.belongsTo(User, {
         as: 'Requester', // Apelido para o usuário que enviou o pedido
