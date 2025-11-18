@@ -1,5 +1,5 @@
 const { includes } = require('zod/v4');
-const { Task, CategoryTask, StatusTask } = require('../models');
+const { Task, CategoryTask, StatusTask, SubTask, Profile, User} = require('../models/index');
 
 class TasksDAO{
     async findAllGeneralTasks(userId){
@@ -11,7 +11,8 @@ class TasksDAO{
                 },
                 include: [
                     {
-                        model: CategoryTask, 
+                        model: CategoryTask,
+                        attributes: ['id', 'nome'] 
                     },
                     {
                         model: StatusTask,
@@ -26,9 +27,11 @@ class TasksDAO{
                             model: Profile,
                             as: 'profile',
                             attributes: ['foto_perfil']
+                        }, {
+                           model: CategoryTask,
+                           attributes: [''] 
                         }],
-                        // 'through: { attributes: [] }' impede que os dados da tabela
-                        // de ligação (atribuicao_tarefa) sejam incluídos no resultado.
+                        
                         through: { attributes: [] } 
                     }
                 ]
@@ -39,6 +42,31 @@ class TasksDAO{
         }
         
     };
+
+    async findByIdWithDetails(id) {
+        try {
+            return await Task.findByPk(id, {
+                include: [
+                    {
+                        model: CategoryTask,
+                        as: 'categoryTask' // Use o 'as' definido na sua associação
+                    },
+                    {
+                        model: StatusTask,
+                        as: 'statusTask' // Use o 'as' definido na sua associação
+                    },
+                    {
+                        model: SubTask,
+                        as: 'subTasks', // Use o 'as' definido na sua associação
+                        order: [['criado_em', 'ASC']] // Opcional: ordena as subtarefas
+                    },
+                ],
+            });
+        } catch (error) {
+            console.error(`Erro no DAO ao buscar tarefa por ID com detalhes (ID: ${id}):`, error);
+            throw error;
+        }
+    }
 
     async create(data){
         try{

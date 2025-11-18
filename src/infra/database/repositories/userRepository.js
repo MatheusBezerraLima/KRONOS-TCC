@@ -21,7 +21,12 @@ class UserDAO {
     }
 
     async findById(id) {
-        return await User.findByPk(id);
+        try{
+          return await User.findByPk(id);  
+        }catch(error){
+            console.error('Erro no DAO ao buscar usuario por ID:', error);
+            throw error;
+        }  
     }
 
     async findAll(){

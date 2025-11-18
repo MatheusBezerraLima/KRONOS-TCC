@@ -1,4 +1,4 @@
-const { UserProjectRole, User, ProfileUser} = require("../models/index");
+const { UserProjectRole, User, ProfileUser, Project} = require("../models/index");
 
 class UserProjectRoleDAO{
     async create(data,  options = {}){
@@ -16,6 +16,24 @@ class UserProjectRoleDAO{
             return association;
         }catch(error){
             console.error(`Erro no DAO ao buscar associação: ${error.message}`);
+            throw error;
+        }
+    }
+
+    async findProjectForUser(userId){
+        try{
+            const projects = UserProjectRole.findAll({
+                where: {
+                    usuario_id: userId
+                },
+                include: [{
+                    model: Project,
+                    attributes: ['titulo', 'descricao', 'data_termino']
+                }]
+            })
+            return projects
+        }catch{
+            console.error(`Erro no DAO ao buscar projetos associados ao usuário: ${error.message}`);
             throw error;
         }
     }
