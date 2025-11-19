@@ -33,7 +33,7 @@ body{
     --taskBoardIcon-color: #3F3F3F;
     --shadow: rgb(198, 198, 198, 0.5);
     --transparentBlack: rgba(0, 0, 0, 0.4);
-    --toDo-color: rgba(64, 64, 64, 0.3);
+    --toDo-color: rgba(64, 64, 64, 0.1);
     --toDoFont-color: #404040;
     --doing-color: rgb(3, 44, 166, 0.5);
     --doingFont-color: #032CA6;
@@ -344,7 +344,15 @@ main{
     height: 45px;
     display: flex;
     border: 1px solid #f2f2f2;
+}
 
+.task:last-child{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    border: 1px solid #f2f2f2;
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
 }
 
 input[type=checkbox]{
@@ -375,3 +383,77 @@ input[type=checkbox]{
     padding-left:10px;
 }
 
+.statusBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    gap:5px;
+    font-size:15px;
+    cursor: pointer;
+}
+
+.statusMarker{
+    width: 5px;
+    height: 5px;
+    border-radius:50%;
+}
+
+.doneMarker{
+    background-color: #119500;
+}
+
+.doneStatus{
+    width: 95px;
+    height: 30px;
+    background-color: rgba(17, 149, 0, 0.1);
+    color: #119500;
+}
+
+.doingStatus{
+    width: 130px;
+    height: 30px;
+    background-color: rgba(52, 98, 191, 0.1);
+    color:#3462BF;
+}
+
+.doingMarker{
+    background-color: #3462BF;
+}
+
+.toDoStatus{
+    width: 90px;
+    height: 30px;
+    background-color: var(--toDo-color);
+    color:var(--toDoFont-color);
+}
+
+.toDoMarker{
+    background-color: var(--toDoFont-color);
+}
+
+.priorityBadge{
+    width: 80px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    font-size:15px;
+    cursor: pointer;
+}
+
+.lowPriority{
+    background-color: rgba(17, 149, 0, 0.1);
+    color: #119500;
+}
+
+.mediumPriority{
+    background-color: rgba(242, 203, 5, 0.1);
+    color:#F2B807;
+}
+
+.highPriority{
+   background-color: rgba(220, 53, 69, 0.1); 
+   color: #DC3545;
+}
