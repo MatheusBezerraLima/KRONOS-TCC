@@ -270,7 +270,7 @@ activitysModalSections.forEach(section => {
     })
 });
 
-//---------------------- Criação de novas tarefas ----------------------
+//---------------------- Criação de novas subtarefas ----------------------
 
 createSubtask.addEventListener("click", ()=>{
 

@@ -310,6 +310,7 @@ main{
     border: 1px solid #f2f2f2;
     border-top-left-radius: 10px; 
     border-top-right-radius: 10px; 
+    background-color: #FFFFFF;
 }
 
 .nameTaskTitle{
@@ -360,7 +361,7 @@ input[type=checkbox]{
     height: 20px;
 }
 
-.taskName{
+.taskNameContainer{
     width: 360px;
     border-right: 1px solid #f2f2f2;
     display: flex;
@@ -368,7 +369,8 @@ input[type=checkbox]{
     padding-left:10px;
     gap:5px;
 } 
-.dueDate, .status, .category{
+
+.dueDateContainer, .statusContainer, .categoryContainer{
     width: 200px;
     border-right: 1px solid #f2f2f2;
     display: flex;
@@ -376,7 +378,7 @@ input[type=checkbox]{
     padding-left:10px;
 }
 
-.priority{
+.priorityContainer{
     width: 200px;
     display: flex;
     align-items: center;
@@ -456,4 +458,14 @@ input[type=checkbox]{
 .highPriority{
    background-color: rgba(220, 53, 69, 0.1); 
    color: #DC3545;
+}
+
+/* Adicionar nova tarefa */
+
+.writeNewTaskName{
+    width: 300px;
+    height: 30px;
+    outline: none;
+    border: none;
+    font-size:15px;
 }
