@@ -19,6 +19,42 @@ class ProjectDAO{
             throw error;
         }
     }
+
+    async delete(projectId){
+        try{
+            return await Project.destroy({
+                where:{
+                    id: projectId
+                }
+            })
+        }catch(error){
+            console.error(`Erro no DAO ao tentar deletar o projeto`, error);
+            throw error;
+        }
+    }
+
+    async update(projectId, data){
+        try{
+            const result = await Project.update(
+                { ...data }, // Copia os dados de forma segura
+                {
+                    where: {
+                        id: projectId
+                    }
+                }
+            );
+
+            if(result[0] > 0 ){
+                const updatedProject = await Project.findById(projectId);
+                return updatedProject;
+            }
+
+            return result;
+        }catch(error){
+            console.error(`Erro no DAO ao tentar atualizar dados do projeto`, error);
+            throw error;
+        }
+    }
 }
 
 module.exports = new ProjectDAO();

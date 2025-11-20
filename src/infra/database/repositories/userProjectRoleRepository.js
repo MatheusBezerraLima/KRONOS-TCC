@@ -2,7 +2,13 @@ const { UserProjectRole, User, ProfileUser, Project} = require("../models/index"
 
 class UserProjectRoleDAO{
     async create(data,  options = {}){
-        return await UserProjectRole.create(data, { transaction: options.transaction });
+        try{
+            return await UserProjectRole.create(data, { transaction: options.transaction });
+        }catch(error){
+            console.error(`Erro no DAO criar relação do usuário ${data.usuario_id} com projeto ${data.projeto_id}:`, error);
+            throw error;
+        }
+        
     }
 
     async findByUserAndProject(userId, projectId){
@@ -39,16 +45,22 @@ class UserProjectRoleDAO{
     }
 
     async findMemberEmailsByProjectId(projectId) {
-        const associations = await UserProjectRole.findAll({
-            where: { projeto_id: projectId },
-            include: [{
-                model: User,
-                attributes: ['email'],
-                required: true // Garante que só venham associações com usuários válidos
-            }]
-        });
-        // Retorna um array simples de strings de e-mail
-        return associations.map(assoc => assoc.User.email);
+        try{
+            const associations = await UserProjectRole.findAll({
+                where: { projeto_id: projectId },
+                include: [{
+                    model: User,
+                    attributes: ['email'],
+                    required: true // Garante que só venham associações com usuários válidos
+                }]
+            });
+            // Retorna um array simples de strings de e-mail
+            return associations.map(assoc => assoc.User.email);
+        }catch(error){
+            console.error(`Erro no DAO ao buscar e-mails de membros do projeto:`, error);
+            throw error;
+        }
+        
     }
 
     async findMemberByProjectId(projectId){

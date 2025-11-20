@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../../../config/database');
 
 
-const Notificacao = sequelize.define("Notificacao", {
+const Notificacao = sequelize.define("Notification", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -16,6 +16,12 @@ const Notificacao = sequelize.define("Notificacao", {
             key: "id"
         }
     },
+    tipo: {
+        type: DataTypes.ENUM,
+        values: ['sistema', 'mensagem', 'convite', 'amizade', 'tarefa'],
+        allowNull: false,
+        defaultValue: 'sistema'
+    },
     mensagem: {
         type: DataTypes.STRING,
         allowNull: false
@@ -24,7 +30,12 @@ const Notificacao = sequelize.define("Notificacao", {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
-    data: {
+    metadados: {
+        type: DataTypes.JSON, 
+        allowNull: true,
+        comment: "Guarda IDs relacionados (ex: { messageId: 1, projectId: 5 })"
+    },
+    criado_em: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
     }

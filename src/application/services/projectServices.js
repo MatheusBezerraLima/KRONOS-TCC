@@ -293,7 +293,6 @@ class ProjectServices{
 
     async addMember(projectId, userIdToAdd, currentUserId, role ){
         let t = null;
-        console.log(projectId);
         
         try{
             const t = await sequelize.transaction();
@@ -303,6 +302,13 @@ class ProjectServices{
 
             if (!currentUserRole || !['Criador', 'Administrador'].includes(currentUserRole.role)) {
                 throw new Error("Acesso negado: você não tem permissão para adicionar membros a este projeto.");
+            }
+
+            //O projeto passado existe?
+            const project = await projectDAO.findById(projectId);
+
+            if(!project){
+                throw new Error("O projeto informado não existe.");
             }
 
             // O usuário a ser adicionado já é membro do projeto?
@@ -319,6 +325,23 @@ class ProjectServices{
             }, { transaction: t });
 
             await t.commit();
+
+            try {
+                await notificationDAO.create({
+                    userId: userIdToAdd, 
+                    type: 'convite',
+                    message: `${currentUserId.nome} te convidou para o Projeto ${project.titulo} `,
+                    metadata: {
+                        requesterId: currentUserId,
+                        projectId: projectId,
+                        role: role
+                    }
+                });
+            } catch (notificationError) {
+                // Logamos o erro, mas não impedimos o sucesso da amizade.
+                // Numa aplicação real, você poderia usar uma fila para garantir o envio.
+                console.error("Falha ao criar notificação de convite para projeto:", notificationError);
+            }
 
             return newMember.get({plain: true});
         }catch(error){

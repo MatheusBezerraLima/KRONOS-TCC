@@ -1,5 +1,6 @@
 const userDAO = require('../../infra/database/repositories/userRepository'); 
 const friendshipDAO = require('../../infra/database/repositories/friendshipRepository');
+const notificationDAO = require('../../infra/database/repositories/notificationRepository');
 
 class FriendshipService{
     async sendFriendRequest(addressee_id, requester_id){
@@ -50,7 +51,20 @@ class FriendshipService{
             throw error;
         }
 
-        // Criar notificação para quem recebeu 
+        // Criar notificação para quem recebeu
+         try {
+            await notificationDAO.create({
+                userId: addressee_id, 
+                type: 'amizade',
+                message: `${requesterUser.nome} enviou-lhe um pedido de amizade.`,
+                metadata: {
+                    friendshipId: newFriendship.id,
+                    requesterId: requester_id
+                }
+            });
+        } catch (notificationError) {
+            console.error("Falha ao criar notificação de amizade:", notificationError);
+        }
 
         return newFriendship;
     }
@@ -102,6 +116,24 @@ class FriendshipService{
              const error = new Error("Não foi possível atualizar a solicitação.");
              error.statusCode = 500;
              throw error;
+        }
+
+        // Notificação caso tenha aceitado 
+        if(newStatus === "accepted"){
+            // Criar notificação para quem recebeu
+            try {
+                await notificationDAO.create({
+                    userId: otherUserId, 
+                    type: 'amizade',
+                    message: `${currentUser.nome} aceitou o seu pedido de amizade!`,
+                    metadata: {
+                        friendshipId: newFriendship.id,
+                        requesterId: otherUserId
+                    }
+                });
+            } catch (notificationError) {
+                console.error("Falha ao criar notificação de amizade:", notificationError);
+            }
         }
 
         return { message: `Solicitação ${newStatus === 'accepted' ? 'aceita' : 'rejeitada'} com sucesso.` };

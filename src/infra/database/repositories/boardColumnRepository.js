@@ -40,16 +40,26 @@ class BoardColumnDAO {
         }catch(error){
             console.error(`Erro no DAO ao criar coluna: ${error.message}`);
             throw error;
+        }  
+    }
+
+      async update(id, data, options = {}) {
+        try{
+            return BoardColumn.update(data, { where: { id }, ...options });
+        }catch(error){
+            console.error(`Erro no DAO ao atualizar coluna do projeto ${projectId}:`, error);
+            throw error;
         }
         
     }
 
-      async update(id, data, options = {}) {
-        return BoardColumn.update(data, { where: { id }, ...options });
-    }
-
     async delete(id, options = {}) {
-        return BoardColumn.destroy({ where: { id }, ...options });
+        try{
+            return BoardColumn.destroy({ where: { id }, ...options });
+        }catch(error){
+            console.error(`Erro no DAO ao deletar coluna do projeto ${projectId}:`, error);
+            throw error;
+        }
     }
 
     /**
@@ -57,11 +67,17 @@ class BoardColumnDAO {
      * Útil para saber onde adicionar a próxima.
      */
     async findLastByProjectId(projectId, options = {}) {
-        return BoardColumn.findOne({
-            where: { projeto_id: projectId },
-            order: [['ordem', 'DESC']],
-            ...options
-        });
+        try{
+            return BoardColumn.findOne({
+                        where: { projeto_id: projectId },
+                        order: [['ordem', 'DESC']],
+                        ...options
+                    });
+        }catch(error){
+            console.error(`Erro no DAO ao buscar a última coluna do projeto ${projectId}:`, error);
+            throw error;
+        }
+        
     }
 
     async findFirstColumn(projectId, options = {}) {

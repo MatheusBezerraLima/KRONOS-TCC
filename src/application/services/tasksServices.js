@@ -124,7 +124,7 @@ class TaskServices{
         //     throw new Error("Somente o criador da tarefa pode atualizar")
         // }
 
-        const updatedTask = await tasksDAO.update(task, dataToUpdate);
+        const updatedTask = await tasksDAO.update(taskId, dataToUpdate);
 
         if(!updatedTask){
             throw new Error("Erro ao atualizar tarefa");

@@ -17,7 +17,7 @@ const Sprint = sequelize.define("Sprint", {
     sprint_number: {
         type: DataTypes.INTEGER,
         allowNull: false
-      },
+    },
     start_date: {
         type: DataTypes.DATE
     },

@@ -109,26 +109,47 @@ class TasksDAO{
     }
 
     async delete(task){
-        return await task.destroy();
+        try{
+            return await task.destroy()
+        }catch(error){
+            console.error(`Erro no DAO tentar deletar tarefa:`, error);
+            throw error;
+        }
     }
 
-    async update(task, dataToUpdate){
-        await task.set(dataToUpdate);
-        await task.save()
-        return task;
+    async update(taskId, dataToUpdate){
+        try{
+            const result = Task.update(
+                {...dataToUpdate},
+                {
+                    where:{
+                        id: taskId
+                    }
+                }
+            );
+
+            if(result[0] > 0){
+                const updatedTask = await Task.findByPk(taskId);
+                return updatedTask;
+            }
+
+            return result;
+        }catch(error){
+            console.error(`Erro no DAO ao tentar atualizar tarefa:`, error);
+            throw error;
+        }
+        
     }
 
      async moveTasksToNewColumn(oldColumnId, newColumnId, options = {}) {
         try {
-            // Task.update é usado para operações em massa (bulk update).
-            // Ele atualiza todos os registos que correspondem à condição 'where'.
             const [affectedRows] = await Task.update(
-                { coluna_id: newColumnId }, // Os novos valores a serem definidos
+                { coluna_id: newColumnId }, 
                 {
                     where: {
-                        coluna_id: oldColumnId // A condição para encontrar as tarefas a serem movidas
+                        coluna_id: oldColumnId 
                     },
-                    ...options // Passa a transação e outras opções para a query
+                    ...options 
                 }
             );
 

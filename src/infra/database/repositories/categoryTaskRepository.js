@@ -1,6 +1,15 @@
 const { CategoryTask } = require('../models/index');
 
 class CategoryTaskDAO{
+    async create(data){
+        try{
+            return await CategoryTask.create(data);
+        }catch(error){
+            console.error(`Erro no DAO ao criar categoria para tarefa:`, error);
+            throw error;
+        }
+    }
+
     async bulkCreate(categoriesData, options = {}){
         try{
             const newCategories = await CategoryTask.bulkCreate(categoriesData, {

@@ -7,7 +7,7 @@ const StatusTask = require("./StatusTask");
 const CategoryTask = require("./CategoryTask");
 const ActivityLog = require("./ActivityLog");
 const FileTask = require("./FileTask");
-const Notificacao = require("./Notificacao");
+const Notification = require("./Notification");
 const ProfileUser = require("./ProfileUser");
 const Project = require("./Project");
 const UserProjectRole = require("./UserProjectRole");
@@ -30,7 +30,7 @@ const  db = {
     CategoryTask,
     ActivityLog,
     FileTask,
-    Notificacao,
+    Notification,
     ProfileUser,
     Project,
     UserProjectRole,

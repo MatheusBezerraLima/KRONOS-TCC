@@ -30,44 +30,78 @@ class UserDAO {
     }
 
     async findAll(){
-        return await User.findAll({
-           attributes: ["id", "nome", "email", "status", "role"],
-           where: {
-            status: "ativo" 
-           }
-        });
+        try{
+            return await User.findAll({
+                attributes: ["id", "nome", "email", "status", "role"],
+                where: {
+                    status: "ativo" 
+                }
+            });
+        }catch(error){
+            console.error(`Erro no DAO ao buscar todos os usuários:`, error);
+            throw error;
+        }
+        
     }
 
     async findByName(nome){
-        return await User.findByAll({
-            nome: nome,
-            status: "ativo"
-        })
+        try{
+            return await User.findByAll({
+                nome: nome,
+                status: "ativo"
+            })
+        }catch(error){
+            console.error(`Erro no DAO ao buscar usuário por nome:`, error);
+            throw error;
+        }
     }
 
     async findByEmail(email){
-        return await User.findOne({
-            where: {
-                email: email,
-                status: "ativo"
-            }
-        });
+        try{
+           return await User.findOne({
+                where: {
+                    email: email,
+                    status: "ativo"
+                }
+            }); 
+        }catch(error){
+            console.error(`Erro no DAO ao buscar usuário por e-mail:`, error);
+            throw error;
+        }
+        
     }
 
     async changePassword(user, newPassword){
-        const newPasswordHash = await bycript.hash(newPassword, 10);
-        user.senha = newPasswordHash;
-        return await user.save();
+        try{
+            const newPasswordHash = await bycript.hash(newPassword, 10);
+            user.senha = newPasswordHash;
+            return await user.save();
+        }catch(error){
+            console.error(`Erro no DAO tentar alterar a senha do usuário:`, error);
+            throw error;
+        }      
     }
 
     async update(user, dataToUpdate){
-        await user.set(dataToUpdate);
-        await user.save()
-        return user;
+        try{
+            await user.set(dataToUpdate);
+            await user.save()
+            return user;
+        }catch(error){
+            console.error(`Erro no DAO ao tentar atualizar dados do usuário:`, error);
+            throw error;
+        }
+        
     }
 
+    // Ser substituido por apenas inativar o usuário.
     async delete(user){
-        return await user.destroy();
+        try{
+            return await user.destroy();
+        }catch(error){
+            console.error(`Erro no DAO tentar deletar usuário:`, error);
+            throw error;
+        } 
     }
 }
 

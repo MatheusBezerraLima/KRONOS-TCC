@@ -11,7 +11,7 @@ const applyAssociations = (db) => {
         CategoryTask,
         ActivityLog,
         FileTask,
-        Notificacao,
+        Notification,
         ProfileUser,
         Project,
         UserProjectRole,
@@ -103,9 +103,9 @@ const applyAssociations = (db) => {
     FileTask.belongsTo(Task, { foreignKey: "tarefa_id" });
     Task.hasMany(FileTask, { foreignKey: "tarefa_id" });
 
-    // Notificacao  --> User (N:1)
-    Notificacao.belongsTo(User, { foreignKey: "usuario_id" });
-    User.hasMany(Notificacao, { foreignKey: "usuario_id" });
+    // Notification  --> User (N:1)
+    Notification.belongsTo(User, { foreignKey: "usuario_id" });
+    User.hasMany(Notification, { foreignKey: "usuario_id" });
 
     //ProfileUser --> User (1:1)
     ProfileUser.belongsTo(User, { foreignKey: "usuario_id" });

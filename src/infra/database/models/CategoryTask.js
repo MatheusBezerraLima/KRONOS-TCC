@@ -18,6 +18,14 @@ const CategoryTask = sequelize.define("CategoryTask", {
           model: "usuario",
           key: "id"
         }
+    },
+    projeto_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'projeto',
+            key: "id"
+        }
     }
 }, {
     tableName: "categoria_tarefa",

@@ -17,17 +17,29 @@ class ProfileUserDAO {
     }
 
     async findByIdUser(userId){
-        return await ProfileUser.findOne({
-            where: {
-                usuario_id: userId
-            }
-        })
+        try{
+            return await ProfileUser.findOne({
+                where: {
+                    usuario_id: userId
+                }
+            })
+        }catch(error){
+            console.error(`Erro no DAO ao buscar perfil do usuário:`, error);
+            throw error;
+        }
+        
     }
 
     async findAll(){
+        try{
          const result = await ProfileUser.findAll();
          console.log(result);
-         return result;
+         return result;   
+        }catch(error){
+            console.error(`Erro no DAO ao buscar todos os perfis`, error);
+            throw error;
+        }
+         
     }
 }
 
