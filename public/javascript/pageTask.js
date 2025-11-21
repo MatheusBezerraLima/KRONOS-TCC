@@ -49,40 +49,126 @@ function toggleMenu() {
     sideMenu.classList.toggle("asideClosed");
 }
 
-// dropDownStatus.addEventListener("click", (event) => {
-     
-//     dropDownStatus.classList.toggle("statusOpen");
- 
-//     event.stopPropagation();
 
-//     const turnOffStatusStyle = document.querySelectorAll(".statusBadgeContainer")
-//     turnOffStatusStyle.classList.add("turnOffstatusBadgeContainer")
+const statusClickArea = document.getElementById("statusClickArea"); 
+const selectedStatus = document.getElementById("selectedStatus"); 
+const selectStatusModal = document.querySelector(".selectStatusModal");
+const statusOptionContainers = Array.from(document.querySelectorAll(".statusBadgeContainer")); 
+const optionsWrapper = document.getElementById('optionsWrapper'); 
 
-// });
+let currentStatus = "toDo"; 
 
-// document.addEventListener('click', (event) => {
-//     // Fecha se o clique for fora do dropdown E ele estiver aberto
-//     if (!dropDownStatus.contains(event.target) && dropDownStatus.classList.contains('statusOpen')) {
-//         dropDownStatus.classList.remove('statusOpen');
-//     }    
-// });
+const statusMap = {
+    toDo: { text: "Pendente", class: "toDoStatus", marker: "toDoMarker"},
+    doing: { text: "Em andamento", class: "doingStatus", marker: "doingMarker"},
+    done: { text: "Concluído", class: "doneStatus", marker: "doneMarker"}
+};
 
-// // Mudar status
+function updateMainBadges(){
+    const info = statusMap[currentStatus];
+    const newClass = info.class;
+    const newMarker = info.marker;
 
-// statusOptions.forEach(option => {
-//     option.addEventListener("click", () =>{
-//         if (dropDownStatus.classList.contains("statusOpen")) {
+    const updateBadge = (badgeElement) => {
+        badgeElement.classList.remove("toDoStatus", "doingStatus", "doneStatus");
+        badgeElement.classList.add(newClass);
 
-//             statusOptions.forEach(opt => opt.classList.remove("statusSelected"));
-            
-//             option.classList.add("statusSelected");
+        const spanElement = badgeElement.querySelector("span");
+        if (spanElement) { 
+            spanElement.textContent = info.text;
+        }
+        
+        const marker = badgeElement.querySelector(".statusMarker");
+        if (marker) { 
+            marker.classList.remove("toDoMarker", "doingMarker", "doneMarker");
+            marker.classList.add(newMarker);
+        }
+    };
 
-//             selectedStatusValue = option.getAttribute("data-status");
-//         }
-//     })
-// })
+    updateBadge(statusClickArea);
+    
+    updateBadge(selectedStatus);
+    selectedStatus.setAttribute("data-status", currentStatus);
+}
 
 
+function reorderBadgesList(){
+    let selectedContainer = null;
+    let otherContainers = [];
+
+    statusOptionContainers.forEach(container => {
+        const statusBadge = container.querySelector(".statusBadge"); 
+        
+        if (!statusBadge) return; 
+        
+        const status = statusBadge.getAttribute("data-status");
+
+        if (status === currentStatus){
+            selectedContainer = container;
+        } else {
+            otherContainers.push(container);
+        }
+    });
+
+    if (selectedContainer && optionsWrapper){ 
+        
+        optionsWrapper.innerHTML = ''; 
+        
+        optionsWrapper.appendChild(selectedContainer);
+        
+        otherContainers.forEach(container => {
+            optionsWrapper.appendChild(container);
+        });
+    }
+}
+
+function toggleModal() {
+    selectStatusModal.classList.toggle('selectStatusModalHidden');
+}
+
+
+statusClickArea.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleModal();
+});
+
+statusOptionContainers.forEach(container => {
+    const statusBadge = container.querySelector('.statusBadge'); 
+    
+    statusBadge.addEventListener('click', (event) => {
+        event.stopPropagation(); 
+        
+        const newStatus = statusBadge.getAttribute('data-status');
+        
+        if (newStatus !== currentStatus) {
+            currentStatus = newStatus;
+
+            updateMainBadges();
+            reorderBadgesList();
+        } 
+        setTimeout(toggleModal, 0); 
+    });
+});
+
+
+document.addEventListener('click', (event) => {
+    if (!selectStatusModal.classList.contains('selectStatusModalHidden')) {
+        
+        const clickedInsideModal = selectStatusModal.contains(event.target);
+        const clickedOnTrigger = statusClickArea.contains(event.target);
+        
+        if (!clickedInsideModal && !clickedOnTrigger) {
+            toggleModal();
+        }
+    }
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateMainBadges();
+    reorderBadgesList();
+});
 // createTask.addEventListener("click", ()=>{
 
 //     newTask = `
@@ -126,3 +212,5 @@ function toggleMenu() {
 //     taskInput.focus()
 
 // })
+
+

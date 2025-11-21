@@ -400,13 +400,14 @@ input[type=checkbox]{
 }
 
 .statusMarker{
-    width: 5px;
-    height: 5px;
-    border-radius:50%;
+   
 }
 
 .doneMarker{
     background-color: #119500;
+     width: 5px;
+    height: 5px;
+    border-radius:50%;
 }
 
 .doneStatus{
@@ -414,6 +415,7 @@ input[type=checkbox]{
     height: 30px;
     background-color: rgba(17, 149, 0, 0.1);
     color: #119500;
+    
 }
 
 .doingStatus{
@@ -425,6 +427,9 @@ input[type=checkbox]{
 
 .doingMarker{
     background-color: #3462BF;
+    width: 5px;
+    height: 5px;
+    border-radius:50%;
 }
 
 .toDoStatus{
@@ -436,6 +441,9 @@ input[type=checkbox]{
 
 .toDoMarker{
     background-color: var(--toDoFont-color);
+    width: 5px;
+    height: 5px;
+    border-radius:50%;
 }
 
 .priorityBadge{
@@ -474,15 +482,49 @@ input[type=checkbox]{
     border-radius:5px;
     border: 1px solid #f2f2f2;
     box-shadow: 1px 1px 5px #f2f2f2;
+    top:5px;
+}
+
+.selectStatusModalHidden{
+    display: none;
 }
 
 .statusModalHeader{
     width: 100%;
-    height: 50px;
+    padding: 3px;
     display: flex;
     align-items: center;
     padding-left:10px;
+    border-bottom: 1px solid #f2f2f2;
+    background-color: #f7f7f7;
 }
+
+.selectOptionText{
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #808080;
+
+}
+.statusBadgeContainer{
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    cursor: pointer;
+}
+.statusBadgeContainer:hover{
+   background-color: #f7f7f7;
+}
+
+.statusBadgeContainer:last-child{
+    border-bottom: 0px;
+}
+
 
 /* Adicionar nova tarefa */
 

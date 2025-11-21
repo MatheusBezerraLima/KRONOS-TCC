@@ -119,37 +119,41 @@
                             </div>
 
                             <div class="statusContainer">
-                                <div class="statusBadge toDoStatus" id="currentStatusValue">
+                                <div class="statusBadge toDoStatus" id="statusClickArea">
                                     <div class="statusMarker toDoMarker"></div>
                                     <span>Pendente</span>
                                 </div>
 
-                                <div class="selectStatusModal">
-
-                                    <div class="statusModalHeader">
-                                        <div class="statusBadge toDoStatus" data-status="toDo">
+                                <div class="selectStatusModal selectStatusModalHidden">
+                                    <div class="statusModalHeader" id="currentStatus">
+                                        <div class="statusBadge toDoStatus" data-status="toDo" id="selectedStatus">
                                             <div class="statusMarker toDoMarker"></div>
                                                 <span>Pendente</span>
                                         </div>
                                     </div>
-                                    <div class="statusBadgeContainer">
-                                        <div class="statusBadge toDoStatus" data-status="toDo">
-                                                <div class="statusMarker toDoMarker"></div>
-                                                <span>Pendente</span>
-                                        </div>
-                                    </div>
 
-                                    <div class="statusBadgeContainer">
-                                        <div class="statusBadge doingStatus" data-status="doing">
-                                            <div class="statusMarker doingMarker"></div>
-                                            <span>Em andamento</span>
-                                        </div>
-                                    </div>
+                                    <div class="selectOptionText">Selecione uma opção</div>
 
-                                    <div class="statusBadgeContainer">
-                                        <div class="statusBadge doneStatus" data-status="done">
-                                            <div class="statusMarker doneMarker"></div>
-                                            <span>Concluído</span>
+                                    <div id="optionsWrapper">
+                                        <div class="statusBadgeContainer">
+                                            <div class="statusBadge toDoStatus" data-status="toDo">
+                                                    <div class="statusMarker toDoMarker"></div>
+                                                    <span>Pendente</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="statusBadgeContainer">
+                                            <div class="statusBadge doingStatus" data-status="doing">
+                                                <div class="statusMarker doingMarker"></div>
+                                                <span>Em andamento</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="statusBadgeContainer">
+                                            <div class="statusBadge doneStatus" data-status="done">
+                                                <div class="statusMarker doneMarker"></div>
+                                                <span>Concluído</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
