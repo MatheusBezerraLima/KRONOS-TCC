@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de tarefa</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script> 
+
     <link rel="stylesheet" href="/public/css/pagetask.css">
     <script src="/public/javascript/pageTask.js" defer ></script>
 </head>
@@ -17,22 +24,22 @@
             <nav>
                 <ul>
                     <div class="selection-aside selected">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                         <li class="headerLink"><a href="#">Home</a></li>
                     </div>
 
                     <div class="selection-aside">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-icon lucide-message-circle"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-open-icon lucide-folder-open"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg>
                         <li class="headerLink"><a href="#">Projetos</a></li>
                     </div>
                     
                     <div class="selection-aside">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity-icon lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-todo-icon lucide-list-todo"><path d="M13 5h8"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="m3 17 2 2 4-4"/><rect x="3" y="4" width="6" height="6" rx="1"/></svg>
                         <li class="headerLink"><a href="#">Tarefas</a></li>
                     </div>
 
                     <div class="selection-aside">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity-icon lucide-activity"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up-icon lucide-trending-up"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></svg>
                         <li class="headerLink"><a href="#">PDI</a></li>
                     </div>
                 </ul>
@@ -50,9 +57,7 @@
                 </div> <!-- breadcrumbs-->
 
                 <div class="headerUtilities">
-                    <div class="headerUtilitiesHover"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></div>
                     <div class="headerUtilitiesHover"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></div>
-                        
                     <div class="userProfile">
 
                     </div> <!-- userProfile -->
@@ -62,19 +67,35 @@
             <main>
                 <section class="taskHeader">
                     <div class="mainTaskHeaderInfo">
-                        <h1 class="taskPageTitle">Tarefas</h1>
+                        <div class="pageTitleContainer">
+                            <div class="pageTitle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-icon lucide-circle-check"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                <h1 class="taskPageTitle">Controle de tarefas</h1>
+                            </div>
+                            <div class="pageSubtitle">
+                                <p>Planeje, priorize e conclua suas tarefas com foco.</p>
+                            </div>
+                        </div>
+                        
 
                         <div class="pageTaskActions">
 
                             <div class="searchTask">
-                                <p>Pesquisar</p>
+                                <div class="searchIconContainer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+                                </div>
+                                <input type="text" class="invisibleInput" placeholder="Pesquise aqui...">
                             </div>
 
                             <div class="filterTasks">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sliders-horizontal-icon lucide-sliders-horizontal"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></svg>
                                 <p>Filtro</p>
                             </div>
 
-                            <button class="createTask">+</button>
+                            <button class="createTask">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                <span>Criar Tarefa</span>
+                            </button>
                         </div>
                     </div> <!-- mainBoardHeaderInfo-->
                 </section> <!--boardColumns-->
@@ -83,22 +104,27 @@
                     
                         <div class="taskInfo">
                             <div class="nameTaskTitle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alarge-small-icon lucide-a-large-small"><path d="m15 16 2.536-7.328a1.02 1.02 1 0 1 1.928 0L22 16"/><path d="M15.697 14h5.606"/><path d="m2 16 4.039-9.69a.5.5 0 0 1 .923 0L11 16"/><path d="M3.304 13h6.392"/></svg>
                                 <p>Nome da tarefa</p>
                             </div>
 
                             <div class="dueDateTitle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock-icon lucide-clock"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>
                                 <p>Prazo</p>
                             </div>
 
                             <div class="statusTitle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-icon lucide-loader"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
                                 <p>Status</p>
                             </div>
 
                             <div class="categoryTitle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shapes-icon lucide-shapes"><path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/></svg>
                                 <p>Categoria</p>
                             </div>
 
                             <div class="priorityTitle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert-icon lucide-circle-alert"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
                                 <p>Prioridade</p>
                             </div>
 
@@ -111,11 +137,12 @@
                         <div class="task">
                             <div class="taskNameContainer">
                                 <input type="checkbox" name="" id="">
-                                <span class="taskName">Faça uma landing page</p>
+                                <input type="text" class="invisibleTaskNameInput">
                             </div>
 
                             <div class="dueDateContainer">
-                                <span class="dueDate">26 de novembro</span>
+                                <span class="dueDateValue"></span>
+                                <input type="text" class="invisibleDateInput" style="display: none;">
                             </div>
 
                             <div class="statusContainer">
@@ -124,7 +151,7 @@
                                     <span>Pendente</span>
                                 </div>
 
-                                <div class="selectStatusModal selectStatusModalHidden">
+                                <div class="selectStatusModal selectModalHidden">
                                     <div class="statusModalHeader" id="currentStatus">
                                         <div class="statusBadge toDoStatus" data-status="toDo" id="selectedStatus">
                                             <div class="statusMarker toDoMarker"></div>
@@ -160,19 +187,68 @@
                             </div>
 
                             <div class="categoryContainer">
-                                <p>Categoria</p>
+                                    <div class="categoryBadge noCategorySelected">
+
+                                    </div>
+
+                               <div class="selectCategoryModal selectCategoryHidden">
+                                    <div class="categoryModalHeader" id="currentCategory">
+                                       <div class="categoryBadgeHeader">
+                                            <div class="categoryBadgeHeaderModal noCategorySelected">
+
+                                            </div>
+                                        </div>
+
+                                        <input type="text" class="createNewCategory">
+                                    </div>
+
+                                    <div class="selectOptionText">Selecione uma opção ou crie uma</div>
+
+                                    <div id="categoryOptionsWrapper">
+                                      
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="priorityContainer">
-                                 <div class="priorityBadge highPriority">
+                                 <div class="priorityBadge highPriority" id="priorityClickArea">
                                     <span>Alta</span>
+                                </div>
+
+                                <div class="selectPriorityModal selectModalHidden">
+                                    <div class="priorityModalHeader" id="currentPriority">
+                                        <div class="priorityBadge highPriority" data-priority="high" id="selectedPriority">
+                                                <span>Pendente</span>
+                                        </div>
+                                    </div>
+                                    <div class="selectOptionText">Selecione uma opção</div>
+
+                                    <div id="priorityOptionsWrapper">
+                                        <div class="priorityBadgeContainer">
+                                            <div class="priorityBadge highPriority" data-priority="high">
+                                                    <span>Alta</span>
+                                            </div>
+                                        </div>
+
+                                         <div class="priorityBadgeContainer">
+                                            <div class="priorityBadge mediumPriority" data-priority="medium">
+                                                    <span>Média</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="priorityBadgeContainer">
+                                            <div class="priorityBadge lowPriority" data-priority="low">
+                                                    <span>Baixa</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>  
 
                             <div class="actionsContainer">
-                                
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
                             </div>
-                        </div>
+                        </div>      
                     </div>
                 </section>
             </main>

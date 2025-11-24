@@ -1,10 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Domine:wght@400..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 *{
     margin:0;
     padding:0;
     box-sizing: border-box;
-    font-family: "roboto";
+    font-family: "poppins";
 }
 
 body{
@@ -206,6 +205,7 @@ header{
 
 .breadcrumbs a{
     text-decoration: none;
+    color: #000000;
 }
 
 .breadcrumbs svg{
@@ -265,9 +265,31 @@ main{
     justify-content: flex-end;
 }
 
-.taskPageTitle{
-    margin-bottom:10px;
+.pageTitleContainer{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
 }
+
+.pageTitle{
+    height: 60px;
+    gap:15px;
+    display: flex;
+    align-items: center;
+}
+
+.pageSubtitle{
+    font-size: 15px;
+    color: #404040;
+    
+}
+.pageTitle svg{
+    width: 40px;
+    height: 40px;
+    fill:#119500;
+    stroke: #ffffff;
+}
+
 .mainTaskHeaderInfo{
     display: flex;
     width: 100%;
@@ -283,24 +305,91 @@ main{
     
 }
 
-.createTask{
-    width: 45px;
-    height: 25px;
-    border-radius:5px;
-    border:none;
-    background-color: var(--blue);
-    color: white;
-    font-size:20px;
+.filterTasks{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 90px;
+    gap:5px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #808080;
+}
+
+.filterTasks:hover{
     cursor: pointer;
+    background-color: #f2f2f2;
+
+}
+
+.filterTasks svg{
+    width: 18px;
+    height: 18px;
+}
+
+.searchTask{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 35px;
+    width: 200px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #ffffff;
+}
+
+.searchTask svg{
+    height: 20px;
+    width: 20px;
+    stroke: #696969;
+}
+
+.invisibleInput{
+    height: 100%;
+    width: 180px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding-left:8px;
+    font-size: 15px;
+    color: #696969;
+}
+
+
+.createTask{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 35px;
+    background-color: var(--blue);
+    border-radius: 10px;
+    color: var(--main-color);
+    border-width: 0;
+    gap:2px;
+    font-size: 13px;
+    cursor:pointer;
+    transition: .3s ease;
+}
+
+.createTask svg{
+    width: 20px;
+    height:20px;
+    fill: var(--main-color);
 }
 
 /* Seção das tarefas */
 
 .taskList{
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: auto;
     background-color: #FFFFFF;
-    border-radius:10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .taskInfo{
@@ -313,13 +402,19 @@ main{
     background-color: #FFFFFF;
 }
 
+.taskInfo svg{
+    width: 18px;
+    height: 18px;
+}
+
 .nameTaskTitle{
-    width: 360px;
+    width: 400px;
     border-right: 1px solid #f2f2f2;
     display: flex;
     align-items: center;
     padding-left:10px;
     color: #808080;
+    gap:8px;
 }
 
 .dueDateTitle, .statusTitle, .categoryTitle, .priorityTitle{
@@ -329,6 +424,7 @@ main{
     align-items: center;
     padding-left:10px;
     color: #808080;
+    gap:8px;
 
 }
 
@@ -345,6 +441,7 @@ main{
     height: 45px;
     display: flex;
     border: 1px solid #f2f2f2;
+
 }
 
 .task:last-child{
@@ -357,18 +454,48 @@ main{
 }
 
 input[type=checkbox]{
-    width:20px;
-    height: 20px;
+    width:18px;
+    height: 18px;
+    border: 1px solid #808080;
 }
+/* Nome da tarefa */
 
 .taskNameContainer{
-    width: 360px;
+    width: 400px;
     border-right: 1px solid #f2f2f2;
     display: flex;
     align-items: center;
     padding-left:10px;
     gap:5px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
 } 
+
+.invisibleTaskNameInput{
+    width: 300px;
+    border:none;
+    outline: none;
+    font-size: 12px;
+    padding: 0;
+    margin: 0;
+    display: inline;
+    font: inherit;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.taskNameContainer:focus-within{
+    width: 405px;
+    height: 48px;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 2px #f2f2f2;
+    border-radius: 10px;
+    border: 1px solid #f2f2f2;
+    z-index: 12;
+
+}
 
 .dueDateContainer, .statusContainer, .categoryContainer, .priorityContainer{
     width: 200px;
@@ -376,11 +503,142 @@ input[type=checkbox]{
     display: flex;
     align-items: center;
     padding-left:10px;
+    cursor: pointer;
 }
+
+.dueDateContainer{
+    position: relative;
+    cursor: pointer;
+}
+.noValue{
+    display: none;
+}
+
+.withValue{
+    display: block;
+}
+
+/* Categoria */
+
+.categoryContainer{
+    position: relative;
+}
+.categoryBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    gap:5px;
+    height: 20px;
+    width: min-content;
+    padding: 15px 10px;
+    font-size:15px;
+    cursor: pointer;
+}
+
+.selectCategoryModal{
+    position: absolute;
+    width: 280px;
+    height: min-content;
+    background-color: #FFFFFF;
+    border-radius:5px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 1px 1px 5px #f2f2f2;
+    top:5px;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.categoryBadgeHeader{
+    background-color: #000080;
+    width: min-content;
+}
+
+.noCategorySelected{
+    display: none;
+}
+
+
+/*  Estilização do calendário */
+
+.flatpickr-calendar {
+    display: flex;
+    font-size: 12px; 
+    width: 220px;    
+    max-width: 220px;
+    height: 280px;
+    margin-top:35px;
+}
+
+.flatpickr-rContainer{
+    width: 220px;
+    height: 220px;
+}
+
+.flatpickr-weekdaycontainer {
+    padding: 0; 
+}
+
+.flatpickr-weekdays{
+    width: 100%;
+    font-size: 12px;
+}
+
+.flatpickr-months{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 100%;
+}
+
+.flatpickr-innerContainer{
+    width: 100%;
+    height: 85%;
+}
+
+.flatpickr-month{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flatpickr-current-month{
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:10px;
+}
+
+.dayContainer{
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.flatpickr-days{
+    width: 100%;
+}
+.flatpickr-day {
+    height: 35px;       /* Altura menor para as células */
+    line-height: 35px;  /* Mantém o número centralizado verticalmente */
+    width: 20px;        /* Largura menor para as células */  /* Espaçamento pequeno entre os números */
+}
+
+/* Container de prioridade */
+
+.priorityContainer{
+    position: relative;
+}
+
+/* Container de status */
 
 .statusContainer{
     position: relative;
 }
+
+/* Container de ações */
+
 .actionsContainer{
     width: 105px;
     display: flex;
@@ -397,10 +655,6 @@ input[type=checkbox]{
     gap:5px;
     font-size:15px;
     cursor: pointer;
-}
-
-.statusMarker{
-   
 }
 
 .doneMarker{
@@ -485,11 +739,22 @@ input[type=checkbox]{
     top:5px;
 }
 
-.selectStatusModalHidden{
+.selectPriorityModal{
+    position: absolute;
+    width: 200px;
+    height: min-content;
+    background-color: #FFFFFF;
+    border-radius:5px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 1px 1px 5px #f2f2f2;
+    top:5px;
+}
+
+.selectModalHidden, .selectCategoryHidden{
     display: none;
 }
 
-.statusModalHeader{
+.statusModalHeader, .priorityModalHeader, .categoryModalHeader{
     width: 100%;
     padding: 3px;
     display: flex;
@@ -498,6 +763,7 @@ input[type=checkbox]{
     border-bottom: 1px solid #f2f2f2;
     background-color: #f7f7f7;
 }
+
 
 .selectOptionText{
     display: flex;
@@ -509,7 +775,7 @@ input[type=checkbox]{
     color: #808080;
 
 }
-.statusBadgeContainer{
+.statusBadgeContainer, .priorityBadgeContainer, .categoryBadgeContainer{
     width: 100%;
     padding: 5px;
     display: flex;
@@ -517,13 +783,24 @@ input[type=checkbox]{
     padding-left: 10px;
     cursor: pointer;
 }
+
+.priorityBadgeContainer:hover{
+    background-color: #f7f7f7;
+
+}
 .statusBadgeContainer:hover{
    background-color: #f7f7f7;
+}
+
+.categoryBadgeContainer:hover{
+    background-color: #f7f7f7;
+
 }
 
 .statusBadgeContainer:last-child{
     border-bottom: 0px;
 }
+
 
 
 /* Adicionar nova tarefa */
