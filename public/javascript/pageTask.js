@@ -11,6 +11,7 @@ const taskContainer = document.querySelector(".taskList")
 
 
 
+
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -51,10 +52,6 @@ function toggleMenu() {
 
 //---------------------- Selecionar data ----------------------
 
-const selectDate = document.querySelector(".dueDateContainer")
-const invisibleDateInput = document.querySelector(".invisibleDateInput")
-const dateValue = document.querySelector(".dueDateValue")
-
 function brazilDateFormat(dataObj) {
 
     const options = {day: "numeric", month: "numeric", year: "numeric"};
@@ -74,28 +71,6 @@ function dateUpdate(dataObj){
         dateValue.classList.add("noValue")
     }
 }
-
-const fp = flatpickr(invisibleDateInput, {
-    dateFormat: "d.m.y",
-    allowInput: false,
-    locale: flatpickr.l10ns.pt,
-
-    appendTo: selectDate, 
-    position: "below",
-
-    onChange: function(selectedDates, dateStr, instance) {
-        const selectedDate = selectedDates[0];
-        dateUpdate(selectedDate);
-    }
-})
-
-console.log(fp);
-
-dateUpdate(null);
-
-selectDate.addEventListener("click", () =>{
-    fp.open()
-})
 
 /* Refatoração da função de data para ser usada em todas as tasks e ser chamada na função de inicialização */
 
@@ -183,10 +158,6 @@ function toggleModal(type) {
     }
 }
 
-/**
- * Atualiza os badges (trigger e header do modal) para qualquer tipo.
- * @param {string} type - 'status' ou 'priority'.
- */
 function updateBadges(type){
     const current = (type === 'status') ? currentStatus : currentPriority;
     const map = (type === 'status') ? statusMap : priorityMap;
@@ -355,25 +326,31 @@ function updateTaskBadges(taskElement, type, newSelection) {
 
 /* Categoria */
 
-const openCategoryModal = document.querySelector(".categoryContainer")
-const selectCategoryModal = document.querySelector(".selectCategoryModal")
-const createNewCategoryInput = document.querySelector(".createNewCategory")
-const categoryOptionsWrapper = document.getElementById("categoryOptionsWrapper")
-
 function toggleCategoryModal (){
     selectCategoryModal.classList.toggle("selectCategoryHidden")
     createNewCategoryInput.focus()
 }
-
-/* CÓDIGO FALTANDO */
+// A lógica de FECHAMENTO global (Ajuste para incluir a classe de categoria)
 document.addEventListener('click', (event) => {
-    if (!selectCategoryModal.contains(event.target) && !openCategoryModal.contains(event.target) && !selectCategoryModal.classList.contains('selectCategoryHidden')) {
-        selectCategoryModal.classList.add('selectCategoryHidden');
- }
+    // Altere para selecionar todos os modais de status, prioridade E categoria
+    document.querySelectorAll('.selectModalHidden, .selectCategoryHidden').forEach(modal => {
+        // ... (Seu código de fechamento deve ser adaptado, mas o ideal é verificar
+        // se o clique não está dentro do elemento pai que abre o modal)
+    });
+    
+    // Simplificando o fechamento:
+    document.querySelectorAll('.selectStatusModal, .selectPriorityModal, .selectCategoryModal').forEach(modal => {
+        const modalIsVisible = !modal.classList.contains('selectModalHidden') && !modal.classList.contains('selectCategoryHidden');
+        
+        // Encontra o botão de abertura correspondente a este modal (Categoria: .categoryContainer)
+        const task = modal.closest('.task');
+        const openButton = task ? task.querySelector('.categoryContainer') : null; 
+        
+        if (modalIsVisible && !modal.contains(event.target) && (!openButton || !openButton.contains(event.target))) {
+            modal.classList.add(modal.classList.contains('selectStatusModal') || modal.classList.contains('selectPriorityModal') ? 'selectModalHidden' : 'selectCategoryHidden');
+        }
+    });
 });
-
-openCategoryModal.addEventListener("click", toggleCategoryModal);
-
 const CATEGORY_COLOR_PAIRS = [
     { bg: '#FFDEDE', text: '#D32F2F'}, 
     { bg: '#E3F2FD', text: '#1976D2'}, 
@@ -391,22 +368,6 @@ function getRandomColor() {
     const randomIndex = Math.floor(Math.random() * CATEGORY_COLOR_PAIRS.length);
     return CATEGORY_COLOR_PAIRS[randomIndex];
 }
-
-createNewCategoryInput.addEventListener("keyup", (event) => {
-    if (event.key === "Enter"){
-        const categoryName = createNewCategoryInput.value.trim()
-
-        if (categoryName === "") return
-
-        const colorPair = getRandomColor()
-
-        addCategoryOption(categoryName, colorPair.bg, colorPair.text)
-        selectCategoryOption(categoryName, colorPair.bg, colorPair.text)
-
-        createNewCategoryInput.value = "";
-        selectCategoryModal.classList.add("selectCategoryHidden")
-    }
-})
 
 function addCategoryOption(taskElement, name, bg, txt) {
     const container = document.createElement("div")
@@ -459,19 +420,6 @@ function selectCategoryOption(taskElement, name, bg, txt) {
     }
 }
 
-/* Nome da tarefa  */
-
-const taskNameInput = document.querySelector(".invisibleTaskNameInput")
-taskNameInput.addEventListener("keypress", (event) => {
-    if (event.key === "Enter"){
-        const newTaskName = taskNameInput.value.trim()
-            console.log(newTaskName);
-            taskNameInput.blur()
-    }
-})
-
-/* Criar tarefa */
-
 function initializeTaskFunctions(taskElement) {
 
     setupDatePickerForTask(taskElement); 
@@ -510,7 +458,6 @@ function initializeTaskFunctions(taskElement) {
         }
     });
     
-    // 3. Listener de SELEÇÃO de opção existente (Delegação Interna na nova tarefa)
     categoryOptionsWrapper.addEventListener('click', (event) => {
         const badge = event.target.closest('.categoryBadge');
         if (badge && !badge.closest('.categoryModalHeader')) {
@@ -615,6 +562,23 @@ createTask.addEventListener("click", () => {
     }
 });
 
+/* Criar a tarefa assim que a pagina abrir */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const newTaskElement = createNewTaskRow(); 
+
+
+    if (taskContainer) {
+        taskContainer.insertAdjacentElement("beforeend", newTaskElement);
+    }
+
+    const newTaskInput = newTaskElement.querySelector(".invisibleTaskNameInput");
+    if (newTaskInput) {
+        newTaskInput.select();
+        newTaskInput.focus();
+    }
+});
 
 
 

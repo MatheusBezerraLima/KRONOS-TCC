@@ -494,7 +494,6 @@ input[type=checkbox]{
     border-radius: 10px;
     border: 1px solid #f2f2f2;
     z-index: 12;
-
 }
 
 .dueDateContainer, .statusContainer, .categoryContainer, .priorityContainer{
