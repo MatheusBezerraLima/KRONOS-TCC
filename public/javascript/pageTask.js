@@ -6,6 +6,9 @@ const sideMenu = document.querySelector("aside")
 const dropDownStatus = document.querySelector(".selectStatusModal")
 const statusOptions = document.querySelectorAll(".statusOption")
 let selectedStatusValue = document.querySelector(".statusSelected")
+const createTask = document.querySelector(".createTask")
+const taskContainer = document.querySelector(".taskList")
+
 
 
 // Função de seleção dos links do menu lateral
@@ -94,9 +97,57 @@ selectDate.addEventListener("click", () =>{
     fp.open()
 })
 
+/* Refatoração da função de data para ser usada em todas as tasks e ser chamada na função de inicialização */
 
-const statusClickArea = document.getElementById("statusClickArea"); 
-const selectedStatus = document.getElementById("selectedStatus"); 
+function setupDatePickerForTask(taskElement) {
+    const selectDate = taskElement.querySelector(".dueDateContainer");
+    const invisibleDateInput = taskElement.querySelector(".invisibleDateInput");
+    const dateValue = taskElement.querySelector(".dueDateValue");
+    
+    if (!invisibleDateInput) return;
+
+    function dateUpdateForTask(dataObj, valueElement) {
+        const formattedDate = brazilDateFormat(dataObj);
+        valueElement.textContent = formattedDate;
+
+        if (dataObj){
+            valueElement.classList.remove("noValue");
+            valueElement.classList.add("withValue");
+        } else {
+            valueElement.classList.remove("withValue");
+            valueElement.classList.add("noValue");
+        }
+    }
+    
+    const fp = flatpickr(invisibleDateInput, {
+        dateFormat: "d.m.y",
+        allowInput: false,
+        locale: flatpickr.l10ns.pt,
+        appendTo: selectDate, 
+        position: "below",
+        onChange: function(selectedDates) {
+            const selectedDate = selectedDates[0];
+            dateUpdateForTask(selectedDate, dateValue); 
+        }
+    });
+    
+    // Listener para abrir o calendário
+    selectDate.addEventListener("click", () => {
+        fp.open();
+    });
+
+    dateUpdateForTask(null, dateValue); // Inicializa a data
+}
+
+// Sua função brazilDateFormat pode permanecer global
+function brazilDateFormat(dataObj) {
+    const options = {day: "numeric", month: "numeric", year: "numeric"};
+    return new Intl.DateTimeFormat("pt-br", options).format(dataObj);
+}
+
+
+const statusClickArea = document.querySelector(".statusClickArea"); 
+const selectedStatus = document.querySelector(".selectedStatus"); 
 const selectStatusModal = document.querySelector(".selectStatusModal");
 const statusOptionContainers = Array.from(document.querySelectorAll(".statusBadgeContainer")); 
 const statusOptionsWrapper = document.getElementById('optionsWrapper'); 
@@ -110,11 +161,11 @@ const statusMap = {
 };
 
 
-const priorityClickArea = document.getElementById("priorityClickArea"); 
-const selectedPriority = document.getElementById("selectedPriority"); 
+const priorityClickArea = document.querySelector(".priorityClickArea"); 
+const selectedPriority = document.querySelector(".selectedPriority"); 
 const selectPriorityModal = document.querySelector(".selectPriorityModal");
 const priorityOptionContainers = Array.from(document.querySelectorAll(".priorityBadgeContainer")); 
-const priorityOptionsWrapper = document.getElementById('priorityOptionsWrapper'); 
+const priorityOptionsWrapper = document.querySelector('.priorityOptionsWrapper'); 
 
 let currentPriority = "high";
 
@@ -124,10 +175,7 @@ const priorityMap = {
     low: { type: 'priority', text: "Baixa", class: "lowPriority", allClasses: ["highPriority", "mediumPriority", "lowPriority"] }
 };
 
-/**
- * Alterna a visibilidade de qualquer modal.
- * @param {string} type - 'status' ou 'priority'.
- */
+
 function toggleModal(type) {
     const modal = (type === 'status') ? selectStatusModal : selectPriorityModal;
     if (modal) {
@@ -176,10 +224,7 @@ function updateBadges(type){
     header.setAttribute(`data-${type}`, current); // Define data-status ou data-priority
 }
 
-/**
- * Reordena as opções para qualquer tipo.
- * @param {string} type - 'status' ou 'priority'.
- */
+
 function reorderList(type){
     const current = (type === 'status') ? currentStatus : currentPriority;
     const containers = (type === 'status') ? statusOptionContainers : priorityOptionContainers;
@@ -212,62 +257,101 @@ function reorderList(type){
     }
 }
 
-/**
- * Função genérica para anexar listeners de Abertura/Fechamento e Seleção de Opções.
- * @param {string} type - 'status' ou 'priority'.
- */
-function setupFieldListeners(type) {
-    const clickArea = (type === 'status') ? statusClickArea : priorityClickArea;
-    const containers = (type === 'status') ? statusOptionContainers : priorityOptionContainers;
-    const dataAttribute = `data-${type}`;
-
-    // 1. Listener de Abertura/Fechamento
-    clickArea.addEventListener('click', (event) => {
-        event.stopPropagation();
-        toggleModal(type);
-    });
-
-    // 2. Listener de Seleção de Opção (Anexado ao CONTÊINER para área maior)
-    containers.forEach(container => {
-        container.addEventListener('click', (event) => {
-            event.stopPropagation(); 
-            
-            const badge = container.querySelector(`[${dataAttribute}]`);
-            if (!badge) return; 
-            
-            const newSelection = badge.getAttribute(dataAttribute);
-            
-            let current = (type === 'status') ? currentStatus : currentPriority;
-            
-            // Se o status for diferente, atualiza
-            if (newSelection !== current) {
-                if (type === 'status') {
-                    currentStatus = newSelection;
-                } else {
-                    currentPriority = newSelection;
-                }
-
-                updateBadges(type);
-                reorderList(type);
-            } 
-            
-            // Fechamento com delay
-            setTimeout(() => toggleModal(type), 0); 
-        });
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    setupFieldListeners('status');
-    setupFieldListeners('priority');
-
-    updateBadges('status');
-    reorderList('status');
+taskContainer.addEventListener('click', (event) => {
     
-    updateBadges('priority');
-    reorderList('priority');
+    let target = event.target.closest('.statusClickArea') || event.target.closest('.priorityClickArea');
+    
+    if (target) {
+        event.stopPropagation();
+        
+        const task = target.closest('.task');
+        const isStatus = target.classList.contains('statusClickArea');
+        const modalClass = isStatus ? '.selectStatusModal' : '.selectPriorityModal';
+        const modal = task.querySelector(modalClass);
+        
+        if (modal) {
+            modal.classList.toggle('selectModalHidden');             
+        }
+    }
+    
+    let optionContainer = event.target.closest('.statusBadgeContainer') || event.target.closest('.priorityBadgeContainer');
+    
+    if (optionContainer) {
+        event.stopPropagation();
+        const task = optionContainer.closest('.task');
+        const isStatus = !!optionContainer.querySelector('.statusBadge');
+        const type = isStatus ? 'status' : 'priority';
+        const dataAttribute = `data-${type}`;
+        
+        const badge = optionContainer.querySelector(`[${dataAttribute}]`);
+        if (!badge) return;
+        
+        const newSelection = badge.getAttribute(dataAttribute);
+        
+        updateTaskBadges(task, type, newSelection);
+
+        const modalClass = isStatus ? '.selectStatusModal' : '.selectPriorityModal';
+        const modal = task.querySelector(modalClass);
+        if (modal) {
+            setTimeout(() => modal.classList.add('selectModalHidden'), 0);
+        }
+    }
+    
+    let categoryBadge = event.target.closest('.categoryBadge');
+    if (categoryBadge && !categoryBadge.classList.contains('noCategorySelected') && !categoryBadge.closest('.selectCategoryModal')) {
+         const task = categoryBadge.closest('.task');       
+    }
+
 });
 
+document.addEventListener('click', (event) => {
+    document.querySelectorAll('.selectModalHidden').forEach(modal => {
+        if (!modal.contains(event.target)) {
+            modal.classList.add('selectModalHidden');
+        }
+    });
+});
+
+taskContainer.addEventListener("keypress", (event) => {
+    if (event.key === "Enter" && event.target.classList.contains("invisibleTaskNameInput")){
+        event.target.blur(); // Salva e remove foco
+    }
+});
+
+
+// Função adaptada que agora aceita o elemento da tarefa e o novo valor
+function updateTaskBadges(taskElement, type, newSelection) {
+    const map = (type === 'status') ? statusMap : priorityMap;
+    const info = map[newSelection];
+    
+    const triggerClass = (type === 'status') ? '.statusClickArea' : '.priorityClickArea';
+    const headerClass = (type === 'status') ? '.selectedStatus' : '.selectedPriority';
+
+    const trigger = taskElement.querySelector(triggerClass);
+    const header = taskElement.querySelector(headerClass);
+    
+    const updateBadge = (badgeElement) => {
+        badgeElement.classList.remove(...info.allClasses);
+        badgeElement.classList.add(info.class);
+
+        const spanElement = badgeElement.querySelector("span");
+        if (spanElement) { spanElement.textContent = info.text; }
+        
+        if (type === 'status') {
+            const marker = badgeElement.querySelector(".statusMarker");
+            if (marker) { 
+                marker.classList.remove(...info.allMarkers);
+                marker.classList.add(info.marker);
+            }
+        }
+    };
+    
+    if (trigger) updateBadge(trigger);
+    if (header) {
+        updateBadge(header);
+        header.setAttribute(`data-${type}`, newSelection);
+    }
+}
 
 /* Categoria */
 
@@ -324,7 +408,7 @@ createNewCategoryInput.addEventListener("keyup", (event) => {
     }
 })
 
-function addCategoryOption(name, bg, txt) {
+function addCategoryOption(taskElement, name, bg, txt) {
     const container = document.createElement("div")
     container.className = "categoryBadgeContainer"
 
@@ -337,22 +421,27 @@ function addCategoryOption(name, bg, txt) {
 
     badgeDiv.innerHTML = `${name}`
 
-    badgeDiv.onclick = () => selectCategoryOption(name, bg, txt)
+    badgeDiv.onclick = () => selectCategoryOption(taskElement, name, bg, txt)
 
     container.appendChild(badgeDiv)
 
-    categoryOptionsWrapper.appendChild(container)
+    const categoryOptionsWrapper = taskElement.querySelector(".categoryOptionsWrapper");
+
+    if (categoryOptionsWrapper) {
+        categoryOptionsWrapper.appendChild(container);
+    }
     
 }
 
-// O badge que aparece no container principal (quando o modal está fechado)
-const selectedCategoryDisplay = document.querySelector(".categoryBadge"); 
 
-// O badge que aparece no header do modal (quando o modal está aberto)
+const selectedCategoryDisplay = document.querySelector(".categoryBadge"); 
 const categoryBadgeHeader = document.querySelector('.categoryBadgeHeaderModal');
 
-function selectCategoryOption(name, bg, txt) {
+function selectCategoryOption(taskElement, name, bg, txt) {
     const badgeContent = `${name}`
+
+    const selectedCategoryDisplay = taskElement.querySelector(".categoryBadge:not(.categoryBadgeHeaderModal)"); 
+    const categoryBadgeHeader = taskElement.querySelector('.categoryBadgeHeaderModal');
 
     if (selectedCategoryDisplay) {
         selectedCategoryDisplay.classList.remove("noCategorySelected")
@@ -373,7 +462,6 @@ function selectCategoryOption(name, bg, txt) {
 /* Nome da tarefa  */
 
 const taskNameInput = document.querySelector(".invisibleTaskNameInput")
-
 taskNameInput.addEventListener("keypress", (event) => {
     if (event.key === "Enter"){
         const newTaskName = taskNameInput.value.trim()
@@ -384,146 +472,150 @@ taskNameInput.addEventListener("keypress", (event) => {
 
 /* Criar tarefa */
 
-function createNewTaskRow () {
-    const taskRow = document.createElement("div")
-    taskRow.classList.add("task")
+function initializeTaskFunctions(taskElement) {
+
+    setupDatePickerForTask(taskElement); 
+
+    const categoryContainer = taskElement.querySelector(".categoryContainer");
+    const createNewCategoryInput = categoryContainer.querySelector(".createNewCategory");
+    const selectCategoryModal = categoryContainer.querySelector(".selectCategoryModal");
+    const categoryOptionsWrapper = categoryContainer.querySelector(".categoryOptionsWrapper");
+
+    categoryContainer.addEventListener('click', (event) => {
+        const modal = categoryContainer.querySelector(".selectCategoryModal");
+        const input = categoryContainer.querySelector(".createNewCategory");
+
+        if (modal) {
+            modal.classList.toggle("selectCategoryHidden");
+            if (!modal.classList.contains('selectCategoryHidden') && input) {
+                 input.focus();
+            }
+        }
+    });
+
+    createNewCategoryInput.addEventListener("keyup", (event) => {
+        if (event.key === "Enter"){
+            const categoryName = createNewCategoryInput.value.trim();
+
+            if (categoryName === "") return;
+
+            const colorPair = getRandomColor();
+
+            // Chamada adaptada: Passa o elemento da tarefa atual!
+            addCategoryOption(taskElement, categoryName, colorPair.bg, colorPair.text);
+            selectCategoryOption(taskElement, categoryName, colorPair.bg, colorPair.text);
+
+            createNewCategoryInput.value = "";
+            selectCategoryModal.classList.add("selectCategoryHidden");
+        }
+    });
+    
+    // 3. Listener de SELEÇÃO de opção existente (Delegação Interna na nova tarefa)
+    categoryOptionsWrapper.addEventListener('click', (event) => {
+        const badge = event.target.closest('.categoryBadge');
+        if (badge && !badge.closest('.categoryModalHeader')) {
+            const name = badge.textContent.trim();
+            const bg = badge.style.backgroundColor;
+            const txt = badge.style.color;
+            
+            selectCategoryOption(taskElement, name, bg, txt);
+            selectCategoryModal.classList.add("selectCategoryHidden");
+        }
+    });
+}
+
+
+function createNewTaskRow() {
+    const taskRow = document.createElement("div");
+    taskRow.classList.add("task");
 
     taskRow.innerHTML = `
+        <div class="taskNameContainer">
+            <input type="checkbox" name="" id="">
+            <input type="text" class="invisibleTaskNameInput">
+        </div>
 
-                            <div class="taskNameContainer">
-                                <input type="checkbox" name="" id="">
-                                <input type="text" class="invisibleTaskNameInput">
-                            </div>
+        <div class="dueDateContainer taskClickArea">
+            <span class="dueDateValue"></span>
+            <input type="text" class="invisibleDateInput" style="display: none;">
+        </div>
 
-                            <div class="dueDateContainer">
-                                <span class="dueDateValue"></span>
-                                <input type="text" class="invisibleDateInput" style="display: none;">
-                            </div>
+        <div class="statusContainer">
+            <div class="statusBadge toDoStatus statusClickArea">
+                <div class="statusMarker toDoMarker"></div>
+                <span>Pendente</span>
+            </div>
+            <div class="selectStatusModal selectModalHidden">
+                <div class="statusModalHeader">
+                    <div class="statusBadge toDoStatus selectedStatus" data-status="toDo">
+                        <div class="statusMarker toDoMarker"></div>
+                        <span>Pendente</span>
+                    </div>
+                </div>
+                <div class="selectOptionText">Selecione uma opção</div>
+                <div class="optionsWrapper">
+                    <div class="statusBadgeContainer"><div class="statusBadge toDoStatus" data-status="toDo"><div class="statusMarker toDoMarker"></div><span>Pendente</span></div></div>
+                    <div class="statusBadgeContainer"><div class="statusBadge doingStatus" data-status="doing"><div class="statusMarker doingMarker"></div><span>Em andamento</span></div></div>
+                    <div class="statusBadgeContainer"><div class="statusBadge doneStatus" data-status="done"><div class="statusMarker doneMarker"></div><span>Concluído</span></div></div>
+                </div>
+            </div>
+        </div>
 
-                            <div class="statusContainer">
-                                <div class="statusBadge toDoStatus" id="statusClickArea">
-                                    <div class="statusMarker toDoMarker"></div>
-                                    <span>Pendente</span>
-                                </div>
+        <div class="categoryContainer taskClickArea">
+            <div class="categoryBadge noCategorySelected"></div>
+            <div class="selectCategoryModal selectCategoryHidden">
+                <div class="categoryModalHeader">
+                    <div class="categoryBadgeHeader">
+                        <div class="categoryBadgeHeaderModal noCategorySelected"></div>
+                    </div>
+                    <input type="text" class="createNewCategory">
+                </div>
+                <div class="selectOptionText">Selecione uma opção ou crie uma</div>
+                <div class="categoryOptionsWrapper"></div>
+            </div>
+        </div>
 
-                                <div class="selectStatusModal selectModalHidden">
-                                    <div class="statusModalHeader" id="currentStatus">
-                                        <div class="statusBadge toDoStatus" data-status="toDo" id="selectedStatus">
-                                            <div class="statusMarker toDoMarker"></div>
-                                                <span>Pendente</span>
-                                        </div>
-                                    </div>
+        <div class="priorityContainer">
+            <div class="priorityBadge highPriority priorityClickArea">
+                <span>Alta</span>
+            </div>
+            <div class="selectPriorityModal selectModalHidden">
+                <div class="priorityModalHeader">
+                    <div class="priorityBadge highPriority selectedPriority" data-priority="high">
+                        <span>Alta</span>
+                    </div>
+                </div>
+                <div class="selectOptionText">Selecione uma opção</div>
+                <div class="priorityOptionsWrapper">
+                    <div class="priorityBadgeContainer"><div class="priorityBadge highPriority" data-priority="high"><span>Alta</span></div></div>
+                    <div class="priorityBadgeContainer"><div class="priorityBadge mediumPriority" data-priority="medium"><span>Média</span></div></div>
+                    <div class="priorityBadgeContainer"><div class="priorityBadge lowPriority" data-priority="low"><span>Baixa</span></div></div>
+                </div>
+            </div>
+        </div> 
 
-                                    <div class="selectOptionText">Selecione uma opção</div>
+        <div class="actionsContainer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+        </div>
+    `; 
 
-                                    <div id="optionsWrapper">
-                                        <div class="statusBadgeContainer">
-                                            <div class="statusBadge toDoStatus" data-status="toDo">
-                                                    <div class="statusMarker toDoMarker"></div>
-                                                    <span>Pendente</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="statusBadgeContainer">
-                                            <div class="statusBadge doingStatus" data-status="doing">
-                                                <div class="statusMarker doingMarker"></div>
-                                                <span>Em andamento</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="statusBadgeContainer">
-                                            <div class="statusBadge doneStatus" data-status="done">
-                                                <div class="statusMarker doneMarker"></div>
-                                                <span>Concluído</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="categoryContainer">
-                                    <div class="categoryBadge noCategorySelected">
-
-                                    </div>
-
-                               <div class="selectCategoryModal selectCategoryHidden">
-                                    <div class="categoryModalHeader" id="currentCategory">
-                                       <div class="categoryBadgeHeader">
-                                            <div class="categoryBadgeHeaderModal noCategorySelected">
-
-                                            </div>
-                                        </div>
-
-                                        <input type="text" class="createNewCategory">
-                                    </div>
-
-                                    <div class="selectOptionText">Selecione uma opção ou crie uma</div>
-
-                                    <div id="categoryOptionsWrapper">
-                                      
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="priorityContainer">
-                                 <div class="priorityBadge highPriority" id="priorityClickArea">
-                                    <span>Alta</span>
-                                </div>
-
-                                <div class="selectPriorityModal selectModalHidden">
-                                    <div class="priorityModalHeader" id="currentPriority">
-                                        <div class="priorityBadge highPriority" data-priority="high" id="selectedPriority">
-                                                <span>Pendente</span>
-                                        </div>
-                                    </div>
-                                    <div class="selectOptionText">Selecione uma opção</div>
-
-                                    <div id="priorityOptionsWrapper">
-                                        <div class="priorityBadgeContainer">
-                                            <div class="priorityBadge highPriority" data-priority="high">
-                                                    <span>Alta</span>
-                                            </div>
-                                        </div>
-
-                                         <div class="priorityBadgeContainer">
-                                            <div class="priorityBadge mediumPriority" data-priority="medium">
-                                                    <span>Média</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="priorityBadgeContainer">
-                                            <div class="priorityBadge lowPriority" data-priority="low">
-                                                    <span>Baixa</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>  
-
-                            <div class="actionsContainer">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                            </div>
-    ` 
-
-    // initializeTaskFunctions(taskRow)
-
+    initializeTaskFunctions(taskRow); 
     return taskRow;
 }
 
-const createTask = document.querySelector(".createTask")
-const taskContainer = document.querySelector(".taskList")
-
 createTask.addEventListener("click", () => {
-    const newTaskElement = createNewTaskRow()
-    taskContainer.prepend(newTaskElement);
+    const newTaskElement = createNewTaskRow(); 
+    taskContainer.insertAdjacentElement("beforeend", newTaskElement);
 
-    const newTaskInput = newTaskElement.querySelector(".invisibleTaskNameInput")
+    const newTaskInput = newTaskElement.querySelector(".invisibleTaskNameInput");
 
     if (newTaskInput) {
-        newTaskInput.select()
-        newTaskInput.focus()
+        newTaskInput.select();
+        newTaskInput.focus();
     }
-})
+});
+
+
 
 
 
