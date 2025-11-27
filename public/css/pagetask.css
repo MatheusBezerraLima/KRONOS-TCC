@@ -13,6 +13,7 @@ body{
     display: flex;
     margin:0;
     padding:0;
+    position: relative;
     /* overflow: hidden; */
 }
 
@@ -20,26 +21,53 @@ body{
 :root{
     --border-color-aside: #ECECEC;
     --border-color: #d3d3d3;
-    --selected-color: rgba(42, 0, 255, 0.05);
+    --asideSelection: rgba(42, 0, 255, 0.05);
     --blue: #000080;
-    --transparent-blue: rgba(42, 0, 255, 0.1);
     --black: #000000;
     --main-color: #FFFFFF;
     --secundary-color: #F7F6FF;
     --lightGrey: #E6E6E6;
-    --transparent-purple: rgba(215, 130, 239, 0.5);
-    --purple: #8601AB;
     --taskBoardIcon-color: #3F3F3F;
     --shadow: rgb(198, 198, 198, 0.5);
-    --transparentBlack: rgba(0, 0, 0, 0.4);
-    --toDo-color: rgba(64, 64, 64, 0.1);
-    --toDoFont-color: #404040;
-    --doing-color: rgb(3, 44, 166, 0.5);
-    --doingFont-color: #032CA6;
-    --done-color: rgb(17, 149, 0, 0.5);
-    --doneFont-color: #119500;
+    --toDoColor: rgba(64, 64, 64, 0.1);
+    --toDoFontColor: #404040;
+    --lightFontColor:#696969;
+    --blueHoverButton: #0000a5; 
 }
 
+/* Modal de erro */
+
+.errorMassage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(242, 203, 5, .3);
+    color: #8a7409;
+    font-weight: 500;
+    font-size:15px;
+    width: 460px;
+    height: 45px;
+    position: absolute;
+    gap:8px;
+    border-radius: 10px;
+    bottom:20px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    visibility: visible;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    z-index: 20;
+}
+
+.errorMassage.messageHidden{
+    visibility: hidden;
+    opacity: 0;
+}
+
+.errorMassage svg{
+    width: 18px;
+    height: 18px;
+
+}
 /* Menu lateral */
 .aside{
     display: flex;
@@ -112,6 +140,7 @@ body{
     width: 25px;
     height: 25px;
     transition: transform 0.3 ease;
+    stroke: var(--black);
 }
 
 .logo svg:hover{
@@ -144,12 +173,12 @@ nav{
     gap:5px;
 }
 .selection-aside:hover{
-    background-color: var(--selected-color);
+    background-color: var(--asideSelection);
     width: 100%;
     height:50px;
 }
 .selected{
-    background-color: var(--selected-color);
+    background-color: var(--asideSelection);
     width: 100%;
     height:50px;
 }
@@ -205,7 +234,7 @@ header{
 
 .breadcrumbs a{
     text-decoration: none;
-    color: #000000;
+    color: var(--black);
 }
 
 .breadcrumbs svg{
@@ -278,10 +307,13 @@ main{
     align-items: center;
 }
 
+.taskPageTitle{
+    color: var(--black);
+}
+
 .pageSubtitle{
     font-size: 15px;
     color: #404040;
-    
 }
 .pageTitle svg{
     width: 40px;
@@ -305,25 +337,74 @@ main{
     
 }
 
-.filterTasks{
+.orderTasks{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 35px;
-    width: 90px;
+    width: 40px;
     gap:5px;
     background-color: #ffffff;
     border-radius: 10px;
     color: #808080;
-}
-
-.filterTasks:hover{
+    position: relative;
     cursor: pointer;
-    background-color: #f2f2f2;
-
 }
 
-.filterTasks svg{
+.orderTasks.orderTasksSelected{
+    background-color:#f2f2f2;
+}
+
+.orderTaskModal{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: min-content;
+    background-color: #6e2626;
+    position: absolute;
+    right:10px;
+    top:160px;
+    z-index:10;
+    background-color: #ffffff;
+    box-shadow: 1px 1px 8px var(--shadow);
+    border-radius: 10px;
+}
+
+.orderTaskModalHidden{
+    display:none;
+}
+
+.orderOptions{
+    display: flex;
+    flex-direction: column;
+}
+
+.orderthrough{
+    display: flex;
+    padding-left: 10px;
+    width: 100%;
+    padding: 10px 10px;
+    gap:5px;
+    align-items: center;
+}
+
+.orderthrough:hover{
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+
+
+.orderthrough svg{
+    width: 18px;
+    height: 18px;
+
+}
+.orderTaskHeader{
+    width: 100%;
+    padding: 10px 10px;
+}
+
+.orderTasks svg{
     width: 18px;
     height: 18px;
 }
@@ -340,10 +421,15 @@ main{
     background-color: #ffffff;
 }
 
-.searchTask svg{
-    height: 20px;
-    width: 20px;
-    stroke: #696969;
+.searchIconContainer{
+    display: flex;
+    justify-content: center;
+}
+
+.searchIconContainer svg{
+    width: 16px;
+    height: 16px;
+    stroke:#696969;
 }
 
 .invisibleInput{
@@ -372,6 +458,10 @@ main{
     font-size: 13px;
     cursor:pointer;
     transition: .3s ease;
+}
+
+.createTask:hover{
+    background-color: var(--blueHoverButton);
 }
 
 .createTask svg{
@@ -453,11 +543,59 @@ main{
     border-bottom-right-radius:10px;
 }
 
-input[type=checkbox]{
-    width:18px;
-    height: 18px;
-    border: 1px solid #808080;
+/* Estilo da checkbox */
+
+.checkBoxTask{
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0;
 }
+
+.checkboxCustom{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.checkIcon{
+    width: 100%;
+    height: 100%;
+    stroke: #FFFFFF;
+    fill: none; 
+    transform: scale(0); 
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Estilo da checkbox depois de marcada */
+.checkBoxTask:checked + .checkboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+/* Estilo de como vai aparecer a checkbox  e o icone depois de marcada */
+.checkBoxTask:checked + .checkboxCustom .checkIcon {
+    transform: scale(1); 
+}
+
+/*Estilo de risquinho no nome da tarefa */
+.checkBoxTask:checked ~ .invisibleTaskNameInput {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
 /* Nome da tarefa */
 
 .taskNameContainer{
@@ -487,7 +625,7 @@ input[type=checkbox]{
 }
 
 .taskNameContainer:focus-within{
-    width: 405px;
+    width: 400px;
     height: 48px;
     background-color: #ffffff;
     box-shadow: 2px 2px 2px #f2f2f2;
@@ -529,7 +667,8 @@ input[type=checkbox]{
     border-radius:10px;
     gap:5px;
     height: 20px;
-    width: min-content;
+    width: fit-content;
+    max-width: 140px;
     padding: 15px 10px;
     font-size:15px;
     cursor: pointer;
@@ -544,16 +683,52 @@ input[type=checkbox]{
     border: 1px solid #f2f2f2;
     box-shadow: 1px 1px 5px #f2f2f2;
     top:5px;
-    z-index: 10;
+    z-index: 11;
     cursor: pointer;
 }
 
-.categoryBadgeHeader{
-    background-color: #000080;
-    width: min-content;
+.categoryModalHeader{
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+    padding: 3px;
+
+
+}
+
+.createNewCategory{
+    flex: 1; /* Ocupa o espaço restante */
+    min-width: 0; /* Essencial para que o input possa encolher no Flexbox */
+    border: 0;
+    outline: none;
+    background-color: transparent;
+}
+
+.categoryBadgeHeaderModal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    height: 20px;
+    width: fit-content;
+    flex-shrink: 0;
+    max-width: 140px;
+    padding: 15px 10px;
+    font-size:15px;
+}
+
+.categoryNameText {
+    display: block; 
+    max-width: 100%; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
 }
 
 .noCategorySelected{
+    display: none;
+}
+.noPrioritySelected {
     display: none;
 }
 
@@ -653,27 +828,26 @@ input[type=checkbox]{
     border-radius:10px;
     gap:5px;
     font-size:15px;
+    height: 20px;
+    width: auto;
+    padding: 15px 10px;
     cursor: pointer;
 }
 
 .doneMarker{
     background-color: #119500;
-     width: 5px;
+    width: 5px;
     height: 5px;
     border-radius:50%;
 }
 
 .doneStatus{
-    width: 95px;
-    height: 30px;
     background-color: rgba(17, 149, 0, 0.1);
     color: #119500;
     
 }
 
 .doingStatus{
-    width: 130px;
-    height: 30px;
     background-color: rgba(52, 98, 191, 0.1);
     color:#3462BF;
 }
@@ -686,22 +860,21 @@ input[type=checkbox]{
 }
 
 .toDoStatus{
-    width: 90px;
-    height: 30px;
-    background-color: var(--toDo-color);
-    color:var(--toDoFont-color);
+    background-color: var(--toDoColor);
+    color:var(--toDoFontColor);
 }
 
 .toDoMarker{
-    background-color: var(--toDoFont-color);
+    background-color: var(--toDoFontColor);
     width: 5px;
     height: 5px;
     border-radius:50%;
 }
 
 .priorityBadge{
-    width: 80px;
-    height: 30px;
+    height: 20px;
+    width: auto;
+    padding: 15px 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -736,6 +909,7 @@ input[type=checkbox]{
     border: 1px solid #f2f2f2;
     box-shadow: 1px 1px 5px #f2f2f2;
     top:5px;
+    z-index: 10;
 }
 
 .selectPriorityModal{
@@ -747,6 +921,7 @@ input[type=checkbox]{
     border: 1px solid #f2f2f2;
     box-shadow: 1px 1px 5px #f2f2f2;
     top:5px;
+    z-index: 12;
 }
 
 .selectModalHidden, .selectCategoryHidden{
@@ -762,7 +937,6 @@ input[type=checkbox]{
     border-bottom: 1px solid #f2f2f2;
     background-color: #f7f7f7;
 }
-
 
 .selectOptionText{
     display: flex;

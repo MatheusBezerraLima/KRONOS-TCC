@@ -8,9 +8,8 @@ const statusOptions = document.querySelectorAll(".statusOption")
 let selectedStatusValue = document.querySelector(".statusSelected")
 const createTask = document.querySelector(".createTask")
 const taskContainer = document.querySelector(".taskList")
-
-
-
+const openOrderModalArea = document.querySelector(".orderTasks")
+const orderModal = document.querySelector(".orderTaskModal")
 
 // Função de seleção dos links do menu lateral
 
@@ -330,19 +329,14 @@ function toggleCategoryModal (){
     selectCategoryModal.classList.toggle("selectCategoryHidden")
     createNewCategoryInput.focus()
 }
-// A lógica de FECHAMENTO global (Ajuste para incluir a classe de categoria)
 document.addEventListener('click', (event) => {
-    // Altere para selecionar todos os modais de status, prioridade E categoria
     document.querySelectorAll('.selectModalHidden, .selectCategoryHidden').forEach(modal => {
-        // ... (Seu código de fechamento deve ser adaptado, mas o ideal é verificar
-        // se o clique não está dentro do elemento pai que abre o modal)
     });
     
     // Simplificando o fechamento:
     document.querySelectorAll('.selectStatusModal, .selectPriorityModal, .selectCategoryModal').forEach(modal => {
         const modalIsVisible = !modal.classList.contains('selectModalHidden') && !modal.classList.contains('selectCategoryHidden');
         
-        // Encontra o botão de abertura correspondente a este modal (Categoria: .categoryContainer)
         const task = modal.closest('.task');
         const openButton = task ? task.querySelector('.categoryContainer') : null; 
         
@@ -370,28 +364,30 @@ function getRandomColor() {
 }
 
 function addCategoryOption(taskElement, name, bg, txt) {
-    const container = document.createElement("div")
-    container.className = "categoryBadgeContainer"
+    const container = document.createElement("div");
+    container.className = "categoryBadgeContainer";
 
-    const badgeDiv = document.createElement("div")
-    badgeDiv.className = "categoryBadge"
+    const badgeDiv = document.createElement("div");
+    badgeDiv.className = "categoryBadge";
 
+    const spanName = document.createElement("span");
+    spanName.className = "categoryNameText";
+    spanName.textContent = name; 
 
     badgeDiv.style.backgroundColor = bg;
     badgeDiv.style.color = txt;
 
-    badgeDiv.innerHTML = `${name}`
+    badgeDiv.appendChild(spanName);
 
-    badgeDiv.onclick = () => selectCategoryOption(taskElement, name, bg, txt)
+    badgeDiv.onclick = () => selectCategoryOption(taskElement, name, bg, txt);
 
-    container.appendChild(badgeDiv)
+    container.appendChild(badgeDiv);
 
     const categoryOptionsWrapper = taskElement.querySelector(".categoryOptionsWrapper");
 
     if (categoryOptionsWrapper) {
         categoryOptionsWrapper.appendChild(container);
     }
-    
 }
 
 
@@ -399,30 +395,38 @@ const selectedCategoryDisplay = document.querySelector(".categoryBadge");
 const categoryBadgeHeader = document.querySelector('.categoryBadgeHeaderModal');
 
 function selectCategoryOption(taskElement, name, bg, txt) {
-    const badgeContent = `${name}`
-
     const selectedCategoryDisplay = taskElement.querySelector(".categoryBadge:not(.categoryBadgeHeaderModal)"); 
     const categoryBadgeHeader = taskElement.querySelector('.categoryBadgeHeaderModal');
 
-    if (selectedCategoryDisplay) {
-        selectedCategoryDisplay.classList.remove("noCategorySelected")
-        selectedCategoryDisplay.style.backgroundColor = bg
-        selectedCategoryDisplay.style.color = txt
-        selectedCategoryDisplay.innerHTML = badgeContent
-    }
+    const updateBadge = (badgeElement) => {
+        if (!badgeElement) return;
 
-    if (categoryBadgeHeader) {
-        categoryBadgeHeader.classList.remove('noCategorySelected');
-        categoryBadgeHeader.style.backgroundColor = bg;
-        categoryBadgeHeader.style.color = txt;
-        categoryBadgeHeader.innerHTML = badgeContent; // O mesmo conteúdo
+        badgeElement.classList.remove("noCategorySelected");
+        badgeElement.style.backgroundColor = bg;
+        badgeElement.style.color = txt;
 
-    }
+        let textSpan = badgeElement.querySelector('.categoryNameText');
+
+        if (!textSpan) {
+            textSpan = document.createElement("span");
+            textSpan.className = "categoryNameText";
+            badgeElement.appendChild(textSpan);
+        }
+        
+        textSpan.textContent = name;
+    };
+
+    // Atualiza o badge principal da tarefa
+    updateBadge(selectedCategoryDisplay);
+    
+    // Atualiza o badge no cabeçalho do modal
+    updateBadge(categoryBadgeHeader);
 }
 
 function initializeTaskFunctions(taskElement) {
 
     setupDatePickerForTask(taskElement); 
+    addCheckEvent (taskElement);
 
     const categoryContainer = taskElement.querySelector(".categoryContainer");
     const createNewCategoryInput = categoryContainer.querySelector(".createNewCategory");
@@ -478,7 +482,10 @@ function createNewTaskRow() {
 
     taskRow.innerHTML = `
         <div class="taskNameContainer">
-            <input type="checkbox" name="" id="">
+            <input type="checkbox" class="checkBoxTask">
+            <span class= "checkboxCustom">
+                <svg class = "checkIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
             <input type="text" class="invisibleTaskNameInput">
         </div>
 
@@ -513,7 +520,7 @@ function createNewTaskRow() {
             <div class="selectCategoryModal selectCategoryHidden">
                 <div class="categoryModalHeader">
                     <div class="categoryBadgeHeader">
-                        <div class="categoryBadgeHeaderModal noCategorySelected"></div>
+                        <div class="categoryBadgeHeaderModal noCategorySelected"></div> 
                     </div>
                     <input type="text" class="createNewCategory">
                 </div>
@@ -580,6 +587,67 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+/* Modal de ordenar por */
+
+openOrderModalArea.addEventListener("click", () => {
+
+    event.stopPropagation();
+    openOrderModalArea.classList.toggle("orderTasksSelected")
+    orderModal.classList.toggle("orderTaskModalHidden")
+    
+})
+
+/* Fechar modal de ordenar tarefas clicando fora do modal  */
+document.addEventListener("click", (event) => {
+    const isModalOpen = !orderModal.classList.contains("orderTaskModalHidden")
+
+    if(isModalOpen && !orderModal.contains(event.target) && !openOrderModalArea.contains(event.target)){
+        openOrderModalArea.classList.remove("orderTasksSelected")
+        orderModal.classList.add("orderTaskModalHidden")
+    }
+    console.log();
+    
+})
+
+/* função para checar as boxes das tarefas */
+
+function addCheckEvent (taskElement) {
+    const customCheckboxes = taskElement.querySelector('.checkboxCustom'); 
+    
+    if (customCheckboxes) {
+        customCheckboxes.addEventListener('click', () => {
+            
+            const inputCheckbox = customCheckboxes.previousElementSibling;
+            const taskNameInput = customCheckboxes.nextElementSibling;
+            const taskName = taskNameInput ? taskNameInput.value.trim() : ''; 
+
+            if (taskName.length > 0) {
+                
+                if (inputCheckbox && inputCheckbox.type === 'checkbox') {
+                    inputCheckbox.checked = !inputCheckbox.checked;
+                    inputCheckbox.dispatchEvent(new Event('change'));
+                }
+            } else {
+                showWarningMessage(2000)
+            }
+        });
+    }
+}
+
+/* Função para mostrar mensagem de alerta */
+
+const messageModal = document.querySelector(".errorMassage")
+
+function showWarningMessage(duration = 2000) {
+    
+    messageModal.classList.remove("messageHidden")
+
+    setTimeout(() => {
+
+         messageModal.classList.add("messageHidden")
+
+    }, duration)
+}
 
 
 
