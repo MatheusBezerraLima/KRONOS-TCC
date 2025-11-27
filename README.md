@@ -17,7 +17,7 @@ Este projeto nasceu da necessidade de aplicar metodologias ágeis, como o SCRUM,
   5. Segurança: Sistema de autenticação de usuários implementado com JWT e criptografia para garantir a proteção dos dados.
 
 ## 🛠️ Tecnologias Utilizadas
-Back-End: Node.js
+Back-End: Node.js, Sequelize, Express
 
 Front-End: HTML, CSS, JavaScript
 
@@ -27,16 +27,8 @@ Arquitetura: Arquitetura Hexagonal (Ports and Adapters)
 
 Autenticação: JWT (JSON Web Tokens)
 
-Metodologia: SCRUM
+Metodologia: SCRUM, KANBAN
 
-## 👣 Próximos Passos (Roadmap)
-[ ] Implementar um sistema de notificações.
+Ademais: Docker, Postman.
 
-[ ] Desenvolver um calendário para visualização de prazos.
 
-[ ] Estudar e integrar APIs de aplicativos de produtividade externos.
-
-[ ] Criar uma funcionalidade para análise e sugestão de gerenciamento de riscos em projetos.
-.
-.
-.
