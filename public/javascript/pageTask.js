@@ -6,10 +6,8 @@ const sideMenu = document.querySelector("aside")
 const dropDownStatus = document.querySelector(".selectStatusModal")
 const statusOptions = document.querySelectorAll(".statusOption")
 let selectedStatusValue = document.querySelector(".statusSelected")
-const createTask = document.querySelector(".createTask")
-const taskContainer = document.querySelector(".taskList")
-const openOrderModalArea = document.querySelector(".orderTasks")
-const orderModal = document.querySelector(".orderTaskModal")
+const openOrderModalArea = document.querySelector(".orderProjects")
+const orderModal = document.querySelector(".orderProjectModal")
 
 // Função de seleção dos links do menu lateral
 

@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: "poppins";
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    font-size: 1em;
+    display: flex;
+    margin:0;
+    padding:0;
+    position: relative;
+    /* overflow: hidden; */
+}
+
+/*Variavéis */
+:root{
+    --border-color-aside: #ECECEC;
+    --border-color: #d3d3d3;
+    --asideSelection: rgba(42, 0, 255, 0.05);
+    --blue: #000080;
+    --black: #000000;
+    --main-color: #FFFFFF;
+    --secundary-color: #F7F6FF;
+    --lightGrey: #E6E6E6;
+    --taskBoardIcon-color: #3F3F3F;
+    --shadow: rgb(198, 198, 198, 0.5);
+    --toDoColor: rgba(64, 64, 64, 0.1);
+    --toDoFontColor: #404040;
+    --lightFontColor:#696969;
+    --blueHoverButton: #0000a5; 
+}
+
+.aside{
+    display: flex;
+    flex-direction: column ;
+    width:200px;
+    height: 100%;
+    border-right: 1px solid #ECECEC;
+    min-width: 200px;
+    transition: width .3s ease, min-width .3s ease;
+}
+
+/*Fechar e abrir menu lateral*/
+
+.asideClosed .selection-aside{
+    display: flex;
+    padding-left: 0;
+    justify-content: center;
+}
+
+.asideClosed .selection-aside svg {
+    width: 22px;
+    height: 22px;
+}
+
+.asideClosed .headerLink {
+    display: none; 
+}
+
+.asideClosed .members{
+    display: none;
+}
+
+.asideClosed .logo{
+     padding: 0;
+     display: flex;
+     justify-content: center;
+}
+
+.asideClosed .logo a{
+    display: none;
+}
+
+.asideClosed .logo .toggleIcon{
+    transform: rotate(180deg); 
+}
+
+.asideClosed{
+    width: 60px;
+    min-width: 60px;   
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    width:100%;
+    height:60px;
+    border-bottom: 1px solid #ECECEC;
+}
+
+.logo a{
+    text-decoration: none;
+    color: var(--black);
+    font-weight: bold;
+}
+
+.logo .toggleIcon{
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    transition: transform 0.3 ease;
+    stroke: var(--black);
+}
+
+.logo svg:hover{
+    width: 25px;
+    height: 25px;
+    background-color: var(--lightGrey);
+    border-radius: 5px ;
+}
+
+/* Navegação Lateral */
+
+nav{
+    
+    padding:15px 0 15px 0;
+    
+    ul{
+        list-style: none; 
+        display: flex;  
+        flex-direction: column;
+    }
+   
+}
+.selection-aside{
+    width:100%;
+    height:50px;
+    display: flex;
+    align-items: center;
+    padding-left:15px ;
+    cursor: pointer;
+    gap:5px;
+}
+.selection-aside:hover{
+    background-color: var(--asideSelection);
+    width: 100%;
+    height:50px;
+}
+.selected{
+    background-color: var(--asideSelection);
+    width: 100%;
+    height:50px;
+}
+
+.headerLink a {
+  color: var(--black);
+  text-decoration: none;
+}
+
+.selection-aside.selected .headerLink a {
+  color: var(--blue);
+  font-weight: bold;
+  
+}
+.selection-aside svg{
+     width: 22px;
+     height: 22px;
+}
+
+.selection-aside.selected svg {
+  color: var(--blue);  
+}
+
+.main-content{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+    height: 100%;
+}
+
+/*Header*/
+
+header{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    padding: 20px;
+    background-color: var(--main-color);
+    border-bottom: 1px solid #ECECEC;
+    justify-content: space-between;
+}
+
+.breadcrumbs{
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    gap:5px;
+
+}
+
+.breadcrumbs a{
+    text-decoration: none;
+    color: var(--black);
+}
+
+.breadcrumbs svg{
+    width: 25px;
+    height: 25px;
+}
+
+.headerUtilities{
+    display: flex;
+    align-items: center;
+    gap:20px;
+}
+
+.headerUtilitiesHover{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    transition: .3s ease;
+}
+.headerUtilitiesHover:hover{
+    background-color: var(--lightGrey);
+}
+
+.userProfile{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: aqua;
+}
+
+/* Main */
+
+main{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--secundary-color);
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    gap:20px;
+}
+
+/*Header project*/
+
+.projectHeader{
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #d3d3d3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.pageTitleContainer{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.pageTitle{
+    height: 60px;
+    gap:15px;
+    display: flex;
+    align-items: center;
+}
+
+.projectPageTitle{
+    color: var(--black);
+}
+
+.pageSubtitle{
+    font-size: 16px;
+    color: var(--black);
+}
+.pageTitle svg{
+    width: 40px;
+    height: 40px;
+    fill:#119500;
+    stroke: #ffffff;
+}
+
+.mainProjectHeaderInfo{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.pageProjectActions{
+    display: flex;
+    align-items: flex-end;
+    margin-bottom:10px;
+    gap:15px;
+    right:0;
+    
+}
+
+.orderProjects{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 40px;
+    gap:5px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #808080;
+    position: relative;
+    cursor: pointer;
+}
+
+.orderProjects.orderProjectsSelected{
+    background-color:#f2f2f2;
+}
+
+.orderProjectModal{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: min-content;
+    background-color: #6e2626;
+    position: absolute;
+    right:10px;
+    top:160px;
+    z-index:10;
+    background-color: #ffffff;
+    box-shadow: 1px 1px 8px var(--shadow);
+    border-radius: 10px;
+}
+
+.orderProjectModalHidden{
+    display:none;
+}
+
+.orderOptions{
+    display: flex;
+    flex-direction: column;
+}
+
+.orderthrough{
+    display: flex;
+    padding-left: 10px;
+    width: 100%;
+    padding: 10px 10px;
+    gap:5px;
+    align-items: center;
+}
+
+.orderthrough:hover{
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+
+
+.orderthrough svg{
+    width: 18px;
+    height: 18px;
+
+}
+.orderProjectHeader{
+    width: 100%;
+    padding: 10px 10px;
+}
+
+.orderProjects svg{
+    width: 18px;
+    height: 18px;
+}
+
+.searchProject{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 35px;
+    width: 200px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #ffffff;
+}
+
+.searchIconContainer{
+    display: flex;
+    justify-content: center;
+}
+
+.searchIconContainer svg{
+    width: 16px;
+    height: 16px;
+    stroke:#696969;
+}
+
+.invisibleInput{
+    height: 100%;
+    width: 180px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding-left:8px;
+    font-size: 15px;
+    color: #696969;
+}
+
+
+.createProject{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 35px;
+    background-color: var(--blue);
+    border-radius: 10px;
+    color: var(--main-color);
+    border-width: 0;
+    gap:2px;
+    font-size: 13px;
+    cursor:pointer;
+    transition: .3s ease;
+}
+
+.createProject:hover{
+    background-color: var(--blueHoverButton);
+}
+
+.createProject svg{
+    width: 20px;
+    height:20px;
+    fill: var(--main-color);
+}
