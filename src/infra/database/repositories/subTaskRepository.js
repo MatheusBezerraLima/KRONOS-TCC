@@ -57,7 +57,7 @@ class SubTaskDAO {
                     tarefa_id: {
                         [Op.in]: taskIds
                     }
-                }
+                }, 
             });
         } catch (error) {
             console.error('Erro no DAO ao buscar subtarefas por múltiplos IDs:', error);

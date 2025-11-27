@@ -79,8 +79,12 @@ body{
      justify-content: center;
 }
 
+.noRender{
+    display: none !important;
+}
+
 .asideClosed .logo a{
-    display: none;
+    display: none !important;
 }
 
 .asideClosed .logo .toggleIcon{

@@ -176,16 +176,13 @@ class TaskServices{
         if (!taskCreated) {
             throw new Error("Erro ao salvar a tarefa no banco de dados.");
         }
-
+        
         // Associondo membros a tarefa
         if (assignedMemberIds.length > 0) {
-            // O método 'setMembers' é uma "magia" do Sequelize que vem da
-            // associação belongsToMany. Ele lida com a tabela de ligação automaticamente.
             await taskCreated.setAssignedMembers(assignedMemberIds);
         }
 
         if(subTasks && subTasks.length > 0){            
-            // 1. Prepara os dados: Transforma o array de strings num array de objetos
             const subTasksData = subTasks.map(subtask => ({
                 titulo: subtask,
                 tarefa_id: taskCreated.id, 

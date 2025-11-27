@@ -15,19 +15,24 @@ module.exports = {
       },
       usuario_id:{
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "usuario",
           key: "id"
-        },
-        projeto_id: {
-          type: Sequelize.INTEGER,
-          allowNull: true,
-          references: {
-              model: 'projeto',
-              key: "id"
-          }
+      },
+      },
+      projeto_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'projeto',
+            key: "id"
         }
+      },
+      cor: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "#3B82F6"
       }
     });
   },

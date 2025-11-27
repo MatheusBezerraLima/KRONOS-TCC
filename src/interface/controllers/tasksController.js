@@ -112,7 +112,7 @@ class TasksController{
             
         res.status(200).json(task)
         }catch(error){
-            res.status(400).json({"Controller": "FindTask" ,"Erro": err})
+            res.status(400).json({"Controller": "FindTask" ,"Erro": error})
         }
     }
 }

@@ -70,7 +70,16 @@ class TasksDAO{
 
     async create(data){
         try{
-            return await Task.create(data);
+            const newTask = await Task.create(data);
+            await newTask.reload({
+                include: [
+                    {
+                        model: CategoryTask,
+                        as: 'categoryTask'
+                    }
+                ]
+            });
+            return newTask;
         }catch(error){
             console.error(`Erro no DAO ao criar Tarefa ${error.message}`);
             throw error;
@@ -79,7 +88,14 @@ class TasksDAO{
 
     async findById(taskId){
         try{
-            return await Task.findByPk(taskId);
+            return await Task.findByPk(taskId, {
+                include: [
+                    {
+                        model: CategoryTask,
+                        as: 'categoryTask'
+                    }
+                ]
+            });
         }catch(error){
             console.error(`Erro no DAO de Tarefa ao buscar por ID ${error.message}`);
             throw error;
@@ -92,13 +108,11 @@ class TasksDAO{
                 where: {
                     projeto_id: projectId
                 },
-                includes: [
+                include: [
                     {
-                     model: CategoryTask    
-                    },
-                    {
-                     model: StatusTask    
-                    },
+                        model: CategoryTask,
+                        as: 'categoryTask'
+                    }
                 ]
             })
         }catch(error){

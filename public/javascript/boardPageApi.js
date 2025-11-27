@@ -4,17 +4,14 @@ const membersHeaderContainer = document.querySelector('.membersIconandQuantity')
 const boardColumnsContainer = document.querySelector('.boardColumns');
 const membersSidebarContainer = document.querySelector('.members .container-memberTasks');
 
-let currentProjectId = null;
+let currentProjectId = window.location.pathname.split('/').filter(Boolean).pop();
 
 
 async function initializeBoard() {
-    const projectId = getProjectIdFromUrl();
-    console.log(projectId);
-    
+    const projectId = getProjectIdFromUrl();    
 
     if (!projectId) {
-         console.log("sem projeto id");
-            
+         console.log("sem projeto id");   
         return;
     }
 
@@ -27,11 +24,12 @@ async function initializeBoard() {
         const boardData = await response.json();
         console.log(boardData);
         
+        console.log('✨👣GERAL', boardData);
         
         renderHeader(boardData.project, boardData.members);
         renderMembersSidebar(boardData.members, boardData.columns); 
         renderColumns(boardData.columns);
-        populateModalSelectors(boardData.columns);
+        populateModalSelectors(boardData.columns, boardData.categories);
         
         addCardClickListeners();
 
@@ -41,12 +39,12 @@ async function initializeBoard() {
     
 }
 
- function populateModalSelectors(columns) {
+ function populateModalSelectors(columns, categories) {
         // 1. Encontra TODOS os containers de status nos dois modais
         const allStatusContainers = document.querySelectorAll('.selectStatusModal');
+        const AllCategoriesContainers = document.querySelectorAll('.selectCategoryModal');
 
         // --- 2. Popula o "STATUS" (usando as COLUNAS) ---
-        // A sua lógica estava correta: o 'status_id' no modal é, na verdade, o 'coluna_id'.
         const columnHtml = columns.map((col, index) => `
             <div class="statusOption ${col.title.toLowerCase().replace(/[\sçã]/g, '')}Status ${index === 0 ? 'statusSelected' : ''}" data-status="${col.id}">
                 <div class="statusBadge ${col.title.toLowerCase().replace(/[\sçã]/g, '')}Badge">
@@ -55,7 +53,16 @@ async function initializeBoard() {
             </div>
         `).join('');
 
+        const categoriesHtml = categories.map((category, index) => `
+            <div class="categoryOption ${category.nome.toLowerCase().replace(/[\sçã]/g, '')}Category ${ index === 0 ? 'categorySelected' : ''}" data-category="${category.id}">
+                <div class="categoryBadge ${category.nome.toLowerCase().replace(/[\sçã]/g, '')}Badge" style="background-color: ${category.cor}">
+                    <p>${category.nome}</p>
+                </div> <!-- designBadge  -->
+            </div>
+        `).join(''); 
+
         allStatusContainers.forEach(container => container.innerHTML = columnHtml);
+        AllCategoriesContainers.forEach(container => container.innerHTML = categoriesHtml);
 
         addStatusListeners();
     }
@@ -287,7 +294,7 @@ async function fetchTaskDetails(taskId) {
         const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`);
         if (!response.ok) {
             const errorData = await response.json();            
-            throw new Error(errorData.message || `Erro ${response.status}`);
+            throw new Error(errorData.message || `Erro ao listar dados da tarefa ${response.status}`);
         }
 
         return await response.json();
@@ -418,7 +425,6 @@ async function openEditModal(taskId) {
     editModal.classList.add('modalOn'); 
     filterEd.classList.add('filterOn')
 
-    
     const editTaskTitleEl = editModal.querySelector('.invisibleTaskNameInput');
     const editDateValueEl = editModal.querySelector('.dateValue');
     const editSubtaskListEl = document.querySelector('.listSubtasks');
@@ -441,20 +447,19 @@ async function openEditModal(taskId) {
         // Exemplo para subtarefas:
         editSubtaskListEl.innerHTML = taskData.subTasks.map(subtask => {
             return `
-                <div classs="subtask-item" style="display: flex; align-items: center; margin-bottom: 5px;">
-                    <input type="checkbox" ${subtask.status_id === 1 ? 'checked' : ''} data-subtask-id="${subtask.id}" style="margin-right: 10px;">
+                <div class="subtask-item" style="display: flex; align-items: center; margin-bottom: 5px;">
+                    <input type="checkbox" ${subtask.status_id === 1 ? 'checked' : ''} data-subtask-id="${subtask.id} style="margin-right: 10px;">
                     <span contenteditable="true">${subtask.titulo}</span>
                 </div>
             `;
         }).join('');
         
     } catch (error) {
-        alert("Erro ao carregar os dados da tarefa: " + error.message);
+        console.log("Erro ao carregar os dados da tarefa: " + error.message);
         editModal.classList.remove('modalOn');
+        filterEd.classList.remove('filterOn');
     }
 }
-
-
 
 function renderColumns(columns) {
     if (!boardColumnsContainer) return;
@@ -468,6 +473,10 @@ function renderColumns(columns) {
         
         // Gera o HTML de todas as tarefas primeiro
         const tasksHtml = column.tasks.map(task => createTaskHtml(task)).join('');
+
+        const classTaskContainer = column.tasks.length > 0 
+            ? `tasksToDoBoard task-list-dropzone` 
+            : 'tasksToDoBoard task-list-dropzone noRender';
 
         columnEl.innerHTML = `
               <div class="actionsColumn">
@@ -489,22 +498,19 @@ function renderColumns(columns) {
                     <h4>${column.title.toUpperCase()}</h4>
                     <div class="columnTaskQuantity">${column.tasks.length}</div>
                 </div>
-                  <div class="iconsColumnHeader">
-                                <svg class="addTaskToTheColumn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                <svg class="seeColumnOptions" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                    <div class="iconsColumnHeader">
+                            <svg class="addTaskToTheColumn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                            <svg class="seeColumnOptions" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
                     </div>
             </div>
 
-            <!-- CORREÇÃO: Este container tem a classe 'tasksToDoBoard' (para o seu CSS)
-                 E a classe única 'task-list-dropzone' (para o JavaScript) -->
-            <div class="tasksToDoBoard task-list-dropzone">
-                ${tasksHtml} <!-- As tarefas são inseridas aqui -->
+            <div class="${classTaskContainer}">
+                ${tasksHtml}
             </div>
         `;
 
-        
-    
         boardColumnsContainer.appendChild(columnEl);
+
     });
 
     const columnAddEl = document.createElement('section');
@@ -523,21 +529,12 @@ function renderColumns(columns) {
 }
 
 function createTaskHtml(dataTask){
+    console.log("➡️🚀AQUI",dataTask);
 
-   console.log(dataTask);
-    const CATEGORIA_MAP = {
-  1: 'Design',
-  2: 'Backend',
-  3: 'Frontend'
-  // Adicione quantos quiser aqui: 4: 'DevOps', 5: 'QA', etc.
-};
-
-// 2. Busque o nome da categoria no mapa
-// Se não encontrar o ID, usa 'Geral' como padrão
-const categoriaNome = CATEGORIA_MAP[dataTask.categoria_id] || 'Geral';
+const categoriaNome = dataTask.categoryTask.nome || 'Geral';
 
 // 3. Crie a tag UMA VEZ
-const tag = `<div class="tag ${categoriaNome}">
+const tag = `<div class="tag ${categoriaNome}" style="background-color: ${dataTask.categoryTask.cor}";>
                <p>${categoriaNome}</p>
              </div>`;
 
@@ -626,7 +623,7 @@ async function requestCreateTask() {
             data_termino: dateToEnd, // Agora envia "2025-10-23" ou null
             projeto_id: parseInt(currentProjectId), 
             titulo: title,
-            criador_id: 3, // !!! MOCK: Substitua pelo ID real do usuário logado
+            criador_id: 1, // !!! MOCK: Substitua pelo ID real do usuário logado
             descricao: description,
             status_id: 1,
             categoria_id: categorySelected,
@@ -643,6 +640,9 @@ async function requestCreateTask() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(taskData)
             });
+
+            console.log("Resposta da api para criar:", response);
+            
             
             if (!response.ok) {
                 const errorData = await response.json();
@@ -651,8 +651,6 @@ async function requestCreateTask() {
 
             const newTask = await response.json();
             console.log("🟩Nova tarefa:", newTask);
-
-            // --- 4. ATUALIZA A UI DINAMICAMENTE ---
             
             // 4a. Gera o HTML para o novo card
             const taskHtml = createTaskHtml(newTask);
@@ -662,6 +660,7 @@ async function requestCreateTask() {
             if (columnEl) {
                 // --- CORREÇÃO: Procura pela classe 'task-list-dropzone' ---
                 const taskListEl = columnEl.querySelector('.task-list-dropzone');
+                taskListEl.classList.remove('noRender');
                 
                 // 4c. Adiciona o novo card ao final da lista
                 // Esta verificação impede o erro 'cannot read properties of null'

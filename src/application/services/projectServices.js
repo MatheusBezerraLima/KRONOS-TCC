@@ -7,8 +7,10 @@ const taskDAO = require('../../infra/database/repositories/tasksRepository');
 const subTaskDAO = require("../../infra/database/repositories/subTaskRepository");
 const sprintDAO = require('../../infra/database/repositories/sprintRepository');
 const boardColumnDAO = require('../../infra/database/repositories/boardColumnRepository');
+const categoryDAO = require('../../infra/database/repositories/categoryTaskRepository');
 const userProjectRoleDAO = require('../../infra/database/repositories/userProjectRoleRepository');
 const projectInvitationsDAO = require('../../infra/database/repositories/projectInvitationsRepository');
+const categoryTaskDAO = require('../../infra/database/repositories/categoryTaskRepository');
 const emailService = require("./emailServices");
 
 class ProjectServices{
@@ -20,13 +22,15 @@ class ProjectServices{
         }
 
         // Adicionar a busca de Contagem de mensagens e contagem de atividades
-        const [project, tasks, members, columns] = await Promise.all([
+        const [project, tasks, members, columns, categories] = await Promise.all([
             projectDAO.findById(projectId),
             taskDAO.findByProjectId(projectId),
             userProjectRoleDAO.findMemberByProjectId(projectId),
             boardColumnDAO.findByProjectId(projectId),
+            categoryTaskDAO.findAllByProjectId(projectId)
         ])
-      
+        console.log('TAREFA☁️☁️☁️', tasks);
+        
         const taskIds = tasks.map(task => task.id);
 
         const allSubTasks = await subTaskDAO.findAllByTaskIds(taskIds);
@@ -42,6 +46,7 @@ class ProjectServices{
             },
             members: members, // O DAO já deve retornar apenas os dados necessários
             columns: shapedColumns,
+            categories: categories
             // unreadCounts: {
             //     chatMessages: unreadMessagesCount,
             //     activityNotifications: unreadActivitiesCount
@@ -276,7 +281,21 @@ class ProjectServices{
                 }
             ]
 
+            const defaultCategories = [      
+                {
+                    nome: 'Geral',
+                    usuario_id: userId,
+                    projeto_id: newProject.id,
+                },
+                {
+                    nome: 'Pesquisa',
+                    usuario_id: userId,
+                    projeto_id: newProject.id,
+                },
+            ]
+
             await boardColumnDAO.createBulk(defaultColums, { transaction: t });
+            await categoryDAO.createBulk(defaultCategories, { transaction: t })
 
             await t.commit();
 
