@@ -8,6 +8,67 @@
     <script src="/public/javascript/projectPage.js" defer></script>
 </head>
 <body>
+    <div class="filter hidden"></div>
+    <div class="createProjectModal hidden">
+        <div class="projectModalHeader">
+            <p>Novo projeto</p>
+            <svg class="closeModalIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </div>
+
+        <div class="projectNameContainer">
+            <h2>Site de ingles</h2>
+        </div>
+
+        <div class="formList">
+            <div class="categoryContainer">
+                <div class="formTitleContainer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-icon lucide-loader"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+                    <span class="formTitles">Categoria</span>
+                </div>
+
+                <div class="categoryForm">
+                    <div class="categoryBadge">
+                        <div class="projectCategoryBadge"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dueDateContainerForm">
+                <div class="formTitleContainer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                    <span class="formTitles">Prazo</span>
+                </div>
+
+                 <div class="dueDateForm">
+                    <p>24/09/34</p>
+                </div>
+            </div>
+
+            <div class="atribuitionsContainer">
+                <div class="formTitleContainer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-icon lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
+                    <span class="formTitles">Atribuições</span>
+                </div>
+
+                <div class="atribuitionsForm">
+                    <div class="membersList">
+                        <div class="memberForm" style="background-color: aqua;"></div>
+                        <div class="memberForm" style="background-color: bisque;"></div>
+                        <div class="memberForm" style="background-color: blue;"></div>
+                    </div>
+
+                    <div class="addMemberContainer">
+                        <div class="addMember" style="background-color: gray;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttonContainer">
+            <input class="createProjectButton" type="button" value="Criar Projeto">
+        </div>
+    </div>
     <aside class="aside">
             <div class="logo">
                 <a href="#" aria-label="Página principal">LOGO</a>
@@ -117,11 +178,35 @@
                 </section> <!--boardColumns-->
 
                 <section class="projectList">
+                    <div class="addProjectContainer">
+                        <div class="iconContainer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        </div>
+                    </div>
                     <div class="project">
                         <div class="projectTop">
+                             <strong class="projectTitle">Trabalho de ingles</strong>
                             <div class="projectCategoryBadge"></div>
-                            .
                         </div>
+
+                        <div class="progressBarContainer">
+                            <div class="progressBar"></div>
+                            <div class="dueDateContainer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                <p>Prazo: <span class="dueDateProjectSubtitle">17/03/225</span></p>
+                            </div> 
+                        </div>
+
+                        <div class="projectBottom">   
+                            <p class="shareWithText">Compartilhado com</p>                     
+                            <div class="projectMembers">
+                                <div class="member" style="background-color: aqua;"></div>
+                                <div class="member" style="background-color: bisque;"></div>
+                                <div class="member" style="background-color: bisque;"></div>
+                                <div class="membersQuantity" style="background-color: gray;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                <p class="quantityNumber">6</p>
+                            </div>
                     </div>
                 </section>
             </main>

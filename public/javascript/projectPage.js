@@ -58,3 +58,20 @@ document.addEventListener("click", (event) => {
     console.log();
     
 })
+
+/* Função de abrir o modal*/
+
+const projectModal = document.querySelector(".createProjectModal")
+const filter = document.querySelector(".filter")
+const createProjectButton = document.querySelector(".createProject")
+const closeModal = document.querySelector(".closeModalIcon")
+
+createProjectButton.addEventListener("click", ()=>{
+    filter.classList.remove("hidden")
+    projectModal.classList.remove("hidden")
+})
+
+closeModal.addEventListener("click", ()=>{
+    filter.classList.add("hidden")
+    projectModal.classList.add("hidden")
+})

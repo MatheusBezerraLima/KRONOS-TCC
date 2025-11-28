@@ -17,6 +17,13 @@ body{
     /* overflow: hidden; */
 }
 
+.filter{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.062);
+    z-index: 10;
+}
 /*Variavéis */
 :root{
     --border-color-aside: #ECECEC;
@@ -433,4 +440,298 @@ main{
     width: 20px;
     height:20px;
     fill: var(--main-color);
+}
+
+.projectList{
+    display: flex;
+    gap:20px;
+}
+.addProjectContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    margin-top:5px;
+    border-radius: 10px;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: #0000802c;
+    background-color: #00008009;
+}
+.iconContainer{
+    width: 40px;
+    height: 40px;
+    background-color: #000080;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.iconContainer svg{
+    color: #fdfdfd;
+    width:20px;
+    height: 20px;
+}
+.project{
+    display: flex;
+    flex-direction: column;
+    width: 290px;
+    padding: 15px 15px 5px 15px;
+
+    height: 180px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 1px 2px 8px var(--shadow);
+    cursor: pointer;
+    margin-top: 5px;
+    transition: .2s ease-in-out;
+}
+
+.project:hover{
+    margin-top: 0px;
+}
+
+.projectTop{
+    flex-grow: 3;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.projectCategoryBadge{
+    width: 75px;
+    height: 25px;
+    background-color: #119500;
+    border-radius:10px;
+    box-shadow: 1px 2px 5px var(--shadow);
+}
+
+.progressBarContainer{
+    gap:5px;
+    flex-grow: 3;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.progressBar{
+    width: 100%;
+    height: 20px;
+    border-radius: 10px ;
+    background-color: #000080;
+}
+.projectBottom{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.shareWithText{
+    font-size: 10px;
+    color: #696969;
+    margin-bottom: 5px;
+}
+
+.projectTitle{
+    font-size: 18px;
+    max-width: 200px;
+}
+.dueDateContainer{
+    margin-left:2px;
+    display: flex;
+    align-items: center;
+    gap:5px;
+}
+
+.dueDateContainer svg{
+    width: 14px;
+    height: 14px;
+    color: #696969;
+}
+
+.dueDateContainer p{
+    font-size: 12px;
+    color: #696969;
+    font-weight: 500;
+}
+.dueDateProjectSubtitle{
+    font-size: 12px;
+}
+
+.projectMembers{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    gap:5px;
+}
+
+.member, .membersQuantity{
+    border: 1px solid var(--main-color);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 1px 2px 5px var(--shadow);
+}
+
+.membersQuantity{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.membersQuantity svg{
+    width: 12px;
+    height: 12px;
+
+}
+
+/* Modal */
+
+.createProjectModal{
+    position: absolute;
+    width: 400px;
+    height: fit-content;
+    left: 50%;
+    top:20%;
+    transform: translate(-50%);
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+    border-radius: 10px;
+    z-index: 12;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 0px 40px 0px;
+}
+
+.hidden{
+    display: none;
+}
+.projectModalHeader{
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.projectModalHeader p{
+    font-size: 15px;
+    color: #696969;
+    font-weight: 500;
+} 
+
+.projectModalHeader svg{
+    stroke: #696969;
+    cursor: pointer;
+}
+
+.projectNameContainer{
+    padding: 15px 15px;
+}
+
+.formList{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0px 15px 35px 15px;
+    width: 100%;
+    height: fit-content;
+}
+
+.categoryContainer, .dueDateContainerForm, .atribuitionsContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    width: 100%;
+    height: 40px;
+    gap:40px;
+}
+
+.formTitleContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 130px;
+    height: 30px;
+    gap:5px;
+    font-size: 16px;
+    color: #696969;
+}
+
+.formTitles{
+    display: flex;
+    align-items: center;
+    width: auto;
+    height: 100%;
+}
+
+.formTitleContainer svg{
+    width: 18px;
+    height: 18px;
+}
+
+.memberForm{
+    border: 1px solid var(--main-color);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    box-shadow: 1px 2px 5px var(--shadow);
+    margin-left: -10px;
+}
+
+.addMember{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    box-shadow: 1px 2px 5px var(--shadow);
+    cursor: pointer;
+}
+
+.addMember svg{
+    width: 18px;
+    height: 18px;   
+}
+
+.memberForm:first-child{
+    margin-left: 0px;
+}
+
+.membersList{
+    display: flex;
+}
+.atribuitionsForm{
+    display: flex;
+    gap:8px;
+}
+
+.buttonContainer{
+    padding: 0px 15px;
+}
+
+.createProjectButton{
+    width: 100%;
+    height: 40px;
+    border-radius:10px;
+    border: none;
+    background-color: var(--blue);
+    color: var(--main-color);
+    cursor: pointer;
+    transition: .2s ease-in-out;
+}
+
+.createProjectButton:hover{
+    background-color: #0000a5;
 }
