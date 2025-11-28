@@ -29,7 +29,12 @@ module.exports = {
             key: "id"
         }
       },
-      cor: {
+      cor_fundo: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "#3B82F6"
+      },
+      cor_texto: {
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: "#3B82F6"

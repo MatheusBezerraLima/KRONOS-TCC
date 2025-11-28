@@ -43,7 +43,6 @@ class CategoryTaskDAO{
             console.error(`Erro no DAO ao buscar categorias por id do projeto: ${error.message}`);
             throw error;
         }
-        
     }
 
     async findAllCategories(userId){
@@ -57,6 +56,19 @@ class CategoryTaskDAO{
             console.error(`Erro no DAO ao listar categorias: ${error.message}`);
                 throw error;
         }
+    }
+
+    async findAllByUserId(userId){
+        try{
+          return await CategoryTask.findAll({
+                where: {
+                    usuario_id: userId
+                }
+            })  
+        }catch(error){
+            console.error(`Erro no DAO ao buscar categorias por id do usuário: ${error.message}`);
+            throw error;
+        }   
     }
 
 }

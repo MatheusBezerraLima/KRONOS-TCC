@@ -13,26 +13,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      projeto_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: "projeto",
-          key: "id"
-        }
+      cor_fundo: {
+          type: Sequelize.STRING,
+          defaultValue: 'rgba(64, 64, 64, 0.1)',
       },
-      ordem: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-      },
-       usuario_id:{
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "usuario",
-          key: "id"
-        }
-    }});
+      cor_texto: {
+          type: Sequelize.STRING,
+          defaultValue: '#404040',
+      } 
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('status_tarefa');

@@ -22,7 +22,11 @@ module.exports = {
       },
       titulo: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
+      },
+      data_termino: {
+        type: Sequelize.DATE,
+        allowNull: true
       },
       descricao: {
         type: Sequelize.STRING,
@@ -63,7 +67,7 @@ module.exports = {
       prioridade: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: "Média"
+        defaultValue: "Media"
       },
       criador_id: {
         type: Sequelize.INTEGER,

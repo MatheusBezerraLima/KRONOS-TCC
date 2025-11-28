@@ -5,19 +5,19 @@ module.exports = {
   async up (queryInterface, Sequelize) {
    await queryInterface.bulkInsert('status_tarefa', [
      {
-        nome: 'Não iniciado',
-        ordem: 1,
-        usuario_id: 1,
+        nome: 'Pendente',
+        cor_fundo: 'rgba(64, 64, 64, 0.1)',
+        cor_texto: '#404040'
       },
       {
         nome: 'Em Andamento',
-        ordem: 2,
-        usuario_id: 1,
+        cor_fundo: 'rgba(52, 98, 191, 0.1)',
+        cor_texto: '#3462BF'
       },
       {
         nome: 'Concluída',
-        ordem: 3,
-        usuario_id: 1,
+        cor_fundo: 'rgba(17, 149, 0, 0.1)',
+        cor_texto: '#119500'
       }
    ], {});
   },

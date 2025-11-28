@@ -27,7 +27,7 @@ const Task = sequelize.define("Task", {
     },
     titulo: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     descricao: {
         type: DataTypes.STRING,
@@ -60,7 +60,7 @@ const Task = sequelize.define("Task", {
     prioridade: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: "Média"    
+        defaultValue: "Media"    
     },
     criador_id: {
         type: DataTypes.INTEGER,

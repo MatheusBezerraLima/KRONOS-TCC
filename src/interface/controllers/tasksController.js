@@ -4,9 +4,9 @@ class TasksController{
 
     async prepareTasksPageData(req, res){
         try{
-            const userId = req.user.id            
-            const {groupedTasks, allCategories, allStatus} = await taskServices.prepareTasksPageData(userId);            
-            res.render('tasks/index', {generalTasks: groupedTasks, allCategories: allCategories, allStatus: allStatus});
+            const userId = 4;           
+            const tasks = await taskServices.prepareTasksPageData(userId);            
+            res.json(tasks);    
         }catch(err){
             console.log("erro na listagem de tarefas", err);
         }
@@ -16,13 +16,13 @@ class TasksController{
         try{
             const dataForm = req.body;
             // dataForm.criador_id = 3;
-            // dataForm.criador_id = 11
+            dataForm.criador_id = 4;
 
             const taskCreated = await taskServices.createTask(dataForm);
             res.json(taskCreated);
-        }catch(err){
-            console.log("Erro:", err);
-            return err;
+        }catch(error){
+            console.log("Erro:", error);
+            return error;
         }     
 
     }
@@ -31,7 +31,7 @@ class TasksController{
         try{
             const id = req.params.id;
             const dataTask = req.body;
-            const userId = 3;
+            const userId = 4;
 
             const updatedTask = await taskServices.updateTask(id, userId, dataTask);
             res.status(201).json(updatedTask);
@@ -113,6 +113,33 @@ class TasksController{
         res.status(200).json(task)
         }catch(error){
             res.status(400).json({"Controller": "FindTask" ,"Erro": error})
+        }
+    }
+
+    async findCategoriesForUser(req, res){
+        const userId = 4;
+
+        try{
+            const categories = await taskServices.findCategoriesForUser(userId); 
+            
+            res.json(categories);
+        }catch(error){
+            console.log("Erro:", error);
+            return error;
+        }
+    }
+
+    async createCategory(req, res){
+        try{
+            const userId = 4;
+            const dataCategory = req.body;
+
+            const createdCategory = await taskServices.createCategory(dataCategory, userId);
+
+            res.json(createdCategory)
+        }catch(error){
+            console.log("Erro:", error);
+            return error;
         }
     }
 }

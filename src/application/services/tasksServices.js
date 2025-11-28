@@ -22,22 +22,18 @@ class TaskServices{
         }
 
         // Buscando no banco todos os dados necessarios
-        const [generalTasksInstances, allCategories, allStatus] = await Promise.all([
+        const [generalTasksInstances] = await Promise.all([
             tasksDAO.findAllGeneralTasks(userId),
-            categoryTaskDAO.findAllCategories(userId),
-            statusTaskDAO.findAllStatusTask()
+            // categoryTaskDAO.findAllCategories(userId),
+            // statusTaskDAO.findAllStatusTask()
         ]);
         
         const generalTasks = generalTasksInstances.map(instance => instance.get({ plain: true }));
         
         // Chamando uma função privada para organizar as tarefas por cateorias
-        const groupedTasks = this._groupTasksByCategory(generalTasks);
+        // const groupedTasks = this._groupTasksByCategory(generalTasks);
 
-        return {
-            groupedTasks,
-            allCategories,
-            allStatus
-        };
+        return generalTasks;
     }
 
     _groupTasksByCategory(tasks){
@@ -354,6 +350,58 @@ class TaskServices{
         return task.get({ plain: true });
     }
 
+    async findCategoriesForUser(userId){
+        if(!userId){
+            console.log("Usuario nao identificado");
+            throw new Error("Erro ao indentificar usuário!");
+        }
+        
+        const user = await userDAO.findById(userId); 
+
+        if(!user){
+            throw new Error("Usuário não encontrado!");
+        }
+
+        const categories = await categoryTaskDAO.findAllByUserId(userId);
+
+        if(!categories){
+            throw new Error("Categorias não encontradas");
+        }
+
+        return categories;
+    }
+
+    async createCategory(dataCategory, userId){
+        if(!userId){
+            console.log("Usuario nao identificado");
+            throw new Error("Erro ao indentificar usuário!");
+        }
+        
+        const user = await userDAO.findById(userId); 
+
+        if(!user){
+            throw new Error("Usuário não encontrado!");
+        }
+
+        if(!dataCategory.nome){
+            throw new Error("Necessário que a categoria tenha nome para ser criada.");
+        }
+
+        const category = {
+            nome: dataCategory.nome,
+            usuario_id: userId,
+            cor_fundo: dataCategory.cor_fundo,
+            cor_texto: dataCategory.cor_texto
+        }
+
+        const createdCategory = await categoryTaskDAO.create(category);
+
+        if(!createdCategory){
+            throw new Error("Não foi possivel criar a tarefa");
+        }
+
+        return createdCategory;
+    }
 }
 
 module.exports = new TaskServices()

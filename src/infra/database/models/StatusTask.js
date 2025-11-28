@@ -1,3 +1,4 @@
+const { toDefaultValue } = require("sequelize/lib/utils");
 const sequelize = require("../../../config/database");
 const { DataTypes } = require("sequelize");
 
@@ -11,25 +12,13 @@ const StatusTask = sequelize.define("StatusTask", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    usuario_id:{
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "usuario",
-          key: "id"
-        }
+    cor_fundo: {
+        type: DataTypes.STRING,
+        defaultValue: '',
     },
-    projeto_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: "projeto",
-            key: "id"
-        },
-    },
-    ordem: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0
+    cor_texto: {
+        type: DataTypes.STRING,
+        defaultValue: '',
     }
 }, {
     tableName: "status_tarefa",

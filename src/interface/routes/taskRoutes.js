@@ -9,8 +9,12 @@
     // Renderização
     routes.get('/tasks', tasksController.prepareTasksPageData);
 
+    routes.get('/categories/tasks', tasksController.findCategoriesForUser)
+
+    routes.post('/category/tasks', tasksController.createCategory)
     // Autenticação
-    routes.post('/tasks', validate(createTaskSchema), tasksController.createTask)
+    // routes.post('/tasks', validate(createTaskSchema), tasksController.createTask)
+    routes.post('/tasks', tasksController.createTask);
 
     routes.patch('/tasks/:id', tasksController.updateTask);
 

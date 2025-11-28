@@ -29,9 +29,9 @@ const serviceInsertUser = async (data) => {
     console.log("Profile", profileUser);
       
     const defaultCategories = [
-      {nome: "Pessoal", usuario_id: newUser.id},
-      {nome: "Estudos", usuario_id: newUser.id},
-      {nome: "Trabalho", usuario_id: newUser.id},
+      {nome: "Pessoal", usuario_id: newUser.id, cor_fundo: "#D0F8FF", cor_texto: "#00BCD4"},
+      {nome: "Estudos", usuario_id: newUser.id, cor_fundo: "#FFF8E1", cor_texto: "#FF8F00"},
+      {nome: "Trabalho", usuario_id: newUser.id, cor_fundo: "#F3E5F5", cor_texto: "#7B1FA2"},
     ];
 
     // Insere todas as categorias de uma vez (bulkCreate) DENTRO da transação

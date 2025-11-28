@@ -1,4 +1,4 @@
-
+const API_BASE_URL = '/api';
 const menuLinksSelection = document.querySelectorAll("ul .selection-aside")
 const categoryBoardSelection = document.querySelectorAll(".category")
 const closeMenu = document.querySelector(".toggleIcon")
@@ -78,43 +78,97 @@ function setupDatePickerForTask(taskElement) {
     const invisibleDateInput = taskElement.querySelector(".invisibleDateInput");
     const dateValue = taskElement.querySelector(".dueDateValue");
     
+    // Tenta pegar o ID da tarefa (do próprio container ou do span)
+    const taskId = taskElement.dataset.taskId || dateValue.getAttribute("data-id");
+
     if (!invisibleDateInput) return;
 
-    function dateUpdateForTask(dataObj, valueElement) {
-        const formattedDate = brazilDateFormat(dataObj);
-        valueElement.textContent = formattedDate;
+    // --- 1. Lógica para ler a data inicial do HTML (Texto -> Objeto Date) ---
+    let initialDate = null;
+    const rawText = dateValue.textContent.trim();
+    
+    // Se o texto for uma data válida (ex: 27/11/2025), convertemos
+    if (rawText.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+        const parts = rawText.split('/');
+        console.log(parts);
+        
+        // Nota: Mês em JS começa em 0 (Janeiro = 0, Novembro = 10)
+        initialDate = new Date(parts[2], parts[1] -1, parts[0]);
+    }
 
-        if (dataObj){
-            valueElement.classList.remove("noValue");
-            valueElement.classList.add("withValue");
-        } else {
-            valueElement.classList.remove("withValue");
-            valueElement.classList.add("noValue");
+    // --- 2. Atualiza APENAS o visual (Classes CSS) ---
+    // Isto roda no início para garantir que a cor está certa
+    if (initialDate) {
+        dateValue.classList.remove("noValue");
+        dateValue.classList.add("withValue");
+    } else {
+        dateValue.classList.remove("withValue");
+        dateValue.classList.add("noValue");
+    }
+
+    async function handleDateChange(selectedDates) {
+        // O flatpickr devolve a data selecionada como objeto Date
+        // e já ajustada para o meio-dia local para evitar problemas de fuso,
+        // mas para garantir, vamos usar os métodos 'get' locais.
+        const dateObj = selectedDates[0];
+        
+        if (!dateObj) {
+            // Se o utilizador limpou a data
+            dateValue.textContent = "Nenhuma data definida";
+            dateValue.classList.remove("withValue");
+            dateValue.classList.add("noValue");
+            
+            console.log(`Removendo data para tarefa ${taskId}...`);
+            try {
+                await requestUpdateTask({data_termino: null}, taskId);
+                console.log("🟩 Data removida com sucesso!");
+            } catch (error) {
+                console.error("Erro ao remover data:", error);
+            }
+            return;
+        }
+
+        // Atualiza visualmente (DD/MM/YYYY)
+        const formattedDate = brazilDateFormat(dateObj);
+        dateValue.textContent = formattedDate;
+        dateValue.classList.remove("noValue");
+        dateValue.classList.add("withValue");
+
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const dateToSend = `${year}-${month}-${day}`;
+
+        // Salva no Banco
+        console.log(`Salvando data ${dateToSend} para tarefa ${taskId}...`);
+        try {
+            await requestUpdateTask({data_termino: dateToSend}, taskId);
+            console.log("🟩 Data salva com sucesso!");
+        } catch (error) {
+            console.error("Erro ao salvar data:", error);
+            // Opcional: Reverter visualmente se falhar
         }
     }
-    
+    // --- 4. Inicializa o Flatpickr ---
     const fp = flatpickr(invisibleDateInput, {
-        dateFormat: "d.m.y",
+        dateFormat: "d.m.Y",
         allowInput: false,
+        defaultDate: initialDate, // <<< IMPORTANTE: Diz ao calendário qual é a data atual!
         locale: flatpickr.l10ns.pt,
         appendTo: selectDate, 
         position: "below",
-        onChange: function(selectedDates) {
-            const selectedDate = selectedDates[0];
-            dateUpdateForTask(selectedDate, dateValue); 
-        }
+        onChange: handleDateChange // Só chama a função de salvar quando o usuário muda algo
     });
     
-    // Listener para abrir o calendário
     selectDate.addEventListener("click", () => {
         fp.open();
     });
-
-    dateUpdateForTask(null, dateValue); // Inicializa a data
 }
 
 // Sua função brazilDateFormat pode permanecer global
 function brazilDateFormat(dataObj) {
+    console.log(dataObj);
+    
     const options = {day: "numeric", month: "numeric", year: "numeric"};
     return new Intl.DateTimeFormat("pt-br", options).format(dataObj);
 }
@@ -141,12 +195,12 @@ const selectPriorityModal = document.querySelector(".selectPriorityModal");
 const priorityOptionContainers = Array.from(document.querySelectorAll(".priorityBadgeContainer")); 
 const priorityOptionsWrapper = document.querySelector('.priorityOptionsWrapper'); 
 
-let currentPriority = "high";
+let currentPriority = "Media";
 
 const priorityMap = {
-    high: { type: 'priority', text: "Alta", class: "highPriority", allClasses: ["highPriority", "mediumPriority", "lowPriority"] },
-    medium: { type: 'priority', text: "Média", class: "mediumPriority", allClasses: ["highPriority", "mediumPriority", "lowPriority"] },
-    low: { type: 'priority', text: "Baixa", class: "lowPriority", allClasses: ["highPriority", "mediumPriority", "lowPriority"] }
+    Alta: { type: 'priority', text: "Alta", class: "highPriority", allClasses: ["highPriority", "mediumPriority", "lowPriority"] },
+    Media: { type: 'priority', text: "Média", class: "mediumPriority", allClasses: ["highPriority", "mediumPriority", "lowPriority"] },
+    Baixa: { type: 'priority', text: "Baixa", class: "lowPriority", allClasses: ["highPriority", "mediumPriority", "lowPriority"] }
 };
 
 
@@ -252,14 +306,24 @@ taskContainer.addEventListener('click', (event) => {
         const isStatus = !!optionContainer.querySelector('.statusBadge');
         const type = isStatus ? 'status' : 'priority';
         const dataAttribute = `data-${type}`;
+
+        
+        
         
         const badge = optionContainer.querySelector(`[${dataAttribute}]`);
         if (!badge) return;
         
         const newSelection = badge.getAttribute(dataAttribute);
-        
-        updateTaskBadges(task, type, newSelection);
 
+        if(type === "status"){
+            const dataAttributeId = `data-${type}-id`
+            const newSelectionId = badge.getAttribute(dataAttributeId)
+
+            updateTaskBadges(task, type, newSelection, newSelectionId);
+        }else{
+            updateTaskBadges(task, type, newSelection, {newSelectionId: null});
+        }
+        
         const modalClass = isStatus ? '.selectStatusModal' : '.selectPriorityModal';
         const modal = task.querySelector(modalClass);
         if (modal) {
@@ -290,7 +354,7 @@ taskContainer.addEventListener("keypress", (event) => {
 
 
 // Função adaptada que agora aceita o elemento da tarefa e o novo valor
-function updateTaskBadges(taskElement, type, newSelection) {
+async function updateTaskBadges(taskElement, type, newSelection, newSelectionId) {
     const map = (type === 'status') ? statusMap : priorityMap;
     const info = map[newSelection];
     
@@ -299,6 +363,7 @@ function updateTaskBadges(taskElement, type, newSelection) {
 
     const trigger = taskElement.querySelector(triggerClass);
     const header = taskElement.querySelector(headerClass);
+    const idTask = taskElement.getAttribute("data-task-id");
     
     const updateBadge = (badgeElement) => {
         badgeElement.classList.remove(...info.allClasses);
@@ -321,6 +386,23 @@ function updateTaskBadges(taskElement, type, newSelection) {
         updateBadge(header);
         header.setAttribute(`data-${type}`, newSelection);
     }
+
+    console.log("⭕DADOS", taskElement, type, newSelection, newSelectionId, idTask);
+
+    if(type === "status"){
+        const updatedTask = await requestUpdateTask({status_id: newSelectionId}, idTask)
+        if(newSelectionId === "3" || newSelectionId === "2"){
+        const customCheckboxes = taskElement.querySelector('.checkboxCustom'); 
+        checkBox(taskElement, customCheckboxes, idTask)  
+        }
+        console.log("🟩Tarefa Atualizada:", updatedTask);
+    }else{
+        const updatedTask = await requestUpdateTask({prioridade: newSelection}, idTask)
+        console.log("🟩Tarefa Atualizada:", updatedTask);
+    }
+    
+    
+    
 }
 
 /* Categoria */
@@ -329,10 +411,8 @@ function toggleCategoryModal (){
     selectCategoryModal.classList.toggle("selectCategoryHidden")
     createNewCategoryInput.focus()
 }
+
 document.addEventListener('click', (event) => {
-    document.querySelectorAll('.selectModalHidden, .selectCategoryHidden').forEach(modal => {
-    });
-    
     // Simplificando o fechamento:
     document.querySelectorAll('.selectStatusModal, .selectPriorityModal, .selectCategoryModal').forEach(modal => {
         const modalIsVisible = !modal.classList.contains('selectModalHidden') && !modal.classList.contains('selectCategoryHidden');
@@ -394,8 +474,10 @@ function addCategoryOption(taskElement, name, bg, txt) {
 const selectedCategoryDisplay = document.querySelector(".categoryBadge"); 
 const categoryBadgeHeader = document.querySelector('.categoryBadgeHeaderModal');
 
-function selectCategoryOption(taskElement, name, bg, txt) {
+async function selectCategoryOption(taskElement, name, bg, txt, categoryId) {
     const selectedCategoryDisplay = taskElement.querySelector(".categoryBadge:not(.categoryBadgeHeaderModal)"); 
+    const taskId = taskElement.getAttribute("data-task-id")  
+    
     const categoryBadgeHeader = taskElement.querySelector('.categoryBadgeHeaderModal');
 
     const updateBadge = (badgeElement) => {
@@ -421,14 +503,25 @@ function selectCategoryOption(taskElement, name, bg, txt) {
     
     // Atualiza o badge no cabeçalho do modal
     updateBadge(categoryBadgeHeader);
+
+    const updatedTask = await requestUpdateTask({categoria_id: categoryId}, taskId);
+
+    console.log("🟩Tarefa Atualizada:", updatedTask);
+
+
+    
 }
 
 function initializeTaskFunctions(taskElement) {
 
     setupDatePickerForTask(taskElement); 
-    addCheckEvent (taskElement);
+    addCheckEvent(taskElement);
 
     const categoryContainer = taskElement.querySelector(".categoryContainer");
+    const taskId = taskElement.getAttribute("data-task-id")
+    console.log("idhudddd:", taskId);
+    
+    
     const createNewCategoryInput = categoryContainer.querySelector(".createNewCategory");
     const selectCategoryModal = categoryContainer.querySelector(".selectCategoryModal");
     const categoryOptionsWrapper = categoryContainer.querySelector(".categoryOptionsWrapper");
@@ -445,13 +538,14 @@ function initializeTaskFunctions(taskElement) {
         }
     });
 
-    createNewCategoryInput.addEventListener("keyup", (event) => {
+    createNewCategoryInput.addEventListener("keyup", async(event) => {
         if (event.key === "Enter"){
             const categoryName = createNewCategoryInput.value.trim();
 
             if (categoryName === "") return;
-
+            
             const colorPair = getRandomColor();
+            console.log(colorPair);
 
             // Chamada adaptada: Passa o elemento da tarefa atual!
             addCategoryOption(taskElement, categoryName, colorPair.bg, colorPair.text);
@@ -459,6 +553,14 @@ function initializeTaskFunctions(taskElement) {
 
             createNewCategoryInput.value = "";
             selectCategoryModal.classList.add("selectCategoryHidden");
+
+            console.log("Category:", { "Nome": categoryName, "Back": colorPair.bg, "Text:": colorPair.text});
+            
+
+            const createdCategory = await requestCreateCategory({nome: categoryName, cor_fundo: colorPair.bg, cor_texto: colorPair.text});
+
+            const updatedTask = await requestUpdateTask({categoria_id: createdCategory.id}, taskId)
+            
         }
     });
     
@@ -468,55 +570,250 @@ function initializeTaskFunctions(taskElement) {
             const name = badge.textContent.trim();
             const bg = badge.style.backgroundColor;
             const txt = badge.style.color;
+            const categoryId = badge.getAttribute("data-category");
             
-            selectCategoryOption(taskElement, name, bg, txt);
+            
+            selectCategoryOption(taskElement, name, bg, txt, categoryId);
             selectCategoryModal.classList.add("selectCategoryHidden");
         }
     });
 }
 
+async function handleTaskUpdate(event) {
+    const inputTarget = event.target;
+    
+    const newText = inputTarget.value.trim();
+    const idItem = inputTarget.dataset.id;
 
-function createNewTaskRow() {
+    console.log(`A salvar o item ${idItem} com o texto: "${newText}"`);
+
+    const taskUpdated = await requestUpdateTask({titulo: newText}, idItem);
+
+    console.log("🟩Tarefa Atualizada:", taskUpdated);
+}
+
+async function requestCreateCategory(dataCategory){
+    try{
+        const response = await fetch(`${API_BASE_URL}/category/tasks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataCategory)
+        }); 
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Falha ao criar a tarefa.');
+        }
+
+        const newCategory = await response.json();
+        
+        return newCategory;
+
+    }catch(error){
+        console.error("Falha ao chamar api para criar tarefa:", error);
+        alert("Não foi possível chamar api para criar a tarefa: " + error.message);
+        return;
+    }
+}
+
+// Chamar API para criar tarefa
+async function requestCreateTask(){
+    const dataDefaultTask = {
+        "status_id": 1,
+        "prioridade": "Media",
+    }
+
+    try{
+        const response = await fetch(`${API_BASE_URL}/tasks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataDefaultTask)
+        }); 
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Falha ao criar a tarefa.');
+        }
+
+        const newTask = await response.json();
+        
+        return newTask;
+        
+    }catch(error){
+        console.error("Falha ao chamar api para criar tarefa:", error);
+        alert("Não foi possível chamar api para criar a tarefa: " + error.message);
+        return;
+    }
+    
+}
+
+// Chamar a api para atualizar tarefa 
+async function requestUpdateTask(dataTaskUpdated, taskId){
+    try{
+        if(!dataTaskUpdated || !taskId){
+            alert("Necessário um dado para atualizar e o id da tarefa");
+            return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+            method: "PATCH",
+            headers: { 'Content-Type': 'application/json' },
+            body:  JSON.stringify(dataTaskUpdated)
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Falha ao criar a tarefa.');
+        }
+
+        const updatedTask = await response.json();
+
+        return updatedTask;
+    }catch(error){
+        console.error("Falha chamar api para atualizar tarefa:", error);
+        alert("Não ao atualizar tarefa na api: " + error.message);
+        return;
+    }
+}
+
+// Buscar todas as categorias na API
+async function requestCategoriesForUser(){
+    try{
+        const response = await fetch(`${API_BASE_URL}/categories/tasks`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        }); 
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Falha ao listar categorias do usuario');
+        }
+
+        const categories = await response.json();
+
+        return categories;
+    }catch(error){
+        console.error("Falha ao buscar categorias na api:", error);
+        alert("Não buscar categorias na api: " + error.message);
+        return;
+    }
+}
+
+function formatDateForDisplay(dateString) {
+    if (!dateString) return "Nenhuma data definida";
+    
+    const date = new Date(dateString);
+    
+    // Verifica se a data é válida
+    if (isNaN(date.getTime())) return "Data inválida";
+    
+    // Opção 1: Usar toLocaleDateString (Mais simples e robusto)
+    // O 'pt-BR' garante o formato dia/mês/ano
+    return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        timeZone: 'UTC'
+    });
+}
+
+async function createNewTaskRow(taskDeafult, categories) {
+    console.log("Tarefa Padrão:", taskDeafult);
+    console.log("Categorias:", categories);
+
+    var classStatus;
+    var classPriority;
+    var classCategory;
+    var valueCategoryName;
+    var statusCheckBox;
+    let badgeDeafult = ` <div class="categoryBadge noCategorySelected"></div>` 
+
+    if(!taskDeafult.titulo){
+        taskDeafult.titulo = ""
+    }
+
+    if(!taskDeafult.categoryTask){
+        classCategory = "noCategorySelected";
+        valueCategoryName = ""
+    }else{
+        classCategory = ""
+        valueCategoryName = taskDeafult.categoryTask.nome
+
+        badgeDeafult = ` <div class="categoryBadge" style="background-color: ${taskDeafult.categoryTask.cor_fundo}; color: ${taskDeafult.categoryTask.cor_texto};"  data-category="${taskDeafult.categoryTask.id}"><span class="categoryNameText">${valueCategoryName}</span></div>` 
+    }
+    
+    if(taskDeafult.statusTask.nome === "Pendente"){
+        classStatus = "toDoStatus"
+    }else if(taskDeafult.statusTask.nome === "Em Andamento"){
+        classStatus = "doingStatus"
+    }else{
+        classStatus = "doneStatus"
+        statusCheckBox = "checked"
+    }
+    
+    if(taskDeafult.prioridade === "Alta"){
+        classPriority = "highPriority";
+    }else if(taskDeafult.prioridade === "Media"){
+        classPriority = "mediumPriority"
+    }else{
+        classPriority = "lowPriority"
+    }
+    
+    
+    const dateValue = formatDateForDisplay(taskDeafult.data_termino);
+    
+    
+    const categoriesHtml = categories.map((cat, index) => {
+    return `
+        <div class="categoryBadgeContainer" data-category="${cat.id}">
+            <div class="categoryBadge" style="background-color: ${cat.cor_fundo}; color: ${cat.cor_texto};"  data-category="${cat.id}">
+                <p>${cat.nome}</p>
+            </div>
+        </div>
+    `;
+    }).join('');
+    
     const taskRow = document.createElement("div");
     taskRow.classList.add("task");
+    taskRow.setAttribute(`data-task-id`, `${taskDeafult.id}`)
 
     taskRow.innerHTML = `
         <div class="taskNameContainer">
-            <input type="checkbox" class="checkBoxTask">
+            <input type="checkbox" class="checkBoxTask" ${statusCheckBox}>
             <span class= "checkboxCustom">
                 <svg class = "checkIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
             </span>
-            <input type="text" class="invisibleTaskNameInput">
+            <input type="text" class="invisibleTaskNameInput" data-id="${taskDeafult.id}" value="${taskDeafult.titulo}">
         </div>
 
         <div class="dueDateContainer taskClickArea">
-            <span class="dueDateValue"></span>
+            <span class="dueDateValue" data-id="${taskDeafult.id}">${dateValue}</span>
             <input type="text" class="invisibleDateInput" style="display: none;">
         </div>
 
         <div class="statusContainer">
-            <div class="statusBadge toDoStatus statusClickArea">
+            <div class="statusBadge ${classStatus} statusClickArea">
                 <div class="statusMarker toDoMarker"></div>
-                <span>Pendente</span>
+                <span>${taskDeafult.statusTask.nome}</span>
             </div>
             <div class="selectStatusModal selectModalHidden">
                 <div class="statusModalHeader">
-                    <div class="statusBadge toDoStatus selectedStatus" data-status="toDo">
+                    <div class="statusBadge toDoStatus selectedStatus" data-status="toDo" data-status-id="1">
                         <div class="statusMarker toDoMarker"></div>
                         <span>Pendente</span>
                     </div>
                 </div>
                 <div class="selectOptionText">Selecione uma opção</div>
                 <div class="optionsWrapper">
-                    <div class="statusBadgeContainer"><div class="statusBadge toDoStatus" data-status="toDo"><div class="statusMarker toDoMarker"></div><span>Pendente</span></div></div>
-                    <div class="statusBadgeContainer"><div class="statusBadge doingStatus" data-status="doing"><div class="statusMarker doingMarker"></div><span>Em andamento</span></div></div>
-                    <div class="statusBadgeContainer"><div class="statusBadge doneStatus" data-status="done"><div class="statusMarker doneMarker"></div><span>Concluído</span></div></div>
+                    <div class="statusBadgeContainer"><div class="statusBadge toDoStatus" data-status="toDo" data-status-id="1"><div class="statusMarker toDoMarker"></div><span>Pendente</span></div></div>
+                    <div class="statusBadgeContainer"><div class="statusBadge doingStatus" data-status="doing" data-status-id="2"><div class="statusMarker doingMarker"></div><span>Em andamento</span></div></div>
+                    <div class="statusBadgeContainer"><div class="statusBadge doneStatus" data-status="done" data-status-id="3"><div class="statusMarker doneMarker"></div><span>Concluído</span></div></div>
                 </div>
             </div>
         </div>
 
         <div class="categoryContainer taskClickArea">
-            <div class="categoryBadge noCategorySelected"></div>
+            ${badgeDeafult}
             <div class="selectCategoryModal selectCategoryHidden">
                 <div class="categoryModalHeader">
                     <div class="categoryBadgeHeader">
@@ -525,25 +822,27 @@ function createNewTaskRow() {
                     <input type="text" class="createNewCategory">
                 </div>
                 <div class="selectOptionText">Selecione uma opção ou crie uma</div>
-                <div class="categoryOptionsWrapper"></div>
+                <div class="categoryOptionsWrapper">
+                ${categoriesHtml}
+                </div>
             </div>
         </div>
 
         <div class="priorityContainer">
-            <div class="priorityBadge highPriority priorityClickArea">
-                <span>Alta</span>
+            <div class="priorityBadge ${classPriority} priorityClickArea">
+                <span>${taskDeafult.prioridade}</span>
             </div>
             <div class="selectPriorityModal selectModalHidden">
                 <div class="priorityModalHeader">
-                    <div class="priorityBadge highPriority selectedPriority" data-priority="high">
-                        <span>Alta</span>
+                    <div class="priorityBadge ${classPriority} selectedPriority" data-priority="${taskDeafult.prioridade}">
+                        <span>${taskDeafult.prioridade}</span>
                     </div>
                 </div>
                 <div class="selectOptionText">Selecione uma opção</div>
                 <div class="priorityOptionsWrapper">
-                    <div class="priorityBadgeContainer"><div class="priorityBadge highPriority" data-priority="high"><span>Alta</span></div></div>
-                    <div class="priorityBadgeContainer"><div class="priorityBadge mediumPriority" data-priority="medium"><span>Média</span></div></div>
-                    <div class="priorityBadgeContainer"><div class="priorityBadge lowPriority" data-priority="low"><span>Baixa</span></div></div>
+                    <div class="priorityBadgeContainer"><div class="priorityBadge highPriority" data-priority="Alta"><span>Alta</span></div></div>
+                    <div class="priorityBadgeContainer"><div class="priorityBadge mediumPriority" data-priority="Media"><span>Média</span></div></div>
+                    <div class="priorityBadgeContainer"><div class="priorityBadge lowPriority" data-priority="Baixa"><span>Baixa</span></div></div>
                 </div>
             </div>
         </div> 
@@ -557,11 +856,24 @@ function createNewTaskRow() {
     return taskRow;
 }
 
-createTask.addEventListener("click", () => {
-    const newTaskElement = createNewTaskRow(); 
+createTask.addEventListener("click", async() => {
+    const taskDeafult = await requestCreateTask()
+    const categories = await requestCategoriesForUser();
+    const newTaskElement = await createNewTaskRow(taskDeafult, categories); 
     taskContainer.insertAdjacentElement("beforeend", newTaskElement);
 
     const newTaskInput = newTaskElement.querySelector(".invisibleTaskNameInput");
+
+    newTaskInput.addEventListener('blur', (event) => {
+    handleTaskUpdate(event);
+    });
+
+    newTaskInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {      
+            event.preventDefault(); 
+            newTaskInput.blur(event); 
+        }
+    });
 
     if (newTaskInput) {
         newTaskInput.select();
@@ -569,22 +881,69 @@ createTask.addEventListener("click", () => {
     }
 });
 
+// Buscar tarefas do usuário na API
+
+async function requestTasksForUser(){
+    try{
+        const response = await fetch(`${API_BASE_URL}/tasks`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        }); 
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Falha ao listar tarefas do usuario');
+        }
+
+        const tasks = await response.json();
+
+        return tasks;
+    }catch(error){
+        console.error("Falha ao criar a tarefa:", error);
+        alert("Não foi possível criar a tarefa: " + error.message);
+        return;
+    }
+}
+
+
 /* Criar a tarefa assim que a pagina abrir */
+document.addEventListener('DOMContentLoaded', async() => {
 
-document.addEventListener('DOMContentLoaded', () => {
-
-    const newTaskElement = createNewTaskRow(); 
+    // const newTaskElement = createNewTaskRow(); 
 
 
-    if (taskContainer) {
+    // if (taskContainer) {
+    //     taskContainer.insertAdjacentElement("beforeend", newTaskElement);
+    // }
+
+    // const newTaskInput = newTaskElement.querySelector(".invisibleTaskNameInput");
+    // if (newTaskInput) {
+    //     newTaskInput.select();
+    //     newTaskInput.focus();
+    // }
+    
+    const tasks = await requestTasksForUser();
+    const categories = await requestCategoriesForUser();
+
+    for (const task of tasks) {
+        const newTaskElement = await createNewTaskRow(task, categories); 
+        
         taskContainer.insertAdjacentElement("beforeend", newTaskElement);
+
+        const newTaskInput = newTaskElement.querySelector(".invisibleTaskNameInput");
+
+        newTaskInput.addEventListener('blur', (event) => {
+        handleTaskUpdate(event);
+        });
+
+        newTaskInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {      
+                event.preventDefault(); 
+                taskTitleInput.blur(event); 
+            }
+        });
     }
 
-    const newTaskInput = newTaskElement.querySelector(".invisibleTaskNameInput");
-    if (newTaskInput) {
-        newTaskInput.select();
-        newTaskInput.focus();
-    }
 });
 
 /* Modal de ordenar por */
@@ -609,27 +968,72 @@ document.addEventListener("click", (event) => {
     
 })
 
+
+// async function checkBox(taskElement, customCheckboxes, taskId){
+//     const inputCheckbox = customCheckboxes.previousElementSibling;
+//         const taskNameInput = customCheckboxes.nextElementSibling;
+//         const taskName = taskNameInput ? taskNameInput.value.trim() : ''; 
+
+//         if (taskName.length > 0) {
+            
+//             if (inputCheckbox && inputCheckbox.type === 'checkbox') {
+//                 inputCheckbox.checked = !inputCheckbox.checked;
+//                 inputCheckbox.dispatchEvent(new Event('change'));
+
+//                 const updatedTask = await requestUpdateTask({status_id: 3}, taskId);
+//                 updateTaskBadges(taskElement, "status", "done", 3)
+//             }
+//         } else {
+//             showWarningMessage(2000)
+//         }
+// }
+
+async function checkBox(taskElement, customCheckboxSpan, taskId) {
+    // 1. Encontra os elementos relacionados
+    const inputCheckbox = customCheckboxSpan.previousElementSibling;
+    const taskNameInput = customCheckboxSpan.nextElementSibling; // ou onde estiver o input do nome
+    const taskName = taskNameInput ? (taskNameInput.value || taskNameInput.textContent).trim() : '';
+
+    if (taskName.length > 0) {
+        if (inputCheckbox && inputCheckbox.type === 'checkbox') {
+            
+            // 2. Inverte o estado atual (Toggle)
+            inputCheckbox.checked = !inputCheckbox.checked;
+            inputCheckbox.dispatchEvent(new Event('change'));
+
+            console.log("Checked:", inputCheckbox.checked);
+            
+            const newStatusId = inputCheckbox.checked ? 3 : 2;
+
+            const newStatusClass = inputCheckbox.checked ? "done" : "doing"
+            
+            try {
+                // 4. Chama a API com o ID dinâmico
+                console.log(`Atualizando tarefa ${taskId} para status ${newStatusId}...`);
+                const updatedTask = await requestUpdateTask({ status_id: newStatusId }, taskId);
+                updateTaskBadges(taskElement, "status", newStatusClass, newStatusId)
+            } catch (error) {
+                console.error("Erro ao atualizar checkbox:", error);
+                // Reverte o checkbox se a API falhar
+                inputCheckbox.checked = !inputCheckbox.checked; 
+                alert("Erro ao atualizar o status da tarefa.");
+            }
+        }
+    } else {
+            showWarningMessage(2000)
+    }
+}
+
+
 /* função para checar as boxes das tarefas */
 
-function addCheckEvent (taskElement) {
+async function addCheckEvent (taskElement) {
     const customCheckboxes = taskElement.querySelector('.checkboxCustom'); 
+    const taskId = taskElement.getAttribute("data-task-id");
     
     if (customCheckboxes) {
-        customCheckboxes.addEventListener('click', () => {
-            
-            const inputCheckbox = customCheckboxes.previousElementSibling;
-            const taskNameInput = customCheckboxes.nextElementSibling;
-            const taskName = taskNameInput ? taskNameInput.value.trim() : ''; 
-
-            if (taskName.length > 0) {
-                
-                if (inputCheckbox && inputCheckbox.type === 'checkbox') {
-                    inputCheckbox.checked = !inputCheckbox.checked;
-                    inputCheckbox.dispatchEvent(new Event('change'));
-                }
-            } else {
-                showWarningMessage(2000)
-            }
+        customCheckboxes.addEventListener('click', async() => {
+            checkBox(taskElement, customCheckboxes, taskId)
         });
     }
 }

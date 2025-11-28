@@ -11,29 +11,13 @@ class TasksDAO{
                 },
                 include: [
                     {
-                        model: CategoryTask,
-                        attributes: ['id', 'nome'] 
+                        model: CategoryTask, 
+                        as: "categoryTask"    
                     },
                     {
                         model: StatusTask,
+                        as: "statusTask"
                     },
-                    {
-                        model: User,
-                        as: 'assignedMembers', // Usa o alias da sua associação Task -> User
-                        // IMPORTANTE: Seleciona apenas os dados não sensíveis dos membros
-                        attributes: ['id', 'nome'],
-                        // Inclui o perfil para buscar o avatar
-                        include: [{
-                            model: Profile,
-                            as: 'profile',
-                            attributes: ['foto_perfil']
-                        }, {
-                           model: CategoryTask,
-                           attributes: [''] 
-                        }],
-                        
-                        through: { attributes: [] } 
-                    }
                 ]
             });
         }catch(error){
@@ -43,6 +27,48 @@ class TasksDAO{
         
     };
 
+    // async findAllGeneralTasks(userId){
+    //     try{
+    //         return await Task.findAll({
+    //             where: {
+    //                 projeto_id: null,
+    //                 criador_id: userId
+    //             },
+    //             include: [
+    //                 {
+    //                     model: CategoryTask,
+    //                     attributes: ['id', 'nome'] 
+    //                 },
+    //                 {
+    //                     model: StatusTask,
+    //                 },
+    //                 {
+    //                     model: User,
+    //                     as: 'assignedMembers', // Usa o alias da sua associação Task -> User
+    //                     // IMPORTANTE: Seleciona apenas os dados não sensíveis dos membros
+    //                     attributes: ['id', 'nome'],
+    //                     // Inclui o perfil para buscar o avatar
+    //                     include: [{
+    //                         model: Profile,
+    //                         as: 'profile',
+    //                         attributes: ['foto_perfil']
+    //                     }, {
+    //                        model: CategoryTask,
+    //                        attributes: [''] 
+    //                     }],
+                        
+    //                     through: { attributes: [] } 
+    //                 }
+    //             ]
+    //         });
+    //     }catch(error){
+    //         console.error(`Erro ao buscar todas as tasks ${error.message}`);
+    //         throw error;           
+    //     }
+        
+    // };
+    
+    
     async findByIdWithDetails(id) {
         try {
             return await Task.findByPk(id, {
@@ -74,8 +100,12 @@ class TasksDAO{
             await newTask.reload({
                 include: [
                     {
-                        model: CategoryTask,
-                        as: 'categoryTask'
+                        model: CategoryTask, 
+                        as: "categoryTask"    
+                    },
+                    {
+                        model: StatusTask,
+                        as: "statusTask"
                     }
                 ]
             });

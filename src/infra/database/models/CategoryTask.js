@@ -27,11 +27,16 @@ const CategoryTask = sequelize.define("CategoryTask", {
             key: "id"
         }
     },
-    cor: {
+    cor_fundo: {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: "#3B82F6"
-    }
+    },
+    cor_texto: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "#3B82F6"
+      }
 }, {
     tableName: "categoria_tarefa",
     timestamps: false
