@@ -4,8 +4,13 @@ class TasksController{
 
     async prepareTasksPageData(req, res){
         try{
-            const userId = 4;           
-            const tasks = await taskServices.prepareTasksPageData(userId);            
+            const userId = 4;
+            let filter;
+            if(req.body.filter){
+                filter = req.body.filter
+            }   
+                    
+            const tasks = await taskServices.prepareTasksPageData(userId, filter);            
             res.json(tasks);    
         }catch(err){
             console.log("erro na listagem de tarefas", err);

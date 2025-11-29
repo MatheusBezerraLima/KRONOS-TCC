@@ -861,6 +861,14 @@ createTask.addEventListener("click", async() => {
     const categories = await requestCategoriesForUser();
     const newTaskElement = await createNewTaskRow(taskDeafult, categories); 
     taskContainer.insertAdjacentElement("beforeend", newTaskElement);
+    taskContainer.scrollTop = taskContainer.scrollHeight;
+                        
+    // Se quiser uma animação suave (opcional, mas bonito):
+    taskContainer.scrollTo({
+        top: taskContainer.scrollHeight,
+        behavior: 'smooth'
+    });
+
 
     const newTaskInput = newTaskElement.querySelector(".invisibleTaskNameInput");
 

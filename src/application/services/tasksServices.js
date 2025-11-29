@@ -9,7 +9,7 @@ const userProjectRoleDAO = require('../../infra/database/repositories/userProjec
 const sprintDAO = require('../../infra/database/repositories/sprintRepository');
 
 class TaskServices{
-    async prepareTasksPageData(userId){
+    async prepareTasksPageData(userId, filter){
 
         if(!userId){
             throw new Error("Id do usuário inconsistente");
@@ -29,9 +29,13 @@ class TaskServices{
         ]);
         
         const generalTasks = generalTasksInstances.map(instance => instance.get({ plain: true }));
+
+        if(filter === "category"){
+            // Chamando uma função privada para organizar as tarefas por cateorias
+            const groupedTasks = this._groupTasksByCategory(generalTasks);
+            return groupedTasks;
+        }
         
-        // Chamando uma função privada para organizar as tarefas por cateorias
-        // const groupedTasks = this._groupTasksByCategory(generalTasks);
 
         return generalTasks;
     }
