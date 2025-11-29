@@ -4,19 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Projeto</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">   
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script> 
+
     <link rel="stylesheet" href="/public/css/projectPage.css">
     <script src="/public/javascript/projectPage.js" defer></script>
 </head>
 <body>
     <div class="filter hidden"></div>
+
     <div class="createProjectModal hidden">
         <div class="projectModalHeader">
-            <p>Novo projeto</p>
+            <p>Criar novo projeto</p>
             <svg class="closeModalIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </div>
 
         <div class="projectNameContainer">
-            <h2>Site de ingles</h2>
+            <input class="invisibleProjectNameInput" type="text" placeholder="Novo projeto" style="display: none;">
         </div>
 
         <div class="formList">
@@ -27,8 +32,21 @@
                 </div>
 
                 <div class="categoryForm">
-                    <div class="categoryBadge">
-                        <div class="projectCategoryBadge"></div>
+                    <div class="categoryBadgeModal">
+                        <div class="projectCategoryBadgeModal">
+                            <span class="categoryNameText">Geral</span>
+                        </div>
+                    </div>
+
+                    <div class="categoryModal hidden">
+                        <div class="categoryModalHeader">
+                            <div class="categoryBadgeHeader">
+                                <div class="categoryBadgeHeaderModal noCategorySelected"></div> 
+                            </div>
+                            <input type="text" class="createNewCategory">
+                        </div>
+                        <div class="selectOptionText">Selecione uma opção ou crie uma</div>
+                        <div class="categoryOptionsWrapper"></div>
                     </div>
                 </div>
             </div>
@@ -39,8 +57,11 @@
                     <span class="formTitles">Prazo</span>
                 </div>
 
-                 <div class="dueDateForm">
-                    <p>24/09/34</p>
+                <div class="dueDateForm">
+                    <div class="selectDateContainer">
+                            <span class="dateValue">Adicionar prazo</span>
+                    </div>
+                    <input type="text" class="invisibleDateInput" style="display: none;">
                 </div>
             </div>
 
@@ -58,7 +79,7 @@
                     </div>
 
                     <div class="addMemberContainer">
-                        <div class="addMember" style="background-color: gray;">
+                        <div class="addMember">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                         </div>
                     </div>
@@ -69,6 +90,34 @@
             <input class="createProjectButton" type="button" value="Criar Projeto">
         </div>
     </div>
+    
+    <div class="atribuitionModal hidden">
+                    <div class="atribuitionModalHeader">
+                        <svg class="closeAtribuitionModal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                        <p>Adicionar membros</p>
+                    </div>
+                    <div class="atribuitionModalContent">
+                        <div class="addMemberContainerModal">
+                            <div class="atribuitionInputs">
+                                <input class="inviteMemberInput" type="text" placeholder="Adicionar por email">
+                                <input class="inviteMemberButton" type="button" value="Convidar">
+                            </div>
+                        </div>
+
+                        <div class="invitedMembersList">
+                            <p>Membros adicionados</p>
+                            <div class="invitedMember">      
+                                <div class="memberProfilePhoto"></div>
+                                <span class="memberName">Matheus Bezerra Lima</span>
+                            </div>
+                            <div class="invitedMember">      
+                                <div class="memberProfilePhoto"></div>
+                                <span class="memberName">Matheus Bezerra Lima</span>
+                            </div>
+                        </div>
+                    </div>
+    </div>
+
     <aside class="aside">
             <div class="logo">
                 <a href="#" aria-label="Página principal">LOGO</a>
@@ -182,32 +231,7 @@
                         <div class="iconContainer">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                         </div>
-                    </div>
-                    <div class="project">
-                        <div class="projectTop">
-                             <strong class="projectTitle">Trabalho de ingles</strong>
-                            <div class="projectCategoryBadge"></div>
-                        </div>
-
-                        <div class="progressBarContainer">
-                            <div class="progressBar"></div>
-                            <div class="dueDateContainer">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
-                                <p>Prazo: <span class="dueDateProjectSubtitle">17/03/225</span></p>
-                            </div> 
-                        </div>
-
-                        <div class="projectBottom">   
-                            <p class="shareWithText">Compartilhado com</p>                     
-                            <div class="projectMembers">
-                                <div class="member" style="background-color: aqua;"></div>
-                                <div class="member" style="background-color: bisque;"></div>
-                                <div class="member" style="background-color: bisque;"></div>
-                                <div class="membersQuantity" style="background-color: gray;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                <p class="quantityNumber">6</p>
-                            </div>
-                    </div>
+                    </div> 
                 </section>
             </main>
         </div> <!-- main-content -->

@@ -418,7 +418,6 @@ function selectCategoryOption(taskElement, name, bg, txt) {
 
     // Atualiza o badge principal da tarefa
     updateBadge(selectedCategoryDisplay);
-    
     // Atualiza o badge no cabeçalho do modal
     updateBadge(categoryBadgeHeader);
 }

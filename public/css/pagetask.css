@@ -693,7 +693,6 @@ main{
     gap: 5px; 
     padding: 3px;
 
-
 }
 
 .createNewCategory{
@@ -728,6 +727,7 @@ main{
 .noCategorySelected{
     display: none;
 }
+
 .noPrioritySelected {
     display: none;
 }
