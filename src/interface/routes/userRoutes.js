@@ -1,7 +1,7 @@
 const express = require('express');
 const routes = express.Router()
 const path = require('path'); 
-const { getRegisterUser, getFindById, getAuthenticateUser, getListAllUsers, getChangePasswordUser, getFindByEmail} = require('../controllers/userController');
+const { getRegisterUser, getFindById, getAuthenticateUser, getListAllUsers, getChangePasswordUser, getFindByEmail, searchUsers} = require('../controllers/userController');
 const verifyAuthToken = require('../middlewares/authenticateToken');
 const verifyRole = require('../middlewares/authorizeAdmin');
 const validate = require("../middlewares/validate");
@@ -43,5 +43,9 @@ routes.post('/change-password', verifyAuthToken, async(req, res) => {
 });
 
 routes.get("/listar-perfis", profileUserDAO.findAll);
+
+routes.get('/users/search', async(req, res) => {
+    await searchUsers(req, res);
+})
 
 module.exports = routes;

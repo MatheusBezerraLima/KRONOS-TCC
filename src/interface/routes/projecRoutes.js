@@ -4,17 +4,17 @@ const routes = express.Router();
 const verifyAuthToken = require('../middlewares/authenticateToken');
 const path = require("path");
 
-routes.get('/projetos', projectController.listProjects)
+routes.get('/projetos', verifyAuthToken, projectController.listProjects)
 
 routes.get('/projetos/:projectId/', projectController.preparePageData);
 
 // Colocar verificação aqui 
-routes.post('/projetos', projectController.create);
+routes.post('/projetos', verifyAuthToken, projectController.create);
 
 // Colocar verificação aqui 
-routes.post('/:projectId/invites', projectController.inviteMembers);
+routes.post('/:projectId/invites',verifyAuthToken,  projectController.inviteMembers);
 
-routes.post('/projetos/:projectId/membros', projectController.addMember)
+routes.post('/projetos/:projectId/membros', verifyAuthToken, projectController.addMember)
 
 routes.get('/projetos/:projectId/sprint-view', projectController.getSprintViewData)
 

@@ -235,17 +235,20 @@ class ProjectServices{
         return { shapedSprints, backlogTasks };
     }
 
-    async create({titulo, descricao, dataTermino}, userId){
+    async create({titulo, dataTermino, categoria}, userId){
         if(!userId){
             throw new Error("ID do usuário não fornecido");
         }
         
         const t = await sequelize.transaction();
 
+
+        console.log(titulo, dataTermino, categoria);
+        
         try{
             const newProject = await projectDAO.create({
-                titulo, 
-                descricao,
+                "titulo": titulo, 
+                "categoria_id" : categoria,
                 "criador_id": userId,
                 "data_termino": dataTermino
             }, {transaction: t});
@@ -284,12 +287,10 @@ class ProjectServices{
             const defaultCategories = [      
                 {
                     nome: 'Geral',
-                    usuario_id: userId,
                     projeto_id: newProject.id,
                 },
                 {
                     nome: 'Pesquisa',
-                    usuario_id: userId,
                     projeto_id: newProject.id,
                 },
             ]

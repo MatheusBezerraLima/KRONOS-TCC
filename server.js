@@ -79,12 +79,17 @@ app.use('/api/projetos/:projectId/colunas', boardColumnRoutes);
 app.use('/api/friendships', friendshipRoutes);
 
 app.get('/', indexController.renderDashboard);
+
 app.get('/projetos/:projectId/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'boardPage.html'))
 });
 
 app.get('/tasks/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'pagetask.html'))
+});
+
+app.get('/projetos/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'projectPage.html'))
 });
 
 server.listen(PORT, '0.0.0.0', async() => {

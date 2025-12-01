@@ -14,6 +14,14 @@ const Project = sequelize.define("Project", {
     descricao: {
       type: DataTypes.TEXT
     },
+    categoria_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "categoria_tarefa",
+          key: "id"
+        }
+    },
     criador_id : {
       type: DataTypes.INTEGER,
       allowNull: false,

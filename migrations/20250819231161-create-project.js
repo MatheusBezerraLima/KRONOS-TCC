@@ -15,6 +15,14 @@ module.exports = {
       descricao: {
         type: Sequelize.TEXT
       },
+      categoria_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: "categoria_tarefa",
+          key: "id"
+        }
+      },
       criador_id: {
         type: Sequelize.INTEGER,
         allowNull: false,

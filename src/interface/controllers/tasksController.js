@@ -4,13 +4,9 @@ class TasksController{
 
     async prepareTasksPageData(req, res){
         try{
-            const userId = 4;
-            let filter;
-            if(req.body.filter){
-                filter = req.body.filter
-            }   
+            const userId = req.user.id;  
                     
-            const tasks = await taskServices.prepareTasksPageData(userId, filter);            
+            const tasks = await taskServices.prepareTasksPageData(userId);            
             res.json(tasks);    
         }catch(err){
             console.log("erro na listagem de tarefas", err);
@@ -20,8 +16,8 @@ class TasksController{
     async createTask(req, res){
         try{
             const dataForm = req.body;
-            // dataForm.criador_id = 3;
-            dataForm.criador_id = 4;
+            dataForm.criador_id = req.user.id;
+;
 
             const taskCreated = await taskServices.createTask(dataForm);
             res.json(taskCreated);
@@ -36,7 +32,7 @@ class TasksController{
         try{
             const id = req.params.id;
             const dataTask = req.body;
-            const userId = 4;
+            const userId = req.user.id;
 
             const updatedTask = await taskServices.updateTask(id, userId, dataTask);
             res.status(201).json(updatedTask);
@@ -51,8 +47,8 @@ class TasksController{
         try{
             const { taskId } = req.params;
             const { newColumnId } = req.body;
-            // const currentUserId = req.user.id;
-            const currentUserId = 3;
+            const currentUserId = req.user.id;
+   
             
             if (!newColumnId) {
                  return res.status(400).json({ message: 'O ID da nova coluna é obrigatório.' });
@@ -122,7 +118,7 @@ class TasksController{
     }
 
     async findCategoriesForUser(req, res){
-        const userId = 4;
+        const userId = req.user.id;
 
         try{
             const categories = await taskServices.findCategoriesForUser(userId); 

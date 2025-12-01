@@ -8,8 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script> 
 
-    <link rel="stylesheet" href="/public/css/projectPage.css">
-    <script src="/public/javascript/projectPage.js" defer></script>
+    <link rel="stylesheet" href="/css/projectPage.css">
+    <script src="/javascript/projectPage.js" defer></script>
 </head>
 <body>
     <div class="filter hidden"></div>
@@ -84,6 +84,35 @@
                         </div>
                     </div>
                 </div>
+
+                 <div class="atribuitionModal hidden">
+                    <div class="atribuitionModalHeader">
+                        <svg class="closeAtribuitionModal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                        <p>Adicionar membros</p>
+                    </div>
+                    <div class="atribuitionModalContent">
+                        <div class="addMemberContainerModal">
+                            <div class="atribuitionInputs" style="position: relative;">
+                                
+                                <input class="inviteMemberInput" id="inputFiltroAmigo" type="text" placeholder="Pesquisar amigo por nome..." autocomplete="off">
+
+                                
+                                <!-- <input class="inviteMemberButton" type="button" id="btnConvidar" value="Convidar">
+
+                                <div id="listaAmigosDisponiveis" class="dropdown-sugestoes hidden"></div> -->
+                            </div>
+                        </div>
+
+                        <div class="invitedMembersList" id="containerListaAmigos">                          
+                        </div>
+
+                        <div class="invitedMembersList" id="areaMembrosAdicionados">
+                            <p>Membros adicionados</p>
+                            
+                        </div>
+                    </div>
+    </div>
+
             </div>
         </div>
         <div class="buttonContainer">
@@ -91,33 +120,6 @@
         </div>
     </div>
     
-    <div class="atribuitionModal hidden">
-                    <div class="atribuitionModalHeader">
-                        <svg class="closeAtribuitionModal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-                        <p>Adicionar membros</p>
-                    </div>
-                    <div class="atribuitionModalContent">
-                        <div class="addMemberContainerModal">
-                            <div class="atribuitionInputs">
-                                <input class="inviteMemberInput" type="text" placeholder="Adicionar por email">
-                                <input class="inviteMemberButton" type="button" value="Convidar">
-                            </div>
-                        </div>
-
-                        <div class="invitedMembersList">
-                            <p>Membros adicionados</p>
-                            <div class="invitedMember">      
-                                <div class="memberProfilePhoto"></div>
-                                <span class="memberName">Matheus Bezerra Lima</span>
-                            </div>
-                            <div class="invitedMember">      
-                                <div class="memberProfilePhoto"></div>
-                                <span class="memberName">Matheus Bezerra Lima</span>
-                            </div>
-                        </div>
-                    </div>
-    </div>
-
     <aside class="aside">
             <div class="logo">
                 <a href="#" aria-label="Página principal">LOGO</a>
@@ -157,9 +159,29 @@
                     <div class="navigation">
                         <a href="#">Home</a> / <a href="#">Projetos</a> / <a href="#">Board</a>
                     </div>
+
+                    
                 </div> <!-- breadcrumbs-->
 
                 <div class="headerUtilities">
+                    <div class="searchUser" style="position: relative;"> 
+                        <div class="searchIconContainer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+                        </div>
+                    <input type="text" id="inputPesquisaUsuario" class="invisibleInputUser" placeholder="Pesquise por usuários aqui..." autocomplete="off">
+                    
+                    <div id="listaResultados" class="results-dropdown hidden"></div>
+                </div>
+
+                <div class="header-icon-container" id="openFriendsSidebarBtn" title="Amigos e Solicitações">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users header-svg-icon">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+
                     <div class="headerUtilitiesHover"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></div>
                     <div class="userProfile">
 
@@ -167,6 +189,60 @@
                 </div> <!-- headerUtilities -->
             </header> <!--menu-top-->
 
+            <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+            <div class="friends-drawer" id="friendsDrawer">
+                
+                <div class="drawer-header">
+                    <h3 class="drawer-title">Comunidade</h3>
+                    <button class="drawer-close-btn" id="closeFriendsSidebarBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+
+                <div class="drawer-tabs">
+                    <button class="tab-btn active" data-target="tab-friends">Meus Amigos</button>
+                    <button class="tab-btn" data-target="tab-requests">Solicitações <span class="tab-count">(2)</span></button>
+                </div>
+
+                <div class="drawer-content">
+
+                    <div class="tab-pane active" id="tab-friends">
+                        <div class="drawer-search">
+                            <input type="text" placeholder="Buscar amigo...">
+                            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </div>
+
+                        <ul class="friend-list-stacked" id="lista-amigos">
+                            <li style="padding: 20px; text-align: center; color: #666;">Carregando amigos...</li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-pane" id="tab-requests">
+                        
+                        <h4 class="request-section-title">Recebidas (1)</h4>
+                        <ul class="friend-list-stacked" id="lista-recebidas">
+                            
+                        </ul>
+
+                        <!-- <h4 class="request-section-title mt-4">Enviadas (1)</h4>
+                        <ul class="friend-list-stacked">
+                            <li class="friend-item request-item">
+                                <div class="friend-avatar-container">
+                                    <img src="https://i.pravatar.cc/150?img=12" alt="Marcos Castro" class="friend-avatar">
+                                </div>
+                                <div class="friend-info">
+                                    <span class="friend-name">Marcos Castro</span>
+                                    <div class="request-actions">
+                                        <button class="btn-request btn-cancel">Cancelar</button>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul> -->
+                    </div>
+                </div>
+            </div>
+            
             <main>
                 <section class="projectHeader">
                     <div class="mainProjectHeaderInfo">

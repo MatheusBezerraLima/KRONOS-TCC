@@ -21,14 +21,6 @@ module.exports = {
           key: "id"
       },
       },
-      projeto_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'projeto',
-            key: "id"
-        }
-      },
       cor_fundo: {
         type: Sequelize.STRING,
         allowNull: false,

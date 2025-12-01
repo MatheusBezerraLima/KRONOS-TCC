@@ -5,8 +5,8 @@ class FriendshipController {
     async sendFriendRequest(req, res){
         try{
             const { addressee_id } = req.body
-            // const { requester_id } = req.user.id
-            const requester_id = 3;
+            const requester_id = req.user.id;
+;
 
             const requestSent = await friendshipService.sendFriendRequest(addressee_id, requester_id);
 
@@ -22,8 +22,8 @@ class FriendshipController {
         try{
             const { otherUserId } = req.params;
             const { newStatus } = req.body;
-            // const currentUserId = req.user.id;
-            const currentUserId = 7;  
+            const currentUserId = req.user.id;
+
 
             const updatedRequest = await friendshipService.respondToRequest(currentUserId, parseInt(otherUserId, 10), newStatus);
 
@@ -37,8 +37,8 @@ class FriendshipController {
 
     async listSentRequests(req, res){
         try{
-            // const currentUserId = req.user.id;
-            const currentUserId = 3;
+            const currentUserId = req.user.id;
+    
 
             const listRequestsSent = await friendshipService.listSentRequests(currentUserId);
             
@@ -52,8 +52,7 @@ class FriendshipController {
 
     async listReceivedRequests(req, res){
         try{
-            // const currentUserId = req.user.id;
-            const currentUserId = 2;
+            const currentUserId = req.user.id;
 
             const listReceivedRequests = await friendshipService.listReceivedRequests(currentUserId);
             
@@ -67,8 +66,8 @@ class FriendshipController {
 
     async findAllFriends(req, res){
         try{
-            // const currentUserId = req.user.id;
-            const currentUserId = 3;
+            const currentUserId = req.user.id;
+            
 
             const listFriends = await friendshipService.findAllFriends(currentUserId);
             
@@ -82,8 +81,7 @@ class FriendshipController {
 
     async deleteFriendship(req, res){
         try{
-            // const currentUserId = req.user.id;
-            const currentUserId = 3;
+            const currentUserId = req.user.id;
             const { otherUserId } = req.params;
 
             const deletedRequest = await friendshipService.deleteFriendship(currentUserId, parseInt(otherUserId, 10));
@@ -94,10 +92,6 @@ class FriendshipController {
             const statusCode = error.statusCode || 500;
             res.status(statusCode).json({ message: error.message });
         }
-        
-
-
-
     }
 
 

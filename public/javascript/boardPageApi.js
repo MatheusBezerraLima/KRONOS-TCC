@@ -334,6 +334,8 @@ async function fetchTaskDetails(taskId) {
     }
 
 function renderHeader(project, members) {
+        console.log(project);
+    
         if (projectTitleEl) {
             projectTitleEl.textContent = project.title;
         }

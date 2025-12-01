@@ -1,4 +1,4 @@
-const { UserProjectRole, User, ProfileUser, Project} = require("../models/index");
+const { UserProjectRole, User, ProfileUser, Project, CategoryTask} = require("../models/index");
 
 class UserProjectRoleDAO{
     async create(data,  options = {}){
@@ -34,7 +34,11 @@ class UserProjectRoleDAO{
                 },
                 include: [{
                     model: Project,
-                    attributes: ['titulo', 'descricao', 'data_termino']
+                    attributes: ['titulo', 'data_termino', 'categoria_id'],
+                    include: [{
+                        model: CategoryTask, 
+                        as: 'categoryTask', 
+                    }]
                 }]
             })
             return projects

@@ -2,12 +2,12 @@ const projectServices = require("../../application/services/projectServices");
 
 class ProjectController{
     async listProjects(req, res){
-        // const userId = req.user.id;
-        const userId = 3;
+        const userId = req.user.id;
+
 
         const projects = await projectServices.listProjectsForUser(userId);
 
-        res.status(200).json({ Projetos: projects});
+        res.status(200).json(projects);
     }
 
     async preparePageData(req, res){
@@ -39,11 +39,14 @@ class ProjectController{
 
     async create(req, res){
         try{
-            const {titulo, descricao, dataTermino} = req.body;
-            // const user = req.user.id;
-            const userId = 1;   
-            const newProject = await  projectServices.create({titulo, descricao, dataTermino}, userId);
-            res.status(200).json({"Sucess": true, "Result:": newProject});
+
+            const {titulo, dataTermino, categoria} = req.body;
+            console.log(titulo, dataTermino, categoria);
+            
+            const userId = req.user.id;
+  
+            const newProject = await  projectServices.create({titulo, dataTermino, categoria}, userId);
+            res.status(200).json(newProject);
         }catch(error){
             // Tratar erros aqui
         }
@@ -53,8 +56,8 @@ class ProjectController{
         try{
             const { projectId } = req.params; // Id do projeto vindo da URL
             const{  emails, role } = req.body;
-            // const inviterId = req.user.id;
-            const inviterId = 3;
+            const userId = req.user.id;
+
             
             if (!emails || !Array.isArray(emails) || emails.length === 0) {
                 return res.status(400).json({ message: 'A lista de e-mails é obrigatória.' });
@@ -75,8 +78,9 @@ class ProjectController{
             console.log(projectId);
                      
             const { userIdToAdd, role } = req.body; 
-            // const currentUserId = req.user.id;
-            const currentUserId = 3;
+
+            const currentUserId = req.user.id;
+;
 
             if (!userIdToAdd) {
                 return res.status(400).json({ message: 'O ID do usuário a ser adicionado é obrigatório.' });

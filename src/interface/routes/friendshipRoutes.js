@@ -1,21 +1,19 @@
 const express = require('express');
 const friendshipController = require('../controllers/friendshipController');
 const routes = express.Router({ mergeParams: true });
-
-routes.post('/', friendshipController.sendFriendRequest); // 🟩
-
-routes.patch('/:otherUserId', friendshipController.respondToRequest); // 🟩
-
-routes.delete('/:otherUserId', friendshipController.deleteFriendship); // 🟩
-
-routes.get('/', friendshipController.findAllFriends); // 🟩
-
-routes.get('/received', friendshipController.listReceivedRequests); // 🟩
-
-routes.get('/sent', friendshipController.listSentRequests); // 🟩
+const verifyAuthToken = require('../middlewares/authenticateToken');
 
 
+routes.post('/', verifyAuthToken, friendshipController.sendFriendRequest); // 🟩
 
+routes.patch('/:otherUserId', verifyAuthToken, friendshipController.respondToRequest); // 🟩
 
+routes.delete('/:otherUserId', verifyAuthToken, friendshipController.deleteFriendship); // 🟩
+
+routes.get('/', verifyAuthToken, friendshipController.findAllFriends); // 🟩
+
+routes.get('/received', verifyAuthToken, friendshipController.listReceivedRequests); // 🟩
+
+routes.get('/sent', verifyAuthToken, friendshipController.listSentRequests); // 🟩
 
 module.exports = routes;

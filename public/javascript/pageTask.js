@@ -11,6 +11,8 @@ const taskContainer = document.querySelector(".taskList")
 const openOrderModalArea = document.querySelector(".orderTasks")
 const orderModal = document.querySelector(".orderTaskModal")
 
+const inputPesquisa = document.getElementById('inputPesquisaUsuario');
+let debounceTimer;
 // Função de seleção dos links do menu lateral
 
 menuLinksSelection.forEach(item => {
@@ -339,7 +341,7 @@ taskContainer.addEventListener('click', (event) => {
 });
 
 document.addEventListener('click', (event) => {
-    document.querySelectorAll('.selectModalHidden').forEach(modal => {
+    document.querySelectorAll('.selectModal').forEach(modal => {
         if (!modal.contains(event.target)) {
             modal.classList.add('selectModalHidden');
         }
@@ -438,11 +440,285 @@ const CATEGORY_COLOR_PAIRS = [
     { bg: '#FCE4EC', text: '#C2185B'}  
 ];
 
+
 function getRandomColor() {
     const randomIndex = Math.floor(Math.random() * CATEGORY_COLOR_PAIRS.length);
     return CATEGORY_COLOR_PAIRS[randomIndex];
 }
 
+
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Lógica de Abrir/Fechar o Drawer ---
+    const openBtn = document.getElementById('openFriendsSidebarBtn');
+    const closeBtn = document.getElementById('closeFriendsSidebarBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+    const body = document.body;
+
+    function toggleSidebar(open) {
+        if (open) {
+            body.classList.add('sidebar-open');
+        } else {
+            body.classList.remove('sidebar-open');
+        }
+    }
+
+    // Abrir ao clicar no ícone do header
+    if(openBtn) openBtn.addEventListener('click', () => toggleSidebar(true));
+    
+    // Fechar ao clicar no X
+    if(closeBtn) closeBtn.addEventListener('click', () => toggleSidebar(false));
+    
+    // Fechar ao clicar no fundo escuro (overlay)
+    if(overlay) overlay.addEventListener('click', () => toggleSidebar(false));
+
+
+    // --- Lógica das Abas ---
+    const tabBtns = document.querySelectorAll('.drawer-tabs .tab-btn');
+    const tabPanes = document.querySelectorAll('.drawer-content .tab-pane');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // 1. Remove 'active' de todos os botões e painéis
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabPanes.forEach(p => p.classList.remove('active'));
+
+            // 2. Adiciona 'active' no botão clicado
+            btn.classList.add('active');
+
+            // 3. Mostra o painel correspondente ao data-target do botão
+            const targetPaneId = btn.getAttribute('data-target');
+            document.getElementById(targetPaneId).classList.add('active');
+        });
+    });
+});
+
+
+const currentUserId = 3
+
+
+
+async function carregarListaAmigos() {
+    const listaElement = document.getElementById('lista-amigos');
+    
+    try {
+        // 1. Busca os dados da API
+        const response = await fetch(`${API_BASE_URL}/friendships/`);
+        
+        if (!response.ok) throw new Error('Erro ao buscar amizades');
+        
+        const amizades = await response.json();
+
+        // Limpa a lista (remove o "Carregando...")
+        listaElement.innerHTML = '';
+
+        if (amizades.length === 0) {
+            listaElement.innerHTML = '<li style="padding:20px; text-align:center; color:#999;">Você ainda não tem amigos adicionados.</li>';
+            return;
+        }
+
+        // 2. Itera sobre cada amizade
+        amizades.forEach(amizade => {
+            // LÓGICA: Descobrir quem é o amigo e quem sou eu
+            let amigoData;
+
+            if (amizade.requester_id === currentUserId) {
+                // Se eu pedi, o amigo é o Addressee
+                amigoData = amizade.Addressee;
+            } else {
+                // Se eu recebi, o amigo é o Requester
+                amigoData = amizade.Requester;
+            }
+
+            // Tratamento de segurança para foto (caso venha null)
+            const foto = amigoData.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amigoData.nome}&background=random`;
+            
+            // Simulação de Status (Já que o banco não retorna online/offline ainda)
+            // Futuramente você pode conectar isso a um WebSocket
+            const isOnline = Math.random() > 0.5; // Random só pra visualização agora
+            const statusClass = isOnline ? 'status-online' : 'status-offline';
+            const statusText = isOnline ? 'Online' : 'Offline';
+
+            // 3. Cria o HTML do Item
+            const li = document.createElement('li');
+            li.classList.add('friend-item');
+            
+            // Adiciona ID da amizade para facilitar chat ou remoção futura
+            li.dataset.friendshipId = amizade.id;
+            li.dataset.friendId = amigoData.id;
+
+            li.innerHTML = `
+                <div class="friend-avatar-container ${statusClass}">
+                    <img src="${foto}" alt="${amigoData.nome}" class="friend-avatar">
+                </div>
+                <div class="friend-info">
+                    <span class="friend-name">${amigoData.nome}</span>
+                    <span class="friend-status-text">${statusText}</span>
+                </div>
+                <button class="btn-more-options" style="background:none; border:none; color:#ccc; cursor:pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                </button>
+            `;
+
+            // Clique no amigo (Ex: para abrir chat)
+            li.addEventListener('click', () => {
+                console.log(`Abrir chat com ${amigoData.nome} (ID: ${amigoData.id})`);
+                // window.location.href = `/chat/${amigoData.id}`;
+            });
+
+            listaElement.appendChild(li);
+        });
+
+        // Atualiza o contador na aba (se houver contador de amigos)
+        // document.querySelector('.tab-count-friends').textContent = `(${amizades.length})`;
+
+    } catch (error) {
+        console.error(error);
+        listaElement.innerHTML = '<li style="color:red; padding:20px; text-align:center;">Erro ao carregar amigos.</li>';
+    }
+}
+
+// Chamar a função quando o botão do menu for clicado (para economizar dados)
+document.getElementById('openFriendsSidebarBtn').addEventListener('click', () => {
+    carregarListaAmigos();
+});
+
+
+
+
+async function carregarSolicitacoes() {
+    const listaElement = document.getElementById('lista-recebidas');
+    console.log(listaElement);
+    
+    const contadorElement = document.querySelector('.tab-count');  
+    const titleElement = document.querySelector('.request-section-title');  
+    
+    try {
+        // 1. Busca os dados da rota que você passou
+        const response = await fetch(`${API_BASE_URL}/friendships/received`);
+        
+        if (!response.ok) throw new Error('Erro ao buscar solicitações');
+        
+        const solicitacoes = await response.json();
+
+        // 2. Atualiza o contador na aba
+        if(contadorElement) contadorElement.textContent = `(${solicitacoes.length})`;
+        if(contadorElement) titleElement.textContent = `Recebidas (${solicitacoes.length})`;
+
+
+        // Limpa a lista
+        listaElement.innerHTML = '';
+
+        if (solicitacoes.length === 0) {
+            listaElement.innerHTML = '<li style="padding:20px; text-align:center; color:#999; font-size: 0.9rem;">Nenhuma solicitação pendente.</li>';
+            return;
+        }
+
+        // 3. Renderiza cada solicitação
+        solicitacoes.forEach(req => {
+            // Como é /received, mostramos os dados do REQUESTER (quem pediu)
+            const pessoa = req.Requester;
+            console.log(pessoa);
+            
+            
+            // Tratamento da foto
+            const foto = pessoa.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${pessoa.nome}&background=random`;
+
+            const li = document.createElement('li');
+            li.classList.add('friend-item', 'request-item'); // Classes de estilo que definimos antes
+            li.id = `request-${pessoa.id}`; // ID único para remover da tela ao aceitar
+
+            li.innerHTML = `
+                <div class="friend-avatar-container">
+                    <img src="${foto}" alt="${pessoa.nome}" class="friend-avatar">
+                </div>
+                <div class="friend-info">
+                    <span class="friend-name">${pessoa.nome}</span>
+                    <div class="request-actions">
+                        <button class="btn-request btn-accept" onclick="responderSolicitacao('${pessoa.id}', 'accepted', '${req.id}')">Aceitar</button>
+                        
+                        <button class="btn-request btn-reject" onclick="responderSolicitacao('${pessoa.id}', 'rejected', '${req.id}')">Recusar</button>
+                    </div>
+                </div>
+            `;
+
+            listaElement.appendChild(li);
+        });
+
+    } catch (error) {
+        console.error(error);
+        listaElement.innerHTML = '<li style="color:red; text-align:center; padding:10px;">Erro ao carregar.</li>';
+    }
+}
+
+// --- FUNÇÃO PARA ACEITAR OU RECUSAR ---
+async function responderSolicitacao(requesterId, novoStatus, friendshipId) {
+
+    console.log(requesterId);
+    
+    
+    // Feedback visual imediato: Desabilita os botões para não clicar 2x
+    const itemLi = document.getElementById(`request-${requesterId}`);
+    const botoes = itemLi.querySelectorAll('button');
+    botoes.forEach(btn => {
+        btn.disabled = true;
+        btn.style.opacity = 0.5;
+        if(btn.classList.contains(novoStatus === 'accepted' ? 'btn-accept' : 'btn-reject')) {
+            btn.textContent = "Processando...";
+        }
+    });
+
+    try {
+        // AJUSTE AQUI: Use a rota que criamos para responder (sendRequest ou updateStatus)
+        // Estou assumindo uma rota genérica baseada no seu controller anterior
+        const response = await fetch(`${API_URL}/friendships/${requesterId}`, { 
+            method: 'PATCH', // ou PUT, dependendo da sua rota
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                newStatus: novoStatus // 'accepted' ou 'rejected'
+            })
+        });
+
+        if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.message || 'Erro ao responder');
+        }
+
+        // Sucesso! Remove o item da lista visualmente
+        itemLi.style.transition = "all 0.5s";
+        itemLi.style.opacity = "0";
+        itemLi.style.transform = "translateX(50px)";
+        
+        setTimeout(() => {
+            itemLi.remove();
+            // Atualiza o contador visualmente (-1)
+            const contadorElement = document.getElementById('contador-solicitacoes');
+            const atual = parseInt(contadorElement.textContent.replace(/\D/g,'')) || 0;
+            if(atual > 0) contadorElement.textContent = `(${atual - 1})`;
+            
+            // Opcional: Se aceitou, recarrega a lista de amigos na outra aba
+            if(novoStatus === 'accepted') carregarListaAmigos();
+        }, 500);
+
+    } catch (error) {
+        console.error(error);
+        alert("Erro: " + error.message);
+        // Reabilita botões em caso de erro
+        botoes.forEach(btn => {
+            btn.disabled = false;
+            btn.style.opacity = 1;
+            btn.textContent = btn.classList.contains('btn-accept') ? 'Aceitar' : 'Recusar';
+        });
+    }
+}
+
+// Gatilhos
+document.getElementById('openFriendsSidebarBtn').addEventListener('click', () => {
+    carregarSolicitacoes(); // Carrega solicitações ao abrir
+    // carregarListaAmigos(); // (Opcional) Carrega amigos também
+});
+
+// Se clicar na aba especificamente, recarrega para garantir
+document.querySelector('[data-target="tab-requests"]').addEventListener('click', carregarSolicitacoes);
 function addCategoryOption(taskElement, name, bg, txt) {
     const container = document.createElement("div");
     container.className = "categoryBadgeContainer";
@@ -601,7 +877,7 @@ async function requestCreateCategory(dataCategory){
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || 'Falha ao criar a tarefa.');
+            throw new Error(errorData.message || 'Falha ao criar a categoria.');
         }
 
         const newCategory = await response.json();
@@ -915,20 +1191,6 @@ async function requestTasksForUser(){
 
 /* Criar a tarefa assim que a pagina abrir */
 document.addEventListener('DOMContentLoaded', async() => {
-
-    // const newTaskElement = createNewTaskRow(); 
-
-
-    // if (taskContainer) {
-    //     taskContainer.insertAdjacentElement("beforeend", newTaskElement);
-    // }
-
-    // const newTaskInput = newTaskElement.querySelector(".invisibleTaskNameInput");
-    // if (newTaskInput) {
-    //     newTaskInput.select();
-    //     newTaskInput.focus();
-    // }
-    
     const tasks = await requestTasksForUser();
     const categories = await requestCategoriesForUser();
 
@@ -946,7 +1208,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         newTaskInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {      
                 event.preventDefault(); 
-                taskTitleInput.blur(event); 
+                newTaskInput.blur(event); 
             }
         });
     }
@@ -975,25 +1237,6 @@ document.addEventListener("click", (event) => {
     
 })
 
-
-// async function checkBox(taskElement, customCheckboxes, taskId){
-//     const inputCheckbox = customCheckboxes.previousElementSibling;
-//         const taskNameInput = customCheckboxes.nextElementSibling;
-//         const taskName = taskNameInput ? taskNameInput.value.trim() : ''; 
-
-//         if (taskName.length > 0) {
-            
-//             if (inputCheckbox && inputCheckbox.type === 'checkbox') {
-//                 inputCheckbox.checked = !inputCheckbox.checked;
-//                 inputCheckbox.dispatchEvent(new Event('change'));
-
-//                 const updatedTask = await requestUpdateTask({status_id: 3}, taskId);
-//                 updateTaskBadges(taskElement, "status", "done", 3)
-//             }
-//         } else {
-//             showWarningMessage(2000)
-//         }
-// }
 
 async function checkBox(taskElement, customCheckboxSpan, taskId) {
     // 1. Encontra os elementos relacionados
@@ -1065,4 +1308,128 @@ function showWarningMessage(duration = 2000) {
 
 
 
+
+inputPesquisa.addEventListener('input', function(e) {
+    const termo = e.target.value;
+
+    // 1. Limpa o timer anterior (se o usuário digitar rápido)
+    clearTimeout(debounceTimer);
+
+    // 2. Esconde a lista se o campo estiver vazio
+    if (termo.length === 0) {
+        listaResultados.classList.add('hidden');
+        return;
+    }
+
+    // 3. Cria um novo timer de 500ms (Meio segundo)
+    debounceTimer = setTimeout(async () => {
+        try {
+            // Faz a requisição ao seu Backend
+            const response = await fetch(`/users/search?termo=${termo}`);
+            const usuarios = await response.json();
+            
+            renderizarResultados(usuarios);
+        } catch (error) {
+            console.error('Erro na pesquisa:', error);
+        }
+    }, 500); // Só executa 500ms depois que parar de digitar
+});
+
+function renderizarResultados(usuarios) {
+    const listaResultados = document.getElementById('listaResultados'); // Garanta que pegou o elemento
+    const inputPesquisa = document.getElementById('inputPesquisaUsuario'); // Seu input
+
+    // 1. Limpa resultados anteriores
+    listaResultados.innerHTML = '';
+
+    // 2. Se não vier nada ou array vazio, esconde
+    if (!usuarios || usuarios.length === 0) {
+        listaResultados.classList.add('hidden');
+        return;
+    }
+
+    // 3. Cria os elementos da lista
+    usuarios.forEach(usuario => {
+        const div = document.createElement('div');
+        div.classList.add('result-item');
+
+        // Tratamento de erro: Se o profile for null ou a foto for null, usa uma padrão
+        // A API ui-avatars já faz um fallback legal, mas é bom garantir
+        const avatarUrl = usuario.profile?.foto_perfil 
+            || `https://ui-avatars.com/api/?name=${usuario.nome}&background=random`;
+
+        // Monta o HTML interno (Foto + Nome na esquerda, Botão na direita)
+        div.innerHTML = `
+            <div class="user-info">
+                <img src="${avatarUrl}" alt="${usuario.nome}" class="user-avatar">
+                <div class="user-details">
+                    <span class="font-bold">${usuario.nome}</span>
+                    <br>
+                    <span style="font-size: 10px; color: #666;">${usuario.email}</span>
+                </div>
+            </div>
+            <button class="btn-add-user" data-id="${usuario.id}">Adicionar</button>
+        `;
+
+        const btnAdd = div.querySelector('.btn-add-user');
+
+        btnAdd.addEventListener('click', async (e) => {
+            e.stopPropagation(); // Não fecha o menu ao clicar
+            
+            // 1. Feedback visual imediato (UX)
+            btnAdd.textContent = "Enviando...";
+            btnAdd.disabled = true; // Evita cliques duplos
+
+            try {
+                // 2. Chama a função que faz o FETCH
+                await enviarSolicitacaoAmizade(usuario.id, btnAdd);
+                
+            } catch (error) {
+                console.error("Erro ao enviar:", error);
+                // Reverte em caso de erro
+                btnAdd.textContent = "Erro";
+                setTimeout(() => {
+                    btnAdd.textContent = "Adicionar";
+                    btnAdd.disabled = false;
+                }, 2000);
+            }
+        });
+
+        listaResultados.appendChild(div);
+    });
+
+    listaResultados.classList.remove('hidden');
+}
+
+
+// --- FUNÇÃO SEPARADA PARA ORGANIZAR O FETCH ---
+async function enviarSolicitacaoAmizade(targetId, btnElement) {
+    const response = await fetch(`${API_BASE_URL}/friendships/`, { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            addressee_id: targetId // O ID que você pediu no body
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Falha na requisição');
+    }
+
+    // 3. Sucesso: Atualiza o botão permanentemente
+    btnElement.textContent = "Enviado ✔";
+    btnElement.classList.add('enviado'); // Fica verde pelo CSS
+    // Opcional: Se quiser esconder a lista após o sucesso, descomente abaixo:
+    // document.getElementById('listaResultados').classList.add('hidden');
+}
+
+
+// Fechar a lista se clicar fora dela
+document.addEventListener('click', (e) => {
+    if (!inputPesquisa.contains(e.target) && !listaResultados.contains(e.target)) {
+        listaResultados.classList.add('hidden');
+    }
+});
 

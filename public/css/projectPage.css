@@ -17,6 +17,108 @@ body{
     /* overflow: hidden; */
 }
 
+.searchUser{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 35px;
+    width: 500px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgb(216, 215, 215);
+}
+
+.invisibleInputUser{
+    height: 100%;
+    width: 480px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding-left:8px;
+    font-size: 15px;
+    color: #696969;
+}
+
+.results-dropdown {
+    position: absolute;
+    top: 100%; /* Cola logo abaixo do input */
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.results-dropdown.hidden {
+    display: none;
+}
+
+/* Container de cada resultado */
+.result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Empurra o botão para a ponta direita */
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: default; /* Cursor padrão, pois o clique será no botão */
+    transition: background 0.2s;
+}
+
+.result-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* Área da esquerda (Foto + Nome) */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre foto e nome */
+}
+
+/* A Imagem redondinha */
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #e0e0e0;
+}
+
+/* Botão Padrão (Azul) */
+.btn-add-user {
+    background-color: #000080;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-add-user:hover {
+    background-color: #0000a5;
+}
+
+/* Estado de Carregamento/Desabilitado */
+.btn-add-user:disabled {
+    background-color: #9CA3AF; /* Cinza */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Estado de Sucesso (Verde) */
+.btn-add-user.enviado {
+    background-color: #10B981; /* Verde */
+    cursor: default;
+}
+
 .filter{
     position: absolute;
     width: 100%;
@@ -454,7 +556,8 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 260px;
+    width: calc(25% - 20px);   
+    min-width: 260px; 
     height: 180px;
     margin-top:5px;
     border-radius: 10px;
@@ -518,7 +621,7 @@ main{
     height: 20px;
     width: fit-content;
     background-color: #77778b41;
-    max-width: 140px;
+    max-width: 200px;
     padding: 15px 10px;
     font-size:15px;
     cursor: pointer;
@@ -532,7 +635,7 @@ main{
     gap:5px;
     height: 20px;
     width: fit-content;
-    max-width: 70px;
+    max-width: 100px;
     padding: 15px 10px;
     font-size:15px;
     cursor: pointer;
@@ -856,8 +959,8 @@ main{
     position: absolute;
     box-shadow: 2px 2px 2px var(--shadow);
     border-radius: 10px;
-    left:65%;
-    top:52%;
+    left:75%;
+    top:50%;
     z-index: 12;
     border: 1px solid #f2f2f2;
     overflow: hidden;
@@ -947,12 +1050,12 @@ main{
     color: #696969;
 }
 
-.memberProfilePhoto{
+/* .memberProfilePhoto{
     width: 30px;
     height: 30px;
     background-color: #3F3F3F;
     border-radius: 50%;
-}
+} */
 
 /* Botao de criar projeto */
 
@@ -1055,4 +1158,449 @@ main{
 
 .categoryBadge:hover{
     background-color: #f7f7f7;
+}
+
+
+
+
+
+
+
+
+
+
+ /* ------------------------ */
+
+ /* --- VARIÁVEIS GERAIS (Baseadas no seu design) --- */
+:root {
+    --sidebar-width: 360px;
+    --primary-blue: #3B82F6; /* Azul aproximado dos botões do seu print */
+    --text-dark: #1F2937;
+    --text-muted: #6B7280;
+    --bg-white: #FFFFFF;
+    --bg-light: #F3F4F6;
+    --border-light: #E5E7EB;
+    --status-online: #10B981; /* Verde */
+}
+
+/* --- ÍCONE GATILHO NO HEADER --- */
+.header-icon-container {
+    cursor: pointer;
+    margin-right: 16px; /* Espaço entre ele e o sino */
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.header-svg-icon {
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.header-icon-container:hover .header-svg-icon {
+    color: var(--text-dark);
+}
+
+/* Opcional: Bolinha de notificação no ícone */
+.badge-notification {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #EF4444; /* Vermelho */
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    height: 16px;
+    width: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid var(--bg-white);
+}
+
+
+/* --- ESTRUTURA GERAL DO DRAWER/SIDEBAR --- */
+
+/* Overlay (Fundo escuro) */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 998; /* Fica atrás do drawer, na frente de tudo */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+/* O Drawer em si */
+.friends-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: var(--bg-white);
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 999; /* Fica na frente de tudo */
+    transform: translateX(100%); /* Escondido fora da tela à direita */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Classes para abrir o menu (serão adicionadas via JS) */
+.sidebar-open .sidebar-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-open .friends-drawer {
+    transform: translateX(0);
+}
+
+
+/* --- ESTILOS INTERNOS DO DRAWER --- */
+
+/* Cabeçalho */
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.drawer-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.drawer-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+}
+
+
+/* Abas */
+.drawer-tabs {
+    display: flex;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--border-light);
+    background-color: var(--bg-white);
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 16px 4px;
+    margin-right: 24px;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+/* Estilo da aba ativa */
+.tab-btn.active {
+    color: var(--blue);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--blueHoverButton);
+}
+
+.tab-count {
+    font-size: 0.85rem;
+    margin-left: 4px;
+}
+
+
+/* Conteúdo */
+.drawer-content {
+    flex: 1;
+    overflow-y: auto; /* Permite scroll se a lista for grande */
+    padding: 24px;
+    background-color: #FAFAFA; /* Um cinza bem clarinho pro fundo */
+}
+
+/* Lógica de mostrar/esconder abas */
+.tab-pane {
+    display: none;
+}
+.tab-pane.active {
+    display: block;
+}
+
+
+/* --- COMPONENTES DA LISTA (Baseado no seu print) --- */
+
+/* Busca */
+.drawer-search {
+    position: relative;
+    margin-bottom: 20px;
+}
+.drawer-search input {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    background-color: var(--bg-white);
+    font-size: 0.9rem;
+}
+.drawer-search .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+/* Lista e Itens */
+.friend-list-stacked {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+.friend-item:last-child {
+    border-bottom: none;
+}
+
+/* Avatares e Status */
+.friend-avatar-container {
+    position: relative;
+    margin-right: 12px;
+}
+
+.friend-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Bolinha de status online/offline */
+.friend-avatar-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-white);
+    background-color: #D1D5DB; /* Cinza (offline) padrão */
+}
+
+.friend-avatar-container.status-online::after {
+    background-color: var(--status-online);
+}
+
+/* Infos de texto */
+.friend-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.friend-name {
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.friend-status-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+
+/* --- ÁREA DE SOLICITAÇÕES (Botões) --- */
+.request-section-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+.mt-4 { margin-top: 1.5rem; }
+
+.request-item .friend-info {
+     /* Para solicitações, o nome fica em cima e botões embaixo */
+    justify-content: center;
+}
+
+.request-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.btn-request {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-accept {
+    background-color: var(--blue);
+    color: white;
+}
+.btn-accept:hover { background-color:  var(--blueHoverButton); }
+
+.btn-reject, .btn-cancel {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    border: 1px solid var(--border-light);
+}
+.btn-reject:hover, .btn-cancel:hover { background-color: #E5E7EB; }
+
+
+
+/* Estilo do Dropdown de Sugestões */
+.dropdown-sugestoes {
+    position: absolute;
+    top: 100%; /* Fica logo abaixo do input */
+    left: 0;
+    width: 70%; /* Ajuste conforme a largura do seu input */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 0 0 8px 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.dropdown-sugestoes.hidden {
+    display: none;
+}
+
+.item-sugestao {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.item-sugestao:hover {
+    background-color: #f5f5f5;
+}
+
+/* Ajuste para a foto aparecer redonda e preenchida */
+.memberProfilePhoto {
+    width: 32px; /* Tamanho sugerido */
+    height: 32px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-color: #ddd; /* Cor de fundo caso não carregue */
+}
+
+/* Opcional: Cursor de remover no item adicionado */
+.invitedMember {
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.invitedMember:hover {
+    background-color: #ffecec; /* Vermelhinho suave para indicar remoção */
+}
+
+/* Container da Lista de Amigos (Abaixo do input) */
+.lista-amigos-scroll {
+    margin-top: 10px;
+    max-height: 180px; /* Altura máxima da lista */
+    overflow-y: auto;  /* Habilita scroll vertical */
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fafafa;
+    padding: 5px;
+}
+
+/* Item individual da lista */
+.item-amigo-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: white;
+    border-bottom: 1px solid #f0f0f0;
+    border-radius: 6px;
+    margin-bottom: 4px;
+}
+
+.item-amigo-row:hover {
+    background-color: #f3f4f6;
+}
+
+/* Informações (Foto + Nome) */
+.info-amigo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.foto-p {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-color: #ccc;
+}
+
+/* Botão de Adicionar (+) */
+.btn-add-amigo {
+    background-color: #3B82F6;
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-add-amigo:hover {
+    background-color: #2563EB;
+}
+
+/* Estilo para quando o amigo já foi adicionado (Visualmente desabilitado na lista) */
+.item-amigo-row.adicionado {
+    opacity: 0.5;
+    pointer-events: none; /* Não deixa clicar de novo */
+    background-color: #e5e7eb;
 }

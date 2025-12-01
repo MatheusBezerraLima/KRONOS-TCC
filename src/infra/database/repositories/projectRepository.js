@@ -1,10 +1,21 @@
 const { where, Transaction } = require("sequelize");
-const { Project } = require("../models/index");
+const { Project, CategoryTask} = require("../models/index");
 
 class ProjectDAO{
     async create(projectData, options = {}){
         try{
-            return await Project.create(projectData, { transaction: options.transaction});
+            const newProject = await Project.create(projectData, { transaction: options.transaction});
+
+            await newProject.reload({
+                include: [
+                    {
+                        model: CategoryTask, 
+                        as: "categoryTask"    
+                    },
+                ],
+                transaction: options.transaction
+            });
+            return newProject;
         }catch(error){
             console.error(`Erro no DAO ao criar Projeto ${error.message}`);
             throw error;

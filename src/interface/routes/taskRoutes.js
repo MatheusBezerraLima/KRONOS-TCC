@@ -7,20 +7,21 @@
 
     routes.get('/tasks/:taskId', tasksController.findTask )
     // Renderização
-    routes.get('/tasks', tasksController.prepareTasksPageData);
+    routes.get('/tasks',  verifyAuthToken, tasksController.prepareTasksPageData);
 
-    routes.get('/categories/tasks', tasksController.findCategoriesForUser)
+    routes.get('/categories/tasks', verifyAuthToken, tasksController.findCategoriesForUser)
 
-    routes.post('/category/tasks', tasksController.createCategory)
+    routes.post('/category/tasks', verifyAuthToken, tasksController.createCategory)
+    
     // Autenticação
     // routes.post('/tasks', validate(createTaskSchema), tasksController.createTask)
-    routes.post('/tasks', tasksController.createTask);
+    routes.post('/tasks', verifyAuthToken, tasksController.createTask);
 
-    routes.patch('/tasks/:id', tasksController.updateTask);
+    routes.patch('/tasks/:id', verifyAuthToken, tasksController.updateTask);
 
-    routes.delete('/tasks/:id/delete', tasksController.deleteTask)
+    routes.delete('/tasks/:id/delete', verifyAuthToken, tasksController.deleteTask)
 
-    routes.patch('/tasks/:taskId/move', tasksController.moveTask);
+    routes.patch('/tasks/:taskId/move', verifyAuthToken, tasksController.moveTask);
 
     routes.patch('/tasks/:taskId/assign-sprint',
         (req, res, next) => {

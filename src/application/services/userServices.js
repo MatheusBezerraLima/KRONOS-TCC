@@ -148,11 +148,28 @@ const serviceFindByEmail = async(email) => {
 
 }
 
+const searchUsersByName = async(termo) => {
+  try {
+      if (!termo || termo.trim().length === 0) {
+          return [];
+      }
+
+      const users = await UserDAO.findByName(termo);
+
+      return users;
+
+  } catch (error) {
+      console.error("Erro no Service ao pesquisar usuários:", error.message);
+      throw new Error("Falha ao buscar usuários.");
+  }
+}
+
 module.exports = {
   serviceAuthenticateUser,
   serviceInsertUser,
   serviceListAllUsers,
   serviceFindById,
   serviceFindByEmail,
-  serviceChangePasswordUser
+  serviceChangePasswordUser,
+  searchUsersByName
 }

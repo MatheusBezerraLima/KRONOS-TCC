@@ -51,20 +51,20 @@ class FriendshipService{
             throw error;
         }
 
-        // Criar notificação para quem recebeu
-         try {
-            await notificationDAO.create({
-                userId: addressee_id, 
-                type: 'amizade',
-                message: `${requesterUser.nome} enviou-lhe um pedido de amizade.`,
-                metadata: {
-                    friendshipId: newFriendship.id,
-                    requesterId: requester_id
-                }
-            });
-        } catch (notificationError) {
-            console.error("Falha ao criar notificação de amizade:", notificationError);
-        }
+        // // Criar notificação para quem recebeu
+        //  try {
+        //     await notificationDAO.create({
+        //         userId: addressee_id, 
+        //         type: 'amizade',
+        //         message: `${requesterUser.nome} enviou-lhe um pedido de amizade.`,
+        //         metadata: {
+        //             friendshipId: newFriendship.id,
+        //             requesterId: requester_id
+        //         }
+        //     });
+        // } catch (notificationError) {
+        //     console.error("Falha ao criar notificação de amizade:", notificationError);
+        // }
 
         return newFriendship;
     }
@@ -88,10 +88,14 @@ class FriendshipService{
             throw error;
         }
 
+        console.log("🟩Enviada por:", otherUserId, "Recebida por:",currentUserId
+
+        );
+        
         const [currentUser, otherUser, friendshipStatus] = await Promise.all([
             userDAO.findById(currentUserId),
             userDAO.findById(otherUserId),
-            friendshipDAO.findFriendshipStatus(otherUserId, currentUserId),
+            friendshipDAO.findFriendshipStatus(currentUserId, otherUserId),
         ]);
 
          if(!currentUser || !otherUser){
@@ -183,10 +187,14 @@ class FriendshipService{
     
         const listReceivedRequests = await friendshipDAO.listReceivedRequests(currentUserId);
     
-        if(!listReceivedRequests || listReceivedRequests.length === 0){
+        if(!listReceivedRequests){
             const error = new Error("Não foi possivel buscar a lista de solicitações de amizade enviadas");
             error.statusCode = 400;
             throw error;
+        }
+
+        if( listReceivedRequests.length === 0){
+            return [];
         }
     
         return listReceivedRequests;

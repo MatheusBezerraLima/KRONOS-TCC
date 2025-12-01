@@ -1,4 +1,4 @@
-const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers, serviceFindById, serviceChangePasswordUser, serviceFindByEmail} = require("../../application/services/userServices.js"); 
+const {serviceInsertUser, serviceAuthenticateUser, serviceListAllUsers, serviceFindById, serviceChangePasswordUser, serviceFindByEmail, searchUsersByName} = require("../../application/services/userServices.js"); 
 const bcrypt = require("bcrypt"); 
 const jwt = require("jsonwebtoken");
 const DatabaseErrors = require("../../utils/databaseErrors.js");
@@ -125,11 +125,29 @@ const getFindByEmail = async(req, res) => {
   }
 }
 
+async function searchUsers(req, res) {
+    try {
+        const { termo } = req.query; 
+
+        if (!termo || termo.length < 3) {
+            return res.json([]); // Não pesquisa se tiver menos de 3 letras
+        }
+
+        const users = await searchUsersByName(termo);
+
+        return res.json(users);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Erro ao buscar usuários' });
+    }
+}
+
 module.exports = {
   getAuthenticateUser,
   getListAllUsers,
   getRegisterUser,
   getFindById,
   getFindByEmail,
-  getChangePasswordUser
+  getChangePasswordUser,
+  searchUsers
 }

@@ -21,11 +21,11 @@ const CategoryTask = sequelize.define("CategoryTask", {
     },
     projeto_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: true, // Importante ser true se já houver dados no banco
         references: {
-            model: 'projeto',
-            key: "id"
-        }
+        model: 'projeto', // Nome EXATO da tabela de projetos no banco
+        key: 'id'
+      },
     },
     cor_fundo: {
         type: DataTypes.STRING,

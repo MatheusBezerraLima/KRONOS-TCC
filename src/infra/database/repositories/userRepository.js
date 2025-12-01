@@ -1,4 +1,6 @@
-const { User } = require('../models');
+const { includes } = require('zod/v4');
+const { User, ProfileUser} = require('../models/index');
+const { Op } = require('sequelize');
 const bycript = require('bcrypt');
 
 class UserDAO {
@@ -44,17 +46,28 @@ class UserDAO {
         
     }
 
-    async findByName(nome){
-        try{
-            return await User.findByAll({
-                nome: nome,
-                status: "ativo"
-            })
-        }catch(error){
-            console.error(`Erro no DAO ao buscar usuário por nome:`, error);
-            throw error;
-        }
+    async findByName(nome) {
+    try {
+        return await User.findAll({
+            where: {
+                nome: {
+                    [Op.like]: `%${nome}%` 
+                },
+                status: "Ativo" 
+            },
+            attributes: ['id', 'nome', 'email'], // Traz dados do USUÁRIO
+            include: [{
+                model: ProfileUser,
+                as: 'profile', 
+                attributes: ['foto_perfil', 'bio', 'cargo'], 
+                required: false 
+            }]
+        });
+    } catch (error) {
+        console.error(`Erro ao buscar usuário:`, error);
+        throw error;
     }
+}
 
     async findByEmail(email){
         try{
@@ -106,3 +119,5 @@ class UserDAO {
 }
 
 module.exports = new UserDAO();
+
+
