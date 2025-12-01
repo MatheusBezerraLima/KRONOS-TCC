@@ -250,10 +250,10 @@ main{
 .projectHeader{
     width: 100%;
     height: 80px;
-    border-bottom: 1px solid #d3d3d3;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    margin-top: 20px;
 }
 
 .pageTitleContainer{
@@ -286,30 +286,104 @@ main{
 
 .middleContainer{
     width: 100%;
-    height: calc(100% - 80px);
+    height: 100%;
+    padding-right: 20px;
+    overflow: hidden;
 }
 
-.projectsAndTasksContainer{
+.projectsContainer{
+    padding-top: 20px;
     width: 100%;
     height: 100%;
-    background-color: #000080;
+    overflow-y: auto;
 }
 
-.calendarAndUsersContainer{
+.tasksAndUsersContainer{
     width: 400px;
-    height: 100%;
-    background-color: #444472;
-}
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+}   
 
 .projectList{
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap; 
     width: 100%; 
-    background-color: #119500;
-    gap:20px;
+    height: auto;
+    gap:10px;
+    padding-top: 10px;
 }
 
+.projectsContainer::-webkit-scrollbar {
+    width: 4px; /* Torna a barra mais fina */
+    height: 2px;
+}
+
+.tasksList::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+/* 4. Estilização do thumb ao passar o mouse (hover) */
+.tasksList::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+
+.titleProjectContainer{
+    display: flex;
+    width: 100%;
+    height: 30px;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-right:12px;
+}
+
+.seeAllProjectsLink{
+    font-size: 14px;
+    text-decoration: none;
+    color: #0633AC;
+}
+
+.seeAllProjectsLink:hover{
+    color: #031649;
+}
+
+.addProjectContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(25% - 20px);   
+    min-width: 260px; 
+    height: 180px;
+    margin-top:5px;
+    border-radius: 10px;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: #0000802c;
+    background-color: #00008009;
+    cursor: pointer;
+}
+
+.iconContainer{
+    width: 40px;
+    height: 40px;
+    background-color: #000080;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.iconContainer svg{
+    color: #fdfdfd;
+    width:20px;
+    height: 20px;
+}
 
 .project{
     display: flex;
@@ -323,6 +397,7 @@ main{
     box-shadow: 1px 2px 8px var(--shadow);
     cursor: pointer;
     transition: .2s ease-in-out;
+    margin-top: 5px;
 }
 
 .project:hover{
@@ -451,4 +526,189 @@ main{
 .membersQuantity svg{
     width: 12px;
     height: 12px;
+}
+
+.tasksContainer{
+    border-radius: 10px;
+    padding: 15px;
+    width: 100%;
+    height: calc(50% - 6px);
+    border-bottom: 1px solid #f2f2f2;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+    overflow: hidden;
+}
+
+.usersContainer{
+    padding: 15px;
+    height: calc(50% - 6px);
+    width: 100%;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+    border-radius: 10px;
+
+}
+
+.taskTitle, .usersContainerTitle{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.taskContainerTitle{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 8px;
+}
+
+.seeAllTasksLink{
+    font-size: 12px;
+    text-decoration: none;
+    color: #0633AC;
+    cursor: pointer;
+    margin-top:3px;
+}
+
+.seeAllTasksLink:hover{
+    color: #031649;
+
+}
+
+
+.tasksList{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    width: 100%;
+    max-height: 100%;
+    padding-top: 10px;
+    overflow: auto;
+    overflow-x: hidden;
+    padding-right:8px;
+}
+
+/* 1. Largura da barra de rolagem */
+.tasksList::-webkit-scrollbar {
+    width: 4px; /* Torna a barra mais fina */
+    height: 2px;
+}
+
+.tasksList::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+/* 4. Estilização do thumb ao passar o mouse (hover) */
+.tasksList::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+.homeTask{
+    padding:5px 10px;
+    border: 1px solid #f2f2f2;
+    border-radius:10px ;
+    box-shadow: 2px 2px 5px var(--shadow);
+    display: flex;
+    gap:8px;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    height: fit-content;
+}
+
+.checkboxCustom{
+    width: 20px;
+    height: 20px;
+    background-color: var(--main-color);
+    border-radius: 5px;
+    border: 1px solid #474646;
+    margin-top:5px;
+}
+
+.taskInfo{
+    gap:8px;
+    display: flex;
+    flex-direction: row;
+}
+
+.taskName{
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.dueDateTask{
+    font-size: 12px;
+    color: #696969;
+}
+
+.priorityBadge{
+    padding:2px 10px;
+    color: red;
+    font-size: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 0, 0, 0.151);
+}
+
+.usersList{
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+    width: 100%;
+    max-height: 100%;
+    padding-top: 15px;
+    overflow: auto;
+    overflow-x: hidden;
+    padding-right:8px;
+
+}
+
+.userList::-webkit-scrollbar {
+    width: 4px; 
+    height: 4px;
+}
+
+.userList::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+.userList::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+.userHome{
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    align-items: center;
+    gap:8px;
+}
+
+.userProfileUsersContainer{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #0633AC;
+    position: relative;
+}
+
+.onlineOfflineCircle{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    right: 0;
+    bottom:0;
+    background-color: #000080;
+}
+
+.online{
+    background-color: #119500;
+}
+
+.offline{
+    background-color: #696969;
 }
