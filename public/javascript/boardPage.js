@@ -7,8 +7,7 @@ const sideMenu = document.querySelector("aside")
 const filter = document.querySelector(".filter")
 const filterEd = document.querySelector(".filterEd")
 const addTaskModal = document.querySelector(".addTaskModal")
-const editTaskModal = document.querySelector(".editTaskModal")
-const addTaskButton = document.querySelector(".addTask")
+const editTaskModal = document.querySelector("#editTaskModal")
 const closeModalIcon = document.querySelector(".closeModalIcon")
 const closeModalIconEd = document.querySelector(".closeModalIconEd")
 
@@ -16,6 +15,7 @@ const closeModalIconEd = document.querySelector(".closeModalIconEd")
 const allDropDownStatuses = document.querySelectorAll(".selectStatusModal") 
 // --- CORREÇÃO: Seleciona TODOS os dropdowns de categoria ---
 const allDropDownCategories = document.querySelectorAll(".selectCategoryModal")
+console.log("🟩🟩🟩🟩🟩🟩🟩",closeModalIcon);
 
 // Estas variáveis globais podem ser problemáticas, mas vamos mantê-las por agora
 let selectedStatusValue = document.querySelector(".statusSelected")
@@ -75,19 +75,6 @@ closeMenu.addEventListener("click", toggleMenu);
 function toggleMenu() {
     sideMenu.classList.toggle("asideClosed");
 }
-
-// Função para abrir o modal
-
-addTaskButton.addEventListener("click", openModalTask);
-
-
-function openModalTask() {
-    filter.classList.add("filterOn")
-    addTaskModal.classList.add("modalOn")
-    taskNameInput.focus()
-}
-
-// Função para fechar modal de criação de tarefas clicando no icone X
 
 closeModalIcon.addEventListener("click", closeModalTask);
 filter.addEventListener("click", closeModalTask);
@@ -164,8 +151,12 @@ document.addEventListener('click', (event) => {
 allDropDownCategories.forEach(dropDown => {
 
     // Adiciona o clique para abrir/fechar este dropdown específico
+    console.log("⭕⭕⭕⭕⭕", dropDown);
+    
     dropDown.addEventListener("click", (event) => {
         dropDown.classList.toggle("categoryOpen");
+        console.log("foi");
+        
         event.stopPropagation();
     });
 

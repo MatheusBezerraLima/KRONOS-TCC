@@ -3,8 +3,188 @@ const API_BASE_URL = '/api';
 const membersHeaderContainer = document.querySelector('.membersIconandQuantity');
 const boardColumnsContainer = document.querySelector('.boardColumns');
 const membersSidebarContainer = document.querySelector('.members .container-memberTasks');
+const addTaskButton = document.querySelector(".addTask")
+
 
 let currentProjectId = window.location.pathname.split('/').filter(Boolean).pop();
+
+// Adicione junto com suas outras variáveis globais
+let currentEditingTaskId = null; 
+let autosaveTimeout = null;
+
+addTaskButton.addEventListener("click", openModalTask);
+
+
+async function openModalTask() {
+    try {
+        // 1. Cria a tarefa vazia no banco imediatamente
+        const newTask = await requestCreateTask();
+        currentEditingTaskId = newTask.id; // Guarda o ID para o autosave usar
+
+        // 2. Abre o Modal
+        filter.classList.add("filterOn");
+        addTaskModal.classList.add("modalOn");
+        
+        // 3. Limpa/Reseta os campos visuais do modal para não mostrar dados antigos
+        taskNameInput.value = ""; 
+        document.querySelector(".dateValue").textContent = "Nenhuma data definida";
+        document.querySelector(".dateValue").classList.remove("withValue");
+        
+        // Foca no título
+        taskNameInput.focus();
+
+        // 4. RENDERIZA O CARD NA COLUNA IMEDIATAMENTE
+        const taskHtml = createTaskHtml(newTask);
+        const targetColumnId = newTask.coluna_id || 1; // ID da coluna "A Fazer"
+        const columnEl = document.querySelector(`.column[data-column-id="${targetColumnId}"]`);
+
+        if (columnEl) {
+            const taskListEl = columnEl.querySelector('.task-list-dropzone');
+            
+            // Tira a classe 'noRender' se for a primeira tarefa
+            if (taskListEl.classList.contains('noRender')) {
+                taskListEl.classList.remove('noRender');
+            }
+            
+            // Adiciona o card
+            taskListEl.insertAdjacentHTML('beforeend', taskHtml);
+
+            // Atualiza contador da coluna
+            const counterEl = columnEl.querySelector('.columnTaskQuantity');
+            if (counterEl) counterEl.textContent = parseInt(counterEl.textContent || 0) + 1;
+
+            // Adiciona listeners de clique no novo card
+            addCardClickListeners();
+        }
+
+        // 5. ATIVA O AUTOSAVE
+        // Liga os eventos nos campos para salvar assim que você alterar algo
+        setupAutoSave();
+
+    } catch (error) {
+        console.error("Erro ao abrir modal:", error);
+        alert("Erro ao iniciar a criação da tarefa.");
+    }
+}
+
+function setupAutoSave() {
+    const modal = document.querySelector('.addTaskModal');
+    
+    // --- A. TÍTULO (Salva 1 segundo após parar de digitar) ---
+    const titleInput = modal.querySelector('.invisibleTaskNameInput');
+    
+    // Remove listeners antigos clonando o elemento (truque rápido)
+    const newTitleInput = titleInput.cloneNode(true);
+    titleInput.parentNode.replaceChild(newTitleInput, titleInput);
+    
+    newTitleInput.addEventListener('input', () => {
+        clearTimeout(autosaveTimeout);
+        autosaveTimeout = setTimeout(() => {
+            triggerUpdate({ titulo: newTitleInput.value });
+        }, 1000); 
+    });
+    // Foca novamente pois o clone perde o foco
+    newTitleInput.focus(); 
+
+    const descriptionInput = modal.querySelector('.descriptionInput');
+    
+    // 1. Clona para limpar ouvintes antigos
+    const newDescriptionInput = descriptionInput.cloneNode(true);
+    
+    // 2. CORREÇÃO AQUI: Usa o pai do descriptionInput, não do titleInput
+    descriptionInput.parentNode.replaceChild(newDescriptionInput, descriptionInput);
+    
+    // 3. Adiciona o ouvinte no novo elemento
+    newDescriptionInput.addEventListener('input', () => {
+        clearTimeout(autosaveTimeout);
+        autosaveTimeout = setTimeout(() => {
+            // Chama o update passando apenas o campo que mudou
+            triggerUpdate({ descricao: newDescriptionInput.value });
+        }, 1000); 
+    });
+
+    // --- B. CATEGORIA (Salva ao clicar) ---
+    const categoryOptions = modal.querySelectorAll('.categoryOption');
+    categoryOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const categoryId = option.getAttribute('data-category');
+            triggerUpdate({ categoria_id: categoryId });
+        });
+    });
+
+    // --- C. STATUS (Salva e move de coluna ao clicar) ---
+    const statusOptions = modal.querySelectorAll('.statusOption');
+    statusOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const statusId = option.getAttribute('data-status');
+            triggerUpdate({ status_id: statusId });
+        });
+    });
+}
+
+function updateColumnCounters() {
+    const columns = document.querySelectorAll('.column');
+    columns.forEach(col => {
+        const count = col.querySelectorAll('.task-card-draggable').length;
+        const counterEl = col.querySelector('.columnTaskQuantity');
+        if (counterEl) counterEl.textContent = count;
+    });
+}
+
+// Função central que chama sua API e atualiza a tela
+// Função central que chama a API e pede para atualizar a tela
+async function triggerUpdate(dataToUpdate) {
+    if (!currentEditingTaskId) return;
+    console.log("🚀🚀🚀🚀🚀🚀",currentEditingTaskId);
+    
+    console.log("Salvando...", dataToUpdate);
+
+    if (dataToUpdate.hasOwnProperty('status_id')) {
+        
+        const newColumnId = dataToUpdate.status_id;
+        console.log("🙏🙏🙏🙏🙏🙏🙏🙏🙏🙏",newColumnId);
+        
+        
+        // 1. Chama a rota específica de MOVER
+        const movedTask = await requestMoveTask(currentEditingTaskId, newColumnId);
+        
+        if (movedTask) {
+            // 2. Move visualmente o card para a nova coluna
+            moveTaskToColumn(currentEditingTaskId, newColumnId);
+            
+            // 3. Atualiza os dados do card (caso a cor ou tags tenham mudado no processo)
+            updateTaskCardInDOM(movedTask);
+            
+            // 4. (Opcional) Atualiza os contadores das colunas visualmente
+            updateColumnCounters(); 
+        }
+        return; // Sai da função, pois já resolvemos o move
+    }
+
+    try {
+        // 1. Chama a API
+        const updatedTask = await requestUpdateTask(dataToUpdate, currentEditingTaskId);
+        console.log("✨✨✨✨✨✨✨✨✨✨", updatedTask);
+        
+        
+        if (updatedTask) {
+            // 2. REUTILIZAÇÃO: Chama sua função para atualizar o visual do card
+            updateTaskCardInDOM(updatedTask);
+            console.log("🥲🥲🥲🥲🥲🥲🥲🥲🥲🥲");
+
+            
+            // 3. Lógica extra: Se mudou o STATUS, precisa mudar de COLUNA também
+            if (dataToUpdate.status_id) {
+                 moveTaskToColumn(currentEditingTaskId, dataToUpdate.status_id);
+            }
+        }
+    } catch (error) {
+        console.error("Erro no autosave:", error);
+    }
+}
+
+
+
 
 
 async function initializeBoard() {
@@ -42,7 +222,7 @@ async function initializeBoard() {
  function populateModalSelectors(columns, categories) {
         // 1. Encontra TODOS os containers de status nos dois modais
         const allStatusContainers = document.querySelectorAll('.selectStatusModal');
-        const AllCategoriesContainers = document.querySelectorAll('.selectCategoryModal');
+        const AllCategoriesContainers = document.querySelectorAll('.categoryOptionsWrapper');
 
         // --- 2. Popula o "STATUS" (usando as COLUNAS) ---
         const columnHtml = columns.map((col, index) => `
@@ -53,12 +233,12 @@ async function initializeBoard() {
             </div>
         `).join('');
 
-        const categoriesHtml = categories.map((category, index) => `
-            <div class="categoryOption ${category.nome.toLowerCase().replace(/[\sçã]/g, '')}Category ${ index === 0 ? 'categorySelected' : ''}" data-category="${category.id}">
-                <div class="categoryBadge ${category.nome.toLowerCase().replace(/[\sçã]/g, '')}Badge" style="background-color: ${category.cor}">
-                    <p>${category.nome}</p>
-                </div> <!-- designBadge  -->
+        const categoriesHtml = categories.map((cat, index) => `
+        <div class="categoryBadgeContainer" data-category="${cat.id}">
+            <div class="categoryBadge" style="background-color: ${cat.cor_fundo}; color: ${cat.cor_texto};"  data-category="${cat.id}">
+                <p>${cat.nome}</p>
             </div>
+        </div>
         `).join(''); 
 
         allStatusContainers.forEach(container => container.innerHTML = columnHtml);
@@ -66,6 +246,11 @@ async function initializeBoard() {
 
         addStatusListeners();
     }
+
+function toggleCategoryModal (){
+    selectCategoryModal.classList.toggle("selectCategoryHidden")
+    createNewCategoryInput.focus()
+}
 
 function criarOptionsColunas(columns){
     const modalOptions = document.querySelector('.selectStatusModal');
@@ -386,7 +571,11 @@ function renderMembersSidebar(members, columns) {
 }
 
 function updateTaskCardInDOM(updatedTask) {
-        const taskCard = document.querySelector(`.task-card-draggable[data-task-id="${updatedTask.id}"]`);
+    console.log(updatedTask.id);
+    
+        const taskCard = document.querySelector(`div[data-task-id="${updatedTask.id}"]`); 
+        console.log("☁️taskCard", taskCard);
+        
         if (taskCard) {
             // Recria o HTML para o card atualizado
             const newTaskHtml = createTaskHtml(updatedTask);
@@ -429,6 +618,7 @@ async function openEditModal(taskId) {
 
     const editTaskTitleEl = editModal.querySelector('.invisibleTaskNameInput');
     const editDateValueEl = editModal.querySelector('.dateValue');
+    const description = editModal.querySelector('.descriptionInput'); 
     const editSubtaskListEl = document.querySelector('.listSubtasks');
     const taskIdDiv = document.querySelector(".taskId")
 
@@ -443,6 +633,7 @@ async function openEditModal(taskId) {
         taskIdDiv.setAttribute("task-id", taskData.id);
         editTaskTitleEl.textContent = taskData.titulo;
         editTaskTitleEl.value = taskData.titulo;
+        description.value = taskData.descricao;
         editDateValueEl.textContent = taskData.data_termino ? new Date(taskData.data_termino).toLocaleDateString('pt-BR') : 'Nenhuma data definida';
         
         // (Lógica para preencher status, categoria, membros)
@@ -475,7 +666,8 @@ function renderColumns(columns) {
         
         // Gera o HTML de todas as tarefas primeiro
         const tasksHtml = column.tasks.map(task => createTaskHtml(task)).join('');
-
+        console.log("Saiuuuuuuuuuuuu🟨");
+        
         const classTaskContainer = column.tasks.length > 0 
             ? `tasksToDoBoard task-list-dropzone` 
             : 'tasksToDoBoard task-list-dropzone noRender';
@@ -531,61 +723,67 @@ function renderColumns(columns) {
 }
 
 function createTaskHtml(dataTask){
-    console.log("➡️🚀AQUI",dataTask);
+    console.log(dataTask);
+    
+    
+    const categoriaNome = dataTask.categoryTask ? dataTask.categoryTask.nome : "Nenhuma" ;
+    const categoriaCor = dataTask.categoryTask ? dataTask.categoryTask.cor_fundo : "#bbbbbbff" ;
+    const taskTitle = dataTask.titulo ? dataTask.titulo : "" ;
+    const taskDesc = dataTask.descricao ? dataTask.descricao : "Sem descrição" ;
+    console.log("➡️➡️➡️➡️➡️➡️",categoriaNome, taskTitle);
 
-const categoriaNome = dataTask.categoryTask.nome || 'Geral';
+    // 3. Crie a tag UMA VEZ
+    const tag = `<div class="tag ${categoriaNome}" style="background-color: ${categoriaCor}";>
+                <p>${categoriaNome}</p>
+                </div>`;
 
-// 3. Crie a tag UMA VEZ
-const tag = `<div class="tag ${categoriaNome}" style="background-color: ${dataTask.categoryTask.cor}";>
-               <p>${categoriaNome}</p>
-             </div>`;
+        return `
+        <div class="tasksToDoBoard task-card-draggable" data-task-id="${dataTask.id}"  draggable="true">
+                                <div class="topTaskSection">
+                                    <div class="taskTop">
+                                    ${tag}
+                                        <div class="taskHeaderIcons">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                        </div> <!-- taskHeaderIcons -->
+                                    </div> <!-- taskTop-->
 
-    return `
-    <div class="tasksToDoBoard task-card-draggable" data-task-id="${dataTask.id}"  draggable="true">
-                            <div class="topTaskSection">
-                                <div class="taskTop">
-                                   ${tag}
-                                    <div class="taskHeaderIcons">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-icon lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                                    </div> <!-- taskHeaderIcons -->
-                                </div> <!-- taskTop-->
-
-                                <div class="boardTaskInfo">
-                                    <h4>${dataTask.titulo}</h4>
-                                    <p class="taskDescription"> Sem descrição </p>
+                                    <div class="boardTaskInfo">
+                                        <h4>${taskTitle}</h4>
+                                        <p class="taskDescription"> ${taskDesc} </p>
+                                        
+                                    <div class="progressBarContainer loading">
+        <div class="progressBar"></div> 
+    </div>
                                     
-                                  <div class="progressBarContainer loading">
-    <div class="progressBar"></div> 
-</div>
-                                
-                                </div> <!-- boarTaskInfo -->
-                            </div> <!--topTaskSection-->
+                                    </div> <!-- boarTaskInfo -->
+                                </div> <!--topTaskSection-->
 
-                            <div class="taskFooterInfo">
-                                <div class="taskMetrics">
-                                    <div class="commentStatus">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more-icon lucide-message-circle-more"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
-                                        <p>0</p>
-                                    </div> <!--commentStatus-->
-                                    <div class="attachmentStatus">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip-icon lucide-paperclip"><path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/></svg>
-                                        <p>0</p>
-                                    </div>
-                                </div> <!--taskMetrics-->
+                                <div class="taskFooterInfo">
+                                    <div class="taskMetrics">
+                                        <div class="commentStatus">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more-icon lucide-message-circle-more"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+                                            <p>0</p>
+                                        </div> <!--commentStatus-->
+                                        <div class="attachmentStatus">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip-icon lucide-paperclip"><path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/></svg>
+                                            <p>0</p>
+                                        </div>
+                                    </div> <!--taskMetrics-->
 
-                                <div class="taskMembersandQuantity">
-                                    <div class="memberIconTask" style="background-color: aquamarine;"></div>
-                                    <div class="memberIconTask" style="background-color: blueviolet;"></div>
-                                    <div class="memberIconTask" style="background-color: blue;"></div>
-                                    <div class="taskQuantityMembers">
-                                        +2
-                                    </div>
-                                </div> <!-- taskMembersandQuantity -->
-                            </div> <!--taskFooterInfo-->
-                        </div> <!-- tasksToDoBoard -->`
+                                    <div class="taskMembersandQuantity">
+                                        <div class="memberIconTask" style="background-color: aquamarine;"></div>
+                                        <div class="memberIconTask" style="background-color: blueviolet;"></div>
+                                        <div class="memberIconTask" style="background-color: blue;"></div>
+                                        <div class="taskQuantityMembers">
+                                            +2
+                                        </div>
+                                    </div> <!-- taskMembersandQuantity -->
+                                </div> <!--taskFooterInfo-->
+                            </div> <!-- tasksToDoBoard -->`
 }
 
-async function requestCreateTask() {
+
+async function requestCreateTaskOld() {
         // 1. Coleta os dados do seu formulário modal
         const title = document.querySelector(".invisibleTaskNameInput").textContent; 
         if (!title || title.trim() === '') {
@@ -610,7 +808,8 @@ async function requestCreateTask() {
         }
         // --- FIM DA CORREÇÃO ---
 
-        const description = null; // (Pode buscar de um <textarea> se tiver)
+        const description = document.querySelector(".descriptionInput").value || null; // (Pode buscar de um <textarea> se tiver)
+        console.log(description);
         const statusSelected = parseInt(document.querySelector(".statusSelected").getAttribute('data-status'));
         const categorySelected = parseInt(document.querySelector(".categorySelected").getAttribute('data-category'));
         const subtasksNodeList = document.querySelectorAll('.subtaskName');
@@ -695,43 +894,130 @@ async function requestCreateTask() {
         }
 }
     
-    function showSuccessModal(message) {
-        // Cria o elemento do overlay (fundo)
-        const overlay = document.createElement('div');
-        overlay.className = 'addTaskModal';
-        
-        // Cria o conteúdo do modal
-        const modalContent = document.createElement('div');
-        modalContent.className = 'bg-white rounded-lg shadow-xl p-6 flex flex-col items-center max-w-sm mx-4';
-
-        // Ícone de Sucesso (SVG)
-        const iconSvg = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-        `;
-
-        // Mensagem
-        const messageEl = document.createElement('h3');
-        messageEl.className = 'text-xl font-semibold text-gray-800 mt-4 text-center';
-        messageEl.textContent = message;
-
-        // Adiciona o ícone e a mensagem ao modal
-        modalContent.innerHTML = iconSvg;
-        modalContent.appendChild(messageEl);
-        
-        // Adiciona o modal ao overlay
-        overlay.appendChild(modalContent);
-        
-        // Adiciona o overlay à página
-        document.body.appendChild(overlay);
-
-        // Remove o modal após 2 segundos
-        setTimeout(() => {
-            overlay.remove();
-        }, 2000);
+async function requestCreateTask(){
+    const dataDefaultTask = {
+        "projeto_id": currentProjectId,
+        "prioridade": "Media",
+        "status_id": 1
     }
+
+    try{
+        const response = await fetch(`${API_BASE_URL}/tasks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataDefaultTask)
+        }); 
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Falha ao criar a tarefa.');
+        }
+
+        const newTask = await response.json();
+        const taskHtml = createTaskHtml(newTask);
+
+        return newTask;
+        
+    }catch(error){
+        console.error("Falha ao chamar api para criar tarefa:", error);
+        alert("Não foi possível chamar api para criar a tarefa: " + error.message);
+        return;
+    }
+    
+}
+
+
+async function requestUpdateTask(dataTaskUpdated, taskId){
+    try{
+        if(!dataTaskUpdated || !taskId){
+            alert("Necessário um dado para atualizar e o id da tarefa");
+            return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+            method: "PATCH",
+            headers: { 'Content-Type': 'application/json' },
+            body:  JSON.stringify(dataTaskUpdated)
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Falha ao criar a tarefa.');
+        }
+
+        const updatedTask = await response.json();
+
+        return updatedTask;
+    }catch(error){
+        console.error("Falha chamar api para atualizar tarefa:", error);
+        alert("Não ao atualizar tarefa na api: " + error.message);
+        return;
+    }
+}
+
+
+async function requestMoveTask(taskId, newColumnId) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/tasks/${taskId}/move`, {
+            method: 'PATCH', // Ou 'POST', dependendo de como seu backend foi definido
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                newColumnId: parseInt(newColumnId) // O corpo que você pediu
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Erro ao mover tarefa');
+        }
+
+        return await response.json(); // Espera-se que retorne a tarefa atualizada
+
+    } catch (error) {
+        console.error("Erro na API de mover:", error);
+        alert("Não foi possível mover a tarefa: " + error.message);
+        return null;
+    }
+}
+
+
+function showSuccessModal(message) {
+    // Cria o elemento do overlay (fundo)
+    const overlay = document.createElement('div');
+    overlay.className = 'addTaskModal';
+    
+    // Cria o conteúdo do modal
+    const modalContent = document.createElement('div');
+    modalContent.className = 'bg-white rounded-lg shadow-xl p-6 flex flex-col items-center max-w-sm mx-4';
+
+    // Ícone de Sucesso (SVG)
+    const iconSvg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+    `;
+
+    // Mensagem
+    const messageEl = document.createElement('h3');
+    messageEl.className = 'text-xl font-semibold text-gray-800 mt-4 text-center';
+    messageEl.textContent = message;
+
+    // Adiciona o ícone e a mensagem ao modal
+    modalContent.innerHTML = iconSvg;
+    modalContent.appendChild(messageEl);
+    
+    // Adiciona o modal ao overlay
+    overlay.appendChild(modalContent);
+    
+    // Adiciona o overlay à página
+    document.body.appendChild(overlay);
+
+    // Remove o modal após 2 segundos
+    setTimeout(() => {
+        overlay.remove();
+    }, 2000);
+}
 
 initializeBoard()
 

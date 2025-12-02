@@ -218,14 +218,17 @@ class FriendshipService{
     
         const listFriends = await friendshipDAO.findAllFriends(currentUserId);
     
-        if(!listFriends || listFriends.length === 0){
+        if(!listFriends){
             const error = new Error("Não foi possivel buscar a lista de solicitações de amizade enviadas");
             error.statusCode = 400;
             throw error;
         }
+
+        if(listFriends.length === 0){
+            return [];
+        }
     
         return listFriends;
-    
     }
 
     async deleteFriendship(currentUserId, otherUserId){
