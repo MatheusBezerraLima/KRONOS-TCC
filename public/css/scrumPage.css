@@ -43,6 +43,601 @@ body{
 
 }
 
+.addTaskModal{
+    position: fixed;
+    top:50%;
+    left:50%;
+    width: 500px;
+    height: 490px;
+    background-color: var(--main-color);
+    z-index: 1001;
+    transform: translate(-50%, -50%);
+    display: none;
+    border-radius:10px;
+    padding: 20px;
+    overflow: hidden;
+    user-select: none;
+}
+
+.modalOn{
+    display: block;
+}
+
+.filter{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--transparentBlack);
+    z-index: 1000;
+    display: none;
+}
+
+.filterEd{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--transparentBlack);
+    z-index: 1000;
+    display: none;
+}
+
+.filterOn{
+    display: block;
+}
+
+.modalTop{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.modalTop svg{
+    cursor: pointer;
+}
+
+.formModal{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 45%;
+    gap:10px;
+    margin-top: 10px;
+    
+}
+
+.dateFormModal, .categoryFormModal, .statusFormModal, .linksFormModal, .atribuitionFormModal {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+    height: 40px; 
+}
+
+.categoryTitle, .dateTitle, .statusTitle, .linksTitle, .atribuitionTitle{
+    width:30%;
+    font-size: 0.9rem;
+    color: var(--taskBoardIcon-color);
+    font-weight: 500;
+}
+
+.addMoreMembersModal{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius:50%;
+    background-color: var(--lightGrey);
+}
+
+.addMoreMembersModal svg{
+    width: 20px;
+    height: 20px;
+}
+
+.memberIconModal{
+    width: 25px;
+    height: 25px;
+    border-radius:50%;
+    margin-left:-10px;
+}
+
+.memberIconModal:first-child{
+    margin-left:0;
+}
+
+.selectInput{
+    width: 75px;
+    height: 25px;
+}
+
+.memberModal{
+    display: flex;
+}
+.atribuitionMembersModal{
+    display: flex;
+    gap:10px;
+}
+
+.formModalInfo{
+    display: flex;
+    align-items: flex-end;
+    width: 70%;
+    height: 25px;
+    min-height: 25px;
+    margin: 0;
+    gap:20px;
+}
+
+/* ------------------------ Estilização nome da tarefa ------------------------ */
+.taskNameContainer{
+    width: 300px;
+    height: 30px;
+}
+
+.invisibleTaskNameInput{
+    outline: none;
+    height: 100%;
+    width: 100%;
+    font-size:1.7rem;
+    font-weight: bold;
+    border: none;
+}
+
+.invisibleCursor{
+    caret-color: transparent !important;
+}
+
+/* ------------------------ Estilização da input de data ------------------------ */
+
+.selectDate{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.98rem;
+    width: 175px;
+    height: 23px;
+    cursor: pointer;
+    position: relative;
+    color: #3F3F3F;
+}
+
+.selectDate:hover{
+    width: 175px;
+    height: 23px;
+    background-color: var(--lightGrey);
+    border-radius: 5px;
+}
+
+.selectDate.placeholder{
+    color: var(--toDoFont-color);
+}
+
+.selectDate.withValue{
+    color: #000000;
+}
+
+/* --- Estilos para Reduzir o Flatpickr e Manter a Legibilidade --- */
+
+.flatpickr-calendar {
+    display: flex;
+    font-size: 12px; 
+    width: 220px;    
+    max-width: 220px;
+    height: 280px;
+    margin-top:25px;
+}
+
+.flatpickr-rContainer{
+    width: 220px;
+    height: 220px;
+}
+
+.flatpickr-weekdaycontainer {
+    padding: 0; 
+}
+
+.flatpickr-weekdays{
+    width: 100%;
+    font-size: 12px;
+}
+
+.flatpickr-months{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    width: 100%;
+}
+
+.flatpickr-innerContainer{
+    width: 100%;
+    height: 85%;
+}
+
+.flatpickr-month{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flatpickr-current-month{
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:10px;
+}
+
+.dayContainer{
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.flatpickr-days{
+    width: 100%;
+}
+.flatpickr-day {
+    height: 35px;       /* Altura menor para as células */
+    line-height: 35px;  /* Mantém o número centralizado verticalmente */
+    width: 20px;        /* Largura menor para as células */  /* Espaçamento pequeno entre os números */
+}
+
+/* ------------------------ Modal para selecionar categoria ------------------------ */
+
+.selectCategoryModal{
+    display: flex;
+    flex-direction: column;
+    width: min-content;
+    height: min-content;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 5px;
+    align-self: flex-start;
+}
+
+.selectCategoryModal.categoryOpen{
+    width: 150px; 
+    background-color: #F2F2F2;
+    z-index: 10;
+}
+
+/* Estilização das etiquetas */
+.categoryBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85px;
+    height: 28px;
+    border-radius:5px;
+    font-weight: 500;
+}
+
+/* Estilização das cores das etiquetas */
+.designBadge{
+    background-color: rgb(231, 53, 106);
+    color: var(--toDoFont-color);
+}
+
+.frontendBadge{
+    background-color: var(--doing-color);
+    color: var(--doingFont-color);
+}
+
+.backendBadge{
+    background-color: var(--done-color);
+    color: var(--doneFont-color);
+}
+
+/* Container que fica as etiquetas quando o modal esta aberto */
+.categoryOption{
+    display: flex;
+    align-items: center;
+    width: 150px;
+    height: 40px;
+    padding-left:10px;
+    font-size:0.9rem;
+}
+
+.selectCategoryModal.categoryOpen .categoryOption:first-child{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.selectCategoryModal.categoryOpen .categoryOption:last-child{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* As que nao estao selecionadas */
+.categoryOption:not(.categorySelected){
+    display: none;
+}
+
+/* Quando o modal esta aberto todos as etiquetas estao abertas*/
+.selectCategoryModal.categoryOpen .categoryOption{
+    display:flex;
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+}
+
+/* Estilo da etiqueta selecionada, sem o modal */
+.categoryOption.categorySelected{
+    padding: 0;
+    width: min-content;
+    height: min-content;
+}
+
+/* Hover nas etiquetas nao selecionadas*/
+.selectCategoryModal.categoryOpen .categoryOption:hover:not(.categorySelected){
+    transform: .2s ease;
+    background-color: #d3d3d3;
+}
+
+/*Estilo da etiqueta selecionada*/
+.selectCategoryModal.categoryOpen .categoryOption.categorySelected{
+    background-color: #D9D9D9;
+}
+
+/* ------------------------ Modal para selecionar status ------------------------ */
+
+.selectStatusModal{
+    display: flex;
+    flex-direction: column;
+    width: min-content;
+    height: min-content;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 5px;
+    align-self: flex-start;
+
+}
+
+.selectStatusModal.statusOpen {
+    width: 150px; 
+    background-color: #F2F2F2;
+    z-index: 10;
+}
+
+/* Estilização das etiquetas */
+.statusBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85px;
+    height: 28px;
+    border-radius:5px;
+    font-weight: 500;
+}
+
+/* Estilização das cores das etiquetas */
+.afazerBadge{
+    background-color: var(--toDo-color);
+    color: var(--toDoFont-color);
+}
+
+.fazendoBadge{
+    background-color: var(--doing-color);
+    color: var(--doingFont-color);
+}
+
+.concluídoBadge{
+    background-color: var(--done-color);
+    color: var(--doneFont-color);
+}
+
+/* Container que fica as etiquetas quando o modal esta aberto */
+.statusOption{
+    display: flex;
+    align-items: center;
+    width: 150px;
+    height: 40px;
+    padding-left:10px;
+    font-size:0.9rem;
+}
+
+.selectStatusModal.statusOpen .statusOption:first-child{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.selectStatusModal.statusOpen .statusOption:last-child{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* As que nao estao selecionadas */
+.statusOption:not(.statusSelected){
+    display: none;
+}
+
+/* Quando o modal esta aberto todos as etiquetas estao abertas*/
+.selectStatusModal.statusOpen .statusOption{
+    display:flex;
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+}
+
+/* Estilo da etiqueta selecionada, sem o modal */
+.statusOption.statusSelected{
+    padding: 0;
+    width: min-content;
+    height: min-content;
+}
+
+/* Hover nas etiquetas nao selecionadas*/
+.selectStatusModal.statusOpen .statusOption:hover:not(.statusSelected){
+    transform: .2s ease;
+    background-color: #d3d3d3;
+}
+
+/*Estilo da etiqueta selecionada*/
+.selectStatusModal.statusOpen .statusOption.statusSelected{
+    background-color: #D9D9D9;
+}
+
+/* ------------------------ Estilização da parte de subtarefas, comentarios... do modal ------------------------ */
+
+.activitysTaskModal{
+    width: 100%;
+    height: 55%;
+    padding-top: 20px;
+}
+
+.sectionsTitleActivitys{
+    display: flex;
+    width: 100%;
+    height: 10%;
+    gap:25px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.activityTitle{
+    width: auto;
+    height: 100%;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    border-bottom: 2px solid transparent;
+
+}
+
+.activitySectionSelected{
+    border-bottom: 2px solid #000080;
+    color: var(--blue);
+    font-weight: 500;
+}
+
+.subtaskQuantitysandButton{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-top: 10px;
+    justify-content: space-between;
+    font-weight: 500;
+}
+
+.createSubtasks{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 25px;
+    background-color: var(--blue);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.createSubtasks svg{
+    stroke: #FFFF;
+    width: 20px;
+    height: 20px;
+}
+
+/* Parte da estilização dos containers do checkbox e das checkboxs */
+.ContainerSubtask{
+    display: flex;
+    width: 100%;
+    height: 80%;
+    flex-direction: column;
+    gap:5px;
+    overflow: scroll;
+    overflow-x: hidden;
+
+}
+
+.subtask{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap:5px;
+    width: 100%;
+    height: 30px;
+}
+
+/* Input escondida */
+.subtaskCheckbox {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+/* Estilo da input falsa */
+.checkboxCustom{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.checkIcon{
+    width: 100%;
+    height: 100%;
+    stroke: #FFFFFF;
+    fill: none; 
+    transform: scale(0); 
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Estilo da checkbox depois de marcada */
+.subtaskCheckbox:checked + .checkboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+/* Estilo de como vai aparecer a checkbox  e o icone depois de marcada */
+.subtaskCheckbox:checked + .checkboxCustom .checkIcon {
+    transform: scale(1); 
+}
+
+/*Estilo de risquinho no nome da tarefa */
+.subtaskCheckbox:checked ~ .subtaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
+.subtaskName{
+    font-size:1rem;
+}  
+
+.insertNameInput{
+    outline: none;
+    border: none;
+    font-size:1rem;
+}
+
+.checkboxAndNameContainer{
+    display: flex;
+    gap:10px;
+}
+
+.deleteSubtask{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    stroke: #999;
+}
+
 /* Menu lateral */
 .aside{
     display: flex;
@@ -138,13 +733,12 @@ nav{
         list-style: none; 
         display: flex;  
         flex-direction: column;
-        gap:10px;
     }
    
 }
 .selection-aside{
     width:100%;
-    height:40px;
+    height:50px;
     display: flex;
     align-items: center;
     padding-left:15px ;
@@ -154,12 +748,12 @@ nav{
 .selection-aside:hover{
     background-color: var(--selected-color);
     width: 100%;
-    height:40px;
+    height:50px;
 }
 .selected{
     background-color: var(--selected-color);
     width: 100%;
-    height:40px;
+    height:50px;
 }
 
 .headerLink a {
@@ -251,7 +845,7 @@ nav{
 
 .taskAside{
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     width: 100%;
     gap:5px;
     font-weight: 400;
@@ -265,6 +859,14 @@ nav{
     font-size:0.9rem;
     font-weight: 400;
     gap:5px;
+}
+
+.asideSubtaskName{
+    width: 120px;
+    max-width: 100%;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
 }
 
 .taskAsidecheckboxCustom{
@@ -474,7 +1076,7 @@ main{
     flex-direction: column;
     width: 100%;
     flex-grow: 1;
-    overflow-y: auto;
+    overflow-y: hidden;
     background-color: var(--secundary-color);
     padding-right: 20px;
     padding-left: 20px;
@@ -706,9 +1308,8 @@ main{
 }
 
 .backlogContainer{
-    width: 300px;
-    max-height: 455px;
-    height: 100%;
+    width: 400px;
+    height: calc(100% - 110px);
     border-radius: 10px;
     background-color: var(--main-color);
     box-shadow: 2px 2px 8px var(--shadow);
@@ -739,7 +1340,7 @@ main{
     background-color: #000080;
     border-radius: 50%;
     color: var(--main-color);
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
 }
 
@@ -771,7 +1372,7 @@ main{
 .backlog{
     display: flex;
     flex-direction: column;
-    justify-content:space-between;
+    gap:5px;
     padding: 10px;
     border-radius: 10px;
     width: 100%;
@@ -845,14 +1446,17 @@ main{
 
 .sprintsContainer{
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap:20px;
     width: calc(100% - 300px);
-    height: 100%;
+    height: calc(100% - 110px);
+    overflow: auto;
 }
 
 .sprint{
     width: 630px;
-    height: 300px;
+    height: 350px;
     background-color: var(--main-color);
     border-radius: 10px;
     box-shadow: 2px 2px 8px var(--shadow);
@@ -878,16 +1482,28 @@ main{
     height: 35px;
     border: none;
     border-radius: 10px;
-    border: 1px solid var(--blue);
+    border: 2px solid var(--blue);
     font-size: 15px;
     color: var(--blue);
     font-weight: 500;
+    background-color: var(--main-color);
+    cursor: pointer;
+    transition: .2s ease-in-out;
+}
+
+.concludeSprint:hover{
+    background-color: #0000800e;
 }
 
 .sprintTasksList{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
     width: 100%;
     height: 65%;
-
+    padding:10px 15px;
+    overflow: hidden;
+    overflow: auto;
 }
 
 .createMoreTasksInSprint{
@@ -903,9 +1519,92 @@ main{
     font-size: 15px;
     color: #696969;
     cursor: pointer;
+    transition: .2s ease-in-out ;
+}
+
+.createMoreTasksInSprint:hover{
+    background-color: #dbdbdb;
+
 }
 
 .createMoreTasksInSprint svg{
     width: 18px;
     height: 18px;
+}
+
+.sprintName{
+    font-weight: 600;
+}
+
+.sprintTask{
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px 15px;
+    width: 100%;
+    height: 70px;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+}
+
+.sprintTaskInfoBottom{
+    display: flex;
+    gap:10px;
+    align-items: center;
+
+}
+
+.categoryBadge{
+    width: 75px;
+    height: 20px;
+    background-color: #032CA6;
+    border-radius: 10px;
+}
+
+.sprintTaskInfo{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 3;
+    gap:5px;
+}
+
+.sprintTaskName{
+    font-weight: 500;
+}
+
+.sprintTaskNumber{
+    font-size: 12px;
+    color: #696969;
+}
+
+.progressBarContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 30px;
+    flex-grow: 2;
+    gap:5px;
+    font-size: 12px;
+}
+
+.memberAtribuiteContainer{
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end ;
+
+}
+
+.userMemberProfile{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #000080;
+}
+
+.progressBar{
+    width: 200px;
+    height: 10px;
+    background-color: #119500;
+    border-radius: 10px;
 }
