@@ -271,6 +271,7 @@ main{
 
 .projectPageTitle{
     color: var(--black);
+    font-size: 30px;
 }
 
 .pageSubtitle{
@@ -298,8 +299,12 @@ main{
     overflow-y: auto;
 }
 
+.projectsContainer::-webkit-scrollbar{
+    display: none;
+}
+
 .tasksAndUsersContainer{
-    width: 400px;
+    width: 360px;
     height: 95%;
     display: flex;
     flex-direction: column;
@@ -313,25 +318,9 @@ main{
     flex-wrap: wrap; 
     width: 100%; 
     height: auto;
-    gap:10px;
+    gap:12px;
     padding-top: 10px;
 }
-
-.projectsContainer::-webkit-scrollbar {
-    width: 4px; /* Torna a barra mais fina */
-    height: 2px;
-}
-
-.tasksList::-webkit-scrollbar-thumb {
-    background: #ccc; 
-    border-radius: 10px;
-}
-
-/* 4. Estilização do thumb ao passar o mouse (hover) */
-.tasksList::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8; 
-}
-
 
 .titleProjectContainer{
     display: flex;
@@ -357,7 +346,7 @@ main{
     justify-content: center;
     align-items: center;
     width: calc(25% - 20px);   
-    min-width: 260px; 
+    min-width: 240px; 
     height: 180px;
     margin-top:5px;
     border-radius: 10px;
@@ -389,7 +378,7 @@ main{
     display: flex;
     flex-direction: column;
     width: calc(25% - 20px);   
-    min-width: 260px; 
+    min-width: 240px; 
     padding: 15px 15px 5px 15px;
     height: 180px;
     background-color: #ffffff;
@@ -607,10 +596,9 @@ main{
     padding:5px 10px;
     border: 1px solid #f2f2f2;
     border-radius:10px ;
-    box-shadow: 2px 2px 5px var(--shadow);
     display: flex;
     gap:8px;
-    width: 100%;
+    flex-grow: 1;
     align-items: center;
     justify-content: space-between;
     height: fit-content;
