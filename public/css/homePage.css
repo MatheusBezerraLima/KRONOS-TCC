@@ -1,0 +1,714 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: "poppins";
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    font-size: 1em;
+    display: flex;
+    margin:0;
+    padding:0;
+    position: relative;
+    /* overflow: hidden; */
+}
+
+:root{
+    --border-color-aside: #ECECEC;
+    --border-color: #d3d3d3;
+    --asideSelection: rgba(42, 0, 255, 0.05);
+    --blue: #000080;
+    --black: #000000;
+    --main-color: #FFFFFF;
+    --secundary-color: #F7F6FF;
+    --lightGrey: #E6E6E6;
+    --taskBoardIcon-color: #3F3F3F;
+    --shadow: rgb(198, 198, 198, 0.5);
+    --toDoColor: rgba(64, 64, 64, 0.1);
+    --toDoFontColor: #404040;
+    --lightFontColor:#696969;
+    --blueHoverButton: #0000a5; 
+}
+
+.aside{
+    display: flex;
+    flex-direction: column ;
+    width:200px;
+    height: 100%;
+    border-right: 1px solid #ECECEC;
+    min-width: 200px;
+    transition: width .3s ease, min-width .3s ease;
+}
+
+/*Fechar e abrir menu lateral*/
+
+.asideClosed .selection-aside{
+    display: flex;
+    padding-left: 0;
+    justify-content: center;
+}
+
+.asideClosed .selection-aside svg {
+    width: 22px;
+    height: 22px;
+}
+
+.asideClosed .headerLink {
+    display: none; 
+}
+
+.asideClosed .members{
+    display: none;
+}
+
+.asideClosed .logo{
+     padding: 0;
+     display: flex;
+     justify-content: center;
+}
+
+.asideClosed .logo a{
+    display: none;
+}
+
+.asideClosed .logo .toggleIcon{
+    transform: rotate(180deg); 
+}
+
+.asideClosed{
+    width: 60px;
+    min-width: 60px;   
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    width:100%;
+    height:60px;
+    border-bottom: 1px solid #ECECEC;
+}
+
+.logo a{
+    text-decoration: none;
+    color: var(--black);
+    font-weight: bold;
+}
+
+.logo .toggleIcon{
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    transition: transform 0.3 ease;
+    stroke: var(--black);
+}
+
+.logo svg:hover{
+    width: 25px;
+    height: 25px;
+    background-color: var(--lightGrey);
+    border-radius: 5px ;
+}
+
+/* Navegação Lateral */
+
+nav{
+    
+    padding:15px 0 15px 0;
+    
+    ul{
+        list-style: none; 
+        display: flex;  
+        flex-direction: column;
+    }
+   
+}
+.selection-aside{
+    width:100%;
+    height:50px;
+    display: flex;
+    align-items: center;
+    padding-left:15px ;
+    cursor: pointer;
+    gap:5px;
+}
+.selection-aside:hover{
+    background-color: var(--asideSelection);
+    width: 100%;
+    height:50px;
+}
+
+.selected{
+    background-color: var(--asideSelection);
+    width: 100%;
+    height:50px;
+}
+
+.headerLink a {
+  color: var(--black);
+  text-decoration: none;
+}
+
+.selection-aside.selected .headerLink a {
+  color: var(--blue);
+  font-weight: bold;
+  
+}
+.selection-aside svg{
+     width: 22px;
+     height: 22px;
+}
+
+.selection-aside.selected svg {
+  color: var(--blue);  
+}
+
+.main-content{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+    height: 100%;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    padding: 20px;
+    background-color: var(--main-color);
+    border-bottom: 1px solid #ECECEC;
+    justify-content: space-between;
+}
+
+.breadcrumbs{
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    gap:5px;
+
+}
+
+.breadcrumbs a{
+    text-decoration: none;
+    color: var(--black);
+}
+
+.breadcrumbs svg{
+    width: 25px;
+    height: 25px;
+}
+
+.headerUtilities{
+    display: flex;
+    align-items: center;
+    gap:20px;
+}
+
+.headerUtilitiesHover{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    transition: .3s ease;
+}
+.headerUtilitiesHover:hover{
+    background-color: var(--lightGrey);
+}
+
+.userProfile{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: aqua;
+}
+
+/* Main */
+
+main{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--secundary-color);
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+/*Header project*/
+
+.projectHeader{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.pageTitleContainer{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.pageTitle{
+    height: 60px;
+    gap:15px;
+    display: flex;
+    align-items: center;
+}
+
+.projectPageTitle{
+    color: var(--black);
+}
+
+.pageSubtitle{
+    font-size: 16px;
+    color: var(--black);
+}
+.pageTitle svg{
+    width: 40px;
+    height: 40px;
+    fill:#119500;
+    stroke: #ffffff;
+}
+
+.middleContainer{
+    width: 100%;
+    height: 100%;
+    padding-right: 20px;
+    overflow: hidden;
+}
+
+.projectsContainer{
+    padding-top: 20px;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.tasksAndUsersContainer{
+    width: 400px;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+}   
+
+.projectList{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap; 
+    width: 100%; 
+    height: auto;
+    gap:10px;
+    padding-top: 10px;
+}
+
+.projectsContainer::-webkit-scrollbar {
+    width: 4px; /* Torna a barra mais fina */
+    height: 2px;
+}
+
+.tasksList::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+/* 4. Estilização do thumb ao passar o mouse (hover) */
+.tasksList::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+
+.titleProjectContainer{
+    display: flex;
+    width: 100%;
+    height: 30px;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-right:12px;
+}
+
+.seeAllProjectsLink{
+    font-size: 14px;
+    text-decoration: none;
+    color: #0633AC;
+}
+
+.seeAllProjectsLink:hover{
+    color: #031649;
+}
+
+.addProjectContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(25% - 20px);   
+    min-width: 260px; 
+    height: 180px;
+    margin-top:5px;
+    border-radius: 10px;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: #0000802c;
+    background-color: #00008009;
+    cursor: pointer;
+}
+
+.iconContainer{
+    width: 40px;
+    height: 40px;
+    background-color: #000080;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.iconContainer svg{
+    color: #fdfdfd;
+    width:20px;
+    height: 20px;
+}
+
+.project{
+    display: flex;
+    flex-direction: column;
+    width: calc(25% - 20px);   
+    min-width: 260px; 
+    padding: 15px 15px 5px 15px;
+    height: 180px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 1px 2px 8px var(--shadow);
+    cursor: pointer;
+    transition: .2s ease-in-out;
+    margin-top: 5px;
+}
+
+.project:hover{
+    margin-top: 0px;
+}
+
+.projectTop{
+    flex-grow: 3;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.projectCategoryBadgeModal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    gap:5px;
+    height: 20px;
+    width: fit-content;
+    background-color: #77778b41;
+    max-width: 200px;
+    padding: 15px 10px;
+    font-size:15px;
+    cursor: pointer;
+}
+
+.projectCategoryBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    gap:5px;
+    height: 20px;
+    width: fit-content;
+    max-width: 100px;
+    padding: 15px 10px;
+    font-size:15px;
+    cursor: pointer;
+}
+
+.progressBarContainer{
+    gap:5px;
+    flex-grow: 3;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.progressBar{
+    width: 100%;
+    height: 20px;
+    border-radius: 10px ;
+    background-color: #000080;
+}
+.projectBottom{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.shareWithText{
+    font-size: 10px;
+    color: #696969;
+    margin-bottom: 5px;
+}
+
+.projectTitle{
+    font-size: 18px;
+    max-width: 155px;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}   
+
+.dueDateContainer{
+    margin-left:2px;
+    display: flex;
+    align-items: center;
+    gap:5px;
+}
+
+.dueDateContainer svg{
+    width: 14px;
+    height: 14px;
+    color: #696969;
+}
+
+.dueDateContainer p{
+    font-size: 12px;
+    color: #696969;
+    font-weight: 500;
+}
+.dueDateProjectSubtitle{
+    font-size: 12px;
+}
+
+.projectMembers{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    gap:5px;
+}
+
+.member, .membersQuantity{
+    border: 1px solid var(--main-color);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 1px 2px 5px var(--shadow);
+}
+
+.membersQuantity{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.membersQuantity svg{
+    width: 12px;
+    height: 12px;
+}
+
+.tasksContainer{
+    border-radius: 10px;
+    padding: 15px;
+    width: 100%;
+    height: calc(50% - 6px);
+    border-bottom: 1px solid #f2f2f2;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+    overflow: hidden;
+}
+
+.usersContainer{
+    padding: 15px;
+    height: calc(50% - 6px);
+    width: 100%;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+    border-radius: 10px;
+
+}
+
+.taskTitle, .usersContainerTitle{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.taskContainerTitle{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 8px;
+}
+
+.seeAllTasksLink{
+    font-size: 12px;
+    text-decoration: none;
+    color: #0633AC;
+    cursor: pointer;
+    margin-top:3px;
+}
+
+.seeAllTasksLink:hover{
+    color: #031649;
+
+}
+
+
+.tasksList{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    width: 100%;
+    max-height: 100%;
+    padding-top: 10px;
+    overflow: auto;
+    overflow-x: hidden;
+    padding-right:8px;
+}
+
+/* 1. Largura da barra de rolagem */
+.tasksList::-webkit-scrollbar {
+    width: 4px; /* Torna a barra mais fina */
+    height: 2px;
+}
+
+.tasksList::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+/* 4. Estilização do thumb ao passar o mouse (hover) */
+.tasksList::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+.homeTask{
+    padding:5px 10px;
+    border: 1px solid #f2f2f2;
+    border-radius:10px ;
+    box-shadow: 2px 2px 5px var(--shadow);
+    display: flex;
+    gap:8px;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    height: fit-content;
+}
+
+.checkboxCustom{
+    width: 20px;
+    height: 20px;
+    background-color: var(--main-color);
+    border-radius: 5px;
+    border: 1px solid #474646;
+    margin-top:5px;
+}
+
+.taskInfo{
+    gap:8px;
+    display: flex;
+    flex-direction: row;
+}
+
+.taskName{
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.dueDateTask{
+    font-size: 12px;
+    color: #696969;
+}
+
+.priorityBadge{
+    padding:2px 10px;
+    color: red;
+    font-size: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 0, 0, 0.151);
+}
+
+.usersList{
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+    width: 100%;
+    max-height: 100%;
+    padding-top: 15px;
+    overflow: auto;
+    overflow-x: hidden;
+    padding-right:8px;
+
+}
+
+.userList::-webkit-scrollbar {
+    width: 4px; 
+    height: 4px;
+}
+
+.userList::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+.userList::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+.userHome{
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    align-items: center;
+    gap:8px;
+}
+
+.userProfileUsersContainer{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #0633AC;
+    position: relative;
+}
+
+.onlineOfflineCircle{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    right: 0;
+    bottom:0;
+    background-color: #000080;
+}
+
+.online{
+    background-color: #119500;
+}
+
+.offline{
+    background-color: #696969;
+}

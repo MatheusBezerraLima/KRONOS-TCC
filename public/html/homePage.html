@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/public/css/homePage.css">
+    <script src="/public/javascript/homePage.js" defer></script>
+</head>
+<body>
+      <aside class="aside">
+            <div class="logo">
+                <a href="#" aria-label="Página principal">LOGO</a>
+                <svg class="toggleIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-left-icon lucide-chevrons-left"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
+            </div> <!-- Logo -->
+            <!--Side Menu Links-->
+            <nav>
+                <ul>
+                    <div class="selection-aside selected">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                        <li class="headerLink"><a href="#">Home</a></li>
+                    </div>
+
+                    <div class="selection-aside">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-open-icon lucide-folder-open"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg>
+                        <li class="headerLink"><a href="#">Projetos</a></li>
+                    </div>
+                    
+                    <div class="selection-aside">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-todo-icon lucide-list-todo"><path d="M13 5h8"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="m3 17 2 2 4-4"/><rect x="3" y="4" width="6" height="6" rx="1"/></svg>
+                        <li class="headerLink"><a href="#">Tarefas</a></li>
+                    </div>
+
+                    <div class="selection-aside">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up-icon lucide-trending-up"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></svg>
+                        <li class="headerLink"><a href="#">PDI</a></li>
+                    </div>
+                </ul>
+            </nav>
+     </aside>
+     <div class="main-content">
+            <header>
+                <div class="breadcrumbs">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+                    <div class="navigation">
+                        <a href="#">Home</a> / <a href="#">Projetos</a> / <a href="#">Board</a>
+                    </div>
+
+                    
+                </div> <!-- breadcrumbs-->
+
+                <div class="headerUtilities">
+                    <div class="searchUser" style="position: relative;"> 
+                        <div class="searchIconContainer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+                        </div>
+                    <input type="text" id="inputPesquisaUsuario" class="invisibleInputUser" placeholder="Pesquise por usuários aqui..." autocomplete="off">
+                    
+                    <div id="listaResultados" class="results-dropdown hidden"></div>
+                </div>
+
+                <div class="header-icon-container" id="openFriendsSidebarBtn" title="Amigos e Solicitações">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users header-svg-icon">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+
+                    <div class="headerUtilitiesHover"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></div>
+                    <div class="userProfile">
+
+                    </div> <!-- userProfile -->
+                </div> <!-- headerUtilities -->
+            </header> <!--menu-top-->            
+            <main>
+                <section class="middleContainer">
+                    <section class="projectHeader">
+                        <div class="mainProjectHeaderInfo">
+                            <div class="pageTitleContainer">
+                                <div class="pageTitle">
+                                    <h1 class="projectPageTitle">Bem vindo(a), <span class="userNameHomeTitle">Matheus</span></h1>
+                                </div>
+                                <div class="pageSubtitle">
+                                    <p>Confira seu dashboard  atualizado.</p>
+                                </div>
+                            </div>
+
+                        </div> <!-- mainBoardHeaderInfo-->
+                    </section> <!--boardColumns-->
+
+                    <section class="projectsContainer">
+                        <div class="titleProjectContainer">
+                            <h3>Seus projetos recentes</h3>
+                            <a class="seeAllProjectsLink" href="projectPage.html">Ver todos</a>
+                        </div>
+                        <div class="projectList">
+                            <div class="addProjectContainer">
+                                <div class="iconContainer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                </div>
+                            </div> 
+                            <div class="project">
+                                <div class="projectTop">
+                                    <strong class="projectTitle"></strong>
+                                    <div class="projectCategoryBadge">
+                                        <span class="categoryNameText"></span>
+                                    </div>
+                                </div>
+
+                                <div class="progressBarContainer">
+                                    <div class="progressBar"></div>
+                                    <div class="dueDateContainer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                        <p>Prazo: <span class="dueDateProjectSubtitle"></span></p>
+                                    </div> 
+                                </div>
+
+                                <div class="projectBottom">   
+                                        <p class="shareWithText">Compartilhado com</p>                     
+                                        <div class="projectMembers">
+                                            <div class="member" style="background-color: aqua;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+
+                                            <div class="membersQuantity" style="background-color: gray;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <p class="quantityNumber">6</p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="project">
+                                <div class="projectTop">
+                                    <strong class="projectTitle"></strong>
+                                    <div class="projectCategoryBadge">
+                                        <span class="categoryNameText"></span>
+                                    </div>
+                                </div>
+
+                                <div class="progressBarContainer">
+                                    <div class="progressBar"></div>
+                                    <div class="dueDateContainer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                        <p>Prazo: <span class="dueDateProjectSubtitle"></span></p>
+                                    </div> 
+                                </div>
+
+                                <div class="projectBottom">   
+                                        <p class="shareWithText">Compartilhado com</p>                     
+                                        <div class="projectMembers">
+                                            <div class="member" style="background-color: aqua;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+
+                                            <div class="membersQuantity" style="background-color: gray;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <p class="quantityNumber">6</p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="project">
+                                <div class="projectTop">
+                                    <strong class="projectTitle"></strong>
+                                    <div class="projectCategoryBadge">
+                                        <span class="categoryNameText"></span>
+                                    </div>
+                                </div>
+
+                                <div class="progressBarContainer">
+                                    <div class="progressBar"></div>
+                                    <div class="dueDateContainer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                        <p>Prazo: <span class="dueDateProjectSubtitle"></span></p>
+                                    </div> 
+                                </div>
+
+                                <div class="projectBottom">   
+                                        <p class="shareWithText">Compartilhado com</p>                     
+                                        <div class="projectMembers">
+                                            <div class="member" style="background-color: aqua;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+
+                                            <div class="membersQuantity" style="background-color: gray;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <p class="quantityNumber">6</p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="project">
+                                <div class="projectTop">
+                                    <strong class="projectTitle"></strong>
+                                    <div class="projectCategoryBadge">
+                                        <span class="categoryNameText"></span>
+                                    </div>
+                                </div>
+
+                                <div class="progressBarContainer">
+                                    <div class="progressBar"></div>
+                                    <div class="dueDateContainer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                        <p>Prazo: <span class="dueDateProjectSubtitle"></span></p>
+                                    </div> 
+                                </div>
+
+                                <div class="projectBottom">   
+                                        <p class="shareWithText">Compartilhado com</p>                     
+                                        <div class="projectMembers">
+                                            <div class="member" style="background-color: aqua;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+
+                                            <div class="membersQuantity" style="background-color: gray;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <p class="quantityNumber">6</p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="project">
+                                <div class="projectTop">
+                                    <strong class="projectTitle"></strong>
+                                    <div class="projectCategoryBadge">
+                                        <span class="categoryNameText"></span>
+                                    </div>
+                                </div>
+
+                                <div class="progressBarContainer">
+                                    <div class="progressBar"></div>
+                                    <div class="dueDateContainer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                        <p>Prazo: <span class="dueDateProjectSubtitle"></span></p>
+                                    </div> 
+                                </div>
+
+                                <div class="projectBottom">   
+                                        <p class="shareWithText">Compartilhado com</p>                     
+                                        <div class="projectMembers">
+                                            <div class="member" style="background-color: aqua;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+
+                                            <div class="membersQuantity" style="background-color: gray;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <p class="quantityNumber">6</p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="project">
+                                <div class="projectTop">
+                                    <strong class="projectTitle"></strong>
+                                    <div class="projectCategoryBadge">
+                                        <span class="categoryNameText"></span>
+                                    </div>
+                                </div>
+
+                                <div class="progressBarContainer">
+                                    <div class="progressBar"></div>
+                                    <div class="dueDateContainer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                        <p>Prazo: <span class="dueDateProjectSubtitle"></span></p>
+                                    </div> 
+                                </div>
+
+                                <div class="projectBottom">   
+                                        <p class="shareWithText">Compartilhado com</p>                     
+                                        <div class="projectMembers">
+                                            <div class="member" style="background-color: aqua;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+
+                                            <div class="membersQuantity" style="background-color: gray;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <p class="quantityNumber">6</p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="project">
+                                <div class="projectTop">
+                                    <strong class="projectTitle"></strong>
+                                    <div class="projectCategoryBadge">
+                                        <span class="categoryNameText"></span>
+                                    </div>
+                                </div>
+
+                                <div class="progressBarContainer">
+                                    <div class="progressBar"></div>
+                                    <div class="dueDateContainer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                        <p>Prazo: <span class="dueDateProjectSubtitle"></span></p>
+                                    </div> 
+                                </div>
+
+                                <div class="projectBottom">   
+                                        <p class="shareWithText">Compartilhado com</p>                     
+                                        <div class="projectMembers">
+                                            <div class="member" style="background-color: aqua;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+
+                                            <div class="membersQuantity" style="background-color: gray;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <p class="quantityNumber">6</p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="project">
+                                <div class="projectTop">
+                                    <strong class="projectTitle"></strong>
+                                    <div class="projectCategoryBadge">
+                                        <span class="categoryNameText"></span>
+                                    </div>
+                                </div>
+
+                                <div class="progressBarContainer">
+                                    <div class="progressBar"></div>
+                                    <div class="dueDateContainer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                        <p>Prazo: <span class="dueDateProjectSubtitle"></span></p>
+                                    </div> 
+                                </div>
+
+                                <div class="projectBottom">   
+                                        <p class="shareWithText">Compartilhado com</p>                     
+                                        <div class="projectMembers">
+                                            <div class="member" style="background-color: aqua;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+
+                                            <div class="membersQuantity" style="background-color: gray;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <p class="quantityNumber">6</p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="project">
+                                <div class="projectTop">
+                                    <strong class="projectTitle"></strong>
+                                    <div class="projectCategoryBadge">
+                                        <span class="categoryNameText"></span>
+                                    </div>
+                                </div>
+
+                                <div class="progressBarContainer">
+                                    <div class="progressBar"></div>
+                                    <div class="dueDateContainer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
+                                        <p>Prazo: <span class="dueDateProjectSubtitle"></span></p>
+                                    </div> 
+                                </div>
+
+                                <div class="projectBottom">   
+                                        <p class="shareWithText">Compartilhado com</p>                     
+                                        <div class="projectMembers">
+                                            <div class="member" style="background-color: aqua;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+                                            <div class="member" style="background-color: bisque;"></div>
+
+                                            <div class="membersQuantity" style="background-color: gray;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                <p class="quantityNumber">6</p>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+                <section class="tasksAndUsersContainer">
+                    <div class="tasksContainer">
+                        <div class="taskContainerTitle">
+                            <p class="taskTitle">Tarefas</p>
+                            <a href = "pagetask.html" class="seeAllTasksLink">Ver todas</a>
+                        </div>
+                        <div class="tasksList">
+
+                            <div class="homeTask">
+                                <div class="taskInfo">
+                                    <span class="checkboxCustom"></span>
+                                    <div class="nameAndDateTask">
+                                        <p class="taskName">Tarefa de ingles</p> 
+                                        <p class="dueDateTask">12/05/12</p>
+                                    </div>
+                                </div>
+                                <div class="priorityBadge">
+                                    alta
+                                </div>
+                            </div>                           
+                        </div>
+                    </div>
+
+                    <div class="usersContainer">
+                        <p class="usersContainerTitle">Amigos</p>
+                        <div class="usersList">
+                            <div class="userHome">
+                                <div class="userProfileUsersContainer">
+                                    <div class="onlineOfflineCircle online"></div>
+                                </div>
+                                <p class="userName">Matheus Bezerra</p>
+                            </div>
+                            <div class="userHome">
+                                <div class="userProfileUsersContainer">
+                                    <div class="onlineOfflineCircle online"></div>
+                                </div>
+                                <p class="userName">Matheus Bezerra</p>
+                            </div>
+                            <div class="userHome">
+                                <div class="userProfileUsersContainer">
+                                    <div class="onlineOfflineCircle offline"></div>
+                                </div>
+                                <p class="userName">Matheus Bezerra</p>
+                            </div>
+                            <div class="userHome">
+                                <div class="userProfileUsersContainer">
+                                    <div class="onlineOfflineCircle offline"></div>
+                                </div>
+                                <p class="userName">Matheus Bezerra</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div> <!-- main-content -->
+</body>
+</html>

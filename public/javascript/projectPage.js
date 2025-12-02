@@ -143,10 +143,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-
-
-
-
 menuLinksSelection.forEach(item => {
 
     // adicionado evento de clique para cada item do link
