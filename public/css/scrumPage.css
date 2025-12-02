@@ -1,0 +1,911 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: "poppins";
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    font-size: 1em;
+    display: flex;
+    margin:0;
+    padding:0;
+    overflow: hidden; 
+}
+
+/*Variavéis */
+:root{
+    --border-color-aside: #ECECEC;
+    --border-color: #d3d3d3;
+    --selected-color: rgba(42, 0, 255, 0.05);
+    --blue: #000080;
+    --transparent-blue: rgba(42, 0, 255, 0.1);
+    --black: #000000;
+    --main-color: #FFFFFF;
+    --secundary-color: #F7F6FF;
+    --lightGrey: #E6E6E6;
+    --transparent-purple: rgba(215, 130, 239, 0.5);
+    --purple: #8601AB;
+    --taskBoardIcon-color: #3F3F3F;
+    --shadow: rgb(198, 198, 198, 0.5);
+    --transparentBlack: rgba(0, 0, 0, 0.4);
+    --toDo-color: rgba(64, 64, 64, 0.3);
+    --toDoFont-color: #404040;
+    --doing-color: rgb(3, 44, 166, 0.5);
+    --doingFont-color: #032CA6;
+    --done-color: rgb(17, 149, 0, 0.5);
+    --doneFont-color: #119500;
+        --blueHoverButton: #0000a5; 
+
+}
+
+/* Menu lateral */
+.aside{
+    display: flex;
+    flex-direction: column ;
+    width:200px;
+    height: 100%;
+    border-right: 1px solid #ECECEC;
+    min-width: 200px;
+    transition: width .3s ease, min-width .3s ease;
+}
+
+/*Fechar e abrir menu lateral*/
+
+.asideClosed .selection-aside{
+    display: flex;
+    padding-left: 0;
+    justify-content: center;
+}
+
+.asideClosed .selection-aside svg {
+    width: 22px;
+    height: 22px;
+}
+
+.asideClosed .headerLink {
+    display: none; 
+}
+
+.asideClosed .members{
+    display: none;
+}
+
+.asideClosed .logo{
+     padding: 0;
+     display: flex;
+     justify-content: center;
+}
+
+.noRender{
+    display: none !important;
+}
+
+.asideClosed .logo a{
+    display: none !important;
+}
+
+.asideClosed .logo .toggleIcon{
+    transform: rotate(180deg); 
+}
+
+.asideClosed{
+    width: 60px;
+    min-width: 60px;   
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    width:100%;
+    height:60px;
+    border-bottom: 1px solid #ECECEC;
+}
+
+.logo a{
+    text-decoration: none;
+    color: var(--black);
+    font-weight: bold;
+}
+
+.logo .toggleIcon{
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    transition: transform 0.3 ease;
+}
+
+.logo svg:hover{
+    width: 25px;
+    height: 25px;
+    background-color: var(--lightGrey);
+    border-radius: 5px ;
+}
+
+/* Navegação Lateral */
+
+nav{
+    
+    padding:15px 0 15px 0;
+    
+    ul{
+        list-style: none; 
+        display: flex;  
+        flex-direction: column;
+        gap:10px;
+    }
+   
+}
+.selection-aside{
+    width:100%;
+    height:40px;
+    display: flex;
+    align-items: center;
+    padding-left:15px ;
+    cursor: pointer;
+    gap:5px;
+}
+.selection-aside:hover{
+    background-color: var(--selected-color);
+    width: 100%;
+    height:40px;
+}
+.selected{
+    background-color: var(--selected-color);
+    width: 100%;
+    height:40px;
+}
+
+.headerLink a {
+  color: var(--black);
+  text-decoration: none;
+}
+
+.selection-aside.selected .headerLink a {
+  color: var(--blue);
+  font-weight: bold;
+  
+}
+.selection-aside svg{
+     width: 22px;
+     height: 22px;
+}
+.selection-aside.selected svg {
+  color: var(--blue);  
+}
+
+/* Membros */
+
+.members{
+    width:100%;
+    height: 100%;
+    border-top: 1px solid #ECECEC;
+    padding: 15px;
+    font-weight: 600;
+}
+
+.container-memberTasks{
+    width:100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    margin-top: 20px;
+    padding-top:10px;
+    border-top: 1px solid var(--border-color-aside);
+}
+
+/* First of type é usado para remover o border-top apenas do primeiro elemento que possue essa classe*/
+.container-memberTasks:first-of-type{
+    border-top: none;
+}
+.memberInfo{
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 10%;
+    gap:10px; 
+}
+
+.memberPhoto{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #d3d3d3;
+}
+
+.listTasksContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap:10px;
+    width: 100%;
+    height:min-content;
+    padding-left: 5px;
+    cursor: pointer;
+}
+
+.task-card-draggable{
+    cursor: pointer;
+}
+
+.task-card-draggable:hover{
+    background-color: #f4f2f2;
+}
+
+
+.asideTaskContainer{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    width: 100%;
+    min-width: 100%;
+    height: min-content;
+}
+
+.taskAside{
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    gap:5px;
+    font-weight: 400;
+    font-size:0.95;
+}
+
+.subtaskAside{
+    display: flex;
+    align-items: flex-end;
+    padding-left:15px;
+    font-size:0.9rem;
+    font-weight: 400;
+    gap:5px;
+}
+
+.taskAsidecheckboxCustom{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.checkIcon{
+    width: 100%;
+    height: 100%;
+    stroke: #FFFFFF;
+    fill: none; 
+    transform: scale(0); 
+    transition: transform 0.2s ease-in-out;
+}
+
+.taskCheckboxAside{
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+/* Estilo da checkbox depois de marcada */
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+/* Estilo de como vai aparecer a checkbox  e o icone depois de marcada */
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom .checkIcon {
+    transform: scale(1); 
+}
+
+/*Estilo de risquinho no nome da tarefa */
+.taskCheckboxAside:checked ~ .asideTaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
+.subtaskCheckboxAside {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+
+/* Opcional: Mudar o estilo quando a subtarefa estiver marcada */
+.subtaskAside input:checked + .asideSubtaskName::before {
+    background-color: #000080;
+    border-color: #000080;
+    /* Você pode adicionar um ícone de "check" aqui se desejar */
+}
+
+/* --- ESTILOS DE TAREFA (mantidos) --- */
+.taskCheckboxAside {
+    /* Torna a checkbox real invisível */
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+.taskCheckboxAside:checked + .taskAsidecheckboxCustom .checkIcon {
+    transform: scale(1); 
+}
+.taskCheckboxAside:checked ~ .asideTaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
+.subtaskCheckboxAside {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
+}
+
+.subtaskAsidecheckboxCustom {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.subtaskCheckboxAside:checked + .subtaskAsidecheckboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+.subtaskCheckboxAside:checked + .subtaskAsidecheckboxCustom .checkIcon {
+    transform: scale(1); 
+}
+.subtaskCheckboxAside:checked ~ .asideSubtaskName {
+    text-decoration: line-through;
+    color: #999; 
+    transition: color 0.2s; 
+}
+
+.main-content{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+    height: 100%;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    padding: 20px;
+    background-color: var(--main-color);
+    border-bottom: 1px solid #ECECEC;
+    justify-content: space-between;
+}
+
+.breadcrumbs{
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    gap:5px;
+}
+
+.navigation a{
+        color: black;
+}
+
+.navigation{
+    display: flex;
+}
+
+.breadcrumbs a{
+    text-decoration: none;
+}
+
+.breadcrumbs svg{
+    width: 25px;
+    height: 25px;
+}
+
+.headerUtilities{
+    display: flex;
+    align-items: center;
+    gap:15px;
+}
+
+.headerUtilitiesHover{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 5px;
+    transition: .3s ease;
+}
+.headerUtilitiesHover:hover{
+    background-color: var(--lightGrey);
+}
+
+.userProfile{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgb(0, 0, 0);
+}
+
+/* Main */
+
+main{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--secundary-color);
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+    gap:20px;
+}
+
+/*Header Board*/
+
+.boardHeader{
+    width: 100%;
+    height: 100px;
+    border-bottom: 1px solid #d3d3d3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menuType{
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 50%;
+    position: relative;
+}
+
+/* Parte de cima do header board: titulo, membros, add, botão*/
+
+.mainBoardHeaderInfo{
+    display: flex;
+    justify-content: space-between;
+    height:50%;
+}
+
+/* membros, add, botão*/
+
+.boardActions{
+    display: flex;
+    align-items: center;
+    gap:10px;
+    height: 100%;
+}
+
+.lineBoardHeader{
+    width: 1px;
+    height: 40px;
+    background-color: #d3d3d3;
+}
+
+.membersIconandQuantity{
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+.membersIconHeaderBoard{
+    display: flex;
+    gap:10px;
+    align-items: center;
+    height: 100%;
+}
+
+.memberIcon{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-left: -10px;
+    border: 1px solid white;
+    background-position: center;
+    background-size: cover; 
+}
+
+.memberIconAdd:first-child{
+    margin-left:0;
+}
+
+.membersQuantity{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-left: -10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    background-color: var(--lightGrey);
+    border: 1px solid white; 
+}
+
+.addMoreMembers{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor:pointer;
+    transition: .3s ease;
+
+}
+
+.addMoreMembers:hover{
+    background-color: var(--lightGrey);
+
+}
+
+.addMoreMembers svg{
+    width: 20px;
+    height: 20px;
+
+}
+
+.addTask{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 40px;
+    background-color: var(--blue);
+    border-radius: 10px;
+    color: var(--main-color);
+    border-width: 0;
+    gap:2px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor:pointer;
+    transition: .3s ease;
+
+}
+
+.addTask:hover{
+    background-color: #010155;
+}
+
+.addTask svg{
+    width: 20px;
+    height:20px;
+    fill: var(--main-color);
+}
+
+/* Parte de baixo do header do board */
+
+.boardCategory{
+    width: 100%;
+    height: 30px;
+    display: flex;
+    gap:30px;
+}
+
+.category{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: min-content;
+    height: 100%;
+    gap:5px;
+    border-bottom:2px solid transparent;
+    cursor: pointer;
+}
+
+.category:hover{
+    color: var(--blue);
+}
+
+.selectedCategory{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: min-content;
+    height: 100%;
+    border-bottom:2px solid #000080;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+/* Modal de adicionar membros */
+
+.addMemberModal{
+    padding:20px;
+    position: absolute;
+    width: 370px;
+    height: 300px;
+    background-color: white;
+    right: 0;
+    top: 10px;
+    border-radius:10px;  
+    box-shadow: 1px 1px 8px var(--shadow);
+    display: none;
+    z-index:100;
+}
+
+.memberModalOpen{
+    display: block;
+}
+
+.memberModalHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    height: 35px;
+    border-bottom: 1px solid var(--border-color-aside);
+    font-weight: 500;
+    font-size:1.2rem
+}
+
+.iconModalMember{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+
+.closeMemberModal{
+    width: 18px;
+    stroke-width:2px ;
+    cursor: pointer;
+
+}
+
+.scrumBoard{
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.backlogContainer{
+    width: 300px;
+    max-height: 455px;
+    height: 100%;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 8px var(--shadow);
+
+}
+
+.backlogHeader{
+    gap:10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.backlogTitle{
+    font-size: 18px;
+    font-weight: 500;   
+}
+
+.backlogQuantity{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    background-color: #000080;
+    border-radius: 50%;
+    color: var(--main-color);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.backlogsContainerList{
+    overflow: hidden;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    padding: 10px;
+    width: 100%;
+    height: 80%;
+}
+
+.backlogsContainerList::-webkit-scrollbar {
+    width: 6px; 
+    height: 8px;
+}
+
+.backlogsContainerList::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+.backlogsContainerList::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+.backlog{
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    height: 120px;
+    background-color: var(--main-color);
+    box-shadow: 1px 2px 5px var(--shadow);
+    border: 1px solid #f2f2f2;
+}
+
+.backlogTitle{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.backlogDescriptionContainer{
+    max-width: 100%;
+    height: fit-content;
+    max-height:50px;
+}
+
+.backlogDescription{
+    font-size: 14px;
+}
+
+.categoryBadgeBacklog{
+    height: 20px;
+    width: fit-content;
+    padding: 0px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #119500;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #FFFFFF;
+}
+
+.backlogBottom{
+    padding: 10px;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.createBacklogTask{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    width: 100%;
+    height: 35px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    color: var(--main-color);
+    background-color: var(--blue);
+    cursor: pointer;
+    transition: .2s ease-in-out;
+}
+
+.createBacklogTask:hover{
+    background-color: var(--blueHoverButton);
+}
+
+.createBacklogTask svg{
+    width: 18px;
+    height: 18px;
+}
+
+.sprintsContainer{
+    display: flex;
+    justify-content: center;
+    width: calc(100% - 300px);
+    height: 100%;
+}
+
+.sprint{
+    width: 630px;
+    height: 300px;
+    background-color: var(--main-color);
+    border-radius: 10px;
+    box-shadow: 2px 2px 8px var(--shadow);
+}
+
+.sprintHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:10px 15px;
+    width: 100%;
+    height: 20%;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.sprintInfos{
+    display: flex;
+    gap:15px;
+}
+
+.concludeSprint{
+    width: 170px;
+    height: 35px;
+    border: none;
+    border-radius: 10px;
+    border: 1px solid var(--blue);
+    font-size: 15px;
+    color: var(--blue);
+    font-weight: 500;
+}
+
+.sprintTasksList{
+    width: 100%;
+    height: 65%;
+
+}
+
+.createMoreTasksInSprint{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:5px;
+    width: 100%;
+    height: 15%;
+    background-color: #f2f2f2;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    font-size: 15px;
+    color: #696969;
+    cursor: pointer;
+}
+
+.createMoreTasksInSprint svg{
+    width: 18px;
+    height: 18px;
+}
