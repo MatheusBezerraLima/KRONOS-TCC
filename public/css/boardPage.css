@@ -1969,12 +1969,20 @@ main{
     gap: 8px;
     margin-bottom: 25px;
     width: 100%;
+    
 }
 
 .descriptionTitle {
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--taskBoardIcon-color); /* Usando suas variáveis */
+}
+.taskDescription{
+    width: 200px;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+     overflow: hidden;
 }
 
 .descriptionInput {

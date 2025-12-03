@@ -522,6 +522,7 @@ const projectList = document.querySelector(".projectList")
 createProjectButton.addEventListener("click", async() => {
 
     const selectedCategoryBadge = document.querySelector(".projectCategoryBadgeModal");
+    const dateCurrentValue = document.querySelector(".dateValue")
 
     const projectName = projectNameInput.value.trim() || defaultPlaceholderText;
 
@@ -536,52 +537,81 @@ createProjectButton.addEventListener("click", async() => {
     const categoryBg = selectedCategoryBadge.style.backgroundColor || '#ECEFF1'; // Cor padrão
     const categoryTxt = selectedCategoryBadge.style.color || '#455A64'; // Cor padrão
 
-    const formattedDueDate = dateValue.textContent; 
+  const formattedDueDate = dateCurrentValue.textContent; // Exemplo: "10/12/2012"
+
+// 1. Divide a string nos separadores (assumindo "/")
+const parts = formattedDueDate.split('/'); 
+
+// Verifica se a string foi dividida corretamente e tem 3 partes
+if (parts.length === 3) {
+    // 2. Extrai as partes. Elas estarão como strings.
+    const day = parseInt(parts[0], 10);   // Ex: 10
+    const month = parseInt(parts[1], 10); // Ex: 12 (Dezembro)
+    const year = parseInt(parts[2], 10);  // Ex: 2012
     
-    const dateObject = new Date(formattedDueDate);
-    const year = dateObject.getFullYear();        
-    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObject.getDate()).padStart(2, '0');
-    const dateToSend = `${year}-${month}-${day}`;
-    console.log(projectName,categoryId, dateToSend);
-    
-    const newProjectDB = await requestCreateProject({projectName, categoryId, dateToSend});
+    // 3. Cria o objeto Date usando os componentes numéricos.
+    // O mês é `month - 1` porque é baseado em ZERO.
+    const dateObject = new Date(year, month - 1, day);
 
-    console.log("Projeto criado:", newProjectDB);
-    
+    // --- CONTINUAÇÃO DO SEU CÓDIGO ---
 
-    const newProject = createNewProject(newProjectDB.titulo, newProjectDB.categoryTask.nome, newProjectDB.categoryTask.cor_fundo, newProjectDB.categoryTask.cor_texto, formattedDueDate, newProjectDB.id);
+    // Verifica se o objeto Date é válido antes de prosseguir
+    if (!isNaN(dateObject)) {
+        // 4. Formata a data para o padrão YYYY-MM-DD para o servidor
+        const finalYear = dateObject.getFullYear();        
+        // O método getMonth() retorna o mês baseado em zero. Adicionamos +1 para o valor real (1 a 12).
+        const finalMonth = String(dateObject.getMonth() + 1).padStart(2, '0');
+        const finalDay = String(dateObject.getDate()).padStart(2, '0');
+        
+        // Formato final YYYY-MM-DD
+        const dateToSend = `${finalYear}-${finalMonth}-${finalDay}`;
+        
+        const newProjectDB = await requestCreateProject({projectName, categoryId, dateToSend});
 
-    projectList.appendChild(newProject);
+        console.log("Projeto criado:", newProjectDB);
 
-    newProject.addEventListener('click', (event) => {
-        const project = event.target.closest('.project');
+         const newProject = createNewProject(newProjectDB.titulo, newProjectDB.categoryTask.nome, newProjectDB.categoryTask.cor_fundo, newProjectDB.categoryTask.cor_texto, formattedDueDate, newProjectDB.id);
 
-        // Segurança: garante que achou o projeto antes de tentar pegar o ID
-        if (project) {
-            const projectId = project.getAttribute('data-project-id');
-            console.log("ID encontrado:", projectId);
-            
-            window.location.href = `/projetos/${projectId}`;
-        }
-    })
+        projectList.appendChild(newProject);
 
-    projectModal.classList.add("hidden");
-    filter.classList.add("hidden");
+        newProject.addEventListener('click', (event) => {
+            const project = event.target.closest('.project');
 
-    /* Limpar o modal depois da criação do projeto */
+            // Segurança: garante que achou o projeto antes de tentar pegar o ID
+            if (project) {
+                const projectId = project.getAttribute('data-project-id');
+                console.log("ID encontrado:", projectId);
+                
+                window.location.href = `/projetos/${projectId}`;
+            }
+        })
 
-    projectNameInput.value = "";     
-    invisibleDateInput._flatpickr.clear(); 
-    dateValue.textContent = "Adicionar prazo"; 
-    dateValue.classList.remove("withValue");
-    dateValue.classList.add("placeholder");
+        projectModal.classList.add("hidden");
+        filter.classList.add("hidden");
 
-    salvarMembrosNoProjeto(newProjectDB.id)
+        /* Limpar o modal depois da criação do projeto */
+
+        projectNameInput.value = "";     
+        invisibleDateInput._flatpickr.clear(); 
+        dateValue.textContent = "Adicionar prazo"; 
+        dateValue.classList.remove("withValue");
+        dateValue.classList.add("placeholder");
+
+        salvarMembrosNoProjeto(newProjectDB.id)
+    } else {
+        console.error("Data inválida após a criação do objeto Date:", formattedDueDate);
+    }
+
+    } else {
+    console.error("Formato de data inesperado:", formattedDueDate);
+}
+
 });
 
 async function salvarMembrosNoProjeto(projectId) {
     const listUsersAddProject = document.querySelectorAll('.adicionado');
+
+    if(!listUsersAddProject || listUsersAddProject.length <= 0) return null;
     
     const requests = Array.from(listUsersAddProject).map(async (userDiv) => {
         
@@ -604,7 +634,9 @@ async function salvarMembrosNoProjeto(projectId) {
             });
 
             if (!response.ok) throw new Error(`Erro ao adicionar user ${userId}`);
-            
+
+
+            userDiv.classList.remove('.adicionado')
             return await response.json(); 
         } catch (error) {
             console.error(error);

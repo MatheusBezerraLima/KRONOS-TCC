@@ -72,6 +72,8 @@ function setupAutoSave() {
     
     // --- A. TÍTULO (Salva 1 segundo após parar de digitar) ---
     const titleInput = modal.querySelector('.invisibleTaskNameInput');
+    console.log("🚀🚀🟨",titleInput);
+    
     
     // Remove listeners antigos clonando o elemento (truque rápido)
     const newTitleInput = titleInput.cloneNode(true);
@@ -80,6 +82,8 @@ function setupAutoSave() {
     newTitleInput.addEventListener('input', () => {
         clearTimeout(autosaveTimeout);
         autosaveTimeout = setTimeout(() => {
+            console.log("🕜");
+            
             triggerUpdate({ titulo: newTitleInput.value });
         }, 1000); 
     });
@@ -610,9 +614,9 @@ function addCardClickListeners() {
 }
 
 async function openEditModal(taskId) {
-    const editModal = document.querySelector('#editTaskModal');
-    const filterEd = document.querySelector('.filterEd');
-    const currentEditingTaskId = taskId; 
+    const editModal = document.querySelector('.addTaskModal');
+    const filterEd = document.querySelector('.filter');
+    currentEditingTaskId = taskId; 
     editModal.classList.add('modalOn'); 
     filterEd.classList.add('filterOn')
 
@@ -628,7 +632,6 @@ async function openEditModal(taskId) {
 
         console.log(taskData);
         
-
         // 2. Preenche o modal com os dados
         taskIdDiv.setAttribute("task-id", taskData.id);
         editTaskTitleEl.textContent = taskData.titulo;
@@ -646,6 +649,9 @@ async function openEditModal(taskId) {
                 </div>
             `;
         }).join('');
+
+        console.log('🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨🟨')
+        setupAutoSave();
         
     } catch (error) {
         console.log("Erro ao carregar os dados da tarefa: " + error.message);
@@ -896,6 +902,7 @@ async function requestCreateTaskOld() {
     
 async function requestCreateTask(){
     const dataDefaultTask = {
+        "titulo": "Nova Tarefa",
         "projeto_id": currentProjectId,
         "prioridade": "Media",
         "status_id": 1
@@ -1024,3 +1031,29 @@ initializeBoard()
 const botaoFake = document.querySelector('.activityTitle');
 
 botaoFake.addEventListener('click', requestCreateTask);
+
+
+async function requestCreateColumn(projectId, columnName){
+    if(!columnName || columnName.length <- 0) return null;
+
+    try{
+        const response = await fetch(`${API_BASE_URL}/projetos/${projectId}/colunas/`, {
+            method: 'PATCH', // Ou 'POST', dependendo de como seu backend foi definido
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                columnName: columnName
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Erro ao mover tarefa');
+        }
+
+        return await response.json();
+    }catch(error){
+        console.error("Erro na API ao criar coluna:", error);
+        alert("Não foi criar coluna: " + error.message);
+        return null;
+    }
+}

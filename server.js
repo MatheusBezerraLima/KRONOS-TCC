@@ -78,7 +78,9 @@ app.use('/invites', inviteRoutes)
 app.use('/api/projetos/:projectId/colunas', boardColumnRoutes);
 app.use('/api/friendships', friendshipRoutes);
 
-app.get('/', indexController.renderDashboard);
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'homePage.html'))
+});
 
 app.get('/projetos/:projectId/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'boardPage.html'))

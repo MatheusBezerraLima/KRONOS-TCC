@@ -670,7 +670,7 @@ async function responderSolicitacao(requesterId, novoStatus, friendshipId) {
     try {
         // AJUSTE AQUI: Use a rota que criamos para responder (sendRequest ou updateStatus)
         // Estou assumindo uma rota genérica baseada no seu controller anterior
-        const response = await fetch(`${API_URL}/friendships/${requesterId}`, { 
+        const response = await fetch(`${API_BASE_URL}/friendships/${requesterId}`, { 
             method: 'PATCH', // ou PUT, dependendo da sua rota
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
