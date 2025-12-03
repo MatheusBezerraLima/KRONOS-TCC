@@ -10,7 +10,6 @@ const addTaskModal = document.querySelector(".addTaskModal")
 const editTaskModal = document.querySelector("#editTaskModal")
 const closeModalIcon = document.querySelector(".closeModalIcon")
 const closeModalIconEd = document.querySelector(".closeModalIconEd")
-
 // --- CORREÇÃO: Seleciona TODOS os dropdowns de status ---
 const allDropDownStatuses = document.querySelectorAll(".selectStatusModal") 
 // --- CORREÇÃO: Seleciona TODOS os dropdowns de categoria ---
