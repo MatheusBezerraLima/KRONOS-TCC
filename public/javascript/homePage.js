@@ -1,6 +1,8 @@
 const menuLinksSelection = document.querySelectorAll("ul .selection-aside")
 const closeMenu = document.querySelector(".toggleIcon")
 const sideMenu = document.querySelector("aside")
+const userProfile = document.querySelector(".userProfile")
+const userProfileModal = document.querySelector(".userModal")
 
 
 menuLinksSelection.forEach(item => {
@@ -24,3 +26,9 @@ function toggleMenu() {
     sideMenu.classList.toggle("asideClosed");
 }
 
+/* Abrir modal do usuario */
+
+userProfile.addEventListener("click", ()=>{
+    userProfileModal.classList.toggle("hidden")
+    userProfile.classList.toggle("userProfileSelected")
+})

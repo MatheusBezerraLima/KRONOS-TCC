@@ -8,7 +8,27 @@
     <script src="/javascript/homePage.js" defer></script>
 </head>
 <body>
-      <aside class="aside">
+    <div class="userModal hidden">
+        <div class="userInfosModalContainer">
+            <div class="userProfileModal"></div>
+            <div class="userNameAndEmailContainer">
+                <p class="userNameModal">Matheus Bezerra</p>
+                <p class="userEmailModal">matheus@gmail.com</p>
+            </div>
+        </div>
+        <div class="userModalOptions">
+            <div class="optionModalUser themesContainer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-palette-icon lucide-palette"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+                <p class="themesTxt">Temas</p>
+            </div>
+            <div class="optionModalUser logoutContainer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
+                <p class="logoutTxt">Logout</p>
+            </div>
+            
+        </div>
+    </div>
+    <aside class="aside">
             <div class="logo">
                 <a href="#" aria-label="Página principal">LOGO</a>
                 <svg class="toggleIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-left-icon lucide-chevrons-left"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
@@ -37,7 +57,7 @@
                     </div>
                 </ul>
             </nav>
-     </aside>
+    </aside>
      <div class="main-content">
             <header>
                 <div class="breadcrumbs">
@@ -94,7 +114,6 @@
                     <section class="projectsContainer">
                         <div class="titleProjectContainer">
                             <h3>Seus projetos recentes</h3>
-                            <a class="seeAllProjectsLink" href="projectPage.html">Ver todos</a>
                         </div>
                         <div class="projectList">
                             <div class="addProjectContainer">
@@ -379,7 +398,6 @@
                     <div class="tasksContainer">
                         <div class="taskContainerTitle">
                             <p class="taskTitle">Tarefas</p>
-                            <a href = "pagetask.html" class="seeAllTasksLink">Ver todas</a>
                         </div>
                         <div class="tasksList">
 
