@@ -19,257 +19,179 @@
 
         <!-- Side Menu -->
         <div class="filter"></div>
+        <div class="filter" id="taskOverlay"></div>
+
         <section class="addTaskModal">
+            
             <div class="modalTop">
+                <svg class="closeModalIcon" id="closeTaskDrawerBtn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </div> 
+
+            <div class="drawer-scroll-content">
+
                 <div class="taskNameContainer">
-                    <input type="text" class="invisibleTaskNameInput" placeholder="Nova tarefa" style="display: none;">
-                </div> <!-- taskNameContainer -->
-                <button onclick="requestCreateTask()" class="buttonModal">Criar</button>
-                <svg class="closeModalIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    <input type="text" class="invisibleTaskNameInput" placeholder="Nova tarefa">
+                </div> 
 
-            </div> <!-- modalTop -->
-            <div class="formModal">
-                <div class="dateFormModal">
-                    <div class="dateTitle">
-                        <p>Data</p>
-                    </div>
-                    <div class="formModalInfo">
-                        <div class="selectDate">
-                            <span class="dateValue">Nenhuma data definida</span>
-                        </div>
-                        <input type="text" class="invisibleDateInput" style="display: none;">
-                    </div>
-                </div> <!-- dateFormModal -->
+                <div class="descriptionContainer">
+                    <p class="descriptionTitle">Descrição</p>
+                    <textarea class="descriptionInput" placeholder="Adicione detalhes sobre essa tarefa..."></textarea>
+                </div>
 
-                <div class="categoryFormModal">
-                    <div class="categoryTitle">
-                        <p>Categoria</p>
-                    </div>
-                    <div class="formModalInfo">
-                        <div class="selectCategoryModal">
-                            <div class="categoryOption designCategory categorySelected" data-category="1">
-                                <div class="categoryBadge designBadge">
-                                    <p>Design</p>
-                                </div> <!-- designBadge  -->
-                            </div> <!-- categoryOption designCategory-->
-
-                            <div class="categoryOption backendCategory" data-category="2">
-                                <div class="categoryBadge backendBadge">
-                                    <p>Backend</p>
-                                </div> <!-- backendBadge -->
-                            </div> <!-- categoryOption backendCategory -->
-
-                            <div class="categoryOption frontendCategory" data-category="3">
-                                <div class="categoryBadge frontendBadge">
-                                    <p>Frontend</p>
-                                </div> <!-- frontendBadge -->
-                            </div> <!--categoryOption frontendCategory-->
-                        </div> <!-- selectCategoryModal -->
-                    </div> <!-- formModalInfo -->
-                </div> <!-- categoryFormModal -->
-
-                <div class="modalForm statusFormModal">
-                     <div class="statusTitle">
-                        <p>Status</p>
-                    </div>
-                    <div class="formModalInfo"> 
-                        <!-- Caixinha para escolher status do projeto -->
-                        <div class="selectStatusModal" id="statusSelector">
-                            <div class="statusOption toDoStatus statusSelected" data-status="1">
-                                <div class="statusBadge toDoBadge">
-                                    <p>A fazer </p>
-                                </div> <!-- toDoCategory  -->
-                            </div> <!-- statusOption toDoStatus-->
-
-                            <div class="statusOption doingStatus" data-status="2">
-                                <div class="statusBadge doingBadge">
-                                    <p>Fazendo</p>
-                                </div> <!-- doingCategoryContainer -->
-                            </div> <!-- statusOption doingStatus -->
-
-                            <div class="statusOption doneStatus" data-status="3">
-                                <div class="statusBadge doneBadge">
-                                    <p>Concluído</p>
-                                </div> <!-- doneCategory -->
-                            </div> <!-- statusOption doneStatus -->
-                        </div> <!-- selectStatusModal -->
-                    </div> <!-- formModalInfo -->
-                </div> <!-- categoryFormModal -->
-
-                <div class="atribuitionFormModal">
-                    <div class="atribuitionTitle">
-                        <p>Atribuições</p>
-                    </div>
-
-                    <div class="formModalInfo">
-                        <div class="atribuitionMembersModal">
-                            <div class="memberModal">
-                                <div class="memberIconModal" style="background-color: pink;"></div>
-                                <div class="memberIconModal" style="background-color: red;"></div>
-                                <div class="memberIconModal" style="background-color: blue;"></div>
+                <div class="formModal">
+                    <div class="dateFormModal">
+                        <div class="dateTitle"><p>Data</p></div>
+                        <div class="formModalInfo">
+                            <div class="selectDate">
+                                <span class="dateValue">Nenhuma data definida</span>
                             </div>
+                            <input type="text" class="invisibleDateInput" style="display: none;">
+                        </div>
+                    </div>
 
+                    <div class="categoryFormModal">
+                        <div class="categoryTitle"><p>Categoria</p></div>
+                        <div class="formModalInfo">
+                            <div class="selectCategoryModal">
+                                <div class="categoryOption designCategory categorySelected" data-category="1"><div class="categoryBadge designBadge"><p>Design</p></div></div>
+                                <div class="categoryOption backendCategory" data-category="2"><div class="categoryBadge backendBadge"><p>Backend</p></div></div>
+                                <div class="categoryOption frontendCategory" data-category="3"><div class="categoryBadge frontendBadge"><p>Frontend</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="statusFormModal">
+                        <div class="statusTitle"><p>Status</p></div>
+                        <div class="formModalInfo"> 
+                            <div class="selectStatusModal" id="statusSelector"></div>
+                        </div>
+                    </div>
+
+                    <div class="atribuitionFormModal">
+                        <div class="atribuitionTitle"><p>Atribuições</p></div>
+                        <div class="formModalInfo">
+                            <div class="atribuitionMembersModal">
+                                <div class="memberModal">
+                                    <div class="memberIconModal" style="background-color: pink;"></div>
+                                </div>
                                 <div class="addMoreMembersModal">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                </div> <!-- addMoreMembers -->
-                        </div> <!-- atribuitionMembersModal -->
-                    </div> <!-- formModalInfo -->
-                </div> <!-- atribuitionFormModal -->
-            </div> <!-- formModal -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
 
-            <div class="activitysTaskModal">
-                <div class="sectionsTitleActivitys">
-                    <div class="activityTitle activitySectionSelected">
-                        <p>Subtarefas</p>
-                    </div> <!-- subtasksTitle-->
+                <div class="activitysTaskModal">
+                    <div class="sectionsTitleActivitys">
+                        <div class="activityTitle activitySectionSelected"><p>Subtarefas</p></div>
+                        <div class="activityTitle"><p>Comentários</p></div>
+                    </div>
+                    <div class="ContainerSubtask">
+                        <span class="subtaskQuantitysandButton">
+                                Subtarefas 1/20
+                                <button class="createSubtasks">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                </button>
+                        </span>
+                        <div class="listSubtasks"></div>
+                    </div>
+                </div>
 
-                    <div class="activityTitle">
-                        <p>Comentários</p>
-                    </div> <!-- Comentários -->
-                </div> <!--sectionsTitleActivitys -->
-
-                <div class="ContainerSubtask">
-                    <span class="subtaskQuantitysandButton">
-                         Subtarefas 1/20
-                         <button class="createSubtasks">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                         </button>
-                    </span>
-
-                    <div class="listSubtasks">
-                         
-                    </div> <!-- subtask -->
-
-                </div> <!-- ContainerSubtask -->
-
-            </div> <!-- activitysTaskModal -->
+            </div>
         </section>
 
         <div class="filterEd"></div>
-        <section id="editTaskModal" class="editTaskModal"> <!-- Usa a mesma classe de estilo, mas um ID único -->
-              <div class="modalTop">
+        <section id="editTaskModal" class="addTaskModal">
+            
+            <div class="modalTop">
+                <svg class="closeModalIconEd" id="closeTaskDrawerBtn" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </div> 
+
+            <div class="drawer-scroll-content">
+
                 <div class="taskNameContainer">
-                    <input type="text" class="invisibleTaskNameInput" placeholder="Nova tarefa" style="display: block;">
-                </div> <!-- taskNameContainer -->
-                <button onclick="saveTaskChanges()" class="buttonModal">Atualizar</button>
-                <svg class="closeModalIconEd" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </div> <!-- modalTop -->
-            <div class="formModal">
-                <div class="dateFormModal">
+                    <input type="text" class="invisibleTaskNameInput" placeholder="Nova tarefa">
+                </div> 
+
+                <div class="descriptionContainer">
+                    <p class="descriptionTitle">Descrição</p>
+                    <textarea class="descriptionInput" placeholder="Adicione detalhes sobre essa tarefa..."></textarea>
+                </div>
+
+                <div class="formModal">
                     <div class="taskId" task-id="1"></div>
-                    <div class="dateTitle">
-                        <p>Data</p>
-                    </div>
-                    <div class="formModalInfo">
-                        <div class="selectDate">
-                            <span class="dateValue">Nenhuma data definida</span>
-                        </div>
-                        <input type="text" class="invisibleDateInput" style="display: none;">
-                    </div>
-                </div> <!-- dateFormModal -->
-
-                <div class="modalForm categoryFormModal">
-                    <div class="categoryTitle">
-                        <p>Categoria</p>
-                    </div>
-                    <div class="formModalInfo">
-                        <div class="selectCategoryModal">
-                            <div class="categoryOption designCategory categorySelected" data-category="1">
-                                <div class="categoryBadge designBadge">
-                                    <p>Design</p>
-                                </div> <!-- designBadge  -->
-                            </div> <!-- categoryOption designCategory-->
-
-                            <div class="categoryOption backendCategory" data-category="2">
-                                <div class="categoryBadge backendBadge">
-                                    <p>Backend</p>
-                                </div> <!-- backendBadge -->
-                            </div> <!-- categoryOption backendCategory -->
-
-                            <div class="categoryOption frontendCategory" data-category="3">
-                                <div class="categoryBadge frontendBadge">
-                                    <p>Frontend</p>
-                                </div> <!-- frontendBadge -->
-                            </div> <!--categoryOption frontendCategory-->
-                        </div> <!-- selectCategoryModal -->
-                    </div> <!-- formModalInfo -->
-                </div> <!-- categoryFormModal -->
-
-                <div class="statusFormModal">
-                     <div class="statusTitle">
-                        <p>Status</p>
-                    </div>
-                    <div class="formModalInfo"> 
-                        <!-- Caixinha para escolher status do projeto -->
-                        <div class="selectStatusModal" id="statusSelector">
-                            <div class="statusOption toDoStatus statusSelected" data-status="1">
-                                <div class="statusBadge toDoBadge">
-                                    <p>A fazer </p>
-                                </div> <!-- toDoCategory  -->
-                            </div> <!-- statusOption toDoStatus-->
-
-                            <div class="statusOption doingStatus" data-status="doing">
-                                <div class="statusBadge doingBadge">
-                                    <p>Fazendo</p>
-                                </div> <!-- doingCategoryContainer -->
-                            </div> <!-- statusOption doingStatus -->
-
-                            <div class="statusOption doneStatus" data-status="done">
-                                <div class="statusBadge doneBadge">
-                                    <p>Concluído</p>
-                                </div> <!-- doneCategory -->
-                            </div> <!-- statusOption doneStatus -->
-                        </div> <!-- selectStatusModal -->
-                    </div> <!-- formModalInfo -->
-                </div> <!-- categoryFormModal -->
-
-                <div class="atribuitionFormModal">
-                    <div class="atribuitionTitle">
-                        <p>Atribuições</p>
-                    </div>
-
-                    <div class="formModalInfo">
-                        <div class="atribuitionMembersModal">
-                            <div class="memberModal">
-                                <div class="memberIconModal" style="background-color: pink;"></div>
-                                <div class="memberIconModal" style="background-color: red;"></div>
-                                <div class="memberIconModal" style="background-color: blue;"></div>
+                    <div class="dateFormModal">
+                        <div class="dateTitle"><p>Data</p></div>
+                        <div class="formModalInfo">
+                            <div class="selectDate">
+                                <span class="dateValue">Nenhuma data definida</span>
                             </div>
+                            <input type="text" class="invisibleDateInput" style="display: none;">
+                        </div>
+                    </div>
+                
+                <div class="formModal">
+                    <div class="dateTitle"><p>Categoria</p></div>
+                    <div class="formModalInfo">
+                        <div class="categoryContainer taskClickArea">
+                                <div class="categoryBadge noCategorySelected"></div>
+                                <div class="selectCategoryModal">
+                                    <div class="categoryModalHeader">
+                                        <div class="categoryBadgeHeader">
+                                            <div class="categoryBadgeHeaderModal noCategorySelected"></div> 
+                                        </div>
+                                        <input type="text" class="createNewCategory">
+                                    </div>
+                                <div class="selectOptionText">Selecione uma opção ou crie uma</div>
+                                <div class="categoryOptionsWrapper">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
 
+                    <div class="statusFormModal">
+                        <div class="statusTitle"><p>Status</p></div>
+                        <div class="formModalInfo"> 
+                            <div class="selectStatusModal" id="statusSelector"></div>
+                        </div>
+                    </div>
+
+                    <div class="atribuitionFormModal">
+                        <div class="atribuitionTitle"><p>Atribuições</p></div>
+                        <div class="formModalInfo">
+                            <div class="atribuitionMembersModal">
+                                <div class="memberModal">
+                                    <div class="memberIconModal" style="background-color: pink;"></div>
+                                </div>
                                 <div class="addMoreMembersModal">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                </div> <!-- addMoreMembers -->
-                        </div> <!-- atribuitionMembersModal -->
-                    </div> <!-- formModalInfo -->
-                </div> <!-- atribuitionFormModal -->
-            </div> <!-- formModal -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
 
-            <div class="activitysTaskModal">
-                <div class="sectionsTitleActivitys">
-                    <div class="activityTitle activitySectionSelected">
-                        <p>Subtarefas</p>
-                    </div> <!-- subtasksTitle-->
+                <div class="activitysTaskModal">
+                    <div class="sectionsTitleActivitys">
+                        <div class="activityTitle activitySectionSelected"><p>Subtarefas</p></div>
+                        <div class="activityTitle"><p>Comentários</p></div>
+                    </div>
+                    <div class="ContainerSubtask">
+                        <span class="subtaskQuantitysandButton">
+                                Subtarefas 1/20
+                                <button class="createSubtasks">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                </button>
+                        </span>
+                        <div class="listSubtasks"></div>
+                    </div>
+                </div>
 
-                    <div class="activityTitle">
-                        <p>Comentários</p>
-                    </div> <!-- Comentários -->
-                </div> <!--sectionsTitleActivitys -->
-
-                <div class="ContainerSubtask">
-                    <span class="subtaskQuantitysandButton">
-                         Subtarefas 1/20
-                         <button class="createSubtasks">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                         </button>
-                    </span>
-
-                    <div class="listSubtasks">
-                         
-                    </div> <!-- subtask -->
-
-                </div> <!-- ContainerSubtask -->
-
-            </div> <!-- activitysTaskModal -->
+            </div>
         </section>
         
         <aside class="aside">

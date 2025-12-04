@@ -161,28 +161,42 @@ class TasksDAO{
         }
     }
 
-    async update(taskId, dataToUpdate){
+async update(taskId, dataToUpdate){
         try{
-            const result = Task.update(
+            // 1. O update precisa de AWAIT!
+            // O update retorna um array onde o primeiro item é o número de linhas afetadas
+            const [affectedRows] = await Task.update(
                 {...dataToUpdate},
                 {
-                    where:{
+                    where: {
                         id: taskId
                     }
                 }
             );
 
-            if(result[0] > 0){
-                const updatedTask = await Task.findByPk(taskId);
+            // 2. Se atualizou algo, buscamos o objeto COMPLETO
+            if(affectedRows > 0){
+                // AQUI ESTÁ O SEGREDO: Precisamos dos 'includes'
+                // Certifique-se de importar o Model CategoryTask no topo do arquivo
+                const updatedTask = await Task.findByPk(taskId, {
+                    include: [
+                        {
+                            model: CategoryTask, // Importe esse Model!
+                            as: 'categoryTask', // O mesmo 'as' definido no seu relacionamento (Associations.js ou index.js)
+                            attributes: ['id', 'nome', 'cor_fundo', 'cor_texto']
+                        }
+                        // Se precisar de status ou criador, adicione aqui também
+                    ]
+                });
+                
                 return updatedTask;
             }
 
-            return result;
-        }catch(error){
+            return null; // Retorna null se não achou a tarefa para atualizar
+        } catch(error){
             console.error(`Erro no DAO ao tentar atualizar tarefa:`, error);
             throw error;
         }
-        
     }
 
      async moveTasksToNewColumn(oldColumnId, newColumnId, options = {}) {

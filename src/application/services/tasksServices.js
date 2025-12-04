@@ -146,7 +146,7 @@ class TaskServices{
 
     async _createTaskForProject(data){
         console.log("Criando tarefa para o projeto...");
-        const {criador_id, projeto_id, coluna_id, assignedMemberIds = [], subTasks = [], sprint_id} = data;
+        const {criador_id, projeto_id, coluna_id, assignedMemberIds = [], subTasks = []} = data;
 
          // 1. AUTORIZAÇÃO: O criador é membro do projeto?
         const membership = await userProjectRoleDAO.findByUserAndProject(criador_id, projeto_id);
@@ -236,9 +236,12 @@ class TaskServices{
                 throw error;
             }
 
+            if(task.coluna_id === newColumnId){
+                return [];
+            }
 
             console.log(`Tentando atualizar a tarefa ${taskId} para a coluna ${newColumnId}...`);
-            const updatedTask = await tasksDAO.update(task, { coluna_id: newColumnId });
+            const updatedTask = await tasksDAO.update(task.id, { coluna_id: newColumnId });
             
             // Adicionamos um log para ver o que o DAO está a retornar
             console.log('Resultado do DAO.update:', updatedTask);

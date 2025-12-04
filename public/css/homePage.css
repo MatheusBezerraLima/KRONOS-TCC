@@ -34,6 +34,83 @@ body{
     --blueHoverButton: #0000a5; 
 }
 
+.hidden{
+    display: none;
+}
+
+.userModal{
+    position: absolute;
+    background-color: var(--main-color);
+    width: 250px;
+    height: fit-content;
+    box-shadow: 2px 2px 8px var(--shadow);
+    border: 1px solid #f2f2f2;
+    right: 0;
+    top:60px;
+    border-radius: 10px;
+}
+
+.userInfosModalContainer{
+    display: flex;
+    align-items: center;
+    gap:12px;
+    padding: 15px 15px;
+
+}
+
+.userProfileModal{
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #0000a5;
+}
+
+.userNameAndEmailContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.userNameModal{
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.userEmailModal{
+    font-size: 11px;
+    color: #696969;
+    font-weight: 500;
+}
+
+.userModalOptions{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.optionModalUser{
+    padding: 15px;
+    display: flex;
+    gap:8px;
+    align-items: center;
+    width: 100%;
+    height: 45px;
+    cursor: pointer;
+}
+
+.optionModalUser:hover{
+    background-color: #f2f2f2;
+}
+
+.optionModalUser svg{
+    width: 22px;
+    height: 22px;
+}
+
+.logoutContainer{
+    color: rgb(201, 6, 6);
+}
+
 .aside{
     display: flex;
     flex-direction: column ;
@@ -229,6 +306,11 @@ header{
     height: 30px;
     border-radius: 50%;
     background-color: aqua;
+    cursor: pointer;
+}
+
+.userProfileSelected{
+    border: 2px solid #000080
 }
 
 /* Main */
@@ -271,6 +353,7 @@ main{
 
 .projectPageTitle{
     color: var(--black);
+    font-size: 30px;
 }
 
 .pageSubtitle{
@@ -289,21 +372,26 @@ main{
     height: 100%;
     padding-right: 20px;
     overflow: hidden;
+    overflow-y: auto;
+
+}
+
+.middleContainer::-webkit-scrollbar {
+   display: none;
 }
 
 .projectsContainer{
     padding-top: 20px;
     width: 100%;
     height: 100%;
-    overflow-y: auto;
 }
 
 .tasksAndUsersContainer{
-    width: 400px;
+    width: 360px;
     height: 95%;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     overflow: hidden;
 }   
 
@@ -313,25 +401,9 @@ main{
     flex-wrap: wrap; 
     width: 100%; 
     height: auto;
-    gap:10px;
+    gap:12px;
     padding-top: 10px;
 }
-
-.projectsContainer::-webkit-scrollbar {
-    width: 4px; /* Torna a barra mais fina */
-    height: 2px;
-}
-
-.tasksList::-webkit-scrollbar-thumb {
-    background: #ccc; 
-    border-radius: 10px;
-}
-
-/* 4. Estilização do thumb ao passar o mouse (hover) */
-.tasksList::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8; 
-}
-
 
 .titleProjectContainer{
     display: flex;
@@ -357,7 +429,7 @@ main{
     justify-content: center;
     align-items: center;
     width: calc(25% - 20px);   
-    min-width: 260px; 
+    min-width: 240px; 
     height: 180px;
     margin-top:5px;
     border-radius: 10px;
@@ -389,7 +461,7 @@ main{
     display: flex;
     flex-direction: column;
     width: calc(25% - 20px);   
-    min-width: 260px; 
+    min-width: 240px; 
     padding: 15px 15px 5px 15px;
     height: 180px;
     background-color: #ffffff;
@@ -549,6 +621,7 @@ main{
 
 }
 
+
 .taskTitle, .usersContainerTitle{
     font-size: 20px;
     font-weight: 500;
@@ -607,10 +680,9 @@ main{
     padding:5px 10px;
     border: 1px solid #f2f2f2;
     border-radius:10px ;
-    box-shadow: 2px 2px 5px var(--shadow);
     display: flex;
     gap:8px;
-    width: 100%;
+    flex-grow: 1;
     align-items: center;
     justify-content: space-between;
     height: fit-content;

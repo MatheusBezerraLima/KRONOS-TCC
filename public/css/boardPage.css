@@ -1285,7 +1285,7 @@ main{
 }
 
 
-.addTaskModal{
+/* .addTaskModal{
     position: fixed;
     top:50%;
     left:50%;
@@ -1299,9 +1299,9 @@ main{
     padding: 20px;
     overflow: hidden;
     user-select: none;
-}
+} */
 
-.editTaskModal{
+/* .editTaskModal{
     position: fixed;
     top:50%;
     left:50%;
@@ -1315,18 +1315,18 @@ main{
     padding: 20px;
     overflow: hidden;
     user-select: none;
-}
+} */
 
 .modalOn{
     display: block;
 }
-
+/* 
 .modalTop{
     display: flex;
     align-items: center;
     justify-content: space-between;
     
-}
+} */
 
 .modalTop svg{
     cursor: pointer;
@@ -1339,7 +1339,7 @@ main{
     height: 45%;
     gap:10px;
     margin-top: 10px;
-    
+    position: relative;
 }
 
 .dateFormModal, .categoryFormModal, .statusFormModal, .linksFormModal, .atribuitionFormModal {
@@ -1522,7 +1522,7 @@ main{
 
 /* ------------------------ Modal para selecionar categoria ------------------------ */
 
-.selectCategoryModal{
+/* .selectCategoryModal{
     display: flex;
     flex-direction: column;
     width: min-content;
@@ -1531,16 +1531,16 @@ main{
     background-color: transparent;
     border-radius: 5px;
     align-self: flex-start;
-}
+} */
 
-.selectCategoryModal.categoryOpen{
+/* .selectCategoryModal.categoryOpen{
     width: 150px; 
     background-color: #F2F2F2;
     z-index: 10;
-}
+} */
 
 /* Estilização das etiquetas */
-.categoryBadge{
+/* .categoryBadge{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1548,10 +1548,10 @@ main{
     height: 28px;
     border-radius:5px;
     font-weight: 500;
-}
+} */
 
 /* Estilização das cores das etiquetas */
-.designBadge{
+/* .designBadge{
     background-color: rgb(231, 53, 106);
     color: var(--toDoFont-color);
 }
@@ -1564,19 +1564,19 @@ main{
 .backendBadge{
     background-color: var(--done-color);
     color: var(--doneFont-color);
-}
+} */
 
 /* Container que fica as etiquetas quando o modal esta aberto */
-.categoryOption{
+/* .categoryOption{
     display: flex;
     align-items: center;
     width: 150px;
     height: 40px;
     padding-left:10px;
-    font-size:0.9rem;
-}
+    font-size:0.9rem; */
+/* } */
 
-.selectCategoryModal.categoryOpen .categoryOption:first-child{
+/* .selectCategoryModal.categoryOpen .categoryOption:first-child{
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
@@ -1587,35 +1587,35 @@ main{
 }
 
 /* As que nao estao selecionadas */
-.categoryOption:not(.categorySelected){
+/* .categoryOption:not(.categorySelected){
     display: none;
 }
 
 /* Quando o modal esta aberto todos as etiquetas estao abertas*/
-.selectCategoryModal.categoryOpen .categoryOption{
+/* .selectCategoryModal.categoryOpen .categoryOption{
     display:flex;
     width: 100%;
     height: 40px;
     padding-left: 10px;
-}
+}   */
 
 /* Estilo da etiqueta selecionada, sem o modal */
-.categoryOption.categorySelected{
+/* .categoryOption.categorySelected{
     padding: 0;
     width: min-content;
     height: min-content;
-}
+} */
 
 /* Hover nas etiquetas nao selecionadas*/
-.selectCategoryModal.categoryOpen .categoryOption:hover:not(.categorySelected){
+/* .selectCategoryModal.categoryOpen .categoryOption:hover:not(.categorySelected){
     transform: .2s ease;
     background-color: #d3d3d3;
-}
+} */
 
 /*Estilo da etiqueta selecionada*/
-.selectCategoryModal.categoryOpen .categoryOption.categorySelected{
+/* .selectCategoryModal.categoryOpen .categoryOption.categorySelected{
     background-color: #D9D9D9;
-}
+} */
 
 /* ------------------------ Modal para selecionar status ------------------------ */
 
@@ -1868,4 +1868,249 @@ main{
     width: 20px;
     height: 20px;
     stroke: #999;
+}
+
+
+
+
+
+
+
+
+
+/* --- DRAWER STYLE (Substitui o estilo antigo de popup central) --- */
+
+/* --- TRANSFORMAÇÃO EM MENU LATERAL --- */
+
+.addTaskModal {
+    /* Posicionamento Fixo na Direita */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto; /* Anula o centralizado antigo */
+    
+    /* Tamanho */
+    width: 550px;
+    height: 100vh;
+    
+    /* Visual */
+    background-color: var(--main-color);
+    z-index: 1001;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    border-radius: 0; /* Remove bordas arredondadas do modal */
+    
+    /* Layout Flex para controle de scroll */
+    display: flex;
+    flex-direction: column;
+    padding: 0; /* Remove padding geral */
+    overflow: hidden; 
+    
+    /* Animação de Entrada */
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Classe ativada pelo JS para mostrar o modal */
+.addTaskModal.modalOn {
+    transform: translateX(0);
+    display: flex; /* Garante display flex */
+}
+
+/* --- CABEÇALHO --- */
+.modalTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Botão Criar na esq, Fechar na dir */
+    padding: 20px 30px;
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0; /* Impede que encolha */
+    height: 70px;
+}
+
+.closeModalIcon {
+    cursor: pointer;
+    color: #666;
+}
+
+/* --- ÁREA DE CONTEÚDO COM SCROLL (NOVA CLASSE) --- */
+.drawer-scroll-content {
+    flex: 1; /* Ocupa todo o espaço restante abaixo do header */
+    overflow-y: auto; /* Habilita o scroll vertical */
+    padding: 20px 30px 40px 30px; /* Espaçamento interno */
+}
+
+/* --- TÍTULO (Agora fora do header) --- */
+.taskNameContainer {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.invisibleTaskNameInput {
+    width: 100%;
+    font-size: 1.8rem; /* Fonte maior para destaque */
+    font-weight: 700;
+    color: var(--black);
+    border: none;
+    outline: none;
+    background: transparent;
+    display: block !important; /* Força aparecer */
+}
+
+.invisibleTaskNameInput::placeholder {
+    color: #d3d3d3;
+}
+
+/* --- DESCRIÇÃO (NOVO ESTILO) --- */
+.descriptionContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.descriptionTitle {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--taskBoardIcon-color); /* Usando suas variáveis */
+}
+
+.descriptionInput {
+    width: 100%;
+    min-height: 80px;
+    border: 1px solid var(--border-color-aside);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: "roboto";
+    font-size: 0.95rem;
+    resize: vertical; /* Permite redimensionar altura */
+    outline: none;
+    background-color: var(--secundary-color); /* Fundo sutil */
+}
+
+.descriptionInput:focus {
+    background-color: #fff;
+    border-color: var(--blue);
+}
+
+/* --- AJUSTES NOS SEUS FORMS ANTIGOS PARA O NOVO LAYOUT --- */
+.formModal {
+    height: auto; /* Remove altura fixa para permitir fluxo natural */
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.activitysTaskModal {
+    height: auto; /* Remove altura fixa */
+    padding-top: 0;
+}
+
+.ContainerSubtask {
+    height: auto;
+    overflow: visible; /* Deixa o scroll pro container pai */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.dueDateContainer, .statusContainer, .categoryContainer, .priorityContainer{
+    width: 200px;
+    border-right: 1px solid #f2f2f2;
+    display: flex;
+    align-items: center;
+    padding-left:10px;
+    cursor: pointer;
+}
+
+.selectCategoryModal{
+    position: absolute;
+    width: 280px;
+    height: min-content;
+    background-color: #FFFFFF;
+    border-radius:5px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 1px 1px 5px #f2f2f2;
+    top:5px;
+    z-index: 11;
+    cursor: pointer;
+}
+.selectModalHidden, .selectCategoryHidden{
+    display: none;
+}
+
+.categoryModalHeader{
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+    padding: 3px;
+
+}
+
+.categoryBadgeHeaderModal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    height: 20px;
+    width: fit-content;
+    flex-shrink: 0;
+    max-width: 140px;
+    padding: 15px 10px;
+    font-size:15px;
+}
+
+.noCategorySelected{
+    display: none;
+}
+
+.createNewCategory{
+    flex: 1; /* Ocupa o espaço restante */
+    min-width: 0; /* Essencial para que o input possa encolher no Flexbox */
+    border: 0;
+    outline: none;
+    background-color: transparent;
+}
+
+.selectOptionText{
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #808080;
+
+}
+
+.statusBadgeContainer, .priorityBadgeContainer, .categoryBadgeContainer{
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+.categoryBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    gap:5px;
+    height: 20px;
+    width: fit-content;
+    max-width: 140px;
+    padding: 15px 10px;
+    font-size:15px;
+    cursor: pointer;
 }
