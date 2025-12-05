@@ -156,7 +156,8 @@ async function triggerUpdate(dataToUpdate) {
         
         // Chama API de mover
         const movedTask = await requestMoveTask(currentEditingTaskId, newColumnId);
-        
+        requestUpdateTask({status_id: 3}, currentEditingTaskId);
+
         if (movedTask) {
             moveTaskToColumn(currentEditingTaskId, newColumnId);
             updateTaskCardInDOM(movedTask);
@@ -249,7 +250,7 @@ async function initializeBoard() {
     const catDropdown = document.getElementById('categoryDropdown');
     const statTrigger = document.getElementById('statusTrigger');
     const statDropdown = document.getElementById('statusDropdown');
-
+    var searchInput = document.querySelector(".categorySearchInput")
     // Toggle Categoria
     catTrigger.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -315,16 +316,16 @@ async function initializeBoard() {
     };
 
     // --- 4. FILTRO DE BUSCA (CATEGORIA) ---
-    const searchInput = document.querySelector('.categorySearchInput');
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const options = document.querySelectorAll('.category-option');
+    // const searchInput = document.querySelector('.categorySearchInput');
+    // searchInput.addEventListener('input', (e) => {
+    //     const term = e.target.value.toLowerCase();
+    //     const options = document.querySelectorAll('.category-option');
         
-        options.forEach(opt => {
-            const text = opt.innerText.toLowerCase();
-            opt.style.display = text.includes(term) ? 'flex' : 'none';
-        });
-    });
+    //     options.forEach(opt => {
+    //         const text = opt.innerText.toLowerCase();
+    //         opt.style.display = text.includes(term) ? 'flex' : 'none';
+    //     });
+    // });
 
      searchInput.addEventListener('keydown', async (e) => {
         if (e.key === 'Enter') {
@@ -1687,31 +1688,6 @@ async function requestCreateColumn(columnName){
 
 // --------------- MUDAR MAIN -------------------
 
-const categoryScrum = document.querySelector(".sectionBoardScrum");
-const categoryKanban = document.querySelector(".sectionBoardKanban");
-
-categoryScrum.addEventListener('click', () => {
-    const boardKanban = document.querySelector(".boardColumns");
-    const boardScrum = document.querySelector(".scrumBoard");
-
-    boardKanban.classList.toggle('display-none');
-    boardScrum.classList.toggle('display-none');
-
-    boardKanban.classList.toggle('.selectedCategory');
-    boardScrum.classList.toggle('.selectedCategory');
-});
-
-
-categoryKanban.addEventListener('click', () => {
-    const boardKanban = document.querySelector(".boardColumns");
-    const boardScrum = document.querySelector(".scrumBoard");
-
-    boardKanban.classList.toggle('display-none');
-    boardScrum.classList.toggle('display-none');
-
-    boardKanban.classList.toggle('.selectedCategory');
-    boardScrum.classList.toggle('.selectedCategory');
-});
 
 // --------------- COLUNA -------------------
 
@@ -1967,7 +1943,6 @@ function setupDropdownLogic() {
                 categoryDropdown.classList.add('active');
                 if (searchInput) {
                     searchInput.value = ''; // Limpa busca
-                    filterOptions(''); // Reseta filtro
                     setTimeout(() => searchInput.focus(), 100); // Foca no input
                 }
             }
@@ -1975,33 +1950,12 @@ function setupDropdownLogic() {
 
         // 2. Filtro de Busca (Input)
         if (searchInput && optionsWrapper) {
-            searchInput.oninput = (e) => {
-                const term = e.target.value.toLowerCase();
-                filterOptions(term);
-            };
             
             // Impede que clicar no input feche o dropdown
             searchInput.onclick = (e) => e.stopPropagation();
         }
     }
 
-    // Função auxiliar de filtro
-    function filterOptions(term) {
-        const options = document.querySelectorAll('.categoryOption');
-        let hasVisible = false;
-        
-        options.forEach(opt => {
-            const text = opt.innerText.toLowerCase();
-            if (text.includes(term)) {
-                opt.style.display = 'flex';
-                hasVisible = true;
-            } else {
-                opt.style.display = 'none';
-            }
-        });
-        
-        // (Opcional) Aqui você poderia mostrar um botão "Criar categoria" se hasVisible for false
-    }
 
     // --- B. Fechar ao clicar fora ---
     document.addEventListener('click', (e) => {
@@ -2043,9 +1997,7 @@ function closeAllDropdowns() {
 
     // --- 3. LÓGICA DE SELEÇÃO ---
 
- 
-    // Inicializa tudo
-    initDropdowns();
+
 
     // --------------------------------------------------------------------------------
 
@@ -2167,107 +2119,6 @@ function setupDateUpdateLogic() {
 
 // --------------------- MODAL ADD MEMBERS TO TASK -------------------------
 
-
-// --- 1. Inicialização ---
-function initMemberDropdown() {
-    const trigger = document.getElementById('memberTrigger');
-    const dropdown = document.getElementById('memberDropdown');
-    const searchInput = dropdown.querySelector('.memberSearchInput');
-
-    // Evento de Abrir/Fechar
-    trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        
-        // Fecha outros dropdowns se existirem na página
-        document.querySelectorAll('.dropdown-active').forEach(el => {
-            if(el !== dropdown) el.classList.remove('dropdown-active');
-        });
-
-        dropdown.classList.toggle('dropdown-active');
-        
-        if (dropdown.classList.contains('dropdown-active')) {
-            searchInput.value = ''; // Limpa busca
-            searchInput.focus();
-        }
-    });
-
-    // Evento de Busca (Filtro)
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = membersDB.filter(m => 
-            m.nome.toLowerCase().includes(term) || 
-            m.email.toLowerCase().includes(term)
-        );
-        renderMembersList(filtered);
-    });
-
-    // Fechar ao clicar fora
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.atribuitionContainer')) {
-            dropdown.classList.remove('dropdown-active');
-        }
-    });
-}
-
-
-
-// --- 3. Lógica de Selecionar Membro ---
-function selectMember(member) {
-    const name = member.getAttribute("data-name")
-    const id = member.getAttribute("data-id")
-    const avatar = member.getAttribute("data-avatar")
-    
-    const list = document.getElementById('assignedMembersList');
-    const dropdown = document.getElementById('memberDropdown');
-
-    // Verifica se já não está adicionado visualmente para evitar duplicatas
-    if (list.querySelector(`[data-member-id="${id}"]`)) {
-        alert("Este membro já está atribuído à tarefa.");
-        return;
-    }
-
-    // Cria o avatar visual na lista de atribuídos
-    const badge = document.createElement('div');
-    badge.className = 'memberIconModal';
-    badge.style.backgroundImage = avatar;
-    badge.title = name; // Tooltip nativo
-    badge.innerText = getInitials(name);
-    badge.setAttribute('data-member-id', id);
-
-    // Adiciona evento para REMOVER ao clicar no avatar
-    badge.onclick = (e) => {
-        e.stopPropagation();
-        if(confirm(`Remover ${name} da tarefa?`)) {
-            badge.remove();
-            // Aqui você chamaria a API para remover:
-            // triggerUpdate({ remove_member_id: member.id });
-        }
-    };
-
-    list.appendChild(badge);
-
-    // Fecha o dropdown
-    dropdown.classList.remove('dropdown-active');
-
-    // Chama sua função de salvar no banco
-    console.log(`Membro adicionado: ${id}`);
-    if (typeof triggerUpdate === 'function') {
-        triggerUpdate({ add_member_id: id });
-    }
-}
-
-// --- Utils: Pegar Iniciais ---
-function getInitials(name) {
-    return name
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .substring(0, 2)
-        .toUpperCase();
-}
-
-// Inicia a lógica (Chame isso no seu onload ou quando abrir o modal)
-initMemberDropdown();
 
 
 

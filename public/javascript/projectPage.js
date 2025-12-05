@@ -474,43 +474,61 @@ const categoryOptionsWrapper = document.querySelector(".categoryOptionsWrapper")
 
 /* Criar/listar projeto */
 
-function createNewProject(name, categoryName, categoryBg, categoryTxt, dueDateText, projectId) {
+function createNewProject(name, categoryName, categoryBg, categoryTxt, dueDateText, projectId, projectProgress, totalTasks) {
     const newProject = document.createElement("div");
     newProject.classList.add("project");
-    newProject.setAttribute('data-project-id', projectId)
+    newProject.setAttribute('data-project-id', projectId);
 
-    const fullProjectName = name;
-    const fullCategoryName = categoryName;
+    // 1. Lógica de Cor (Verde se completou, senão Azul padrão ou a cor da sua variável --blue)
+    const progressColor = projectProgress >= 100 ? '#119500' : '#000080'; 
+    
+    // 2. Garante que não quebre se vier null/undefined
+    const safeProgress = projectProgress || 0;
+    const safeTotal = totalTasks || 0;
 
     newProject.innerHTML = `
         <div class="projectTop">
-            <strong class="projectTitle">${fullProjectName}</strong>
+            <strong class="projectTitle">${name}</strong>
             <div class="projectCategoryBadge" style="background-color: ${categoryBg}; color: ${categoryTxt};">
-                 <span class="categoryNameText">${fullCategoryName}</span>
+                 <span class="categoryNameText">${categoryName}</span>
             </div>
         </div>
 
-        <div class="progressBarContainer">
-            <div class="progressBar"></div>
-            <div class="dueDateContainer">
+        <div class="progressBarContainer" style="display: flex; flex-direction: column; gap: 5px;">
+            
+            <!-- Texto Informativo (Opcional, mas bom para UX) -->
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #666; font-weight: 500;">
+                <span>Progresso</span>
+                <span>${safeProgress}% (${safeTotal} tasks)</span>
+            </div>
+
+            <!-- TRILHO DA BARRA (Fundo Cinza) -->
+            <div style="width: 100%; background-color: #e5e7eb; border-radius: 10px; height: 8px; overflow: hidden;">
+                <!-- A BARRA (Preenchimento Dinâmico) -->
+                <div class="progressBar" 
+                     style="width: ${safeProgress}%; background-color: ${progressColor}; height: 100%; border-radius: 10px; transition: width 0.5s ease;">
+                </div>
+            </div>
+
+            <div class="dueDateContainer" style="margin-top: 8px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
                 <p>Prazo: <span class="dueDateProjectSubtitle">${dueDateText}</span></p>
             </div> 
         </div>
 
-           <div class="projectBottom">   
-                <p class="shareWithText">Compartilhado com</p>                     
-                <div class="projectMembers">
-                    <div class="member" style="background-color: aqua;"></div>
-                    <div class="member" style="background-color: bisque;"></div>
-                    <div class="member" style="background-color: bisque;"></div>
+        <div class="projectBottom">   
+            <p class="shareWithText">Compartilhado com</p>                     
+            <div class="projectMembers">
+                <div class="member" style="background-color: aqua;"></div>
+                <div class="member" style="background-color: bisque;"></div>
+                <div class="member" style="background-color: bisque;"></div>
 
-                    <div class="membersQuantity" style="background-color: gray;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                        <p class="quantityNumber">6</p>
-                    </div>
+                <div class="membersQuantity" style="background-color: gray;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                    <p class="quantityNumber">6</p>
                 </div>
             </div>
+        </div>
     `;
     return newProject;
 }
@@ -685,9 +703,9 @@ document.addEventListener('DOMContentLoaded', async() => {
     console.log(projects);
     
     for(const project of projects){
-        const dateValue = formatDateForDisplay(project.Project.data_termino)
+        const dateValue = formatDateForDisplay(project.data_termino)
 
-        const newProject = createNewProject(project.Project.titulo, project.Project.categoryTask.nome, project.Project.categoryTask.cor_fundo, project.Project.categoryTask.cor_texto, dateValue, project.projeto_id);
+        const newProject = createNewProject(project.titulo, project.categoryTask.nome, project.categoryTask.cor_fundo, project.categoryTask.cor_texto, dateValue, project.id, project.progress, project.total_tasks);
 
         projectList.appendChild(newProject);
 

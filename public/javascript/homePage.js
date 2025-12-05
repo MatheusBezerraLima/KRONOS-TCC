@@ -226,9 +226,9 @@ document.addEventListener('DOMContentLoaded', async() => {
     console.log(projects);
     
     for(const project of projects){
-        const dateValue = formatDateForDisplay(project.Project.data_termino)
+        const dateValue = formatDateForDisplay(project.data_termino)
 
-        const newProject = createNewProject(project.Project.titulo, project.Project.categoryTask.nome, project.Project.categoryTask.cor_fundo, project.Project.categoryTask.cor_texto, dateValue, project.projeto_id);
+        const newProject = createNewProject(project.titulo, project.categoryTask.nome, project.categoryTask.cor_fundo, project.categoryTask.cor_texto, dateValue, project.id);
 
         projectList.appendChild(newProject);
 
@@ -777,21 +777,11 @@ async function carregarListaAmigosPage() {
 
         // 2. Itera sobre cada amizade
         amizades.forEach(amizade => {
-            // LÓGICA: Descobrir quem é o amigo e quem sou eu
-            let amigoData;
-
-            if (amizade.requester_id === currentUserId) {
-                // Se eu pedi, o amigo é o Addressee
-                amigoData = amizade.Addressee;
-            } else {
-                // Se eu recebi, o amigo é o Requester
-                amigoData = amizade.Requester;
-            }
-
-            console.log(amigoData);
+            console.log(amizade);
             
+        
             // Tratamento de segurança para foto (caso venha null)
-            const foto = amigoData.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amigoData.nome}&background=random`;
+            const foto = amizade.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amizade.nome}&background=random`;
             
             // Simulação de Status (Já que o banco não retorna online/offline ainda)
             // Futuramente você pode conectar isso a um WebSocket
@@ -805,18 +795,18 @@ async function carregarListaAmigosPage() {
             
             // Adiciona ID da amizade para facilitar chat ou remoção futura
             li.dataset.friendshipId = amizade.id;
-            li.dataset.friendId = amigoData.id;
+            li.dataset.friendId = amizade.id;
 
             li.innerHTML = `
                 <div class="friend-avatar-container ${statusClass}">
-                    <img src="${foto}" alt="${amigoData.nome}" class="friend-avatar">
+                    <img src="${foto}" alt="${amizade.nome}" class="friend-avatar">
                 </div>
-                    <p class="userName">${amigoData.nome}</p>
+                    <p class="userName">${amizade.nome}</p>
             `;
 
             // Clique no amigo (Ex: para abrir chat)
             li.addEventListener('click', () => {
-                console.log(`Abrir chat com ${amigoData.nome} (ID: ${amigoData.id})`);
+                console.log(`Abrir chat com ${amizade.nome} (ID: ${amizade.id})`);
                 // window.location.href = `/chat/${amigoData.id}`;
             });
 

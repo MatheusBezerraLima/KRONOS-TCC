@@ -1,4 +1,4 @@
-const { UserProjectRole, User, ProfileUser, Project, CategoryTask} = require("../models/index");
+const { UserProjectRole, User, ProfileUser, Project, CategoryTask, Task} = require("../models/index");
 
 class UserProjectRoleDAO{
     async create(data,  options = {}){
@@ -26,23 +26,59 @@ class UserProjectRoleDAO{
         }
     }
 
-    async findProjectForUser(userId){
-        try{
-            const projects = UserProjectRole.findAll({
+     async findProjectForUser(userId) {
+        try {
+            const userProjects = await UserProjectRole.findAll({
                 where: {
                     usuario_id: userId
                 },
                 include: [{
                     model: Project,
-                    attributes: ['titulo', 'data_termino', 'categoria_id'],
-                    include: [{
-                        model: CategoryTask, 
-                        as: 'categoryTask', 
-                    }]
+                    // attributes: você pode selecionar só o que precisa do projeto aqui se quiser
+                    include: [
+                        {
+                            model: CategoryTask,
+                            as: 'categoryTask',
+                        },
+                        {
+                            model: Task,
+                            as: 'tasks', // Certifique-se que seu Project.hasMany(Task) usa esse alias (ou remova o 'as' se for padrão)
+                            attributes: ['id', 'status_id'] // Trazemos apenas o necessário para calcular
+                        }
+                    ]
                 }]
-            })
-            return projects
-        }catch{
+            });
+
+            // Processamento dos dados para calcular o progresso
+            const projectsWithProgress = userProjects.map(role => {
+                // .get({ plain: true }) converte a instância do Sequelize em um objeto JSON puro
+                const project = role.Project.get({ plain: true });
+
+                const tasks = project.tasks || [];
+                const totalTasks = tasks.length;
+                console.log("🚀", tasks);
+                
+                // Filtra tarefas concluídas (Assumindo que status_id 3 = Concluído)
+                // Se o seu ID de concluído for diferente, altere o número 3 abaixo.
+                const completedTasks = tasks.filter(t => t.status_id === 3).length;
+
+                // Cálculo da porcentagem (evita divisão por zero)
+                const progress = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+
+                // Adiciona as novas propriedades ao objeto do projeto
+                project.progress = progress;
+                project.total_tasks = totalTasks;
+                project.completed_tasks = completedTasks;
+
+                // (Opcional) Remove o array de tasks para não enviar dados desnecessários pro front
+                delete project.tasks; 
+
+                return project;
+            });
+
+            return projectsWithProgress;
+
+        } catch (error) {
             console.error(`Erro no DAO ao buscar projetos associados ao usuário: ${error.message}`);
             throw error;
         }

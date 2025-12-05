@@ -497,6 +497,8 @@ class ProjectServices{
         }
 
         const projects = await userProjectRoleDAO.findProjectForUser(userId);
+        console.log(projects);
+        
 
         return projects;
     }

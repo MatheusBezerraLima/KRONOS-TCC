@@ -88,7 +88,7 @@ const applyAssociations = (db) => {
 
     //  Task -->  Project (N:1)
     Task.belongsTo(Project, { foreignKey: "projeto_id" });
-    Project.hasMany(Task, { foreignKey: "projeto_id" });
+    Project.hasMany(Task, { foreignKey: "projeto_id" , as:"tasks"});
 
     // ActivityLog --> User (1:N)
     ActivityLog.belongsTo(User, { foreignKey: "usuario_id"});
