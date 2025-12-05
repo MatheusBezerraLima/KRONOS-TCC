@@ -9,7 +9,7 @@ const projectNameInput = document.querySelector(".invisibleProjectNameInput")
 const openModalProjectDiv = document.querySelector(".addProjectContainer")
 const defaultPlaceholderText = 'Novo projeto';
 const categoryModal = document.querySelector(".categoryModal");
-
+const currentUserId = localStorage.getItem('userId'); 
 const inputPesquisa = document.getElementById('inputPesquisaUsuario');
 const inputFiltro = document.getElementById('inputFiltroAmigo');
 const listaResultados = document.getElementById('listaResultados');
@@ -616,6 +616,8 @@ async function salvarMembrosNoProjeto(projectId) {
     const requests = Array.from(listUsersAddProject).map(async (userDiv) => {
         
     const userId = userDiv.getAttribute('data-user-id');
+    console.log(userId);
+    
     
     if (!userId) return null;
 
@@ -742,9 +744,9 @@ async function carregarListaInicial() {
         const data = await response.json();
         
         // Separa os dados corretos dos amigos
-        todosAmigos = data.map(f => f.requester_id === currentUserId ? f.Addressee : f.Requester);
-
-        renderizarLista(todosAmigos);
+        todosAmigos = data
+        
+        renderizarLista(data);
 
     } catch (error) {
         containerLista.innerHTML = '<p style="color:red; text-align:center;">Erro ao carregar</p>';
@@ -806,6 +808,8 @@ const inputBusca = document.getElementById('inputBuscaMembro');
 const divSugestoes = document.getElementById('sugestoesMembros');
 
 function adicionarAoProjeto(amigo) {
+    console.log(amigo);
+    
     console.log(amigo);
     
     selecionadosIDs.push(amigo.id);
@@ -942,6 +946,24 @@ async function requestListProjects(dataProject){
 
 
 document.addEventListener('DOMContentLoaded', function() {
+
+        const optionSectionProject = document.querySelector("#optionSectionProject");
+        const optionSectionTask = document.querySelector("#optionSectionTask");
+        const optionSectionHome = document.querySelector("#optionSectionHome");
+
+
+        optionSectionProject.addEventListener('click', () => {
+            window.location.href = '/projetos'
+        })
+
+        optionSectionTask.addEventListener('click', () => {
+            window.location.href = '/tasks'
+        })
+
+        optionSectionHome.addEventListener('click', () => {
+             window.location.href = '/'
+        })
+
         // --- Lógica de Abrir/Fechar o Drawer ---
         const openBtn = document.getElementById('openFriendsSidebarBtn');
         const closeBtn = document.getElementById('closeFriendsSidebarBtn');
@@ -984,9 +1006,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById(targetPaneId).classList.add('active');
             });
         });
-    });
+});
 
-const currentUserId = 3
+
 
 async function carregarListaAmigos() {
     const listaElement = document.getElementById('lista-amigos');
@@ -1010,18 +1032,10 @@ async function carregarListaAmigos() {
         // 2. Itera sobre cada amizade
         amizades.forEach(amizade => {
             // LÓGICA: Descobrir quem é o amigo e quem sou eu
-            let amigoData;
-
-            if (amizade.requester_id === currentUserId) {
-                // Se eu pedi, o amigo é o Addressee
-                amigoData = amizade.Addressee;
-            } else {
-                // Se eu recebi, o amigo é o Requester
-                amigoData = amizade.Requester;
-            }
+           
 
             // Tratamento de segurança para foto (caso venha null)
-            const foto = amigoData.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amigoData.nome}&background=random`;
+            const foto = amizade.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amizade.nome}&background=random`;
             
             // Simulação de Status (Já que o banco não retorna online/offline ainda)
             // Futuramente você pode conectar isso a um WebSocket
@@ -1035,14 +1049,14 @@ async function carregarListaAmigos() {
             
             // Adiciona ID da amizade para facilitar chat ou remoção futura
             li.dataset.friendshipId = amizade.id;
-            li.dataset.friendId = amigoData.id;
+            li.dataset.friendId = amizade.id;
 
             li.innerHTML = `
                 <div class="friend-avatar-container ${statusClass}">
-                    <img src="${foto}" alt="${amigoData.nome}" class="friend-avatar">
+                    <img src="${foto}" alt="${amizade.nome}" class="friend-avatar">
                 </div>
                 <div class="friend-info">
-                    <span class="friend-name">${amigoData.nome}</span>
+                    <span class="friend-name">${amizade.nome}</span>
                     <span class="friend-status-text">${statusText}</span>
                 </div>
                 <button class="btn-more-options" style="background:none; border:none; color:#ccc; cursor:pointer;">
@@ -1052,7 +1066,7 @@ async function carregarListaAmigos() {
 
             // Clique no amigo (Ex: para abrir chat)
             li.addEventListener('click', () => {
-                console.log(`Abrir chat com ${amigoData.nome} (ID: ${amigoData.id})`);
+                console.log(`Abrir chat com ${amizade.nome} (ID: ${amizade.id})`);
                 // window.location.href = `/chat/${amigoData.id}`;
             });
 
@@ -1159,7 +1173,7 @@ async function responderSolicitacao(requesterId, novoStatus, friendshipId) {
     try {
         // AJUSTE AQUI: Use a rota que criamos para responder (sendRequest ou updateStatus)
         // Estou assumindo uma rota genérica baseada no seu controller anterior
-        const response = await fetch(`${API_URL}/friendships/${requesterId}`, { 
+        const response = await fetch(`${API_BASE_URL}/friendships/${requesterId}`, { 
             method: 'PATCH', // ou PUT, dependendo da sua rota
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1208,3 +1222,180 @@ document.getElementById('openFriendsSidebarBtn').addEventListener('click', () =>
 
 // Se clicar na aba especificamente, recarrega para garantir
 document.querySelector('[data-target="tab-requests"]').addEventListener('click', carregarSolicitacoes);
+
+
+
+
+
+
+
+
+// ------------------------------ NOTIFICAÇÕES -----------------------------
+
+let notifications = [
+    {
+        id: 1,
+        user: 'Ana Silva',
+        action: 'curtiu sua publicação',
+        time: '2 min atrás',
+        colorClass: 'color-pink',
+        read: false,
+        icon: 'heart'
+    },
+    {
+        id: 2,
+        user: 'João Souza',
+        action: 'comentou no seu post: "Ficou ótimo!"',
+        time: '15 min atrás',
+        colorClass: 'color-blue',
+        read: false,
+        icon: 'message-square'
+    },
+    {
+        id: 3,
+        user: 'Sistema',
+        action: 'Sua senha foi alterada com sucesso.',
+        time: '1h atrás',
+        colorClass: 'color-gray',
+        read: true,
+        icon: 'settings'
+    },
+    {
+        id: 4,
+        user: 'Carlos Miguel',
+        action: 'começou a seguir você',
+        time: '3h atrás',
+        colorClass: 'color-green',
+        read: true,
+        icon: 'check-circle-2'
+    },
+    {
+        id: 5,
+        user: 'Segurança',
+        action: 'Novo login detectado em São Paulo',
+        time: 'Ontem',
+        colorClass: 'color-yellow',
+        read: true,
+        icon: 'bell'
+    }
+];
+
+let currentTab = 'all';
+
+// --- Elementos DOM ---
+const overlay = document.getElementById('sidebarOverlay');
+const drawer = document.getElementById('notificationDrawer');
+const openBtn = document.getElementById('openDrawerBtn');
+console.log(openBtn);
+
+const closeBtn = document.getElementById('closeDrawerBtn');
+const listContainer = document.getElementById('notificationList');
+const searchInput = document.getElementById('searchInput');
+const unreadCountBadge = document.getElementById('unreadCount');
+const tabBtns = document.querySelectorAll('.tab-btn');
+
+// --- Inicialização ---
+renderList();
+
+// --- Funções de Drawer ---
+function openDrawer() {
+    overlay.classList.add('active');
+    drawer.classList.add('active');
+    openBtn.style.opacity = '0'; // Ocultar botão para não sobrepor visualmente se quiser
+}
+
+function closeDrawer() {
+    overlay.classList.remove('active');
+    drawer.classList.remove('active');
+    openBtn.style.opacity = '1';
+}
+
+openBtn.addEventListener('click', openDrawer);
+closeBtn.addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+
+// --- Lógica de Negócio ---
+
+function setTab(tab) {
+    currentTab = tab;
+    
+    // Atualizar UI das abas
+    tabBtns.forEach(btn => {
+        if(btn.dataset.target === tab) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+
+    renderList();
+}
+
+function filterNotifications() {
+    renderList();
+}
+
+function toggleRead(id) {
+    const notif = notifications.find(n => n.id === id);
+    if (notif) {
+        notif.read = !notif.read;
+        renderList();
+    }
+}
+
+function markAllRead() {
+    notifications.forEach(n => n.read = true);
+    renderList();
+}
+
+function renderList() {
+    const searchTerm = searchInput.value.toLowerCase();
+    
+    const filtered = notifications.filter(n => {
+        const matchesSearch = n.user.toLowerCase().includes(searchTerm) || n.action.toLowerCase().includes(searchTerm);
+        const matchesTab = currentTab === 'all' ? true : !n.read;
+        return matchesSearch && matchesTab;
+    });
+
+    // Atualizar contador
+    const unreadCount = notifications.filter(n => !n.read).length;
+    if (unreadCount > 0) {
+        unreadCountBadge.innerText = unreadCount;
+        unreadCountBadge.style.display = 'inline-flex';
+    } else {
+        unreadCountBadge.style.display = 'none';
+    }
+
+    // Limpar lista
+    listContainer.innerHTML = '';
+
+    if (filtered.length === 0) {
+        listContainer.innerHTML = `
+            <li class="empty-state">
+                <i data-lucide="bell-off" width="32" height="32"></i>
+                <p>Nenhuma notificação encontrada.</p>
+            </li>
+        `;
+    } else {
+        filtered.forEach(item => {
+            const li = document.createElement('li');
+            li.className = `notification-item ${!item.read ? 'unread' : ''}`;
+            li.onclick = () => toggleRead(item.id);
+
+            li.innerHTML = `
+                <div class="notif-icon-box ${item.colorClass}">
+                    <i data-lucide="${item.icon}" width="18" height="18"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-header">
+                        <span class="notif-user">${item.user}</span>
+                        <span class="notif-time">${item.time}</span>
+                    </div>
+                    <p class="notif-action">${item.action}</p>
+                </div>
+                ${!item.read ? '<div class="unread-indicator"></div>' : ''}
+            `;
+            listContainer.appendChild(li);
+        });
+    }
+
+    // Reinicializar ícones Lucide para os novos elementos
+    lucide.createIcons();
+}

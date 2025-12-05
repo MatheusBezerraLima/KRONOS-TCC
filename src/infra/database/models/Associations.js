@@ -34,7 +34,7 @@ const applyAssociations = (db) => {
     StatusTask.hasMany(Task, { foreignKey: "status_id" });
 
     // Task --> BoardColumn (N:1)
-    Task.belongsTo(BoardColumn, { foreignKey: "coluna_id" });
+    Task.belongsTo(BoardColumn, { foreignKey: "coluna_id", as: "coluna"});
     BoardColumn.hasMany(Task, { foreignKey: "coluna_id" });
 
     // Task - User 
@@ -127,12 +127,12 @@ const applyAssociations = (db) => {
     // Project.hasMany(BoardColumn, { foreignKey: "projeto_id" });
 
     // ChatProjectMessage --> User  (N:1)
-    ChatProjectMessage.belongsTo(User, { foreignKey: "usuario_id" });
+    ChatProjectMessage.belongsTo(User, { foreignKey: "usuario_id", as:"usuario" });
     User.hasMany(ChatProjectMessage, { foreignKey: "usuario_id" });
 
     // ChatProjectMessage --> Project (N:1)
-    ChatProjectMessage.belongsTo(Project, { foreignKey: "project_id" });
-    Project.hasMany(ChatProjectMessage, { foreignKey: "project_id" });
+    ChatProjectMessage.belongsTo(Project, { foreignKey: "projeto_id" });
+    Project.hasMany(ChatProjectMessage, { foreignKey: "projeto_id" });
 
     // PrivateMessage  --> PrivateChat (N:1);
     PrivateMessage.belongsTo(PrivateChat, { foreignKey: "chat_id"});

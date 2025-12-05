@@ -1,5 +1,5 @@
 const { includes } = require('zod/v4');
-const { Task, CategoryTask, StatusTask, SubTask, Profile, User} = require('../models/index');
+const { Task, CategoryTask, StatusTask, SubTask, User, BoardColumn, ProfileUser} = require('../models/index');
 
 class TasksDAO{
     async findAllGeneralTasks(userId){
@@ -18,6 +18,22 @@ class TasksDAO{
                         model: StatusTask,
                         as: "statusTask"
                     },
+                    {
+                        model: BoardColumn,
+                        as: "coluna"
+                    },// --- INCLUINDO MEMBROS ---
+                    {
+                        model: User,
+                        as: 'assignedMembers', // Alias definido na associação (Task.belongsToMany User)
+                        attributes: ['id', 'nome'],
+                        include: [{
+                            model: ProfileUser,
+                            as: 'profile',
+                            attributes: ['foto_perfil']
+                        }],
+                        // 'through: { attributes: [] }' remove os dados da tabela de ligação (assignmentTask) do retorno JSON, deixando mais limpo
+                        through: { attributes: [] } 
+                    }
                 ]
             });
         }catch(error){
@@ -86,6 +102,22 @@ class TasksDAO{
                         as: 'subTasks', // Use o 'as' definido na sua associação
                         order: [['criado_em', 'ASC']] // Opcional: ordena as subtarefas
                     },
+                    {
+                        model: BoardColumn,
+                       as: "coluna"
+                    },// --- INCLUINDO MEMBROS ---
+                    {
+                        model: User,
+                        as: 'assignedMembers', // Alias definido na associação (Task.belongsToMany User)
+                        attributes: ['id', 'nome'],
+                        include: [{
+                            model: ProfileUser,
+                            as: 'profile',
+                            attributes: ['foto_perfil']
+                        }],
+                        // 'through: { attributes: [] }' remove os dados da tabela de ligação (assignmentTask) do retorno JSON, deixando mais limpo
+                        through: { attributes: [] } 
+                    }
                 ],
             });
         } catch (error) {
@@ -106,6 +138,22 @@ class TasksDAO{
                     {
                         model: StatusTask,
                         as: "statusTask"
+                    },
+                    {
+                        model: BoardColumn,
+                        as: "coluna"
+                    },// --- INCLUINDO MEMBROS ---
+                    {
+                        model: User,
+                        as: 'assignedMembers', // Alias definido na associação (Task.belongsToMany User)
+                        attributes: ['id', 'nome'],
+                        include: [{
+                            model: ProfileUser,
+                            as: 'profile',
+                            attributes: ['foto_perfil']
+                        }],
+                        // 'through: { attributes: [] }' remove os dados da tabela de ligação (assignmentTask) do retorno JSON, deixando mais limpo
+                        through: { attributes: [] } 
                     }
                 ]
             });
@@ -142,6 +190,26 @@ class TasksDAO{
                     {
                         model: CategoryTask,
                         as: 'categoryTask'
+                    },
+                    {
+                        model: StatusTask,
+                        as: "statusTask"
+                    },
+                    {
+                        model: BoardColumn,
+                        as: "coluna"
+                    },// --- INCLUINDO MEMBROS ---
+                    {
+                        model: User,
+                        as: 'assignedMembers', // Alias definido na associação (Task.belongsToMany User)
+                        attributes: ['id', 'nome'],
+                        include: [{
+                            model: ProfileUser,
+                            as: 'profile',
+                            attributes: ['foto_perfil']
+                        }],
+                        // 'through: { attributes: [] }' remove os dados da tabela de ligação (assignmentTask) do retorno JSON, deixando mais limpo
+                        through: { attributes: [] } 
                     }
                 ]
             })

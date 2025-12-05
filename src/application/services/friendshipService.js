@@ -217,7 +217,9 @@ class FriendshipService{
         }
     
         const listFriends = await friendshipDAO.findAllFriends(currentUserId);
-    
+        
+        console.log("➡️➡️➡️➡️",listFriends);
+        
         if(!listFriends){
             const error = new Error("Não foi possivel buscar a lista de solicitações de amizade enviadas");
             error.statusCode = 400;

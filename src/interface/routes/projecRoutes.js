@@ -6,7 +6,7 @@ const path = require("path");
 
 routes.get('/projetos', verifyAuthToken, projectController.listProjects)
 
-routes.get('/projetos/:projectId/', projectController.preparePageData);
+routes.get('/projetos/:projectId/', verifyAuthToken, projectController.preparePageData);
 
 // Colocar verificação aqui 
 routes.post('/projetos', verifyAuthToken, projectController.create);

@@ -5,9 +5,14 @@ class BoardColumnController {
     async createColumn(req, res) {
         try {
             const { projectId } = req.params;
+            console.log("Projeto: ", projectId);
+            
             const { columnName } = req.body;
-            // const currentUserId = req.user.id; 
-            const currentUserId = 3; 
+            console.log("Coluna: ", columnName)
+
+            const currentUserId = req.user.id; 
+            console.log("USer: ", currentUserId);
+            
 
             if (!columnName) {
                 return res.status(400).json({ message: 'O nome da coluna é obrigatório.' });

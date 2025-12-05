@@ -7,14 +7,15 @@ const subTaskController = require('../controllers/subTaskController');
 
 // Rota para criar uma subtarefa dentro de uma tarefa
 // POST /tasks/123/subtasks
-routes.post('/tasks/:taskId/subtasks', subTaskController.create);
+
+routes.post('/tasks/:taskId/subtasks', verifyAuthToken, subTaskController.create);
 
 // Rota para atualizar (renomear, mudar status) uma subtarefa
 // PATCH /subtasks/456
-routes.patch('/subtasks/:subTaskId', subTaskController.update);
+routes.patch('/subtasks/:subTaskId', verifyAuthToken, subTaskController.update);
 
 // Rota para apagar uma subtarefa
 // DELETE /subtasks/456
-routes.delete('/subtasks/:subTaskId', subTaskController.delete);
+routes.delete('/subtasks/:subTaskId', verifyAuthToken, subTaskController.delete);
 
 module.exports = routes;

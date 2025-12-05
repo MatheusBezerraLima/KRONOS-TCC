@@ -25,6 +25,13 @@ module.exports = {
           key: "id"
         }
       },
+      conteudo: {
+        type: Sequelize.TEXT, 
+        allowNull: false,
+        validate: {
+            notEmpty: true 
+        }
+      },
       data_envio: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW

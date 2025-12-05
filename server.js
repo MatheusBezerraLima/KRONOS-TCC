@@ -3,6 +3,7 @@ const { sequelize } = require('./src/infra/database/models');
 const userRoutes = require('./src/interface/routes/userRoutes');
 const adminRoutes = require('./src/interface/routes/adminRoutes');
 const projectRoutes = require('./src/interface/routes/projecRoutes');
+const chatRoutes = require('./src/interface/routes/chatRoutes');
 const inviteRoutes = require('./src/interface/routes/inviteRoutes');
 const boardColumnRoutes = require('./src/interface/routes/boardColumnRoutes');
 const friendshipRoutes = require('./src/interface/routes/friendshipRoutes');
@@ -60,8 +61,17 @@ io.on("connection", (socket) => {
     const user = socket.data.user;
     console.log(`Usuário ${user.id} (${user.email}) autenticado via cookie e conectado.`);
 
-    // Coloca o usuario em suas salas
-    socket.join(user.id.toString());
+    socket.on('joinRoom', (projectId) => {
+        socket.join(projectId);
+        console.log(`Usuário ${socket.id} entrou no projeto: ${projectId}`);
+    });
+
+    // 2. O usuário envia uma mensagem
+    socket.on('chatMessage', (data) => {
+        console.log(`Usuário ${data.usuario_id} mandou a mensagem: ${data.conteudo}`);
+        io.to(data.projectId).emit('chatMessage', data);
+    });
+
 
     // Log para desconexão 
     socket.on('disconnect', () => {
@@ -74,6 +84,7 @@ app.use('/admin', adminRoutes);
 app.use('/api', taskRoutes);
 app.use('/api', subTaskRoutes);
 app.use('/api', projectRoutes);
+app.use('/api', chatRoutes);
 app.use('/invites', inviteRoutes)
 app.use('/api/projetos/:projectId/colunas', boardColumnRoutes);
 app.use('/api/friendships', friendshipRoutes);
@@ -92,6 +103,10 @@ app.get('/tasks/', (req, res) => {
 
 app.get('/projetos/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'projectPage.html'))
+});
+
+app.get('/scrum/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'scrumPage.html'))
 });
 
 server.listen(PORT, '0.0.0.0', async() => {

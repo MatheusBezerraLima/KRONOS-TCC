@@ -701,6 +701,7 @@ main{
     gap:8px;
     display: flex;
     flex-direction: row;
+    cursor: pointer;
 }
 
 .taskName{
@@ -784,3 +785,417 @@ main{
 .offline{
     background-color: #696969;
 }
+
+
+.searchUser{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 35px;
+    width: 500px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgb(216, 215, 215);
+}
+
+.searchProject{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 35px;
+    width: 200px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #ffffff;
+}
+
+.searchIconContainer{
+    display: flex;
+    justify-content: center;
+}
+
+.searchIconContainer svg{
+    width: 16px;
+    height: 16px;
+    stroke:#696969;
+}
+
+.invisibleInput{
+    height: 100%;
+    width: 180px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding-left:8px;
+    font-size: 15px;
+    color: #696969;
+}
+
+.invisibleInputUser{
+    height: 100%;
+    width: 480px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding-left:8px;
+    font-size: 15px;
+    color: #696969;
+}
+
+.results-dropdown {
+    position: absolute;
+    top: 100%; /* Cola logo abaixo do input */
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.results-dropdown.hidden {
+    display: none;
+}
+
+/* Container de cada resultado */
+.result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Empurra o botão para a ponta direita */
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: default; /* Cursor padrão, pois o clique será no botão */
+    transition: background 0.2s;
+}
+
+.result-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* Área da esquerda (Foto + Nome) */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre foto e nome */
+}
+
+/* A Imagem redondinha */
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #e0e0e0;
+}
+
+/* Botão Padrão (Azul) */
+.btn-add-user {
+    background-color: #000080;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-add-user:hover {
+    background-color: #0000a5;
+}
+
+/* Estado de Carregamento/Desabilitado */
+.btn-add-user:disabled {
+    background-color: #9CA3AF; /* Cinza */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Estado de Sucesso (Verde) */
+.btn-add-user.enviado {
+    background-color: #10B981; /* Verde */
+    cursor: default;
+}
+
+
+
+/* ------------------ MODAL COMUNIDADE -------------------  */
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 998; /* Fica atrás do drawer, na frente de tudo */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+/* O Drawer em si */
+.friends-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: var(--bg-white);
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 999; /* Fica na frente de tudo */
+    transform: translateX(100%); /* Escondido fora da tela à direita */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Classes para abrir o menu (serão adicionadas via JS) */
+.sidebar-open .sidebar-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-open .friends-drawer {
+    transform: translateX(0);
+}
+
+
+/* --- ESTILOS INTERNOS DO DRAWER --- */
+:root {
+    --sidebar-width: 360px;
+    --primary-blue: #3B82F6; /* Azul aproximado dos botões do seu print */
+    --text-dark: #1F2937;
+    --text-muted: #6B7280;
+    --bg-white: #FFFFFF;
+    --bg-light: #F3F4F6;
+    --border-light: #E5E7EB;
+    --status-online: #10B981; /* Verde */
+}
+
+
+/* Cabeçalho */
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.drawer-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.drawer-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+}
+
+
+/* Abas */
+.drawer-tabs {
+    display: flex;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--border-light);
+    background-color: var(--bg-white);
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 16px 4px;
+    margin-right: 24px;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+/* Estilo da aba ativa */
+.tab-btn.active {
+    color: var(--blue);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--blueHoverButton);
+}
+
+.tab-count {
+    font-size: 0.85rem;
+    margin-left: 4px;
+}
+
+
+/* Conteúdo */
+.drawer-content {
+    flex: 1;
+    overflow-y: auto; /* Permite scroll se a lista for grande */
+    padding: 24px;
+    background-color: #FAFAFA; /* Um cinza bem clarinho pro fundo */
+}
+
+/* Lógica de mostrar/esconder abas */
+.tab-pane {
+    display: none;
+}
+.tab-pane.active {
+    display: block;
+}
+
+
+/* --- COMPONENTES DA LISTA (Baseado no seu print) --- */
+
+/* Busca */
+.drawer-search {
+    position: relative;
+    margin-bottom: 20px;
+}
+.drawer-search input {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    background-color: var(--bg-white);
+    font-size: 0.9rem;
+}
+.drawer-search .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+/* Lista e Itens */
+.friend-list-stacked {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+.friend-item:last-child {
+    border-bottom: none;
+}
+
+/* Avatares e Status */
+.friend-avatar-container {
+    position: relative;
+    margin-right: 12px;
+}
+
+.friend-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Bolinha de status online/offline */
+.friend-avatar-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-white);
+    background-color: #D1D5DB; /* Cinza (offline) padrão */
+}
+
+.friend-avatar-container.status-online::after {
+    background-color: var(--status-online);
+}
+
+/* Infos de texto */
+.friend-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.friend-name {
+    font-weight: 500;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.friend-status-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+
+/* --- ÁREA DE SOLICITAÇÕES (Botões) --- */
+.request-section-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+.mt-4 { margin-top: 1.5rem; }
+
+.request-item .friend-info {
+     /* Para solicitações, o nome fica em cima e botões embaixo */
+    justify-content: center;
+}
+
+.request-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.btn-request {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-accept {
+    background-color: var(--blue);
+    color: white;
+}
+.btn-accept:hover { background-color:  var(--blueHoverButton); }
+
+.btn-reject, .btn-cancel {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    border: 1px solid var(--border-light);
+}
+.btn-reject:hover, .btn-cancel:hover { background-color: #E5E7EB; }
+
+
+

@@ -15,6 +15,13 @@ const ChatProjectMessage = sequelize.define("ChatProjectMessage", {
             key: "id"
         }
     },
+    conteudo: {
+        type: DataTypes.TEXT, 
+        allowNull: false,
+        validate: {
+            notEmpty: true 
+        }
+    },
     usuario_id: {
         type: DataTypes.INTEGER,
         allowNull: false,

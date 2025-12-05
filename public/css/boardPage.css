@@ -16,6 +16,9 @@ body{
     padding:0;
     /* overflow: hidden; */
 }
+.display-none{
+    display: none !important;
+}
 
 /*Variavéis */
 :root{
@@ -663,6 +666,7 @@ main{
     justify-content: center;
     align-items: center;
     width: min-content;
+    flex-wrap: nowrap;
     height: 100%;
     gap:5px;
     border-bottom:2px solid transparent;
@@ -842,7 +846,7 @@ main{
     height: 100%;
     min-width: 100px;
     overflow: auto;
-    scrollbar-width: none;
+    /* scrollbar-width: none; */
     display: flex;
     gap:40px;
     padding-left: 2px;
@@ -854,7 +858,7 @@ main{
 .column{
     display: flex;
     flex-direction: column;
-    width: 250px;
+    width: 280px;
     height: 100%;
     min-width: 250px;
     gap: 20px;
@@ -938,7 +942,7 @@ main{
 .columnHeader{
     width: 250px;
     height: 40px;
-    min-width: 250px;
+    min-width: 280px;
     min-height: 40px;
     background-color: var(--main-color);
     border-radius: 10px;
@@ -1021,14 +1025,14 @@ main{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 250px;
+    width: 280px;
     height: 200px;
     min-width: 250px;
     min-height: 200px;
     background-color: var(--main-color);
     border-radius: 10px;
     box-shadow: 1px 1px 8px var(--shadow);
-    gap: 20px
+    gap: 10px
 }
 
 /* Parte de cima do card de tarefas, tag e icones */
@@ -1037,7 +1041,7 @@ main{
     display: flex;
     flex-direction: column;
     gap:5px;
-    padding: 20px 15px ;    
+    padding: 20px 15px 5px 15px;    
 }
 .taskTop{
     display: flex;
@@ -1053,14 +1057,19 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 75px;
+    padding: 2px 8px;
     height: 20px;
     border-radius: 5px;
-   
     font-size: 0.8rem;
-    
     font-weight: bold;
     cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.badgesTop{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
 }
 
 /* Parte de meio do card de tarefas, titulo, descrição, barra de progresso */
@@ -1069,7 +1078,7 @@ main{
     display: flex;
     flex-direction: column;
     gap:10px;
-    
+   
 }
 
 .boardTaskInfo h4{
@@ -1169,7 +1178,7 @@ main{
     border-bottom-right-radius: 10px;
     padding-left: 15px;
     padding-right: 15px;
-    border-top: 1px solid #D3D3D3;
+    
 }
 
 .taskMetrics{
@@ -1178,6 +1187,7 @@ main{
     height: 100%;
     gap:10px;
     font-size:0.8rem;
+    margin-bottom: 5px;
 }
 
 .commentStatus, .attachmentStatus{
@@ -1204,6 +1214,7 @@ main{
 
 .taskMembersandQuantity{
     display: flex;
+    margin-bottom: 10px;
 }
 
 .memberIconTask{
@@ -1619,6 +1630,31 @@ main{
 
 /* ------------------------ Modal para selecionar status ------------------------ */
 
+/* 1. Estilo do Gatilho */
+.categoryBadge, .selectStatusModal, .selectPriorityModal { /* Adicionei .selectPriorityModal */
+    padding: 6px 12px;
+    border-radius: 6px;
+    /* ... resto do css ... */
+    cursor: pointer;
+}
+.categoryBadge:hover, .selectStatusModal:hover, .selectPriorityModal:hover { opacity: 0.8; }
+
+
+/* 2. Estilo do Dropdown Flutuante */
+.selectCategoryModal, .selectStatusDropdown, .selectPriorityDropdown { /* Adicionei .selectPriorityDropdown */
+    position: absolute;
+    /* ... resto do css ... */
+    display: none; 
+}
+
+/* 3. Estilo da Lista Interna */
+.categoryOptionsWrapper, .statusOptionsWrapper, .priorityOptionsWrapper { /* Adicionei .priorityOptionsWrapper */
+    max-height: 200px;
+    /* ... resto do css ... */
+}
+
+
+
 .selectStatusModal{
     display: flex;
     flex-direction: column;
@@ -1977,12 +2013,19 @@ main{
     font-weight: 500;
     color: var(--taskBoardIcon-color); /* Usando suas variáveis */
 }
-.taskDescription{
-    width: 200px;
+.taskDescription {
+    width: 200px; /* Ou 100% dependendo do container */
     max-width: 100%;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-     overflow: hidden;
+    font-size: 14px;
+    
+    /* REMOVIDO: white-space: nowrap; */
+    /* REMOVIDO: text-overflow: ellipsis; (o line-clamp já cuida disso) */
+
+    /* ADICIONADO: Lógica para multilinhas */
+    display: -webkit-box;       /* Transforma em flexbox antigo para suporte a line-clamp */
+    -webkit-line-clamp: 2;      /* Define o número máximo de linhas */
+    -webkit-box-orient: vertical; /* Orienta o box verticalmente */
+    overflow: hidden;           /* Esconde o que passar das 2 linhas */
 }
 
 .descriptionInput {
@@ -2031,15 +2074,18 @@ main{
 
 
 
-.dueDateContainer, .statusContainer, .categoryContainer, .priorityContainer{
-    width: 200px;
-    border-right: 1px solid #f2f2f2;
-    display: flex;
-    align-items: center;
-    padding-left:10px;
+.selectPriorityModal{
+    position: absolute;
+    width: 280px;
+    height: min-content;
+    background-color: #FFFFFF;
+    border-radius:5px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 1px 1px 5px #f2f2f2;
+    top:5px;
+    z-index: 11;
     cursor: pointer;
 }
-
 .selectCategoryModal{
     position: absolute;
     width: 280px;
@@ -2108,6 +2154,11 @@ main{
     padding-left: 10px;
     cursor: pointer;
 }
+.categoryBadgeContainer:hover{
+    background-color: #f7f7f7;
+
+}
+
 
 .categoryBadge{
     display: flex;
@@ -2122,3 +2173,1396 @@ main{
     font-size:15px;
     cursor: pointer;
 }
+
+
+
+
+
+
+
+
+
+/* ------------- Board Scrum Style ------------------  */
+
+.scrumBoard{
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.backlogContainer{
+    width: 400px;
+    height: calc(100% - 110px);
+    border-radius: 10px;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 8px var(--shadow);
+
+}
+
+.backlogHeader{
+    gap:10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.backlogTitle{
+    font-size: 18px;
+    font-weight: 500;   
+}
+
+.backlogQuantity{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    background-color: #000080;
+    border-radius: 50%;
+    color: var(--main-color);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.backlogsContainerList{
+    overflow: hidden;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    padding: 10px;
+    width: 100%;
+    height: 80%;
+}
+
+.backlogsContainerList::-webkit-scrollbar {
+    width: 6px; 
+    height: 8px;
+}
+
+.backlogsContainerList::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+.backlogsContainerList::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+.backlog{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    height: 120px;
+    background-color: var(--main-color);
+    box-shadow: 1px 2px 5px var(--shadow);
+    border: 1px solid #f2f2f2;
+}
+
+.backlogTitle{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.backlogDescriptionContainer{
+    max-width: 100%;
+    height: fit-content;
+    max-height:50px;
+}
+
+.backlogDescription{
+    font-size: 14px;
+}
+
+.categoryBadgeBacklog{
+    height: 20px;
+    width: fit-content;
+    padding: 0px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #119500;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #FFFFFF;
+}
+
+.backlogBottom{
+    padding: 10px;
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.createBacklogTask{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    width: 100%;
+    height: 35px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    color: var(--main-color);
+    background-color: var(--blue);
+    cursor: pointer;
+    transition: .2s ease-in-out;
+}
+
+.createBacklogTask:hover{
+    background-color: var(--blueHoverButton);
+}
+
+.createBacklogTask svg{
+    width: 18px;
+    height: 18px;
+}
+
+.sprintsContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap:20px;
+    width: calc(100% - 300px);
+    height: calc(100% - 110px);
+    overflow: auto;
+}
+
+.sprint{
+    width: 630px;
+    height: 350px;
+    background-color: var(--main-color);
+    border-radius: 10px;
+    box-shadow: 2px 2px 8px var(--shadow);
+}
+
+.sprintHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:10px 15px;
+    width: 100%;
+    height: 20%;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.sprintInfos{
+    display: flex;
+    gap:15px;
+}
+
+.concludeSprint{
+    width: 170px;
+    height: 35px;
+    border: none;
+    border-radius: 10px;
+    border: 2px solid var(--blue);
+    font-size: 15px;
+    color: var(--blue);
+    font-weight: 500;
+    background-color: var(--main-color);
+    cursor: pointer;
+    transition: .2s ease-in-out;
+}
+
+.concludeSprint:hover{
+    background-color: #0000800e;
+}
+
+.sprintTasksList{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    width: 100%;
+    height: 65%;
+    padding:10px 15px;
+    overflow: hidden;
+    overflow: auto;
+}
+
+.createMoreTasksInSprint{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:5px;
+    width: 100%;
+    height: 15%;
+    background-color: #f2f2f2;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    font-size: 15px;
+    color: #696969;
+    cursor: pointer;
+    transition: .2s ease-in-out ;
+}
+
+.createMoreTasksInSprint:hover{
+    background-color: #dbdbdb;
+
+}
+
+.createMoreTasksInSprint svg{
+    width: 18px;
+    height: 18px;
+}
+
+.sprintName{
+    font-weight: 600;
+}
+
+.sprintTask{
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px 15px;
+    width: 100%;
+    height: 70px;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+}
+
+.sprintTaskInfoBottom{
+    display: flex;
+    gap:10px;
+    align-items: center;
+
+}
+
+.categoryBadgeScrum{
+    width: 75px;
+    height: 20px;
+    background-color: #032CA6;
+    border-radius: 10px;
+}
+
+.sprintTaskInfo{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 3;
+    gap:5px;
+}
+
+.sprintTaskName{
+    font-weight: 500;
+}
+
+.sprintTaskNumber{
+    font-size: 12px;
+    color: #696969;
+}
+
+.progressBarContainerScrum{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 30px;
+    flex-grow: 2;
+    gap:5px;
+    font-size: 12px;
+}
+
+.memberAtribuiteContainer{
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end ;
+
+}
+
+.userMemberProfile{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #000080;
+}
+
+.progressBarScrum{
+    width: 200px;
+    height: 10px;
+    background-color: #119500;
+    border-radius: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ----------------- CHAT ------------------ */
+
+.main-content-chat{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+    height: 100%;
+}
+
+.chatHeader{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+
+.pageTitleContainer{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.pageTitle{
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.projectPageTitle{
+    color: var(--black);
+}
+
+.pageSubtitle{
+    font-size: 16px;
+    color: var(--black);
+}
+.pageTitle svg{
+    width: 40px;
+    height: 40px;
+    fill:#119500;
+    stroke: #ffffff;
+}
+
+.membersQuantityOnChat{
+    color: #696969;
+}
+
+.chatContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+
+.daysDivision{
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+}
+
+.leftLine, .rightLine{
+    width: 45%;
+    height: 1px;
+    background-color: #e9e7e7;
+}
+
+.dayContainer{
+    padding: 2px 5px;
+    border-radius: 8px;
+    background-color: var(--main-color);
+    color: #696969;
+    font-size: 15px;
+    box-shadow: 2px 2px 5px var(--shadow);
+}
+
+.messagesContainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1; 
+    height: auto; 
+    overflow-y: auto; 
+    overflow-x: hidden;
+    padding-bottom: 20px;
+
+}
+
+.messagesContainer::-webkit-scrollbar {
+    width: 6px; 
+    height: 3px;
+}
+
+.messagesContainer::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+.messagesContainer::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+.messagesContainer-container {
+    scrollbar-color: #ccc #f1f1f1;
+    scrollbar-width: thin; /* Torna a barra mais fina */
+}
+
+.messageContainerInfo{
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    min-width: fit-content;
+    max-width: 650px;
+    height: fit-content;
+    padding-top: 10px;
+}
+
+.userProfileChatContainer{
+    width: 10%;
+    max-width: 35px;
+    height: 100%;
+}
+.userProfileChat{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: pink;
+}
+
+.messageContainer{
+    padding: 10px 15px;
+    border-radius: 10px;
+    flex-grow: 1;
+    width: fit-content;
+    max-width: 500px;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 5px var(--shadow);
+}
+
+/* ----------- Messagem Do Próprio Usuário -------------- */
+.messageContainerInfo.myMessage {
+    display: flex !important;
+    width: 100%;
+    flex-direction: row-reverse !important; 
+    justify-content: flex-start !important;
+    
+    /* ADICIONE ISSO: */
+    align-self: flex-end; /* Isso empurra o bloco de 650px para a direita da tela */
+}
+
+/* O resto do seu CSS para .myMessage continua igual... */
+.messageContainerInfo.myMessage .messageContainer {
+    background-color: #80cbfd;
+    align-items: flex-end;
+    text-align: right;
+    margin-right: 10px;
+    margin-left: 0;
+}
+/* 3. (Opcional) Ajusta a ordem de Nome e Hora */
+.messageContainerInfo.myMessage .messageOwnerAndTime {
+    flex-direction: row-reverse; /* Hora na esquerda, Nome na direita */
+    justify-content: flex-start; /* Mantém eles juntos */
+    gap: 8px;
+}
+
+/* 4. (Opcional) Estilo visual do balão do usuário */
+.messageContainerInfo.myMessage .message { /* Exemplo: Cor verde tipo WhatsApp */
+    border-radius: 8px 0 8px 8px; /* Ponta do balão no canto superior direito */
+}
+
+.messageContainerInfo.myMessage .ownerMessage{
+    display:none;
+} 
+
+
+/* ------------------------------------------------------  */
+
+.messageContainer p {
+    /* 1. Respeita as quebras de linha (Enter) que o utilizador digitou e faz o wrap automático */
+    white-space: pre-wrap;
+
+    /* 2. Padrão moderno: Quebra a palavra se ela for muito longa para caber na linha */
+    overflow-wrap: break-word;
+
+    /* 3. Suporte legado (para navegadores antigos), faz o mesmo que o de cima */
+    word-wrap: break-word;
+
+    /* 4. Garante quebra agressiva se necessário (opcional, mas bom para garantir) */
+    word-break: break-word; 
+    
+    /* Garante que não ultrapasse a largura máxima */
+    max-width: 100%;
+}
+
+.messageOwnerAndTime{
+    display: flex;
+    align-items: flex-end;
+    gap:10px;
+}
+
+.ownerMessage{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.messageTime{
+    font-size: 14px;
+    margin-bottom: 2px;
+    color: #696969;
+}
+
+.message{
+    margin-top: 5px ;
+    font-size: 15px;
+}
+
+.typingBarContainer{
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    box-shadow: 2px 2px 8px var(--shadow);
+    border: 1px solid var(--shadow);
+}
+
+.sendMessage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    background-color: var(--blue);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.sendMessage:hover{
+    background-color: var(--blueHoverButton);
+}
+
+.sendMessage svg{
+    stroke: var(--main-color);
+    width: 20px;
+    height: 20px;
+}
+
+.writeMessageInput{
+    width: 95%;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------------------ MODAL CATEGORIA --------------------- */
+
+.categoryContainer{
+    width: 200px;
+    border-right: 1px solid #f2f2f2;
+    display: flex;
+    align-items: center;
+    padding-left:10px;
+    cursor: pointer;
+}
+
+.categoryBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    gap:5px;
+    height: 20px;
+    width: fit-content;
+    max-width: 140px;
+    padding: 15px 10px;
+    font-size:15px;
+    cursor: pointer;
+}
+
+.categoryNameText {
+    display: block; 
+    max-width: 100%; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+
+.selectCategoryModal{
+    position: absolute;
+    width: 280px;
+    height: min-content;
+    background-color: #FFFFFF;
+    border-radius:5px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 1px 1px 5px #f2f2f2;
+    top:5px;
+    z-index: 11;
+    cursor: pointer;
+}
+
+.selectModalHidden, .selectCategoryHidden{
+    display: none;
+}
+
+
+.categoryModalHeader{
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+    padding: 3px;
+
+}
+
+.categoryBadgeHeaderModal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:10px;
+    height: 20px;
+    width: fit-content;
+    flex-shrink: 0;
+    max-width: 140px;
+    padding: 15px 10px;
+    font-size:15px;
+}
+
+.noCategorySelected{
+    display: none;
+}
+
+.createNewCategory{
+    flex: 1; /* Ocupa o espaço restante */
+    min-width: 0; /* Essencial para que o input possa encolher no Flexbox */
+    border: 0;
+    outline: none;
+    background-color: transparent;
+}
+
+.selectOptionText{
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #808080;
+
+}
+
+.categoryBadgeContainer{
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+/* -------------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+/* --- Estrutura Principal do Drawer --- */
+.addTaskModal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 600px; /* Largura confortável para leitura */
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08); /* Sombra suave e moderna */
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Cabeçalho (Botão Fechar) --- */
+.modalTop {
+    padding: 16px 24px 0;
+    display: flex;
+    justify-content: flex-end;
+    flex-shrink: 0; /* Impede que o cabeçalho encolha */
+}
+
+.closeModalIcon {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+    padding: 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.closeModalIcon:hover {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+/* --- Área de Conteúdo com Scroll --- */
+.drawer-scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 48px 48px 48px; /* Espaçamento interno generoso estilo Notion */
+}
+
+/* Scrollbar sutil */
+.drawer-scroll-content::-webkit-scrollbar {
+    width: 6px;
+}
+.drawer-scroll-content::-webkit-scrollbar-thumb {
+    background-color: #e5e7eb;
+    border-radius: 3px;
+}
+.drawer-scroll-content::-webkit-scrollbar-thumb:hover {
+    background-color: #d1d5db;
+}
+
+/* --- Seção 1: Título e Descrição --- */
+.main-content-group {
+    margin-bottom: 32px;
+}
+
+.taskNameContainer {
+    margin-bottom: 12px;
+}
+
+.invisibleTaskNameInput {
+    width: 100%;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    line-height: 1.2;
+}
+
+.invisibleTaskNameInput::placeholder {
+    color: #e5e7eb;
+}
+
+.descriptionContainer {
+    width: 100%;
+}
+
+.descriptionInput {
+    width: 100%;
+    min-height: 60px;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 16px;
+    color: #4b5563;
+    background: transparent;
+    line-height: 1.6;
+    padding: 0;
+    font-family: inherit;
+}
+
+.descriptionInput::placeholder {
+    color: #9ca3af;
+    opacity: 0.8;
+}
+
+/* --- Seção 2: Grid de Metadados (A parte organizada) --- */
+.task-meta-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaço vertical entre as linhas */
+    margin-bottom: 40px;
+    padding-top: 8px;
+}
+
+.meta-row {
+    display: flex;
+    align-items: flex-start; /* Alinha no topo caso o valor quebre linha */
+    min-height: 28px;
+    position: relative; /* Para posicionamento de dropdowns se necessário */
+}
+
+.meta-label {
+    width: 160px; /* Largura fixa para a coluna da esquerda */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.meta-label svg {
+    color: #9ca3af;
+    width: 18px;
+    height: 18px;
+}
+
+.meta-value {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Estilos Específicos dos Valores */
+
+/* Data e Status */
+.selectDate, .selectStatusModal {
+    cursor: pointer;
+    padding: 4px 8px;
+    margin-left: -8px; /* Compensação visual para alinhar texto */
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    font-size: 14px;
+    color: #374151;
+    display: inline-flex;
+    align-items: center;
+}
+
+.selectDate:hover, .selectStatusModal:hover {
+    background-color: #f3f4f6;
+}
+
+.dateValue {
+    color: #374151;
+}
+
+/* --- Dropdown de Categorias (Pop-over) --- */
+.categoryContainer {
+    position: relative; /* Contexto para o dropdown absoluto */
+    display: inline-block;
+}
+
+.categoryBadge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.categoryBadge:hover {
+    opacity: 0.9;
+}
+
+/* O Dropdown Flutuante */
+.selectCategoryModal {
+    position: absolute;
+    top: calc(100% + 8px); /* Logo abaixo da badge */
+    left: 0;
+    width: 260px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0,0,0,0.05);
+    padding: 12px;
+    z-index: 50;
+    display: none; /* JS deve alternar para 'block' */
+    animation: fadeIn 0.15s ease-out;
+}
+
+/* Classe para mostrar via JS: document.getElementById('categoryDropdown').classList.add('active') */
+.selectCategoryModal.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Input no Topo */
+.categorySearchInput {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 12px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.categorySearchInput:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.categorySearchInput::placeholder {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+/* Lista de Opções */
+.categoryOptionsWrapper {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Badges dentro do dropdown */
+.categoryOption {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.categoryOption:hover {
+    transform: translateY(-1px);
+    filter: brightness(0.95);
+}
+
+/* Membros (Avatares) */
+.atribuitionMembersModal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.memberIconModal {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #e5e7eb;
+    cursor: pointer;
+}
+
+.addMoreMembersModal {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px dashed #9ca3af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: transparent;
+}
+
+.addMoreMembersModal:hover {
+    background-color: #f9fafb;
+    border-color: #4b5563;
+    color: #111827;
+}
+
+/* --- Divisor Horizontal --- */
+.modal-divider {
+    border: 0;
+    height: 1px;
+    background-color: #f3f4f6;
+    margin-bottom: 32px;
+}
+
+/* --- Seção 3: Abas e Subtarefas --- */
+.activitysTaskModal {
+    display: flex;
+    flex-direction: column;
+}
+
+.sectionsTitleActivitys {
+    display: flex;
+    gap: 32px;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 24px;
+}
+
+.activityTitle {
+    padding-bottom: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.activityTitle:hover {
+    color: #374151;
+}
+
+.activityTitle.activitySectionSelected {
+    color: #111827;
+}
+
+.activityTitle.activitySectionSelected::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #111827;
+}
+
+/* Cabeçalho das Subtarefas */
+.ContainerSubtask {
+    display: flex;
+    flex-direction: column;
+}
+
+.subtaskHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.subtaskCount {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #9ca3af;
+    letter-spacing: 0.5px;
+}
+
+.createSubtasks {
+    background: transparent;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6b7280;
+    transition: all 0.2s;
+    padding: 0;
+}
+
+.createSubtasks:hover {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+    color: #111827;
+}
+
+/* Lista de Subtarefas (Placeholder visual) */
+.listSubtasks {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Exemplo de item de subtarefa (caso insira via JS) */
+.subtask-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 6px;
+    background-color: #f9fafb;
+    border: 1px solid transparent;
+}
+.subtask-item:hover {
+    border-color: #e5e7eb;
+    background-color: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.task-meta-grid { display: flex; flex-direction: column; gap: 20px; margin-top: 20px; }
+    
+    .meta-row { display: flex; align-items: flex-start; position: relative; }
+    
+    .meta-label { 
+        width: 140px; display: flex; align-items: center; gap: 8px; 
+        color: #9ca3af; font-size: 14px; 
+    }
+    .meta-value { flex: 1; position: relative; } /* position relative para o dropdown ancorar aqui */
+
+    /* --- ESTILOS DOS DROPDOWNS (Onde a mágica acontece) --- */
+    
+    /* 1. O Gatilho (Botão visível) */
+    .categoryBadge, .selectStatusModal {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        transition: background 0.2s;
+        user-select: none;
+    }
+    .categoryBadge:hover, .selectStatusModal:hover { opacity: 0.8; }
+
+    /* 2. O Dropdown Flutuante (Escondido por padrão) */
+    .selectCategoryModal, .selectStatusDropdown .selectPriorityDropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        width: 240px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 8px;
+        z-index: 100;
+        
+        /* Ocultação */
+        display: none; 
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: opacity 0.2s, transform 0.2s;
+    }
+
+    /* Classe para mostrar o dropdown */
+    .dropdown-active {
+        display: block !important;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    /* Conteúdo do Dropdown */
+    .categorySearchInput {
+        width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 6px; 
+        font-size: 13px; margin-bottom: 8px; outline: none;
+    }
+    .categorySearchInput:focus { border-color: #3b82f6; }
+
+    .categoryOptionsWrapper, .statusOptionsWrapper {
+        max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px;
+    }
+
+    .option-item {
+        padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center;
+    }
+    .option-item:hover { background-color: #f3f4f6; }
+
+
+
+
+
+
+
+
+/* ------------------- MEMBERS ADD -------------------- */
+
+/* --- Container Principal --- */
+.atribuitionContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Lista de Membros Selecionados --- */
+.atribuitionMembersModal {
+    display: flex;
+    align-items: center;
+}
+
+/* Avatar Redondo (Selecionado) */
+.memberIconModal {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    /* Imagem ou cor de fundo */
+    background-size: cover;
+    background-position: center;
+    /* Borda branca para separar visualmente quando sobrepostos */
+    border: 2px solid white; 
+    box-shadow: 0 0 0 1px #e5e7eb;
+    margin-left: -8px; /* Cria o efeito de sobreposição (stack) */
+    cursor: pointer;
+    
+    /* Centralizar iniciais se não tiver foto */
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-size: 10px; 
+    font-weight: bold; 
+    color: white;
+    user-select: none;
+}
+
+/* O primeiro avatar não deve ter margem negativa */
+.memberIconModal:first-child { 
+    margin-left: 0; 
+}
+
+/* --- Botão de Adicionar (+) --- */
+.addMoreMembersModal {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    width: 28px; 
+    height: 28px;
+    border-radius: 50%;
+    border: 1px dashed #9ca3af; /* Borda tracejada característica */
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    z-index: 2;
+    margin-left: 4px;
+}
+
+.addMoreMembersModal:hover { 
+    background-color: #f9fafb; 
+    border-color: #4b5563; 
+    color: #111827; 
+}
+
+/* --- Dropdown Flutuante --- */
+.selectMemberDropdown {
+    position: absolute;
+    top: calc(100% + 8px); /* Logo abaixo do botão */
+    left: 0;
+    width: 260px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 8px;
+    z-index: 100;
+    
+    /* Animação suave de entrada */
+    animation: fadeIn 0.15s ease-out;
+}
+
+/* Classe para mostrar o dropdown via JS */
+.dropdown-active {
+    display: block !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Input de Busca --- */
+.memberSearchInput {
+    width: 100%; 
+    padding: 8px 12px; 
+    border: 1px solid #e5e7eb; 
+    border-radius: 6px; 
+    font-size: 13px; 
+    margin-bottom: 8px; 
+    outline: none;
+}
+.memberSearchInput:focus { 
+    border-color: #3b82f6; 
+}
+
+/* --- Lista de Opções --- */
+.membersOptionsWrapper {
+    max-height: 200px; 
+    overflow-y: auto; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 2px;
+}
+
+/* Item Individual da Lista */
+.memberOption {
+    display: flex; 
+    align-items: center; 
+    gap: 10px;
+    padding: 8px; 
+    border-radius: 6px; 
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.memberOption:hover { 
+    background-color: #f3f4f6; 
+}
+
+/* Avatar dentro da lista (menor) */
+.memberAvatarOption {
+    width: 24px; 
+    height: 24px; 
+    border-radius: 50%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-size: 10px; 
+    font-weight: bold; 
+    color: #fff; 
+    background-size: cover;
+    flex-shrink: 0;
+}
+
+.memberNameOption {
+    font-size: 13px; 
+    font-weight: 500; 
+    color: #374151;
+}
+
+.memberEmailOption {
+    font-size: 11px; 
+    color: #9ca3af;
+}
+
+/* ------------------------------------------------------  */

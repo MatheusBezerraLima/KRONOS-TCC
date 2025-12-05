@@ -13,9 +13,9 @@
         <div class="esquerdaLogin">
           <div class="formLogin">
             <p class="tituloForm">Faça o Login</p>
-            <form action="/login" method="POST">
-              <input type="email" id="email" name="email" required placeholder="Email"/>
-              <input type="password" id="password" name="password" required minlength="6" placeholder="Senha" />
+            <form id="loginForm">
+              <input type="email" id="loginEmail" name="email" required placeholder="Email"/>
+              <input type="password" id="loginPassword" name="password" required minlength="6" placeholder="Senha" />
               <input type="submit" value="Faça o Login"></input>
             </form>
              <div class="redesLogin">
@@ -43,11 +43,11 @@
           
           <div class="formCadastro">
             <p class = "tituloForm">Cadastrar-se</p>
-            <form action="/register" method="post">
-              <input type="text" id="name" name="name" required placeholder="Nome completo" />
-              <input type="email" id="email" name="email" required placeholder="Email"/>
-              <input type="password" id="password" name="password" required minlength="6" placeholder="Senha" />
-              <input type="tel" id="phone" name="phone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Telefone"/>
+            <form id="registerForm">
+              <input type="text" id="registerName" name="name" required placeholder="Nome completo" />
+              <input type="email" id="registerEmail" name="email" required placeholder="Email"/>
+              <input type="password" id="registerPassword" name="password" required minlength="6" placeholder="Senha" />
+              <input type="tel" id="registerPhone" name="phone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Telefone"/>
       <input class="inputSubmit" type="submit" value="Cadastrar"/>
       <!-- <br> -->
     </form>
