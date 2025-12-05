@@ -1,5 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+      :root{
+            --border-color-aside: #ECECEC;
+            --border-color: #d3d3d3;
+            --asideSelection: rgba(42, 0, 255, 0.05);
+            --blue: #000080;
+            --black: #000000;
+            --main-color: #FFFFFF;
+            --secundary-color: #F7F6FF;
+            --lightGrey: #E6E6E6;
+            --taskBoardIcon-color: #3F3F3F;
+            --shadow: rgb(198, 198, 198, 0.5);
+            --toDoColor: rgba(64, 64, 64, 0.1);
+            --toDoFontColor: #404040;
+            --lightFontColor:#696969;
+            --blueHoverButton: #0000a5; 
+        }
+
+
 *{
     padding: 0;
     margin:0;
@@ -118,7 +136,7 @@ form{
         input[type="submit"]{
             padding: 10px 30px;
             height: 42px;
-            background-color: #2B00FF;
+            background-color: var(--blue);
             border-radius: 32px;
             color:#FFFF;
             font-weight: bold;
@@ -129,7 +147,7 @@ form{
 
         
         input[type="submit"]:hover{
-            background-color: #2404c5;
+            background-color: var(--blueHoverButton);
             transform: translateY(-1px);
         }
 

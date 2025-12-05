@@ -1,29 +1,31 @@
-FROM node:20.17.0 
+# Use uma imagem base Node.js
+FROM node:18-alpine
 
-# Instala o utilitário dos2unix para corrigir quebras de linha
-RUN sed -i 's|http://deb.debian.org|http://ftp.br.debian.org|g' /etc/apt/sources.list.d/debian.sources && \ 
-    apt-get update && apt-get install -y dos2unix
-    
-# Diretório de trabalho dentro do container
+# Define o diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 
-# Copiando o package.json e package-lock.json
+# Copia o script de entrada
+COPY entrypoint.sh .
+
+# Copia os arquivos de configuração do Node (package.json e package-lock.json)
+# para que o npm install possa ser executado no container
 COPY package*.json ./
 
-# Intalando as dependencias  
+# Instala as dependências do projeto
 RUN npm install
 
-# Copiando o restante dos arquivos para o containder
+# Copia o restante do código da aplicação
+# Como você está usando "volumes" no docker-compose, esta linha pode ser opcional 
+# para desenvolvimento, mas é CRUCIAL para produção.
 COPY . .
 
-# Converte o arquivo de entrypoint para o formato Unix (LF)
-RUN dos2unix /usr/src/app/entrypoint.sh
+# Garante que o script tenha as permissões de execução
+RUN chmod a+x entrypoint.sh
 
-# Dando permissão de execução para o script de entrypoint.
-RUN chmod +x /usr/src/app/entrypoint.sh
+# Corrige quebras de linha (se o arquivo foi criado no Windows)
+RUN sed -i 's/\r$//' entrypoint.sh
 
-# Configurando o entrypoint para usar o script
-ENTRYPOINT  [ "/usr/src/app/entrypoint.sh"]
+# Define o script de entrada do container
+# O comando ENTRYPOINT substitui o 'command' que você executaria.
+ENTRYPOINT ["./entrypoint.sh"]
 
-# Difinindo o comando padrão para iniciar a aplicação 
-CMD ["node", "server.js"]
