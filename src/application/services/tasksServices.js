@@ -397,6 +397,7 @@ class TaskServices{
         const category = {
             nome: dataCategory.nome,
             usuario_id: userId,
+            projeto_id: dataCategory.projeto_id || null,
             cor_fundo: dataCategory.cor_fundo,
             cor_texto: dataCategory.cor_texto
         }
@@ -409,6 +410,27 @@ class TaskServices{
 
         return createdCategory;
     }
+
+
+    async addMemberToTask(taskId, memberId) {
+    console.log(`Adicionando membro ${memberId} à tarefa ${taskId}...`);
+
+    // 1. Busca a tarefa pelo ID
+    const task = await tasksDAO.findById(taskId);
+    if (!task) {
+        throw new Error("Tarefa não encontrada.");
+    }
+
+    // 2. Validação (Opcional): Verificar se o membro já está na tarefa ou se existe
+    // Geralmente o Sequelize ignora se já estiver, ou lança erro dependendo da config.
+
+    // 3. Adiciona o membro (Mixin do Sequelize)
+    // "add" + Alias no Singular (AssignedMember)
+    await task.addAssignedMember(memberId);
+
+    // 4. Retorna a tarefa atualizada (importante para o front atualizar o card)
+    return tasksDAO.findById(taskId); 
+}
 }
 
 module.exports = new TaskServices()

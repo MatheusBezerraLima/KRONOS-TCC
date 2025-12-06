@@ -9,7 +9,7 @@ const projectNameInput = document.querySelector(".invisibleProjectNameInput")
 const openModalProjectDiv = document.querySelector(".addProjectContainer")
 const defaultPlaceholderText = 'Novo projeto';
 const categoryModal = document.querySelector(".categoryModal");
-
+const currentUserId = localStorage.getItem('userId'); 
 const inputPesquisa = document.getElementById('inputPesquisaUsuario');
 const inputFiltro = document.getElementById('inputFiltroAmigo');
 const listaResultados = document.getElementById('listaResultados');
@@ -474,43 +474,61 @@ const categoryOptionsWrapper = document.querySelector(".categoryOptionsWrapper")
 
 /* Criar/listar projeto */
 
-function createNewProject(name, categoryName, categoryBg, categoryTxt, dueDateText, projectId) {
+function createNewProject(name, categoryName, categoryBg, categoryTxt, dueDateText, projectId, projectProgress, totalTasks) {
     const newProject = document.createElement("div");
     newProject.classList.add("project");
-    newProject.setAttribute('data-project-id', projectId)
+    newProject.setAttribute('data-project-id', projectId);
 
-    const fullProjectName = name;
-    const fullCategoryName = categoryName;
+    // 1. Lógica de Cor (Verde se completou, senão Azul padrão ou a cor da sua variável --blue)
+    const progressColor = projectProgress >= 100 ? '#119500' : '#000080'; 
+    
+    // 2. Garante que não quebre se vier null/undefined
+    const safeProgress = projectProgress || 0;
+    const safeTotal = totalTasks || 0;
 
     newProject.innerHTML = `
         <div class="projectTop">
-            <strong class="projectTitle">${fullProjectName}</strong>
+            <strong class="projectTitle">${name}</strong>
             <div class="projectCategoryBadge" style="background-color: ${categoryBg}; color: ${categoryTxt};">
-                 <span class="categoryNameText">${fullCategoryName}</span>
+                 <span class="categoryNameText">${categoryName}</span>
             </div>
         </div>
 
-        <div class="progressBarContainer">
-            <div class="progressBar"></div>
-            <div class="dueDateContainer">
+        <div class="progressBarContainer" style="display: flex; flex-direction: column; gap: 5px;">
+            
+            <!-- Texto Informativo (Opcional, mas bom para UX) -->
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #666; font-weight: 500;">
+                <span>Progresso</span>
+                <span>${safeProgress}% (${safeTotal} tasks)</span>
+            </div>
+
+            <!-- TRILHO DA BARRA (Fundo Cinza) -->
+            <div style="width: 100%; background-color: #e5e7eb; border-radius: 10px; height: 8px; overflow: hidden;">
+                <!-- A BARRA (Preenchimento Dinâmico) -->
+                <div class="progressBar" 
+                     style="width: ${safeProgress}%; background-color: ${progressColor}; height: 100%; border-radius: 10px; transition: width 0.5s ease;">
+                </div>
+            </div>
+
+            <div class="dueDateContainer" style="margin-top: 8px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-clock-icon lucide-calendar-clock"><path d="M16 14v2.2l1.6 1"/><path d="M16 2v4"/><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M3 10h5"/><path d="M8 2v4"/><circle cx="16" cy="16" r="6"/></svg>
                 <p>Prazo: <span class="dueDateProjectSubtitle">${dueDateText}</span></p>
             </div> 
         </div>
 
-           <div class="projectBottom">   
-                <p class="shareWithText">Compartilhado com</p>                     
-                <div class="projectMembers">
-                    <div class="member" style="background-color: aqua;"></div>
-                    <div class="member" style="background-color: bisque;"></div>
-                    <div class="member" style="background-color: bisque;"></div>
+        <div class="projectBottom">   
+            <p class="shareWithText">Compartilhado com</p>                     
+            <div class="projectMembers">
+                <div class="member" style="background-color: aqua;"></div>
+                <div class="member" style="background-color: bisque;"></div>
+                <div class="member" style="background-color: bisque;"></div>
 
-                    <div class="membersQuantity" style="background-color: gray;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                        <p class="quantityNumber">6</p>
-                    </div>
+                <div class="membersQuantity" style="background-color: gray;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                    <p class="quantityNumber">6</p>
                 </div>
             </div>
+        </div>
     `;
     return newProject;
 }
@@ -522,6 +540,7 @@ const projectList = document.querySelector(".projectList")
 createProjectButton.addEventListener("click", async() => {
 
     const selectedCategoryBadge = document.querySelector(".projectCategoryBadgeModal");
+    const dateCurrentValue = document.querySelector(".dateValue")
 
     const projectName = projectNameInput.value.trim() || defaultPlaceholderText;
 
@@ -536,56 +555,87 @@ createProjectButton.addEventListener("click", async() => {
     const categoryBg = selectedCategoryBadge.style.backgroundColor || '#ECEFF1'; // Cor padrão
     const categoryTxt = selectedCategoryBadge.style.color || '#455A64'; // Cor padrão
 
-    const formattedDueDate = dateValue.textContent; 
+  const formattedDueDate = dateCurrentValue.textContent; // Exemplo: "10/12/2012"
+
+// 1. Divide a string nos separadores (assumindo "/")
+const parts = formattedDueDate.split('/'); 
+
+// Verifica se a string foi dividida corretamente e tem 3 partes
+if (parts.length === 3) {
+    // 2. Extrai as partes. Elas estarão como strings.
+    const day = parseInt(parts[0], 10);   // Ex: 10
+    const month = parseInt(parts[1], 10); // Ex: 12 (Dezembro)
+    const year = parseInt(parts[2], 10);  // Ex: 2012
     
-    const dateObject = new Date(formattedDueDate);
-    const year = dateObject.getFullYear();        
-    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObject.getDate()).padStart(2, '0');
-    const dateToSend = `${year}-${month}-${day}`;
-    console.log(projectName,categoryId, dateToSend);
-    
-    const newProjectDB = await requestCreateProject({projectName, categoryId, dateToSend});
+    // 3. Cria o objeto Date usando os componentes numéricos.
+    // O mês é `month - 1` porque é baseado em ZERO.
+    const dateObject = new Date(year, month - 1, day);
 
-    console.log("Projeto criado:", newProjectDB);
-    
+    // --- CONTINUAÇÃO DO SEU CÓDIGO ---
 
-    const newProject = createNewProject(newProjectDB.titulo, newProjectDB.categoryTask.nome, newProjectDB.categoryTask.cor_fundo, newProjectDB.categoryTask.cor_texto, formattedDueDate, newProjectDB.id);
+    // Verifica se o objeto Date é válido antes de prosseguir
+    if (!isNaN(dateObject)) {
+        // 4. Formata a data para o padrão YYYY-MM-DD para o servidor
+        const finalYear = dateObject.getFullYear();        
+        // O método getMonth() retorna o mês baseado em zero. Adicionamos +1 para o valor real (1 a 12).
+        const finalMonth = String(dateObject.getMonth() + 1).padStart(2, '0');
+        const finalDay = String(dateObject.getDate()).padStart(2, '0');
+        
+        // Formato final YYYY-MM-DD
+        const dateToSend = `${finalYear}-${finalMonth}-${finalDay}`;
+        
+        const newProjectDB = await requestCreateProject({projectName, categoryId, dateToSend});
 
-    projectList.appendChild(newProject);
+        console.log("Projeto criado:", newProjectDB);
 
-    newProject.addEventListener('click', (event) => {
-        const project = event.target.closest('.project');
+         const newProject = createNewProject(newProjectDB.titulo, newProjectDB.categoryTask.nome, newProjectDB.categoryTask.cor_fundo, newProjectDB.categoryTask.cor_texto, formattedDueDate, newProjectDB.id);
 
-        // Segurança: garante que achou o projeto antes de tentar pegar o ID
-        if (project) {
-            const projectId = project.getAttribute('data-project-id');
-            console.log("ID encontrado:", projectId);
-            
-            window.location.href = `/projetos/${projectId}`;
-        }
-    })
+        projectList.appendChild(newProject);
 
-    projectModal.classList.add("hidden");
-    filter.classList.add("hidden");
+        newProject.addEventListener('click', (event) => {
+            const project = event.target.closest('.project');
 
-    /* Limpar o modal depois da criação do projeto */
+            // Segurança: garante que achou o projeto antes de tentar pegar o ID
+            if (project) {
+                const projectId = project.getAttribute('data-project-id');
+                console.log("ID encontrado:", projectId);
+                
+                window.location.href = `/projetos/${projectId}`;
+            }
+        })
 
-    projectNameInput.value = "";     
-    invisibleDateInput._flatpickr.clear(); 
-    dateValue.textContent = "Adicionar prazo"; 
-    dateValue.classList.remove("withValue");
-    dateValue.classList.add("placeholder");
+        projectModal.classList.add("hidden");
+        filter.classList.add("hidden");
 
-    salvarMembrosNoProjeto(newProjectDB.id)
+        /* Limpar o modal depois da criação do projeto */
+
+        projectNameInput.value = "";     
+        invisibleDateInput._flatpickr.clear(); 
+        dateValue.textContent = "Adicionar prazo"; 
+        dateValue.classList.remove("withValue");
+        dateValue.classList.add("placeholder");
+
+        salvarMembrosNoProjeto(newProjectDB.id)
+    } else {
+        console.error("Data inválida após a criação do objeto Date:", formattedDueDate);
+    }
+
+    } else {
+    console.error("Formato de data inesperado:", formattedDueDate);
+}
+
 });
 
 async function salvarMembrosNoProjeto(projectId) {
     const listUsersAddProject = document.querySelectorAll('.adicionado');
+
+    if(!listUsersAddProject || listUsersAddProject.length <= 0) return null;
     
     const requests = Array.from(listUsersAddProject).map(async (userDiv) => {
         
     const userId = userDiv.getAttribute('data-user-id');
+    console.log(userId);
+    
     
     if (!userId) return null;
 
@@ -604,7 +654,9 @@ async function salvarMembrosNoProjeto(projectId) {
             });
 
             if (!response.ok) throw new Error(`Erro ao adicionar user ${userId}`);
-            
+
+
+            userDiv.classList.remove('.adicionado')
             return await response.json(); 
         } catch (error) {
             console.error(error);
@@ -651,9 +703,9 @@ document.addEventListener('DOMContentLoaded', async() => {
     console.log(projects);
     
     for(const project of projects){
-        const dateValue = formatDateForDisplay(project.Project.data_termino)
+        const dateValue = formatDateForDisplay(project.data_termino)
 
-        const newProject = createNewProject(project.Project.titulo, project.Project.categoryTask.nome, project.Project.categoryTask.cor_fundo, project.Project.categoryTask.cor_texto, dateValue, project.projeto_id);
+        const newProject = createNewProject(project.titulo, project.categoryTask.nome, project.categoryTask.cor_fundo, project.categoryTask.cor_texto, dateValue, project.id, project.progress, project.total_tasks);
 
         projectList.appendChild(newProject);
 
@@ -710,9 +762,9 @@ async function carregarListaInicial() {
         const data = await response.json();
         
         // Separa os dados corretos dos amigos
-        todosAmigos = data.map(f => f.requester_id === currentUserId ? f.Addressee : f.Requester);
-
-        renderizarLista(todosAmigos);
+        todosAmigos = data
+        
+        renderizarLista(data);
 
     } catch (error) {
         containerLista.innerHTML = '<p style="color:red; text-align:center;">Erro ao carregar</p>';
@@ -774,6 +826,8 @@ const inputBusca = document.getElementById('inputBuscaMembro');
 const divSugestoes = document.getElementById('sugestoesMembros');
 
 function adicionarAoProjeto(amigo) {
+    console.log(amigo);
+    
     console.log(amigo);
     
     selecionadosIDs.push(amigo.id);
@@ -910,6 +964,24 @@ async function requestListProjects(dataProject){
 
 
 document.addEventListener('DOMContentLoaded', function() {
+
+        const optionSectionProject = document.querySelector("#optionSectionProject");
+        const optionSectionTask = document.querySelector("#optionSectionTask");
+        const optionSectionHome = document.querySelector("#optionSectionHome");
+
+
+        optionSectionProject.addEventListener('click', () => {
+            window.location.href = '/projetos'
+        })
+
+        optionSectionTask.addEventListener('click', () => {
+            window.location.href = '/tasks'
+        })
+
+        optionSectionHome.addEventListener('click', () => {
+             window.location.href = '/'
+        })
+
         // --- Lógica de Abrir/Fechar o Drawer ---
         const openBtn = document.getElementById('openFriendsSidebarBtn');
         const closeBtn = document.getElementById('closeFriendsSidebarBtn');
@@ -952,9 +1024,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById(targetPaneId).classList.add('active');
             });
         });
-    });
+});
 
-const currentUserId = 3
+
 
 async function carregarListaAmigos() {
     const listaElement = document.getElementById('lista-amigos');
@@ -978,18 +1050,10 @@ async function carregarListaAmigos() {
         // 2. Itera sobre cada amizade
         amizades.forEach(amizade => {
             // LÓGICA: Descobrir quem é o amigo e quem sou eu
-            let amigoData;
-
-            if (amizade.requester_id === currentUserId) {
-                // Se eu pedi, o amigo é o Addressee
-                amigoData = amizade.Addressee;
-            } else {
-                // Se eu recebi, o amigo é o Requester
-                amigoData = amizade.Requester;
-            }
+           
 
             // Tratamento de segurança para foto (caso venha null)
-            const foto = amigoData.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amigoData.nome}&background=random`;
+            const foto = amizade.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amizade.nome}&background=random`;
             
             // Simulação de Status (Já que o banco não retorna online/offline ainda)
             // Futuramente você pode conectar isso a um WebSocket
@@ -1003,14 +1067,14 @@ async function carregarListaAmigos() {
             
             // Adiciona ID da amizade para facilitar chat ou remoção futura
             li.dataset.friendshipId = amizade.id;
-            li.dataset.friendId = amigoData.id;
+            li.dataset.friendId = amizade.id;
 
             li.innerHTML = `
                 <div class="friend-avatar-container ${statusClass}">
-                    <img src="${foto}" alt="${amigoData.nome}" class="friend-avatar">
+                    <img src="${foto}" alt="${amizade.nome}" class="friend-avatar">
                 </div>
                 <div class="friend-info">
-                    <span class="friend-name">${amigoData.nome}</span>
+                    <span class="friend-name">${amizade.nome}</span>
                     <span class="friend-status-text">${statusText}</span>
                 </div>
                 <button class="btn-more-options" style="background:none; border:none; color:#ccc; cursor:pointer;">
@@ -1020,7 +1084,7 @@ async function carregarListaAmigos() {
 
             // Clique no amigo (Ex: para abrir chat)
             li.addEventListener('click', () => {
-                console.log(`Abrir chat com ${amigoData.nome} (ID: ${amigoData.id})`);
+                console.log(`Abrir chat com ${amizade.nome} (ID: ${amizade.id})`);
                 // window.location.href = `/chat/${amigoData.id}`;
             });
 
@@ -1127,7 +1191,7 @@ async function responderSolicitacao(requesterId, novoStatus, friendshipId) {
     try {
         // AJUSTE AQUI: Use a rota que criamos para responder (sendRequest ou updateStatus)
         // Estou assumindo uma rota genérica baseada no seu controller anterior
-        const response = await fetch(`${API_URL}/friendships/${requesterId}`, { 
+        const response = await fetch(`${API_BASE_URL}/friendships/${requesterId}`, { 
             method: 'PATCH', // ou PUT, dependendo da sua rota
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1176,3 +1240,180 @@ document.getElementById('openFriendsSidebarBtn').addEventListener('click', () =>
 
 // Se clicar na aba especificamente, recarrega para garantir
 document.querySelector('[data-target="tab-requests"]').addEventListener('click', carregarSolicitacoes);
+
+
+
+
+
+
+
+
+// ------------------------------ NOTIFICAÇÕES -----------------------------
+
+let notifications = [
+    {
+        id: 1,
+        user: 'Ana Silva',
+        action: 'curtiu sua publicação',
+        time: '2 min atrás',
+        colorClass: 'color-pink',
+        read: false,
+        icon: 'heart'
+    },
+    {
+        id: 2,
+        user: 'João Souza',
+        action: 'comentou no seu post: "Ficou ótimo!"',
+        time: '15 min atrás',
+        colorClass: 'color-blue',
+        read: false,
+        icon: 'message-square'
+    },
+    {
+        id: 3,
+        user: 'Sistema',
+        action: 'Sua senha foi alterada com sucesso.',
+        time: '1h atrás',
+        colorClass: 'color-gray',
+        read: true,
+        icon: 'settings'
+    },
+    {
+        id: 4,
+        user: 'Carlos Miguel',
+        action: 'começou a seguir você',
+        time: '3h atrás',
+        colorClass: 'color-green',
+        read: true,
+        icon: 'check-circle-2'
+    },
+    {
+        id: 5,
+        user: 'Segurança',
+        action: 'Novo login detectado em São Paulo',
+        time: 'Ontem',
+        colorClass: 'color-yellow',
+        read: true,
+        icon: 'bell'
+    }
+];
+
+let currentTab = 'all';
+
+// --- Elementos DOM ---
+const overlay = document.getElementById('sidebarOverlay');
+const drawer = document.getElementById('notificationDrawer');
+const openBtn = document.getElementById('openDrawerBtn');
+console.log(openBtn);
+
+const closeBtn = document.getElementById('closeDrawerBtn');
+const listContainer = document.getElementById('notificationList');
+const searchInput = document.getElementById('searchInput');
+const unreadCountBadge = document.getElementById('unreadCount');
+const tabBtns = document.querySelectorAll('.tab-btn');
+
+// --- Inicialização ---
+renderList();
+
+// --- Funções de Drawer ---
+function openDrawer() {
+    overlay.classList.add('active');
+    drawer.classList.add('active');
+    openBtn.style.opacity = '0'; // Ocultar botão para não sobrepor visualmente se quiser
+}
+
+function closeDrawer() {
+    overlay.classList.remove('active');
+    drawer.classList.remove('active');
+    openBtn.style.opacity = '1';
+}
+
+openBtn.addEventListener('click', openDrawer);
+closeBtn.addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+
+// --- Lógica de Negócio ---
+
+function setTab(tab) {
+    currentTab = tab;
+    
+    // Atualizar UI das abas
+    tabBtns.forEach(btn => {
+        if(btn.dataset.target === tab) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+
+    renderList();
+}
+
+function filterNotifications() {
+    renderList();
+}
+
+function toggleRead(id) {
+    const notif = notifications.find(n => n.id === id);
+    if (notif) {
+        notif.read = !notif.read;
+        renderList();
+    }
+}
+
+function markAllRead() {
+    notifications.forEach(n => n.read = true);
+    renderList();
+}
+
+function renderList() {
+    const searchTerm = searchInput.value.toLowerCase();
+    
+    const filtered = notifications.filter(n => {
+        const matchesSearch = n.user.toLowerCase().includes(searchTerm) || n.action.toLowerCase().includes(searchTerm);
+        const matchesTab = currentTab === 'all' ? true : !n.read;
+        return matchesSearch && matchesTab;
+    });
+
+    // Atualizar contador
+    const unreadCount = notifications.filter(n => !n.read).length;
+    if (unreadCount > 0) {
+        unreadCountBadge.innerText = unreadCount;
+        unreadCountBadge.style.display = 'inline-flex';
+    } else {
+        unreadCountBadge.style.display = 'none';
+    }
+
+    // Limpar lista
+    listContainer.innerHTML = '';
+
+    if (filtered.length === 0) {
+        listContainer.innerHTML = `
+            <li class="empty-state">
+                <i data-lucide="bell-off" width="32" height="32"></i>
+                <p>Nenhuma notificação encontrada.</p>
+            </li>
+        `;
+    } else {
+        filtered.forEach(item => {
+            const li = document.createElement('li');
+            li.className = `notification-item ${!item.read ? 'unread' : ''}`;
+            li.onclick = () => toggleRead(item.id);
+
+            li.innerHTML = `
+                <div class="notif-icon-box ${item.colorClass}">
+                    <i data-lucide="${item.icon}" width="18" height="18"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-header">
+                        <span class="notif-user">${item.user}</span>
+                        <span class="notif-time">${item.time}</span>
+                    </div>
+                    <p class="notif-action">${item.action}</p>
+                </div>
+                ${!item.read ? '<div class="unread-indicator"></div>' : ''}
+            `;
+            listContainer.appendChild(li);
+        });
+    }
+
+    // Reinicializar ícones Lucide para os novos elementos
+    lucide.createIcons();
+}

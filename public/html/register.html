@@ -142,6 +142,7 @@
         <div class="esquerdaLogin">
           <div class="formLogin">
             <p class="tituloForm">Faça o Login</p>
+<<<<<<< HEAD
             <form action="/login" method="POST">
               <input type="email" id="email" name="email" required placeholder="Email"/>
               <input type="password" id="password" name="password" required minlength="6" placeholder="Senha" />
@@ -149,6 +150,12 @@
                     <svg class="spinner hidden"xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><circle fill='#FFFFFF' stroke='#FFFFFF' stroke-width='15' r='15' cx='40' cy='65'><animate attributeName='cy' calcMode='spline' dur='2' values='65;135;65;' keySplines='.5 0 .5 1;.5 0 .5 1' repeatCount='indefinite' begin='-.4'></animate></circle><circle fill='#FFFFFF' stroke='#FFFFFF' stroke-width='15' r='15' cx='100' cy='65'><animate attributeName='cy' calcMode='spline' dur='2' values='65;135;65;' keySplines='.5 0 .5 1;.5 0 .5 1' repeatCount='indefinite' begin='-.2'></animate></circle><circle fill='#FFFFFF' stroke='#FFFFFF' stroke-width='15' r='15' cx='160' cy='65'><animate attributeName='cy' calcMode='spline' dur='2' values='65;135;65;' keySplines='.5 0 .5 1;.5 0 .5 1' repeatCount='indefinite' begin='0'></animate></circle></svg>
                     <p class="button-text">Entrar</p>
                   </button>
+=======
+            <form id="loginForm">
+              <input type="email" id="loginEmail" name="email" required placeholder="Email"/>
+              <input type="password" id="loginPassword" name="password" required minlength="6" placeholder="Senha" />
+              <input type="submit" value="Faça o Login"></input>
+>>>>>>> 7e466ceb284f43f87bafab17b4dd9eb237acb3cf
             </form>
              <div class="redesLogin">
               <div class="divOu">
@@ -175,6 +182,7 @@
         <div class="direitaCadastro">
           
           <div class="formCadastro">
+<<<<<<< HEAD
               <p class = "tituloForm">Cadastrar-se</p>
               <form class="submitForm" action="/register" method="post">
                   <input type="text" id="name" name="name" required placeholder="Nome completo" />
@@ -195,6 +203,26 @@
                     </label>
                   </div>
               </form>
+=======
+            <p class = "tituloForm">Cadastrar-se</p>
+            <form id="registerForm">
+              <input type="text" id="registerName" name="name" required placeholder="Nome completo" />
+              <input type="email" id="registerEmail" name="email" required placeholder="Email"/>
+              <input type="password" id="registerPassword" name="password" required minlength="6" placeholder="Senha" />
+              <input type="tel" id="registerPhone" name="phone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Telefone"/>
+      <input class="inputSubmit" type="submit" value="Cadastrar"/>
+      <!-- <br> -->
+    </form>
+              <!-- <div class="termos">
+                <label class="checkbox-container">
+                  <input type="checkbox">
+                  <span class="checkmark"></span>
+                  <span class="termosTxt">Eu concordo com os <a href="">termos e condições</a></span>
+                </label>
+              </div> -->
+
+            </form>
+>>>>>>> 7e466ceb284f43f87bafab17b4dd9eb237acb3cf
 
             <div class="redesLogin">
               <div class="divOu">

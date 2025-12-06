@@ -28,6 +28,20 @@ class TasksController{
 
     }
 
+    async addMemberToTask(req, res){
+        try{
+            const {taskId} = req.params;
+            const {memberId} = req.body;
+
+            const member = await taskServices.addMemberToTask(taskId, memberId);
+            res.status(201).json(member);
+
+        }catch(err){
+            console.log("Erro ao atualizar tarefa", err);
+            res.status(400).json({"Controller": "UpdateTask" ,"Erro": err})
+        }
+    }
+
     async updateTask(req, res){
         try{
             const id = req.params.id;
@@ -132,9 +146,10 @@ class TasksController{
 
     async createCategory(req, res){
         try{
-            const userId = 4;
+            const userId = req.user.id;
             const dataCategory = req.body;
-
+            console.log(dataCategory);
+            
             const createdCategory = await taskServices.createCategory(dataCategory, userId);
 
             res.json(createdCategory)

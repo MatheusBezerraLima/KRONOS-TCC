@@ -23,6 +23,9 @@
 
     routes.patch('/tasks/:taskId/move', verifyAuthToken, tasksController.moveTask);
 
+    routes.post('/tasks/:taskId/members', verifyAuthToken, tasksController.addMemberToTask);
+
+
     routes.patch('/tasks/:taskId/assign-sprint',
         (req, res, next) => {
         console.log('--- ROTA /assign-sprint ACIONADA ---');

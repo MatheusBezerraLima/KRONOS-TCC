@@ -1,13 +1,12 @@
 const subTaskService = require('../../application/services/subTaskService');
 
 class SubTaskController {
-
+    
     async create(req, res) {
         try {
             const { taskId } = req.params;
             const subTaskData = req.body;
-            // const currentUserId = req.user.id;
-            const currentUserId = 3;
+            const currentUserId = req.user.id;
             const newSubTask = await subTaskService.createSubTask(parseInt(taskId), subTaskData, currentUserId);
             res.status(201).json(newSubTask);
         } catch (error) {

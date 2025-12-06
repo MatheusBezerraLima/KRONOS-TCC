@@ -24,8 +24,6 @@ const selectDate = document.querySelector(".selectDate")
 const invisibleDateInput = document.querySelector(".invisibleDateInput")
 const dateValue = document.querySelector(".dateValue")
 const activitysModalSections = document.querySelectorAll(".activityTitle")
-const subtaskContainer = document.querySelector(".listSubtasks")
-const createSubtask = document.querySelector(".createSubtasks")
 const taskNameInput = document.querySelector('.invisibleTaskNameInput');
 const defaultPlaceholderText = 'Nova tarefa';
 const openMembersModal = document.querySelector(".addMoreMembers")
@@ -301,107 +299,6 @@ activitysModalSections.forEach(section => {
     })
 });
 
-//---------------------- Criação de novas tarefas ----------------------
-
-createSubtask.addEventListener("click", ()=>{
-
-    const newTask = `
-                    <div class="subtask editing">
-                            <div class="checkboxAndNameContainer">
-                            <input class= "subtaskCheckbox" type="checkbox">
-
-                            <span class="checkboxCustom">
-                                <svg class="checkIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
-                            </span>
-
-                             <input class= "insertNameInput" type="text" placeholder="Nova subtarefa">
-                            </div>
-                    </div> <!-- subtask -->
-                    `
-    // inserir estrutura HTML dentro da div subtasks depois de qualquer conteúdo existente dentro dela
-    subtaskContainer.insertAdjacentHTML("beforeend", newTask)
-    
-    // armazenando em uma variavel o novo HTML adicionado a classe subtaskContainer
-    const newSubtaskRow = subtaskContainer.querySelector(".subtask.editing")
-    console.log(newSubtaskRow);
-    
-    // armazenando o elemento input, onde irá ser o campo que o usuário digita
-    const inputField = newSubtaskRow.querySelector(".insertNameInput")
-
-    // adiciona o foco do cursor no elemento (o negocinho piscando) 
-    inputField.focus()
-
-    if(newSubtaskRow){
-            setListenerandConversion(newSubtaskRow, inputField)
-    }
-})
-
-function setListenerandConversion(newSubtaskRow, inputField){
-    inputField.addEventListener("keypress", (event) =>{
-        if (event.key === "Enter") {
-            const subtaskName = inputField.value.trim() // o metodo trim tira todos os espaços em branco
-
-        if (subtaskName){
-                convertToFinalSubtask(newSubtaskRow, subtaskName)
-            } else  {
-                newSubtaskRow.remove()
-            }
-        }        
-    })
-
-    inputField.addEventListener("blur", () => {
-        const subtaskName = inputField.value.trim() // o metodo trim tira todos os espaços em branco
-
-        if(subtaskName === "") {
-            newSubtaskRow.remove()
-        } else {
-            convertToFinalSubtask(newSubtaskRow, subtaskName)   
-
-        }
-    })
-}
-
-function addDeleteListener(subtaskElement) {
-    // 1. Encontra o ícone 'X' (deleteSubtask) dentro da nova subtarefa
-    const deleteIcon = subtaskElement.querySelector(".deleteSubtask");
-    
-    if (deleteIcon) {
-        // 2. Adiciona o evento de clique
-        deleteIcon.addEventListener("click", () => {
-            // 3. Remove todo o elemento pai (a div.subtask)
-            subtaskElement.remove(); 
-        });
-    }
-}
- function convertToFinalSubtask(newSubtaskRow, subtaskName){
-    const finalSubtaskHTML = `
-                            <div class="subtask">
-                                <div class="checkboxAndNameContainer">
-                                <input class= "subtaskCheckbox" type="checkbox">
-
-                                <span class="checkboxCustom">
-                                    <svg class="checkIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
-                                </span>
-
-                                <span class="subtaskName">${subtaskName}</span>
-                                </div>
-                                <svg class = "deleteSubtask" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-
-                            </div> <!-- subtask -->
-                            `
-    const tempElement = document.createElement('div');
-    tempElement.innerHTML = finalSubtaskHTML.trim(); // .trim() é opcional, mas ajuda na limpeza
-
-    // 2. Selecione o elemento filho real (a div.subtask finalizada)
-    const finalSubtaskElement = tempElement.firstElementChild;
-
-    // 3. Substitua o elemento de edição original pelo novo elemento finalizado
-    newSubtaskRow.replaceWith(finalSubtaskElement); 
-   
-    addCheckEvent() 
-
-    addDeleteListener(finalSubtaskElement);
-}
 
 //----------------------  Modal add membros no projeto ----------------------
 

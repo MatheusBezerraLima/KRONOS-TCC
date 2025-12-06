@@ -50,7 +50,15 @@ const getAuthenticateUser = async (req, res) => {
     });    
 
     // res.status(StatusCode.OK).redirect('/');
-    res.status(StatusCode.OK).json("Usuário Logado!");
+    res.status(StatusCode.OK).json({
+        message: "Usuário Logado!",
+        token: token,       // Necessário para localStorage.setItem('token', ...)
+        user: {             // Necessário para localStorage.setItem('userId', ...)
+            id: user.id,
+            nome: user.nome, // Opcional, mas útil ter o nome no front
+            email: user.email 
+        }
+    });
     
   } catch (err) {
     if (err.message === "USER_NOT_FOUND") {

@@ -10,7 +10,7 @@ const createTask = document.querySelector(".createTask")
 const taskContainer = document.querySelector(".taskList")
 const openOrderModalArea = document.querySelector(".orderTasks")
 const orderModal = document.querySelector(".orderTaskModal")
-
+const currentUserId = localStorage.getItem('userId'); 
 const inputPesquisa = document.getElementById('inputPesquisaUsuario');
 let debounceTimer;
 // Função de seleção dos links do menu lateral
@@ -448,6 +448,25 @@ function getRandomColor() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
+
+     const optionSectionProject = document.querySelector("#optionSectionProject");
+        const optionSectionTask = document.querySelector("#optionSectionTask");
+        const optionSectionHome = document.querySelector("#optionSectionHome");
+
+
+        optionSectionProject.addEventListener('click', () => {
+            window.location.href = '/projetos'
+        })
+
+        optionSectionTask.addEventListener('click', () => {
+            window.location.href = '/tasks'
+        })
+
+        optionSectionHome.addEventListener('click', () => {
+             window.location.href = '/'
+        })
+
+
     // --- Lógica de Abrir/Fechar o Drawer ---
     const openBtn = document.getElementById('openFriendsSidebarBtn');
     const closeBtn = document.getElementById('closeFriendsSidebarBtn');
@@ -491,9 +510,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-
-const currentUserId = 3
 
 
 
@@ -670,7 +686,7 @@ async function responderSolicitacao(requesterId, novoStatus, friendshipId) {
     try {
         // AJUSTE AQUI: Use a rota que criamos para responder (sendRequest ou updateStatus)
         // Estou assumindo uma rota genérica baseada no seu controller anterior
-        const response = await fetch(`${API_URL}/friendships/${requesterId}`, { 
+        const response = await fetch(`${API_BASE_URL}/friendships/${requesterId}`, { 
             method: 'PATCH', // ou PUT, dependendo da sua rota
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -719,6 +735,9 @@ document.getElementById('openFriendsSidebarBtn').addEventListener('click', () =>
 
 // Se clicar na aba especificamente, recarrega para garantir
 document.querySelector('[data-target="tab-requests"]').addEventListener('click', carregarSolicitacoes);
+
+//  ---------------------------------------
+
 function addCategoryOption(taskElement, name, bg, txt) {
     const container = document.createElement("div");
     container.className = "categoryBadgeContainer";
@@ -786,6 +805,8 @@ async function selectCategoryOption(taskElement, name, bg, txt, categoryId) {
 
     
 }
+
+// -----------------------------------------------------------------
 
 function initializeTaskFunctions(taskElement) {
 

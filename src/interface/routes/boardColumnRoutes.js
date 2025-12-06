@@ -1,8 +1,9 @@
 const express = require('express');
 const boardColumnController = require('../controllers/boardColumnController');
 const routes = express.Router({ mergeParams: true });
+const verifyAuthToken = require('../middlewares/authenticateToken');
 
-routes.post('/',  boardColumnController.createColumn);
+routes.post('/', verifyAuthToken, boardColumnController.createColumn);
 
 routes.patch('/:columnId',  boardColumnController.renameColumn);
 

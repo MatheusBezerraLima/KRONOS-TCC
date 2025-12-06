@@ -288,10 +288,14 @@ class ProjectServices{
                 {
                     nome: 'Geral',
                     projeto_id: newProject.id,
+                    cor_fundo: "#E3F2FD",
+                    cor_texto: "#1976D2",
                 },
                 {
                     nome: 'Pesquisa',
                     projeto_id: newProject.id,
+                    cor_fundo: "#E8F5E9",
+                    cor_texto: "#388E3C",
                 },
             ]
 
@@ -333,9 +337,10 @@ class ProjectServices{
 
             // O usuário a ser adicionado já é membro do projeto?
             const existingAssociation = await userProjectRoleDAO.findByUserAndProject(userIdToAdd, projectId);
-
+            console.log(existingAssociation);
+            
             if (existingAssociation) {
-                throw new Error("Este usuário já é membro do projeto.");
+                throw new Error("Este usuário já é membro do projeto", existingAssociation);
             }
             
             const newMember = await userProjectRoleDAO.create({
@@ -346,22 +351,22 @@ class ProjectServices{
 
             await t.commit();
 
-            try {
-                await notificationDAO.create({
-                    userId: userIdToAdd, 
-                    type: 'convite',
-                    message: `${currentUserId.nome} te convidou para o Projeto ${project.titulo} `,
-                    metadata: {
-                        requesterId: currentUserId,
-                        projectId: projectId,
-                        role: role
-                    }
-                });
-            } catch (notificationError) {
-                // Logamos o erro, mas não impedimos o sucesso da amizade.
-                // Numa aplicação real, você poderia usar uma fila para garantir o envio.
-                console.error("Falha ao criar notificação de convite para projeto:", notificationError);
-            }
+            // try {
+            //     await notificationDAO.create({
+            //         userId: userIdToAdd, 
+            //         type: 'convite',
+            //         message: `${currentUserId.nome} te convidou para o Projeto ${project.titulo} `,
+            //         metadata: {
+            //             requesterId: currentUserId,
+            //             projectId: projectId,
+            //             role: role
+            //         }
+            //     });
+            // } catch (notificationError) {
+            //     // Logamos o erro, mas não impedimos o sucesso da amizade.
+            //     // Numa aplicação real, você poderia usar uma fila para garantir o envio.
+            //     console.error("Falha ao criar notificação de convite para projeto:", notificationError);
+            // }
 
             return newMember.get({plain: true});
         }catch(error){
@@ -492,6 +497,8 @@ class ProjectServices{
         }
 
         const projects = await userProjectRoleDAO.findProjectForUser(userId);
+        console.log(projects);
+        
 
         return projects;
     }

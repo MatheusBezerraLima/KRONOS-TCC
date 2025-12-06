@@ -98,9 +98,9 @@ class FriendshipDAO {
         }
     }
 
-    async findAllFriends(currentUserId){
+   async findAllFriends(currentUserId){
         try{
-            return await Friendship.findAll({
+            const friendships = await Friendship.findAll({
                 where: {
                     status: 'accepted',
                     [Op.or]: [
@@ -123,12 +123,24 @@ class FriendshipDAO {
                     as: 'Addressee',
                     attributes: ['id', 'nome'],
                     include: [{ 
-                        model: ProfileUser,
-                        as: 'profile',
-                        attributes: ['foto_perfil']
+                        model: ProfileUser, 
+                        as: 'profile', 
+                        attributes: ['foto_perfil'] 
                     }]
                 }]
-            })
+            });
+
+            // Mapeia para retornar apenas a instância do USUÁRIO amigo
+            // Mantendo o tipo de dado original do Model User
+            return friendships.map(friendship => {
+                // Se eu sou o solicitante (Requester), meu amigo é o Addressee
+                if(friendship.requester_id == currentUserId){
+                    return friendship.Addressee;
+                }
+                // Se eu não sou o solicitante, então sou o Addressee, e meu amigo é o Requester
+                return friendship.Requester;
+            });
+
         }catch(error){
             console.error(`Erro no DAO ao listar amizades`, error)
             throw error;
