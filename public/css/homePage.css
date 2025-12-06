@@ -17,8 +17,6 @@ body{
     /* overflow: hidden; */
 }
 
-
-
 :root{
     --border-color-aside: #ECECEC;
     --border-color: #d3d3d3;
@@ -481,19 +479,9 @@ main{
 .projectTop{
     flex-grow: 3;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.badgeCategoryAndMore{
+    align-items: center;
     display: flex;
     justify-content: space-between;
-}
-
-.badgeCategoryAndMore svg{
-    cursor: pointer;
-    stroke: #696969;
 }
 
 .projectCategoryBadgeModal{
@@ -515,15 +503,14 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius:12px;
+    border-radius:10px;
     gap:5px;
     height: 20px;
     width: fit-content;
     max-width: 100px;
-    padding: 12px 10px;
+    padding: 15px 10px;
     font-size:15px;
     cursor: pointer;
-    background-color: #0633AC;
 }
 
 .progressBarContainer{
@@ -557,7 +544,7 @@ main{
 
 .projectTitle{
     font-size: 18px;
-    max-width: 100%;
+    max-width: 155px;
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis; 
@@ -716,7 +703,7 @@ main{
     flex-direction: row;
 }
 
-.task{
+.taskName{
     font-weight: 500;
     font-size: 15px;
 }
