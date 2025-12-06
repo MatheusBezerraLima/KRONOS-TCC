@@ -4,6 +4,8 @@ const sideMenu = document.querySelector("aside")
 const userProfile = document.querySelector(".userProfile")
 const userProfileModal = document.querySelector(".userModal")
 const currentUserId = localStorage.getItem('userId'); 
+const currentUserJson = localStorage.getItem('user');
+const currentUser = JSON.parse(currentUserJson)
 let currentProjectId = window.location.pathname.split('/').filter(Boolean).pop();
 
 const API_BASE_URL = '/api';
@@ -149,7 +151,15 @@ function renderizarResultados(usuarios) {
 // ----------------------- COMUNIDADE --------------------------------
 
 document.addEventListener('DOMContentLoaded', function() {
+        const userNameHome = document.querySelector('.userNameHomeTitle'); 
+        const userProfile = document.querySelector('.userProfile');
+        const userNameModal = document.querySelector('.userNameModal');
+        const userEmailModal = document.querySelector('.userEmailModal');
 
+        userEmailModal.innerHTML = `${currentUser.email}`
+        userNameModal.innerHTML = `${currentUser.nome}`
+        userProfile.style.backgroundImage = `url('${currentUser.avatar}')`;
+        userNameHome.innerHTML = `${currentUser.nome}`
         const optionSectionProject = document.querySelector("#optionSectionProject");
         const optionSectionTask = document.querySelector("#optionSectionTask");
         const optionSectionHome = document.querySelector("#optionSectionHome");
@@ -225,9 +235,16 @@ document.addEventListener('DOMContentLoaded', async() => {
     const projects = await requestListProjects();
     console.log(projects);
     
-    for(const project of projects){
-        const dateValue = formatDateForDisplay(project.data_termino)
+    var cont;
 
+    for(const project of projects){
+        cont += 1;
+
+        if(cont === 11){
+            return 
+        }
+
+        const dateValue = formatDateForDisplay(project.data_termino)
         const newProject = createNewProject(project.titulo, project.categoryTask.nome, project.categoryTask.cor_fundo, project.categoryTask.cor_texto, dateValue, project.id, project.progress, project.total_tasks);
 
         projectList.appendChild(newProject);
@@ -364,6 +381,9 @@ async function carregarListaAmigos() {
     try {
         // 1. Busca os dados da API
         const response = await fetch(`${API_BASE_URL}/friendships`);
+        if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
         
         if (!response.ok) throw new Error('Erro ao buscar amizades');
         
@@ -380,18 +400,10 @@ async function carregarListaAmigos() {
         // 2. Itera sobre cada amizade
         amizades.forEach(amizade => {
             // LÓGICA: Descobrir quem é o amigo e quem sou eu
-            let amigoData;
-
-            if (amizade.requester_id === currentUserId) {
-                // Se eu pedi, o amigo é o Addressee
-                amigoData = amizade.Addressee;
-            } else {
-                // Se eu recebi, o amigo é o Requester
-                amigoData = amizade.Requester;
-            }
+           
 
             // Tratamento de segurança para foto (caso venha null)
-            const foto = amigoData.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amigoData.nome}&background=random`;
+            const foto = amizade.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amizade.nome}&background=random`;
             
             // Simulação de Status (Já que o banco não retorna online/offline ainda)
             // Futuramente você pode conectar isso a um WebSocket
@@ -405,14 +417,14 @@ async function carregarListaAmigos() {
             
             // Adiciona ID da amizade para facilitar chat ou remoção futura
             li.dataset.friendshipId = amizade.id;
-            li.dataset.friendId = amigoData.id;
+            li.dataset.friendId = amizade.id;
 
             li.innerHTML = `
                 <div class="friend-avatar-container ${statusClass}">
-                    <img src="${foto}" alt="${amigoData.nome}" class="friend-avatar">
+                    <img src="${foto}" alt="${amizade.nome}" class="friend-avatar">
                 </div>
                 <div class="friend-info">
-                    <span class="friend-name">${amigoData.nome}</span>
+                    <span class="friend-name">${amizade.nome}</span>
                     <span class="friend-status-text">${statusText}</span>
                 </div>
                 <button class="btn-more-options" style="background:none; border:none; color:#ccc; cursor:pointer;">
@@ -422,7 +434,7 @@ async function carregarListaAmigos() {
 
             // Clique no amigo (Ex: para abrir chat)
             li.addEventListener('click', () => {
-                console.log(`Abrir chat com ${amigoData.nome} (ID: ${amigoData.id})`);
+                console.log(`Abrir chat com ${amizade.nome} (ID: ${amizade.id})`);
                 // window.location.href = `/chat/${amigoData.id}`;
             });
 
@@ -451,6 +463,9 @@ async function carregarSolicitacoes() {
     try {
         // 1. Busca os dados da rota que você passou
         const response = await fetch(`${API_BASE_URL}/friendships/received`);
+        if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
         
         if (!response.ok) throw new Error('Erro ao buscar solicitações');
         
@@ -535,6 +550,9 @@ async function responderSolicitacao(requesterId, novoStatus, friendshipId) {
         });
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errData = await response.json();
             throw new Error(errData.message || 'Erro ao responder');
         }
@@ -577,6 +595,7 @@ document.getElementById('openFriendsSidebarBtn').addEventListener('click', () =>
 document.querySelector('[data-target="tab-requests"]').addEventListener('click', carregarSolicitacoes);
 
 
+
 //  -----------------------------------------------------------
 
 
@@ -585,8 +604,15 @@ document.querySelector('[data-target="tab-requests"]').addEventListener('click',
  const taskList = document.querySelector('.tasksList');
 
 document.addEventListener('DOMContentLoaded', async() => {
+    const addProjectContainer = document.querySelector('.addProjectContainer');
+
+
+    addProjectContainer.addEventListener('click',() => {
+         window.location.href = '/projetos'
+    })
+
     const tasks = await requestTasksForUser();
-    if(tasks){
+    if(tasks  && tasks.length > 0){
         taskList.innerHTML = ""
     }
 
@@ -655,7 +681,7 @@ async function createNewTaskRow(taskDeafult) {
                                         <p class="dueDateTask" data-id="${taskDeafult.id}">${dateValue}</p>
                                     </div>
                                 </div>
-                                <div class="priorityBadge">
+                                <div class="priorityBadge ${taskDeafult.prioridade}">
                                     ${taskDeafult.prioridade}
                                 </div>
                             `; 

@@ -23,6 +23,8 @@
                 box-sizing: border-box;
                 margin: 0;
                 padding: 0;
+                scroll-behavior: smooth;
+
             }
 
             body {
@@ -483,7 +485,7 @@
                width: 250px;
                height: 250px;
                border-radius: 50%;
-               background-image: url(/public/images/kamilly.jpeg);
+               background-image: url("../images/kamilly.jpeg");
                background-size: cover;
                background-repeat: no-repeat;
                z-index: 10;
@@ -493,7 +495,7 @@
                 width: 250px;
                height: 250px;
                border-radius: 50%;
-               background-image: url(/public/images/matheus.jpeg);
+               background-image: url("../images/matheus.jpeg");
                background-size: cover;
                background-repeat: no-repeat;
                z-index: 10;

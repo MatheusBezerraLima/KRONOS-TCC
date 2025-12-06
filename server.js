@@ -89,6 +89,10 @@ app.use('/invites', inviteRoutes)
 app.use('/api/projetos/:projectId/colunas', boardColumnRoutes);
 app.use('/api/friendships', friendshipRoutes);
 
+app.get('/landingPage', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'html', 'landingPage.html'))
+});
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'homePage.html'))
 });

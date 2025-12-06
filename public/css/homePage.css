@@ -17,8 +17,6 @@ body{
     /* overflow: hidden; */
 }
 
-
-
 :root{
     --border-color-aside: #ECECEC;
     --border-color: #d3d3d3;
@@ -40,8 +38,24 @@ body{
     display: none;
 }
 
+.logoImg {
+                display: flex;
+                padding-left: 0;
+                width: min-content;
+            }
+
+            .logoImg svg{
+                width: 60px;
+                height: 60px;
+            }
+
+            .logoImg span {
+                color: var(--color-text);
+            }
+
 .userModal{
     position: absolute;
+    z-index: 999;
     background-color: var(--main-color);
     width: 250px;
     height: fit-content;
@@ -144,11 +158,7 @@ body{
     display: none;
 }
 
-.asideClosed .logo{
-     padding: 0;
-     display: flex;
-     justify-content: center;
-}
+
 
 .asideClosed .logo a{
     display: none;
@@ -167,7 +177,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 0px 20px 0px 0px;
     width:100%;
     height:60px;
     border-bottom: 1px solid #ECECEC;
@@ -187,7 +197,7 @@ body{
     stroke: var(--black);
 }
 
-.logo svg:hover{
+.logo svg.toggleIcon:hover{
     width: 25px;
     height: 25px;
     background-color: var(--lightGrey);
@@ -307,8 +317,8 @@ header{
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: aqua;
-    cursor: pointer;
+    background-position: center;
+    background-size: cover;
 }
 
 .userProfileSelected{
@@ -491,11 +501,6 @@ main{
     justify-content: space-between;
 }
 
-.badgeCategoryAndMore svg{
-    cursor: pointer;
-    stroke: #696969;
-}
-
 .projectCategoryBadgeModal{
     display: flex;
     justify-content: center;
@@ -515,7 +520,7 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius:12px;
+    border-radius:10px;
     gap:5px;
     height: 20px;
     width: fit-content;
@@ -524,7 +529,7 @@ main{
     font-size:15px;
     cursor: pointer;
     background-color: #0633AC;
-        white-space: nowrap; 
+    white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis; 
     
@@ -721,9 +726,13 @@ main{
     cursor: pointer;
 }
 
-.task{
+.taskName{
     font-weight: 500;
     font-size: 15px;
+    width: 100px;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
 }
 
 .dueDateTask{
@@ -733,13 +742,11 @@ main{
 
 .priorityBadge{
     padding:2px 10px;
-    color: red;
     font-size: 15px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(255, 0, 0, 0.151);
 }
 
 .usersList{
@@ -1214,5 +1221,18 @@ main{
 }
 .btn-reject:hover, .btn-cancel:hover { background-color: #E5E7EB; }
 
+.Baixa{
+    background-color: rgba(17, 149, 0, 0.1);
+    color: #119500;
+}
 
+.Media{
+    background-color: rgba(242, 203, 5, 0.1);
+    color:#F2B807;
+}
+
+.Alta{
+   background-color: rgba(220, 53, 69, 0.1); 
+   color: #DC3545;
+}
 

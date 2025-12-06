@@ -11,9 +11,18 @@ const taskContainer = document.querySelector(".taskList")
 const openOrderModalArea = document.querySelector(".orderTasks")
 const orderModal = document.querySelector(".orderTaskModal")
 const currentUserId = localStorage.getItem('userId'); 
+const currentUserJson = localStorage.getItem('user');
+const currentUser = JSON.parse(currentUserJson)
 const inputPesquisa = document.getElementById('inputPesquisaUsuario');
+const userProfile = document.querySelector(".userProfile")
+const userProfileModal = document.querySelector(".userModal")
 let debounceTimer;
 // Função de seleção dos links do menu lateral
+
+userProfile.addEventListener("click", ()=>{
+    userProfileModal.classList.toggle("hidden")
+    userProfile.classList.toggle("userProfileSelected")
+})
 
 menuLinksSelection.forEach(item => {
 
@@ -518,8 +527,10 @@ async function carregarListaAmigos() {
     
     try {
         // 1. Busca os dados da API
-        const response = await fetch(`${API_BASE_URL}/friendships/`);
-        
+        const response = await fetch(`${API_BASE_URL}/friendships`);
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
         if (!response.ok) throw new Error('Erro ao buscar amizades');
         
         const amizades = await response.json();
@@ -535,18 +546,10 @@ async function carregarListaAmigos() {
         // 2. Itera sobre cada amizade
         amizades.forEach(amizade => {
             // LÓGICA: Descobrir quem é o amigo e quem sou eu
-            let amigoData;
-
-            if (amizade.requester_id === currentUserId) {
-                // Se eu pedi, o amigo é o Addressee
-                amigoData = amizade.Addressee;
-            } else {
-                // Se eu recebi, o amigo é o Requester
-                amigoData = amizade.Requester;
-            }
+           
 
             // Tratamento de segurança para foto (caso venha null)
-            const foto = amigoData.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amigoData.nome}&background=random`;
+            const foto = amizade.profile?.foto_perfil || `https://ui-avatars.com/api/?name=${amizade.nome}&background=random`;
             
             // Simulação de Status (Já que o banco não retorna online/offline ainda)
             // Futuramente você pode conectar isso a um WebSocket
@@ -560,14 +563,14 @@ async function carregarListaAmigos() {
             
             // Adiciona ID da amizade para facilitar chat ou remoção futura
             li.dataset.friendshipId = amizade.id;
-            li.dataset.friendId = amigoData.id;
+            li.dataset.friendId = amizade.id;
 
             li.innerHTML = `
                 <div class="friend-avatar-container ${statusClass}">
-                    <img src="${foto}" alt="${amigoData.nome}" class="friend-avatar">
+                    <img src="${foto}" alt="${amizade.nome}" class="friend-avatar">
                 </div>
                 <div class="friend-info">
-                    <span class="friend-name">${amigoData.nome}</span>
+                    <span class="friend-name">${amizade.nome}</span>
                     <span class="friend-status-text">${statusText}</span>
                 </div>
                 <button class="btn-more-options" style="background:none; border:none; color:#ccc; cursor:pointer;">
@@ -577,7 +580,7 @@ async function carregarListaAmigos() {
 
             // Clique no amigo (Ex: para abrir chat)
             li.addEventListener('click', () => {
-                console.log(`Abrir chat com ${amigoData.nome} (ID: ${amigoData.id})`);
+                console.log(`Abrir chat com ${amizade.nome} (ID: ${amizade.id})`);
                 // window.location.href = `/chat/${amigoData.id}`;
             });
 
@@ -600,18 +603,17 @@ document.getElementById('openFriendsSidebarBtn').addEventListener('click', () =>
 
 
 
-
 async function carregarSolicitacoes() {
     const listaElement = document.getElementById('lista-recebidas');
-    console.log(listaElement);
-    
     const contadorElement = document.querySelector('.tab-count');  
     const titleElement = document.querySelector('.request-section-title');  
     
     try {
         // 1. Busca os dados da rota que você passou
         const response = await fetch(`${API_BASE_URL}/friendships/received`);
-        
+        if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
         if (!response.ok) throw new Error('Erro ao buscar solicitações');
         
         const solicitacoes = await response.json();
@@ -695,6 +697,9 @@ async function responderSolicitacao(requesterId, novoStatus, friendshipId) {
         });
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errData = await response.json();
             throw new Error(errData.message || 'Erro ao responder');
         }
@@ -735,6 +740,8 @@ document.getElementById('openFriendsSidebarBtn').addEventListener('click', () =>
 
 // Se clicar na aba especificamente, recarrega para garantir
 document.querySelector('[data-target="tab-requests"]').addEventListener('click', carregarSolicitacoes);
+
+
 
 //  ---------------------------------------
 
@@ -897,6 +904,9 @@ async function requestCreateCategory(dataCategory){
         }); 
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao criar a categoria.');
         }
@@ -927,6 +937,9 @@ async function requestCreateTask(){
         }); 
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao criar a tarefa.');
         }
@@ -958,6 +971,10 @@ async function requestUpdateTask(dataTaskUpdated, taskId){
         })
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
+
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao criar a tarefa.');
         }
@@ -981,6 +998,9 @@ async function requestCategoriesForUser(){
         }); 
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao listar categorias do usuario');
         }
@@ -1195,6 +1215,9 @@ async function requestTasksForUser(){
         }); 
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao listar tarefas do usuario');
         }
@@ -1212,6 +1235,14 @@ async function requestTasksForUser(){
 
 /* Criar a tarefa assim que a pagina abrir */
 document.addEventListener('DOMContentLoaded', async() => {
+    const userProfile = document.querySelector('.userProfile');
+        const userNameModal = document.querySelector('.userNameModal');
+        const userEmailModal = document.querySelector('.userEmailModal');
+
+        userEmailModal.innerHTML = `${currentUser.email}`
+        userNameModal.innerHTML = `${currentUser.nome}`
+        userProfile.style.backgroundImage = `url('${currentUser.avatar}')`;
+
     const tasks = await requestTasksForUser();
     const categories = await requestCategoriesForUser();
 
@@ -1347,6 +1378,9 @@ inputPesquisa.addEventListener('input', function(e) {
         try {
             // Faz a requisição ao seu Backend
             const response = await fetch(`/users/search?termo=${termo}`);
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const usuarios = await response.json();
             
             renderizarResultados(usuarios);
@@ -1436,6 +1470,9 @@ async function enviarSolicitacaoAmizade(targetId, btnElement) {
     });
 
     if (!response.ok) {
+        if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
         throw new Error('Falha na requisição');
     }
 

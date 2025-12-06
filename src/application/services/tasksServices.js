@@ -96,9 +96,9 @@ class TaskServices{
             throw new Error("Somente o criador da tarefa pode apaga-la");
         }
 
-        await tasksDAO.delete(task);
+        const response = await tasksDAO.delete(task);
 
-        return;
+        return response;
     }
 
     async updateTask(taskId, userId, dataToUpdate){
@@ -127,7 +127,7 @@ class TaskServices{
         const updatedTask = await tasksDAO.update(taskId, dataToUpdate);
 
         if(!updatedTask){
-            throw new Error("Erro ao atualizar tarefa");
+            return [];
         }
 
         return updatedTask;

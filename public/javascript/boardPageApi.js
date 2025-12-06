@@ -12,6 +12,7 @@ const membersSidebarContainer = document.querySelector('.members .container-memb
 const addTaskButton = document.querySelector(".addTask")
 const createSubtask = document.querySelector(".createSubtasks")
 const subtaskContainer = document.querySelector(".listSubtasks")
+const sendMessageButton = document.querySelector(".sendMessage")
 
 
 // Adicione junto com suas outras variáveis globais
@@ -117,9 +118,48 @@ function setupAutoSave() {
 
     // --- B. CATEGORIA (Salva ao clicar) ---
     const categoryOptions = modal.querySelectorAll('.categoryOption');
+    
+    // Elementos que vamos atualizar
+    const triggerBadge = document.getElementById('categoryTrigger');
+    const triggerText = triggerBadge.querySelector('.categoryNameText');
+    const dropdown = document.getElementById('categoryDropdown');
+
     categoryOptions.forEach(option => {
-        option.addEventListener('click', () => {
+        // Removemos ouvintes antigos clonando o nó (opcional, mas boa prática em SPAs)
+        // ou usamos addEventListener direto se o modal for recriado sempre.
+        
+        option.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita que o clique feche o modal inesperadamente
+
+            // 1. Captura os dados da opção clicada
             const categoryId = option.getAttribute('data-category');
+            
+            // Encontra onde está a cor (pode ser na própria div ou numa div interna .categoryBadge)
+            const visualSource = option.querySelector('.categoryBadge') || option;
+            
+            // Pega as cores direto do estilo inline
+            const bgColor = visualSource.style.backgroundColor;
+            // Tenta pegar a cor do texto da div ou do parágrafo interno
+            const txtColor = visualSource.style.color || visualSource.querySelector('p')?.style.color || 'inherit';
+            const name = option.innerText.trim();
+
+            // 2. Atualiza o Gatilho (O botão principal)
+            if (triggerBadge) {
+                triggerBadge.style.backgroundColor = bgColor;
+                triggerBadge.style.color = txtColor;
+                if (triggerText) triggerText.textContent = name;
+                
+                // (Opcional) Guarda o ID selecionado no gatilho para referência futura
+                triggerBadge.setAttribute('data-selected-id', categoryId);
+            }
+
+            // 3. Fecha o Dropdown
+            if (dropdown) {
+                dropdown.classList.remove('active'); // Remove classe de visibilidade
+                dropdown.classList.add('selectCategoryHidden'); // Garante que esconda (se usar essa classe)
+            }
+
+            // 4. Atualiza no Banco
             triggerUpdate({ categoria_id: categoryId });
         });
     });
@@ -229,6 +269,9 @@ async function initializeBoard() {
     try {
         const response = await fetch(`/api/projetos/${projectId}`);
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || `Erro ${response.status}`);
         }
@@ -467,6 +510,25 @@ function setListenerandConversion(newSubtaskRow, inputField) {
     });
 }
 
+function addDeleteListener(subtaskElement) {
+    const deleteIcon = subtaskElement.querySelector(".deleteSubtask");
+    const subtaskId = subtaskElement.getAttribute("data-subtask-id");
+
+    if (deleteIcon) {
+        deleteIcon.addEventListener("click", async () => {
+            if(confirm("Deseja excluir esta subtarefa?")) {
+                try {
+                    // Chame sua API de delete aqui se tiver
+                    // await requestDeleteSubTask(subtaskId); 
+                    subtaskElement.remove(); 
+                } catch (e) {
+                    alert("Erro ao excluir");
+                }
+            }
+        });
+    }
+}
+
 function convertToFinalSubtask(tempRowElement, subtaskData) {
     // subtaskData deve conter { id, titulo, status_id, ... }
 
@@ -502,24 +564,7 @@ function convertToFinalSubtask(tempRowElement, subtaskData) {
     // addCheckEvent(finalElement); 
 }
 
-function addDeleteListener(subtaskElement) {
-    const deleteIcon = subtaskElement.querySelector(".deleteSubtask");
-    const subtaskId = subtaskElement.getAttribute("data-subtask-id");
 
-    if (deleteIcon) {
-        deleteIcon.addEventListener("click", async () => {
-            if(confirm("Deseja excluir esta subtarefa?")) {
-                try {
-                    // Chame sua API de delete aqui se tiver
-                    // await requestDeleteSubTask(subtaskId); 
-                    subtaskElement.remove(); 
-                } catch (e) {
-                    alert("Erro ao excluir");
-                }
-            }
-        });
-    }
-}
 
 
 const optionChat = document.querySelector('.option-chat');
@@ -561,6 +606,10 @@ if (messageInput) {
     });
 }
 
+sendMessageButton.addEventListener('click', () => {
+    requestSendMessage();
+})
+
 async function requestSendMessage(){
     const text = messageInput.value.trim(); // Pega o valor e remove espaços extras
 
@@ -585,6 +634,9 @@ async function requestSendMessage(){
          console.log("3", response);
 
         if(!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Erro ao enviar mensagem');
         }
@@ -696,88 +748,76 @@ function appendMessageToChat(message) {
     const chatContainer = document.querySelector('.messagesContainer');
     if (!chatContainer) return;
 
-    // --- NOVA LÓGICA: Verificar remetente anterior ---
-    const lastMessage = chatContainer.lastElementChild;
-    let isSameUser = false;
-    
-    // Verifica se existe mensagem anterior e compara os IDs (usando dataset que adicionaremos abaixo)
-    if (lastMessage && lastMessage.dataset.userId === String(message.usuario_id)) {
-        isSameUser = true;
-    }
-    // -------------------------------------------------
+    // Dados do Usuário Atual (Pegue do seu localStorage ou variável global)
+    const currentUserId = localStorage.getItem('userId'); 
 
-    const messageInfo = document.createElement('div');
-    messageInfo.className = 'messageContainerInfo';
-    
-    // Guarda o ID no elemento para a próxima comparação
-    messageInfo.dataset.userId = message.usuario_id;
+    // Verifica se é minha mensagem
+    const isMe = String(message.usuario_id) === String(currentUserId);
 
-    // Lógica para adicionar classe 'myMessage'
-    if (currentUserId && String(message.usuario_id) === String(currentUserId)) {
-        messageInfo.classList.add('myMessage');
-    }
-
-    // Tratamento de dados (Fallback seguro)
+    // Tratamento de dados
     const userName = message.usuario ? message.usuario.nome : 'Usuário';
+    const userAvatar = message.usuario && message.usuario.avatar ? message.usuario.avatar : ''; 
+    const conteudo = message.conteudo || "";
     
-    // Lógica de Avatar
-    let userAvatar = message.usuario && message.usuario.avatar ? message.usuario.avatar : ''; 
-    if (userAvatar === '') {
-        if (message.usuario && message.usuario.profile && message.usuario.profile.foto_perfil) {
-             userAvatar = message.usuario.profile.foto_perfil;
-        }
-    }
-
-    const conteudo = message.conteudo || message.content || ""; 
-    
-    // Formatação da hora
+    // Hora
     let time = '--:--';
     if (message.data_envio || message.created_at) {
-        const dateRaw = message.data_envio || message.created_at;
-        const dateObj = new Date(dateRaw);
+        const dateObj = new Date(message.data_envio || message.created_at);
         if (!isNaN(dateObj)) {
             time = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
     }
 
-    // --- CONSTRUÇÃO DO HTML CONDICIONAL ---
+    // Estilo do Avatar
+    const avatarStyle = userAvatar 
+        ? `background-image: url('${userAvatar}');` 
+        : `background-color: #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: white;`;
     
-    // 1. Avatar: Se for o mesmo usuário, usamos visibility: hidden para manter o espaçamento sem mostrar a imagem
-    const avatarStyle = userAvatar ? `background-image: url('${userAvatar}');` : 'background-color: #ccc;';
-    const avatarHTML = isSameUser 
-        ? `<div class="userProfileChat" style="visibility: hidden;"></div>` 
-        : `<div class="userProfileChat" style="${avatarStyle} background-size: cover; background-position: center;"></div>`;
+    const avatarContent = userAvatar ? '' : getInitials(userName); 
 
-    // 2. Cabeçalho (Nome): Se for o mesmo usuário, não mostramos o nome, apenas a hora (opcional)
-    let headerHTML = '';
-    if (isSameUser) {
-        // Se for continuação, não mostra o nome, talvez nem a hora se quiser ultra compacto,
-        // mas aqui mantive a hora para referência.
-        headerHTML = `
-            <div class="messageOwnerAndTime"> <!-- Ajuste para alinhar hora se necessário -->
-                <p class="messageTime">${time}</p>
-            </div>`;
-    } else {
-        headerHTML = `
-            <div class="messageOwnerAndTime">
-                <p class="ownerMessage">${userName}</p>
-                <p class="messageTime">${time}</p>
-            </div>`;
-    }
+    // Cria o elemento da linha
+    const rowDiv = document.createElement('div');
+    rowDiv.className = `messageContainerInfo ${isMe ? 'myMessage' : ''}`;
+    rowDiv.dataset.userId = message.usuario_id;
 
-    messageInfo.innerHTML = `
+    // --- HTML ESTRUTURADO ---
+    // Se for EU: O layout CSS esconde o avatar e o nome, e muda a cor do balão.
+    // Se for OUTRO: Mostra avatar, nome em cima e balão branco.
+
+    rowDiv.innerHTML = `
+        <!-- 1. Avatar (Esquerda) -->
         <div class="userProfileChatContainer">
-            ${avatarHTML}
+            <div class="userProfileChat" style="${avatarStyle}">${avatarContent}</div>
         </div>
-        <div class="messageContainer" ${isSameUser ? 'style="margin-top: 2px;"' : ''}> <!-- Margem menor se for agrupado -->
-            ${headerHTML}
-            <div class="message">
-                <p>${conteudo}</p>
+
+        <!-- 2. Wrapper de Conteúdo (Coluna) -->
+        <div class="messageContentWrapper">
+            
+            <!-- Metadados (Nome apenas para outros) -->
+            <div class="messageOwnerAndTime">
+                <span class="ownerMessage">${userName}</span>
+                ${!isMe ? `<span class="messageTime">${time}</span>` : ''}
             </div>
+
+            <!-- Balão da Mensagem -->
+            <div class="messageContainer">
+                <p>${conteudo}</p>
+                <!-- Hora dentro do balão apenas para MIM (estilo Whatsapp) -->
+                ${isMe ? `<div class="messageTime" style="margin-top: 4px; text-align: right; opacity: 0.8; font-size: 10px;">${time}</div>` : ''}
+            </div>
+
         </div>
     `;
 
-    chatContainer.appendChild(messageInfo);
+    chatContainer.appendChild(rowDiv);
+    
+    // Scroll para o fundo
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Helper simples para iniciais se não tiver essa função acessível
+function getInitials(name) {
+    return name ? name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '??';
 }
 
 function scrollToBottom() {
@@ -819,8 +859,25 @@ function populateModalSelectors(columns, categories, members) {
     const statusHtml = columns.map((col, index) => {
         const titleClass = col.title.toLowerCase().replace(/[\sçã]/g, '');
         return `
-            <div class="option-item status-option ${titleClass}Status ${index === 0 ? 'statusSelected' : ''}" data-status="${col.id}" onclick="selectStatus(this)">
-                <span>${col.title}</span>
+            <div class=" option-item  ${titleClass}Status ${index === 0 ? 'statusSelected' : ''}" data-status="${col.id}" style="padding: 4px 0; cursor: pointer;" onclick="selectStatus(this)">
+                <!-- Badge com Estilo Inline Neutro/Clean -->
+                <div class="statusBadge toDoBadge" style="
+                    display: inline-flex; 
+                    align-items: center; 
+                    padding: 4px 10px; 
+                    background-color: #f3f4f6; 
+                    color: #374151; 
+                    border-radius: 6px; 
+                    font-size: 13px; 
+                    font-weight: 500; 
+                    border: 1px solid #e5e7eb;
+                    transition: background 0.2s;
+                ">
+                    <!-- Texto centralizado e sem margem -->
+                    <p style="margin: 0; line-height: 1; white-space: nowrap;">
+                        ${col.title || 'A fazer'}
+                    </p>
+                </div>
             </div>
         `;
     }).join('');
@@ -905,18 +962,49 @@ function toggleCategoryModal (){
 function criarOptionsColunas(columns){
     const modalOptions = document.querySelector('.selectStatusModal');
 
+    // Limpa opções anteriores para não duplicar se a função for chamada novamente
+    if(modalOptions) modalOptions.innerHTML = '';
+
+     const randomColors = [
+        '#dbeafe', // Azul claro
+        '#dcfce7', // Verde claro
+        '#fef9c3', // Amarelo claro
+        '#fee2e2', // Vermelho claro
+        '#f3e8ff', // Roxo claro
+        '#ffedd5', // Laranja claro
+        '#e0e7ff', // Indigo claro
+        '#f3f4f6'  // Cinza padrão
+    ];
+
      columns.forEach(column => {
-        const option = ` <div class="statusOption toDoStatus statusSelected" data-status="${column.id}">
-                                <div class="statusBadge toDoBadge">
-                                    <p>A fazer </p>
-                                </div> <!-- toDoCategory  -->
-                            </div>`
+        // Seleciona uma cor aleatória da lista
+        const randomBg = randomColors[Math.floor(Math.random() * randomColors.length)];
 
-        modalOptions.appendChild(option);
-        
+        const option = `
+            <div class="statusOption toDoStatus statusSelected" data-status="${column.id}" style="padding: 4px 0; cursor: pointer;">
+                <!-- Badge com Estilo Inline e Cor Aleatória -->
+                <div class="statusBadge toDoBadge" style="
+                    display: inline-flex; 
+                    align-items: center; 
+                    padding: 4px 10px; 
+                    background-color: ${randomBg}; /* <--- Cor aleatória aqui */
+                    color: #374151; 
+                    border-radius: 6px; 
+                    font-size: 13px; 
+                    font-weight: 500; 
+                    border: 1px solid #e5e7eb;
+                    transition: background 0.2s;
+                ">
+                    <!-- Texto centralizado e sem margem -->
+                    <p style="margin: 0; line-height: 1; white-space: nowrap;">
+                        ${column.nome || 'A fazer'}
+                    </p>
+                </div>
+            </div>`;
+
+        // Correção: Usamos insertAdjacentHTML pois 'option' é uma string
+        modalOptions.insertAdjacentHTML('beforeend', option);
      });
-
-     return
 }
 
 function getProjectIdFromUrl() {
@@ -934,19 +1022,40 @@ function getProjectIdFromUrl() {
 }
 
 function moveTaskToColumn(taskId, newColumnId) {
-    // Passo A: Encontre o card da tarefa na tela
+    // 1. Encontra o card da tarefa
     const taskCardElement = document.querySelector(`.task-card-draggable[data-task-id="${taskId}"]`);
-
-    // Passo B: Encontre a div da NOVA coluna para onde o card deve ir
-    // (Adapte '.tasks-column' para a classe correta da sua coluna)
+    
+    // 2. Encontra a coluna de destino
     const newColumnElement = document.querySelector(`.column[data-column-id="${newColumnId}"]`);
+    
+    if (!taskCardElement || !newColumnElement) {
+        console.warn(`Erro ao mover: Card ${taskId} ou Coluna ${newColumnId} não encontrados.`);
+        return;
+    }
 
-    // Passo C: Mova o elemento
-    if (taskCardElement && newColumnElement) {
-        // .appendChild() remove o card da coluna antiga e o adiciona na nova
-        newColumnElement.appendChild(taskCardElement);
-    } else {
-        console.warn(`Não foi possível mover o card ${taskId} para a coluna ${newColumnId} no DOM.`);
+    // 3. CAPTURA A LISTA ANTIGA (Antes de mover)
+    // O pai do card é a div .task-list-dropzone da coluna atual
+    const oldTaskList = taskCardElement.parentElement;
+
+    // 4. Encontra a lista da NOVA coluna
+    const newTaskList = newColumnElement.querySelector('.task-list-dropzone');
+
+    if (newTaskList) {
+        // --- AÇÃO DE MOVER ---
+        // Ao fazer appendChild, o elemento é removido automaticamente da lista antiga
+        newTaskList.appendChild(taskCardElement);
+        
+        // Garante que a nova lista fique visível (remove noRender se tiver)
+        newTaskList.classList.remove('noRender');
+    }
+
+    // 5. VALIDAÇÃO DA LISTA ANTIGA
+    if (oldTaskList) {
+        // Verifica se sobrou algum elemento filho
+        // .children.length ignora nós de texto/espaço, conta apenas tags HTML
+        if (oldTaskList.children.length === 0) {
+            oldTaskList.classList.add('noRender');
+        }
     }
 }
 
@@ -992,6 +1101,9 @@ async function saveTaskChanges() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dataToUpdate)
             });
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             if (!response.ok) throw new Error(await response.json().message);
 
             const updatedTask = await response.json();
@@ -1012,6 +1124,9 @@ async function saveTaskChanges() {
 async function fetchTaskDetails(taskId) {
         const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`);
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();            
             throw new Error(errorData.message || `Erro ao listar dados da tarefa ${response.status}`);
         }
@@ -1032,6 +1147,9 @@ async function fetchTaskDetails(taskId) {
             });
             
             if (!response.ok) {
+                if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
                  // Tenta ler a mensagem de erro se o status não for 204
                 if (response.status !== 204) {
                     const errorData = await response.json();
@@ -1143,6 +1261,24 @@ function addCardClickListeners() {
     });
 }
 
+function addDeleteListener(subtaskElement) {
+    const deleteIcon = subtaskElement.querySelector(".deleteSubtask");
+    const subtaskId = subtaskElement.getAttribute("data-subtask-id");
+
+    if (deleteIcon) {
+        deleteIcon.addEventListener("click", async () => {
+            if(confirm("Deseja excluir esta subtarefa?")) {
+                try {
+                    // Chame sua API de delete aqui se tiver
+                    // await requestDeleteSubTask(subtaskId); 
+                    subtaskElement.remove(); 
+                } catch (e) {
+                    alert("Erro ao excluir");
+                }
+            }
+        });
+    }}
+
 async function openEditModal(taskId) {
     const editModal = document.querySelector('.addTaskModal');
     const filterEd = document.querySelector('.filter'); // Verifique se a classe é .filter ou .filterEd no seu HTML
@@ -1176,9 +1312,12 @@ async function openEditModal(taskId) {
         
         // Formata data
         if (taskData.data_termino) {
+            console.log(taskData.data_termino);
+            
             // Ajuste para evitar problemas de fuso horário se necessário, ou use string direta
             const dateObj = new Date(taskData.data_termino);
             editDateValueEl.textContent = dateObj.toLocaleDateString('pt-BR', { timeZone: 'UTC' }); 
+            console.log(editDateValueEl.textContent);
         } else {
             editDateValueEl.textContent = 'Nenhuma data definida';
         }
@@ -1337,7 +1476,7 @@ function createTaskHtml(dataTask) {
         
         // Verifica atraso
         const isLate = new Date() > dateObj;
-        const colorStyle = isLate ? 'color: #ef4444; font-weight: bold;' : 'color: #6b7280;';
+        const colorStyle = isLate ? 'color: #ef4444; font-weight: bold;' : 'color: #335aa9ff;';
 
         dateHtml = `
             <div class="infoBadge" style="display: flex; align-items: center; gap: 4px; font-size: 12px; ${colorStyle}">
@@ -1417,116 +1556,6 @@ function createTaskHtml(dataTask) {
 }
 
 
-async function requestCreateTaskOld() {
-        // 1. Coleta os dados do seu formulário modal
-        const title = document.querySelector(".invisibleTaskNameInput").textContent; 
-        if (!title || title.trim() === '') {
-            alert("O título da tarefa não pode estar vazio.");
-            return; 
-        }
-
-        // --- CORREÇÃO DA LÓGICA DE DATA ---
-        const dateInput = document.querySelector(".invisibleDateInput").value; // Ex: "23/10/2025"
-        let dateToEnd = null;
-
-        if (dateInput) {
-            // O locale 'pt' do flatpickr usa o formato "DD/MM/YYYY"
-            // Vamos dividir por "/" em vez de "."
-            const parts = dateInput.split('/'); 
-            if (parts.length === 3) {
-                // Converte de DD/MM/YYYY para YYYY-MM-DD (formato do MySQL)
-                dateToEnd = `${parts[2]}-${parts[1]}-${parts[0]}`; 
-            } else {
-                console.warn(`Formato de data inesperado recebido: ${dateInput}. A data de término será nula.`);
-            }
-        }
-        // --- FIM DA CORREÇÃO ---
-
-        const description = document.querySelector(".descriptionInput").value || null; // (Pode buscar de um <textarea> se tiver)
-        console.log(description);
-        const statusSelected = parseInt(document.querySelector(".statusSelected").getAttribute('data-status'));
-        const categorySelected = parseInt(document.querySelector(".categorySelected").getAttribute('data-category'));
-        const subtasksNodeList = document.querySelectorAll('.subtaskName');
-
-        const subtaskNames = Array.from(subtasksNodeList).map(subtask => subtask.innerText);
-        
-        const firstColumnEl = document.querySelector('.column[data-column-id]');
-        const defaultColumnId = firstColumnEl ? parseInt(firstColumnEl.dataset.columnId) : 1; 
-
-        // 2. Monta o objeto JSON (Payload)
-        const taskData = {
-            data_termino: dateToEnd, // Agora envia "2025-10-23" ou null
-            projeto_id: parseInt(currentProjectId), 
-            titulo: title,
-            criador_id: 1, // !!! MOCK: Substitua pelo ID real do usuário logado
-            descricao: description,
-            status_id: 1,
-            categoria_id: categorySelected,
-            coluna_id: statusSelected, 
-            assignedMemberIds: [], 
-            prioridade: "Média", // CORRIGIDO: "Média" com acento
-            subTasksNames: subtaskNames // CORRIGIDO: de 'subTasks' para 'subTasksNames'
-        };
-
-        try{
-            // 3. Envia o 'fetch' para a API
-            const response = await fetch(`${API_BASE_URL}/tasks`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(taskData)
-            });
-
-            console.log("Resposta da api para criar:", response);
-            
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Falha ao criar a tarefa.');
-            }
-
-            const newTask = await response.json();
-            console.log("🟩Nova tarefa:", newTask);
-            
-            // 4a. Gera o HTML para o novo card
-            const taskHtml = createTaskHtml(newTask);
-            
-            // 4b. Encontra o container (lista de tarefas) da coluna correta
-            const columnEl = document.querySelector(`.column[data-column-id="${newTask.coluna_id}"]`);
-            if (columnEl) {
-                // --- CORREÇÃO: Procura pela classe 'task-list-dropzone' ---
-                const taskListEl = columnEl.querySelector('.task-list-dropzone');
-                taskListEl.classList.remove('noRender');
-                
-                // 4c. Adiciona o novo card ao final da lista
-                // Esta verificação impede o erro 'cannot read properties of null'
-                if (taskListEl) {
-                    taskListEl.insertAdjacentHTML('beforeend', taskHtml);
-                } else {
-                    console.error("Não foi possível encontrar o container '.task-list-dropzone' para adicionar a nova tarefa.");
-                    return;
-                }
-
-                // 4d. Atualiza a contagem de tarefas no cabeçalho da coluna
-                const taskCountEl = columnEl.querySelector('.columnTaskQuantity');
-                const newCount = taskListEl.children.length;
-                taskCountEl.textContent = newCount;
-
-                // 4e. Re-ativa o drag-and-drop para que o novo card também funcione
-                // addDragAndDropHandlers();
-                closeModalTask();
-                addCardClickListeners()
-                showSuccessModal("Tarefa criada com sucesso!");
-                // 4f. (Opcional) Feche o modal
-                // Ex: document.querySelector('.addTaskModal').classList.remove('active');
-            } else {
-                console.error(`Coluna com ID ${newTask.coluna_id} não encontrada no DOM.`);
-            }
-            
-        } catch(error) {
-            console.error("Falha ao criar a tarefa:", error);
-            alert("Não foi possível criar a tarefa: " + error.message);
-        }
-}
     
 async function requestCreateTask(){
     const dataDefaultTask = {
@@ -1544,6 +1573,9 @@ async function requestCreateTask(){
         }); 
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao criar a tarefa.');
         }
@@ -1576,6 +1608,9 @@ async function requestUpdateTask(dataTaskUpdated, taskId){
         })
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao criar a tarefa.');
         }
@@ -1602,6 +1637,9 @@ async function requestMoveTask(taskId, newColumnId) {
         });
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Erro ao mover tarefa');
         }
@@ -1674,6 +1712,9 @@ async function requestCreateColumn(columnName){
         });
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Erro ao mover tarefa');
         }
@@ -1882,6 +1923,9 @@ async function requestCreateCategory(dataCategory){
         }); 
         console.log(response);
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao criar a categoria.');
         }
@@ -2029,6 +2073,9 @@ async function requestCreateSubTask(taskId, subTaskTitle) {
         });
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Erro ao criar subtarefa');
         }
@@ -2119,6 +2166,49 @@ function setupDateUpdateLogic() {
 
 // --------------------- MODAL ADD MEMBERS TO TASK -------------------------
 
+
+
+async function requestCreateSubTask(taskId, subTaskTitle) {
+    // Validação simples antes de chamar a API
+    if (!taskId || !subTaskTitle.trim()) {
+        alert("A subtarefa precisa de um título e uma tarefa pai.");
+        return null;
+    }
+
+    try {
+        // Recupera o token do localStorage (ajuste a chave se o seu for diferente)
+        const token = localStorage.getItem('token'); 
+
+        const response = await fetch(`${API_BASE_URL}/tasks/${taskId}/subtasks`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Envia o token para o middleware verificar
+            },
+            body: JSON.stringify({
+                titulo: subTaskTitle
+            })
+        });
+
+        if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Erro ao criar subtarefa');
+        }
+
+        const newSubTask = await response.json();
+        console.log("Subtarefa criada:", newSubTask);
+        
+        return newSubTask;
+
+    } catch (error) {
+        console.error("Erro na API de subtarefa:", error);
+        alert("Não foi possível criar a subtarefa: " + error.message);
+        return null;
+    }
+}
 
 
 

@@ -241,7 +241,7 @@ async update(taskId, dataToUpdate){
                     }
                 }
             );
-
+            
             // 2. Se atualizou algo, buscamos o objeto COMPLETO
             if(affectedRows > 0){
                 // AQUI ESTÁ O SEGREDO: Precisamos dos 'includes'

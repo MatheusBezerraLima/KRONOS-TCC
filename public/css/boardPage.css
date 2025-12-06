@@ -103,7 +103,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 0px 20px 0px 0px;
     width:100%;
     height:60px;
     border-bottom: 1px solid #ECECEC;
@@ -122,7 +122,7 @@ body{
     transition: transform 0.3 ease;
 }
 
-.logo svg:hover{
+.logo svg.toggleIcon:hover{
     width: 25px;
     height: 25px;
     background-color: var(--lightGrey);
@@ -1631,12 +1631,13 @@ main{
 /* ------------------------ Modal para selecionar status ------------------------ */
 
 /* 1. Estilo do Gatilho */
-.categoryBadge, .selectStatusModal, .selectPriorityModal { /* Adicionei .selectPriorityModal */
-    padding: 6px 12px;
+ .selectStatusModal, .selectPriorityModal { /* Adicionei .selectPriorityModal */
+    padding: 12px 12px;
     border-radius: 6px;
     /* ... resto do css ... */
     cursor: pointer;
 }
+
 .categoryBadge:hover, .selectStatusModal:hover, .selectPriorityModal:hover { opacity: 0.8; }
 
 
@@ -1805,7 +1806,7 @@ main{
 }
 
 .createSubtasks svg{
-    stroke: #FFFF;
+    stroke: var(--blue);
     width: 20px;
     height: 20px;
 }
@@ -2135,6 +2136,21 @@ main{
     background-color: transparent;
 }
 
+.logoImg {
+                display: flex;
+                padding-left: 0;
+                width: min-content;
+            }
+
+            .logoImg svg{
+                width: 60px;
+                height: 60px;
+            }
+
+            .logoImg span {
+                color: var(--color-text);
+            }
+
 .selectOptionText{
     display: flex;
     align-items: center;
@@ -2169,9 +2185,11 @@ main{
     height: 20px;
     width: fit-content;
     max-width: 140px;
-    padding: 15px 10px;
+    padding: 15px 10px !important;
     font-size:15px;
     cursor: pointer;
+    background-color:#000080;
+    color: #ffffff;
 }
 
 
@@ -2516,176 +2534,215 @@ main{
     height: 100%;
 }
 
-.chatHeader{
-    width: 100%;
-    height: 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
-
-
-.pageTitleContainer{
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-}
-
-.pageTitle{
-    height: 60px;
-    display: flex;
-    align-items: center;
-}
-
-.projectPageTitle{
-    color: var(--black);
-}
-
-.pageSubtitle{
-    font-size: 16px;
-    color: var(--black);
-}
-.pageTitle svg{
-    width: 40px;
-    height: 40px;
-    fill:#119500;
-    stroke: #ffffff;
-}
-
-.membersQuantityOnChat{
-    color: #696969;
-}
-
-.chatContainer{
+/* --- CONTAINER PRINCIPAL --- */
+.chatContainer {
+    background-color: #f3f4f6; /* Fundo cinza claro igual do preview */
+    border-radius: 0 0 10px 10px; /* Arredondar embaixo se precisar */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    height: 100%;
+    height: 90%;
     overflow: hidden;
-    padding-bottom: 20px;
+    border: 1px solid #e5e7eb;
 }
 
-.daysDivision{
+/* Divisão de Dias (Pequeno ajuste visual) */
+.daysDivision {
     display: flex;
-    justify-content:space-around;
+    justify-content: center;
     align-items: center;
+    margin: 15px 0;
 }
-
-.leftLine, .rightLine{
-    width: 45%;
-    height: 1px;
-    background-color: #e9e7e7;
+.dayContainer {
+    padding: 4px 12px;
+    border-radius: 12px;
+    background-color: #ffffff; /* Cinza mais escuro que o fundo */
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 600;
+    box-shadow: none; /* Removido sombra forte */
 }
+.leftLine, .rightLine { display: none; } /* No design clean geralmente não tem linha */
 
-.dayContainer{
-    padding: 2px 5px;
-    border-radius: 8px;
-    background-color: var(--main-color);
-    color: #696969;
-    font-size: 15px;
-    box-shadow: 2px 2px 5px var(--shadow);
-}
-
-.messagesContainer{
+/* --- ÁREA DE MENSAGENS --- */
+.messagesContainer {
     display: flex;
     flex-direction: column;
+    background-color: #f7f6ff;
     width: 100%;
-    flex-grow: 1; 
-    height: auto; 
-    overflow-y: auto; 
+    flex-grow: 1;
+    height: auto;
+    overflow-y: auto;
     overflow-x: hidden;
-    padding-bottom: 20px;
-
+    padding: 20px; /* Mais espaçamento */
+    gap: 10px; /* Espaço entre mensagens */
 }
 
-.messagesContainer::-webkit-scrollbar {
-    width: 6px; 
-    height: 3px;
-}
+/* Scrollbar Sutil */
+.messagesContainer::-webkit-scrollbar { width: 6px; }
+.messagesContainer::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.messagesContainer::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-.messagesContainer::-webkit-scrollbar-thumb {
-    background: #ccc; 
-    border-radius: 10px;
-}
-
-.messagesContainer::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8; 
-}
-
-.messagesContainer-container {
-    scrollbar-color: #ccc #f1f1f1;
-    scrollbar-width: thin; /* Torna a barra mais fina */
-}
-
-.messageContainerInfo{
+/* --- LINHA DA MENSAGEM (Onde fica Avatar + Balão) --- */
+.messageContainerInfo {
     display: flex;
+    align-items: flex-end; /* Alinha avatar com o fundo do balão */
     gap: 10px;
     width: 100%;
-    min-width: fit-content;
-    max-width: 650px;
-    height: fit-content;
-    padding-top: 10px;
+    max-width: 100%;
+    padding: 0; /* Removido padding interno */
 }
 
-.userProfileChatContainer{
-    width: 10%;
-    max-width: 35px;
-    height: 100%;
-}
-.userProfileChat{
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: pink;
+/* Coluna interna para agrupar (Nome + Balão) */
+.messageContentWrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%; /* Limita a largura da mensagem */
 }
 
-.messageContainer{
-    padding: 10px 15px;
-    border-radius: 10px;
-    flex-grow: 1;
-    width: fit-content;
-    max-width: 500px;
-    background-color: var(--main-color);
-    box-shadow: 2px 2px 5px var(--shadow);
+/* --- AVATAR --- */
+.userProfileChatContainer {
+    width: 32px; /* Tamanho fixo */
+    height: 32px;
+    flex-shrink: 0; /* Não esmagar */
+    margin-bottom: 2px; /* Alinhar com o balão */
 }
 
-/* ----------- Messagem Do Próprio Usuário -------------- */
-.messageContainerInfo.myMessage {
-    display: flex !important;
+.userProfileChat {
     width: 100%;
-    flex-direction: row-reverse !important; 
-    justify-content: flex-start !important;
-    
-    /* ADICIONE ISSO: */
-    align-self: flex-end; /* Isso empurra o bloco de 650px para a direita da tela */
+    height: 100%;
+    border-radius: 50%;
+    background-color: #ddd;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* O resto do seu CSS para .myMessage continua igual... */
-.messageContainerInfo.myMessage .messageContainer {
-    background-color: #80cbfd;
-    align-items: flex-end;
-    text-align: right;
-    margin-right: 10px;
-    margin-left: 0;
+/* --- BALÃO DE MENSAGEM (A caixa colorida) --- */
+.messageContainer {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    max-width: 500px;
+    position: relative;
+    width: fit-content;
+    word-wrap: break-word;
 }
-/* 3. (Opcional) Ajusta a ordem de Nome e Hora */
-.messageContainerInfo.myMessage .messageOwnerAndTime {
-    flex-direction: row-reverse; /* Hora na esquerda, Nome na direita */
-    justify-content: flex-start; /* Mantém eles juntos */
+
+.messageContainer p {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* --- NOME E HORA --- */
+.messageOwnerAndTime {
+    display: flex;
+    align-items: center;
     gap: 8px;
+    font-size: 11px;
+    margin-bottom: 4px;
+    margin-left: 4px;
 }
 
-/* 4. (Opcional) Estilo visual do balão do usuário */
-.messageContainerInfo.myMessage .message { /* Exemplo: Cor verde tipo WhatsApp */
-    border-radius: 8px 0 8px 8px; /* Ponta do balão no canto superior direito */
+.ownerMessage {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4b5563; /* Cinza escuro */
 }
 
-.messageContainerInfo.myMessage .ownerMessage{
-    display:none;
-} 
+.messageTime {
+    font-size: 10px;
+    color: #9ca3af; /* Cinza claro */
+}
 
+/* =========================================
+   VARIAÇÕES: MINHA MENSAGEM (.myMessage)
+   ========================================= */
+
+.messageContainerInfo.myMessage {
+    flex-direction: row; /* Mantém row, mas alinhamos o conteúdo à direita */
+    justify-content: flex-end;
+}
+
+/* Esconde Avatar e Nome nas minhas mensagens (Padrão moderno) */
+.messageContainerInfo.myMessage .userProfileChatContainer,
+.messageContainerInfo.myMessage .ownerMessage {
+    display: none;
+}
+
+.messageContainerInfo.myMessage .messageContentWrapper {
+    align-items: flex-end; /* Alinha o balão à direita */
+}
+
+/* Balão Azul (Eu) */
+.messageContainerInfo.myMessage .messageContainer {
+    background-color: var(--blue); /* Sua cor azul (#000080) */
+    color: #ffffff;
+    border-bottom-right-radius: 2px; /* Pontinha estética */
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+/* Hora dentro do balão azul */
+.messageContainerInfo.myMessage .messageTime {
+    color: rgba(255, 255, 255, 0.7); /* Branco transparente */
+    font-size: 10px;
+    margin: 0;
+    margin-top: 2px;
+    text-align: right;
+    display: block; /* Força quebra de linha para ficar embaixo do texto se quiser */
+}
+
+/* =========================================
+   VARIAÇÕES: OUTROS (.otherMessage)
+   ========================================= */
+
+/* Balão Branco (Outros) */
+.messageContainerInfo:not(.myMessage) .messageContainer {
+    background-color: #ffffff;
+    color: #1f2937;
+    border: 1px solid #e5e7eb; /* Borda sutil */
+    border-bottom-left-radius: 2px; /* Pontinha estética */
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* --- INPUT AREA (Rodapé) --- */
+.typingBarContainer {
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: none; /* Remove sombra flutuante */
+    padding: 15px 20px;
+    height: auto; /* Altura automática */
+    gap: 10px;
+}
+
+.writeMessageInput {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    padding: 10px 15px;
+    height: 45px;
+}
+.writeMessageInput:focus {
+    background-color: #fff;
+    border-color: var(--blue);
+}
+
+.sendMessage {
+    width: 40px;
+    height: 40px;
+    background-color: var(--blue);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.1s;
+}
+.sendMessage:hover { transform: scale(1.05); }
 
 /* ------------------------------------------------------  */
 
@@ -2753,9 +2810,7 @@ main{
     cursor: pointer;
 }
 
-.sendMessage:hover{
-    background-color: var(--blueHoverButton);
-}
+
 
 .sendMessage svg{
     stroke: var(--main-color);
@@ -2793,19 +2848,7 @@ main{
     cursor: pointer;
 }
 
-.categoryBadge{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius:10px;
-    gap:5px;
-    height: 20px;
-    width: fit-content;
-    max-width: 140px;
-    padding: 15px 10px;
-    font-size:15px;
-    cursor: pointer;
-}
+
 
 .categoryNameText {
     display: block; 
@@ -3045,22 +3088,13 @@ main{
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    position: relative;
 }
 
 /* Estilos Específicos dos Valores */
 
 /* Data e Status */
-.selectDate, .selectStatusModal {
-    cursor: pointer;
-    padding: 4px 8px;
-    margin-left: -8px; /* Compensação visual para alinhar texto */
-    border-radius: 4px;
-    transition: background-color 0.2s;
-    font-size: 14px;
-    color: #374151;
-    display: inline-flex;
-    align-items: center;
-}
+
 
 .selectDate:hover, .selectStatusModal:hover {
     background-color: #f3f4f6;
@@ -3076,19 +3110,7 @@ main{
     display: inline-block;
 }
 
-.categoryBadge {
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
+
 
 .categoryBadge:hover {
     opacity: 0.9;
@@ -3354,11 +3376,14 @@ main{
         align-items: center;
         transition: background 0.2s;
         user-select: none;
+        white-space: nowrap; /* Força o texto a ficar em uma linha só */
+    max-width: 100%;
     }
+
     .categoryBadge:hover, .selectStatusModal:hover { opacity: 0.8; }
 
     /* 2. O Dropdown Flutuante (Escondido por padrão) */
-    .selectCategoryModal, .selectStatusDropdown .selectPriorityDropdown {
+    .selectCategoryModal, .selectStatusDropdown {
         position: absolute;
         top: calc(100% + 8px);
         left: 0;

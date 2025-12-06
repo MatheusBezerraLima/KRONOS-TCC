@@ -83,10 +83,10 @@ class TasksController{
             const { id } = req.params
             const userId = req.user.id
             
-            await taskServices.deleteTask(id, userId);
-            console.log("resposta de apagar");
+            const response = await taskServices.deleteTask(id, userId);
             
-            res.redirect('/tasks');
+            
+            res.status(204).json(response);
         }catch(err){
             res.status(400).json({"Controller": "DeleteTask" ,"Erro": err})
         }

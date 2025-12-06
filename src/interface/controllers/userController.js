@@ -46,7 +46,7 @@ const getAuthenticateUser = async (req, res) => {
         httpOnly: true,                                   // Bloqueia o acesso por meio do JS pelo lado do usuário
         secure: process.env.NODE_ENV === "production",    // Só permite acesso em ambiente de produção
         sameSite: "Strict",                               // Restringe para que apenas o próprio site tenha acesso
-        maxAge:  30 * 60 * 1000                           // Tempo de duração em milisegundos 
+        maxAge:  180 * 60 * 1000                         // Tempo de duração em milisegundos 
     });    
 
     // res.status(StatusCode.OK).redirect('/');
@@ -56,7 +56,8 @@ const getAuthenticateUser = async (req, res) => {
         user: {             // Necessário para localStorage.setItem('userId', ...)
             id: user.id,
             nome: user.nome, // Opcional, mas útil ter o nome no front
-            email: user.email 
+            email: user.email, 
+            avatar: user.profile.foto_perfil
         }
     });
     

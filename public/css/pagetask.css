@@ -226,7 +226,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 0px 20px 0px 0px;
     width:100%;
     height:60px;
     border-bottom: 1px solid #ECECEC;
@@ -246,7 +246,7 @@ body{
     stroke: var(--black);
 }
 
-.logo svg:hover{
+.logo svg.toggleIcon:hover{
     width: 25px;
     height: 25px;
     background-color: var(--lightGrey);
@@ -368,7 +368,8 @@ header{
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: aqua;
+    background-position: center;
+    background-size: cover;
 }
 
 /* Main */
@@ -385,6 +386,101 @@ main{
     padding-top: 20px;
     gap:20px;
 }
+
+.logoImg {
+                display: flex;
+                padding-left: 0;
+                width: min-content;
+            }
+
+            .logoImg svg{
+                width: 60px;
+                height: 60px;
+            }
+
+            .logoImg span {
+                color: var(--color-text);
+            }
+
+.hidden{
+    display: none;
+}
+
+.userModal{
+    position: absolute;
+    z-index: 999;
+    background-color: var(--main-color);
+    width: 250px;
+    height: fit-content;
+    box-shadow: 2px 2px 8px var(--shadow);
+    border: 1px solid #f2f2f2;
+    right: 0;
+    top:60px;
+    border-radius: 10px;
+}
+
+.userInfosModalContainer{
+    display: flex;
+    align-items: center;
+    gap:12px;
+    padding: 15px 15px;
+
+}
+
+.userProfileModal{
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #0000a5;
+}
+
+.userNameAndEmailContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.userNameModal{
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.userEmailModal{
+    font-size: 11px;
+    color: #696969;
+    font-weight: 500;
+}
+
+.userModalOptions{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.optionModalUser{
+    padding: 15px;
+    display: flex;
+    gap:8px;
+    align-items: center;
+    width: 100%;
+    height: 45px;
+    cursor: pointer;
+}
+
+.optionModalUser:hover{
+    background-color: #f2f2f2;
+}
+
+.optionModalUser svg{
+    width: 22px;
+    height: 22px;
+}
+
+.logoutContainer{
+    color: rgb(201, 6, 6);
+}
+
+
 
 /*Header task*/
 
@@ -620,7 +716,7 @@ main{
 }
 
 .nameTaskTitle{
-    width: 400px;
+    width: 800px;
     border-right: 1px solid #f2f2f2;
     display: flex;
     align-items: center;
@@ -722,7 +818,7 @@ main{
 /* Nome da tarefa */
 
 .taskNameContainer{
-    width: 400px;
+    width: 800px;
     border-right: 1px solid #f2f2f2;
     display: flex;
     align-items: center;
@@ -734,7 +830,7 @@ main{
 } 
 
 .invisibleTaskNameInput{
-    width: 300px;
+    width: 700px;
     border:none;
     outline: none;
     font-size: 12px;
@@ -748,7 +844,7 @@ main{
 }
 
 .taskNameContainer:focus-within{
-    width: 400px;
+    width: 800px;
     height: 48px;
     background-color: #ffffff;
     box-shadow: 2px 2px 2px #f2f2f2;

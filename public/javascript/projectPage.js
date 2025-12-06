@@ -15,10 +15,28 @@ const inputFiltro = document.getElementById('inputFiltroAmigo');
 const listaResultados = document.getElementById('listaResultados');
 const containerLista = document.getElementById('containerListaAmigos');
 const areaAdicionados = document.getElementById('areaMembrosAdicionados');
+const currentUserJson = localStorage.getItem('user');
+const currentUser = JSON.parse(currentUserJson)
 let debounceTimer;
+const userProfile = document.querySelector(".userProfile")
+const userProfileModal = document.querySelector(".userModal")
 
 let todosAmigos = [];    // Armazena a lista vinda do banco
 let selecionadosIDs = [];
+
+
+
+
+
+
+userProfile.addEventListener("click", ()=>{
+    userProfileModal.classList.toggle("hidden")
+    userProfile.classList.toggle("userProfileSelected")
+})
+
+
+
+
 
 inputPesquisa.addEventListener('input', function(e) {
     const termo = e.target.value;
@@ -652,7 +670,10 @@ async function salvarMembrosNoProjeto(projectId) {
                 },
                 body: JSON.stringify(bodyData)
             });
-
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
+            
             if (!response.ok) throw new Error(`Erro ao adicionar user ${userId}`);
 
 
@@ -696,6 +717,14 @@ function formatDateForDisplay(dateString) {
 }
 
 document.addEventListener('DOMContentLoaded', async() => {
+     const userProfile = document.querySelector('.userProfile');
+    const userNameModal = document.querySelector('.userNameModal');
+    const userEmailModal = document.querySelector('.userEmailModal');
+
+    userEmailModal.innerHTML = `${currentUser.email}`
+    userNameModal.innerHTML = `${currentUser.nome}`
+    userProfile.style.backgroundImage = `url('${currentUser.avatar}')`;
+
     const categoryOptionsWrapper = document.querySelector(".categoryOptionsWrapper");
 
     const categories = await requestCategoriesForUser();
@@ -870,6 +899,9 @@ async function requestCategoriesForUser(){
         });
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao listar categorias do usuario');
         }
@@ -894,6 +926,9 @@ async function requestCreateCategory(dataCategory){
         }); 
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao criar a categoria.');
         }
@@ -925,6 +960,9 @@ async function requestCreateProject(dataProject){
         }); 
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao criar a tarefa.');
         }
@@ -939,6 +977,7 @@ async function requestCreateProject(dataProject){
     }
     
 }
+
 async function requestListProjects(dataProject){
     try{
         const response = await fetch(`${API_BASE_URL}/projetos`, {
@@ -947,6 +986,9 @@ async function requestListProjects(dataProject){
         }); 
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errorData = await response.json();
             throw new Error(errorData.message || 'Falha ao criar a tarefa.');
         }
@@ -1034,7 +1076,9 @@ async function carregarListaAmigos() {
     try {
         // 1. Busca os dados da API
         const response = await fetch(`${API_BASE_URL}/friendships`);
-        
+        if(response.status === 401 || response.status === 403){
+            window.location.href = '/register';
+        }
         if (!response.ok) throw new Error('Erro ao buscar amizades');
         
         const amizades = await response.json();
@@ -1116,6 +1160,9 @@ async function carregarSolicitacoes() {
     try {
         // 1. Busca os dados da rota que você passou
         const response = await fetch(`${API_BASE_URL}/friendships/received`);
+        if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
         
         if (!response.ok) throw new Error('Erro ao buscar solicitações');
         
@@ -1200,6 +1247,9 @@ async function responderSolicitacao(requesterId, novoStatus, friendshipId) {
         });
 
         if (!response.ok) {
+            if(response.status === 401 || response.status === 403){
+                window.location.href = '/register';
+            }
             const errData = await response.json();
             throw new Error(errData.message || 'Erro ao responder');
         }

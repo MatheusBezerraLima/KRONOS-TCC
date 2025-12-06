@@ -75,7 +75,13 @@ class UserDAO {
                 where: {
                     email: email,
                     status: "ativo"
-                }
+                },
+                include: [{
+                model: ProfileUser,
+                as: 'profile', 
+                attributes: ['foto_perfil'], 
+                required: false 
+                }]
             }); 
         }catch(error){
             console.error(`Erro no DAO ao buscar usuário por e-mail:`, error);

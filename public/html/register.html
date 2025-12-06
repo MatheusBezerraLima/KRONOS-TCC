@@ -4,12 +4,141 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro | Usuário</title>
-    <link rel="stylesheet" href="../css/register.css">
-    <script src="../javascript/registerLogin.js" defer></script> 
+     <link rel="shortcut icon" type="image/x-p" href="/images/logo.svg">
+    <link rel="stylesheet" href="/css/register.css">
+    <script src="/javascript/registerLogin.js" defer></script> 
     <link rel="shortcut icon" type="image/x-p" href="/public/images/logo.svg">
   </head>
   <body>
     <main>
+      <div class="filter hidden"></div>
+      <div class="modalTermsAndConditions hidden">
+        <svg class="closeModal"xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        <div class="section">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" zoomAndPan="magnify" viewBox="0 0 375 374.999991" height="500" preserveAspectRatio="xMidYMid meet" version="1.0"><defs><clipPath id="c16d646a14"><path d="M 98 69 L 277 69 L 277 282 L 98 282 Z M 98 69 " clip-rule="nonzero"/></clipPath><clipPath id="a45d4a59ab"><path d="M 225.339844 52.988281 L 292.652344 101.996094 L 149.648438 298.410156 L 82.335938 249.402344 Z M 225.339844 52.988281 " clip-rule="nonzero"/></clipPath><clipPath id="d6051f646e"><path d="M 268.148438 135.652344 L 174.164062 264.742188 C 160.628906 283.328125 134.589844 287.425781 116.003906 273.894531 C 97.417969 260.359375 93.320312 234.320312 106.851562 215.734375 L 200.835938 86.644531 C 214.371094 68.058594 240.410156 63.960938 258.996094 77.492188 C 277.585938 91.027344 281.683594 117.066406 268.148438 135.652344 Z M 268.148438 135.652344 " clip-rule="nonzero"/></clipPath><clipPath id="0e0401026f"><path d="M 0 0 L 179 0 L 179 213 L 0 213 Z M 0 0 " clip-rule="nonzero"/></clipPath><clipPath id="f55442028e"><path d="M 127.339844 -16.011719 L 194.652344 32.996094 L 51.648438 229.410156 L -15.664062 180.402344 Z M 127.339844 -16.011719 " clip-rule="nonzero"/></clipPath><clipPath id="19b4be3197"><path d="M 170.148438 66.652344 L 76.164062 195.742188 C 62.628906 214.328125 36.589844 218.425781 18.003906 204.894531 C -0.582031 191.359375 -4.679688 165.320312 8.851562 146.734375 L 102.835938 17.644531 C 116.371094 -0.941406 142.410156 -5.039062 160.996094 8.492188 C 179.585938 22.027344 183.683594 48.066406 170.148438 66.652344 Z M 170.148438 66.652344 " clip-rule="nonzero"/></clipPath><clipPath id="4adaa6eb2c"><rect x="0" width="179" y="0" height="213"/></clipPath><clipPath id="754b7d1f4c"><path d="M 97.875 68.367188 L 181.140625 68.367188 L 181.140625 283.03125 L 97.875 283.03125 Z M 97.875 68.367188 " clip-rule="nonzero"/></clipPath><clipPath id="912fe0a2ff"><path d="M 181.140625 110 L 181.140625 241.386719 C 181.140625 264.378906 162.5 283.015625 139.507812 283.015625 C 116.515625 283.015625 97.875 264.378906 97.875 241.386719 L 97.875 110 C 97.875 87.007812 116.515625 68.367188 139.507812 68.367188 C 162.5 68.367188 181.140625 87.007812 181.140625 110 Z M 181.140625 110 " clip-rule="nonzero"/></clipPath><clipPath id="95c5fcd74c"><path d="M 0.875 0.367188 L 84.140625 0.367188 L 84.140625 215.03125 L 0.875 215.03125 Z M 0.875 0.367188 " clip-rule="nonzero"/></clipPath><clipPath id="0993b3e494"><path d="M 84.140625 42 L 84.140625 173.386719 C 84.140625 196.378906 65.5 215.015625 42.507812 215.015625 C 19.515625 215.015625 0.875 196.378906 0.875 173.386719 L 0.875 42 C 0.875 19.007812 19.515625 0.367188 42.507812 0.367188 C 65.5 0.367188 84.140625 19.007812 84.140625 42 Z M 84.140625 42 " clip-rule="nonzero"/></clipPath><clipPath id="1139e90eaa"><rect x="0" width="85" y="0" height="216"/></clipPath><clipPath id="9ecbb1fec6"><path d="M 209.75 207.96875 L 284.808594 207.96875 L 284.808594 283.027344 L 209.75 283.027344 Z M 209.75 207.96875 " clip-rule="nonzero"/></clipPath><clipPath id="6401b41328"><path d="M 247.28125 207.96875 C 226.554688 207.96875 209.75 224.769531 209.75 245.496094 C 209.75 266.222656 226.554688 283.027344 247.28125 283.027344 C 268.007812 283.027344 284.808594 266.222656 284.808594 245.496094 C 284.808594 224.769531 268.007812 207.96875 247.28125 207.96875 Z M 247.28125 207.96875 " clip-rule="nonzero"/></clipPath><clipPath id="83fb9c04e6"><path d="M 0.75 0.96875 L 75.808594 0.96875 L 75.808594 76.027344 L 0.75 76.027344 Z M 0.75 0.96875 " clip-rule="nonzero"/></clipPath><clipPath id="aa8424a18c"><path d="M 38.28125 0.96875 C 17.554688 0.96875 0.75 17.769531 0.75 38.496094 C 0.75 59.222656 17.554688 76.027344 38.28125 76.027344 C 59.007812 76.027344 75.808594 59.222656 75.808594 38.496094 C 75.808594 17.769531 59.007812 0.96875 38.28125 0.96875 Z M 38.28125 0.96875 " clip-rule="nonzero"/></clipPath><clipPath id="27cb272533"><rect x="0" width="76" y="0" height="77"/></clipPath></defs><g clip-path="url(#c16d646a14)"><g clip-path="url(#a45d4a59ab)"><g clip-path="url(#d6051f646e)"><g transform="matrix(1, 0, 0, 1, 98, 69)"><g clip-path="url(#4adaa6eb2c)"><g clip-path="url(#0e0401026f)"><g clip-path="url(#f55442028e)"><g clip-path="url(#19b4be3197)"><path fill="#004aad" d="M 127.339844 -16.011719 L 194.652344 32.996094 L 51.648438 229.410156 L -15.664062 180.402344 Z M 127.339844 -16.011719 " fill-opacity="1" fill-rule="nonzero"/></g></g></g></g></g></g></g></g><g clip-path="url(#754b7d1f4c)"><g clip-path="url(#912fe0a2ff)"><g transform="matrix(1, 0, 0, 1, 97, 68)"><g clip-path="url(#1139e90eaa)"><g clip-path="url(#95c5fcd74c)"><g clip-path="url(#0993b3e494)"><path fill="#1800ad" d="M 0.875 0.367188 L 84.140625 0.367188 L 84.140625 215.03125 L 0.875 215.03125 Z M 0.875 0.367188 " fill-opacity="1" fill-rule="nonzero"/></g></g></g></g></g></g><g clip-path="url(#9ecbb1fec6)"><g clip-path="url(#6401b41328)"><g transform="matrix(1, 0, 0, 1, 209, 207)"><g clip-path="url(#27cb272533)"><g clip-path="url(#83fb9c04e6)"><g clip-path="url(#aa8424a18c)"><path fill="#ffde59" d="M 0.75 0.96875 L 75.808594 0.96875 L 75.808594 76.027344 L 0.75 76.027344 Z M 0.75 0.96875 " fill-opacity="1" fill-rule="nonzero"/></g></g></g></g></g></g></svg>
+          <h2>Termos e condições</h2>
+          <p>
+            Bem-vindo ao Kronos!
+            Ao acessar ou utilizar nosso site, aplicativo ou qualquer serviço oferecido pela plataforma, você concorda integralmente com estes Termos e Condições de Uso. Por favor, leia atentamente.
+          </p>
+        </div>
+        <div class="section">
+          <h3>Aceitação dos termos</h3>
+          <p>
+            Ao criar uma conta ou utilizar o Kronos, você declara que leu, entendeu e concorda com estes Termos e Condições, bem como com nossa Política de Privacidade.
+            Se você não concordar com qualquer parte deste documento, não deve utilizar o serviço.
+          </p>
+        </div>
+        <div class="section">
+          <h3>Sobre o Kronos</h3>
+          <p>
+            O Kronos é um sistema criado para auxiliar estudantes no gerenciamento de tarefas, organização do tempo e acompanhamento de metas.
+            Nós fornecemos ferramentas de produtividade, relatórios e funcionalidades de planejamento.
+            O Kronos não se responsabiliza por resultados acadêmicos, prazos perdidos ou desempenho escolar do usuário.
+          </p>
+        </div>
+        <div class="section">
+          <h3>Cadastro e Conta do Usuário</h3>
+          <p>
+            Para utilizar o Kronos, pode ser necessário criar uma conta informando dados como nome, e-mail ou outras informações.
+            Você é responsável por:
+            <br>
+            <br>
+            - garantir que seus dados sejam verdadeiros e atualizados;
+
+            <br>
+            - manter a segurança da sua senha;
+
+            <br>
+            - não compartilhar sua conta com terceiros.
+
+            <br>
+            <br>
+            Caso identifiquemos atividade suspeita, podemos suspender ou encerrar a conta para proteção do usuário e da plataforma.
+                      </p>
+        </div>
+        <div class="section">
+          <h3>Uso Permitido da Plataforma</h3>
+          <p>
+            Você concorda em utilizar o Kronos apenas para fins legais e pessoais.
+            É proibido:
+            <br>
+            <br>
+            - tentar invadir, modificar ou interromper o funcionamento do sistema;
+
+            <br>
+            - usar o Kronos para fins comerciais sem autorização;
+
+            <br>
+            - inserir conteúdos ofensivos, ilegais ou que violem direitos de terceiros;
+
+            <br>
+            - copiar, distribuir ou reutilizar partes do software sem permissão.
+
+            <br>
+            <br>
+            Violação dessas regras pode resultar em suspensão imediata da conta.
+          </p>
+        </div>
+        <div class="section">
+          <h3>Propriedade Intelectual</h3>
+          <p>
+           Todo o conteúdo do Kronos — incluindo interface, logotipo, textos, códigos, design e funcionalidades — pertence aos seus desenvolvedores.
+            É proibido copiar, reproduzir, redistribuir ou criar derivados sem autorização expressa.
+          </p>
+        </div>
+        <div class="section">
+          <h3>Limitação de Responsabilidade</h3>
+          <p>
+            Embora nos esforcemos para garantir que o Kronos funcione sem interrupções, não garantimos:
+            <br>
+            <br>
+            - funcionamento ininterrupto, livre de erros ou bugs;
+
+            <br>
+            - perda de dados causada por falhas de terceiros, conexão ou dispositivos;
+
+            <br>
+            - resultados específicos no desempenho do usuário.
+            <br>
+            <br>
+            O uso do Kronos é por sua conta e risco.
+          </p>
+        </div>
+        <div class="section">
+          <h3>Atualizações e Modificações</h3>
+          <p>
+           O Kronos pode sofrer atualizações, melhorias, correções ou mudanças de funcionalidades sem aviso prévio.
+          Também podemos alterar estes Termos e Condições a qualquer momento. Caso isso aconteça, notificaremos pela plataforma e a continuação do uso significa que você aceita as novas regras.
+          </p>
+        </div>
+        <div class="section">
+          <h3>Cancelamento e Encerramento</h3>
+          <p>
+           Você pode solicitar o encerramento da sua conta a qualquer momento.
+          Nós também podemos encerrar ou suspender contas que violem estes Termos ou representem risco ao sistema.
+          </p>
+        </div>
+        <div class="section">
+          <h3>Privacidade e Proteção de Dados</h3>
+          <p>
+            Seus dados são tratados conforme nossa Política de Privacidade.
+            Não vendemos, repassamos ou compartilhamos suas informações pessoais sem consentimento, exceto quando exigido por lei.
+          </p>
+        </div>
+        <div class="section">
+          <h3>Contato</h3>
+          <p>
+           Se tiver dúvidas sobre estes Termos e Condições, entre em contato:
+          </p>
+        </div>
+
+        <div class="containerButtons">
+          <button class="buttons acceptTermsAndConditions">Aceitar</button>
+          <button class="buttons refuseTermsAndConditions">Recusar</button>
+        </div>
+      </div>
+
       <div class="card cadastroActive">
         <div class="esquerdaLogin">
           <div class="formLogin">
@@ -17,7 +146,7 @@
             <form id="loginForm">
               <input type="email" id="loginEmail" name="email" required placeholder="Email"/>
               <input type="password" id="loginPassword" name="password" required minlength="6" placeholder="Senha" />
-              <input type="submit" value="Faça o Login"></input>
+              <input type="submit" class="inputSubmit" value="Faça o Login"></input>
             </form>
              <div class="redesLogin">
               <div class="divOu">
@@ -44,24 +173,26 @@
         <div class="direitaCadastro">
           
           <div class="formCadastro">
-            <p class = "tituloForm">Cadastrar-se</p>
-            <form id="registerForm">
-              <input type="text" id="registerName" name="name" required placeholder="Nome completo" />
-              <input type="email" id="registerEmail" name="email" required placeholder="Email"/>
-              <input type="password" id="registerPassword" name="password" required minlength="6" placeholder="Senha" />
-              <input type="tel" id="registerPhone" name="phone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Telefone"/>
-      <input class="inputSubmit" type="submit" value="Cadastrar"/>
-      <!-- <br> -->
-    </form>
-              <!-- <div class="termos">
-                <label class="checkbox-container">
-                  <input type="checkbox">
-                  <span class="checkmark"></span>
-                  <span class="termosTxt">Eu concordo com os <a href="">termos e condições</a></span>
-                </label>
-              </div> -->
-
-            </form>
+              <p class = "tituloForm">Cadastrar-se</p>
+              <form class="submitForm" id="registerForm" action="/register" method="post">
+                  <input type="text" id="registerName" name="name" required placeholder="Nome completo" />
+                  <input type="email" id="registerEmail" name="email" required placeholder="Email"/>
+                  <input type="password" id="registerPassword" name="password" required minlength="6" placeholder="Senha" />
+                  <input type="tel" id="registerPhone" name="phone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="Telefone"/>
+                  <button class="inputSubmit" type="submit" value="Cadastrar">
+                      <svg class="spinner hidden"xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><circle fill='#FFFFFF' stroke='#FFFFFF' stroke-width='15' r='15' cx='40' cy='65'><animate attributeName='cy' calcMode='spline' dur='2' values='65;135;65;' keySplines='.5 0 .5 1;.5 0 .5 1' repeatCount='indefinite' begin='-.4'></animate></circle><circle fill='#FFFFFF' stroke='#FFFFFF' stroke-width='15' r='15' cx='100' cy='65'><animate attributeName='cy' calcMode='spline' dur='2' values='65;135;65;' keySplines='.5 0 .5 1;.5 0 .5 1' repeatCount='indefinite' begin='-.2'></animate></circle><circle fill='#FFFFFF' stroke='#FFFFFF' stroke-width='15' r='15' cx='160' cy='65'><animate attributeName='cy' calcMode='spline' dur='2' values='65;135;65;' keySplines='.5 0 .5 1;.5 0 .5 1' repeatCount='indefinite' begin='0'></animate></circle></svg>
+                      <p class="button-text">Cadastrar</p>
+                  </button>
+                  <div class="termos">
+                    <label class="checkbox-container">
+                      <input type="checkbox" class="checkbox" required> 
+                        <span class="checkboxCustom">
+                          <svg class="checkIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+                      </span>
+                      <span class="termosTxt">Eu concordo com os <a class="openModal" href="#">termos e condições</a></span>
+                    </label>
+                  </div>
+              </form>
 
             <div class="redesLogin">
               <div class="divOu">

@@ -32,7 +32,134 @@ main{
     height: 100vh;
     background-color: #EBEBEB;
     font-family: "Poppins", sans-serif;
+    position: relative;
 }
+
+
+
+
+
+.hidden{
+    visibility: hidden;
+}
+
+.filter{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #0000000c;
+    z-index: 9;
+}
+
+.modalTermsAndConditions{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 450px;
+    height: 500px;
+    background-color: #FFFFFF;
+    position: absolute;
+    z-index: 10;
+    border-radius: 10px;
+    padding:25px;
+    gap:40px;
+    overflow-x: hidden;
+    overflow: auto;
+    box-shadow: 2px 2px 5px var(--shadow);
+}
+
+.modalTermsAndConditions::-webkit-scrollbar {
+    width: 4px; 
+    height: 3px;
+}
+
+.modalTermsAndConditions::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 10px;
+}
+
+.modalTermsAndConditions::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}
+
+.modalTermsAndConditions-container {
+    scrollbar-color: #ccc #f1f1f1;
+    scrollbar-width: thin; /* Torna a barra mais fina */
+}
+.section svg{
+    width: 50px;
+    height: 50px;
+}
+
+.section h2{
+    margin-top:0.5rem;
+    color: var(--blue);
+
+}
+
+.section p{
+    text-align: center;
+}
+
+.modalTermsAndConditions p{
+    margin-top:0.5rem;
+    font-size: 13px;
+    color: #404040;
+    text-align:justify;
+}
+
+.modalTermsAndConditions h3{
+    color: var(--blue);
+}
+
+.closeModal{
+    height: 20px;
+    width: 20px;
+    fill: #696969;
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+}
+
+.containerButtons{
+    display: flex;
+    justify-content: center;
+    gap:10px;
+    width: 100%;
+    height: 80px;
+    background-color: var(--main-color);
+}
+
+.containerButtons button{
+    width: 180px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    font-family: "poppins";
+    cursor: pointer;
+    box-shadow: 0px 2px 5px #9191fa;
+    transition: .2s ease-in-out;
+}
+
+.acceptTermsAndConditions{
+    background-color: var(--blue);
+    color: var(--main-color);
+}
+.acceptTermsAndConditions:hover{
+    background-color: var(--blueHoverButton);
+}
+
+.refuseTermsAndConditions{
+    outline: 2px solid var(--blue);
+    background-color: transparent;
+    color: var(--blue);
+}
+
+.refuseTermsAndConditions:hover{
+    background-color: #ddddf1;
+}
+
 .card{
     display: flex;
     justify-content: center;
@@ -110,6 +237,7 @@ main{
 .tituloForm{
     font-size:30px;
     align-self: center;
+    margin-top: 20px;
     font-weight: bold;
     margin-bottom:20px;
 
@@ -133,7 +261,10 @@ form{
         
 }
 
-        input[type="submit"]{
+        .inputSubmit{
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 10px 30px;
             height: 42px;
             background-color: var(--blue);
@@ -143,10 +274,36 @@ form{
             font-family: "poppins";
             transition: all 0.3s;
             cursor: pointer;
+            border: none;
+        }
+
+        .inputSubmit svg{
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Exemplo de CSS (O spinner precisa ser animado, este é um exemplo básico) */
+        .inputSubmit:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Esconde o spinner até que a classe 'loading' seja ativada */
+        .spinner.hidden {
+            display: none;
+        }
+
+        /* Estado de Carregamento Ativo */
+        .inputSubmit.loading .button-text {
+            display: none; 
+        }
+
+        .inputSubmit.loading .spinner {
+            display: inline-block; 
         }
 
         
-        input[type="submit"]:hover{
+        .inputSubmit:hover{
             background-color: var(--blueHoverButton);
             transform: translateY(-1px);
         }
@@ -172,49 +329,53 @@ form{
 
 .checkbox-container{
     display: flex;
+    align-items: center;
+}
+
+.checkboxCustom{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
     justify-content: center;
     align-items: center;
-    margin-left:5px;
-}
-.checkbox-container input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
-.checkmark {
-  display: inline-block;
-  width: 22px;
-  height: 22px;
-  border: 2px solid #9E9E9E;
-  border-radius: 5px;  
-  transition: all 0.3s;
+.checkIcon{
+    width: 100%;
+    height: 100%;
+    stroke: #FFFFFF;
+    fill: none; 
+    transform: scale(0); 
+    transition: transform 0.2s ease-in-out;
 }
 
-.checkbox-container:hover .checkmark {
-  background-color: #ddd;
+.checkbox{
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    position: absolute;
+    width: 1px; 
+    height: 1px;
+    opacity: 0; 
 }
 
-.checkbox-container input:checked ~ .checkmark {
-  background-color: #2B00FF;
-  border-color: #2B00FF;
+/* Estilo da checkbox depois de marcada */
+.checkbox:checked + .checkboxCustom {
+    background-color: #000080; 
+    border-color: #000080; 
+}
+/* Estilo de como vai aparecer a checkbox  e o icone depois de marcada */
+.checkbox:checked + .checkboxCustom .checkIcon {
+    transform: scale(1); 
 }
 
-.checkmark::after {
-  content: "";
-  position: relative;
-  display: none;
-}
-
-.checkbox-container input:checked ~ .checkmark::after {
-  display: block;
-  left: 5px;
-  width: 6px;
-  height: 12px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
 
 
 
