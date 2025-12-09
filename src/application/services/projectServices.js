@@ -80,54 +80,10 @@ class ProjectServices{
         return shapedColumns;
     }
 
-    _createResponseContract(){
-        /** 
-         * {
-               "project": {
-                   "id": project.id
-                   "titulo": project.titulo
-                   "owner": project.criador_id      
-                },
-              
-               "members": [
-                  {"id": member.id, "name": member.name, "avatarUrl": member.foto_perfil}    
-                {"id": member.id, "name": member.name, "avatarUrl": member.foto_perfil}    
-                ],
-         
-                "colums": [
-                 {
-                    "id": colum.id,
-                    "title": colum.name,
-                    "order": colum.order,
-                  
-                    "tasks": [
-                        {
-                        "id": task.id,
-                        "title": task.titulo,
-                        "tags": ["UX/UI", "Frontend"], 
-                        "progress": 20, xxxxxxxxxxxxxxxxx
-                        "assignedMembers": [ // Apenas o suficiente para os avatares no card
-                            { "id": member.id, "avatarUrl": "/path/to/ana.png" }, xxxxxxxxx
-                            { "id": member.id, "avatarUrl": "/path/to/carlos.png" } xxxxxxxxxx
-                        ],
-                        "counts": { // Contagens importantes, mas sem os dados completos
-                            "comments": comments.quantity,
-                            "attachments": 2
-                        }
-                        },
-                        // ... outras tarefas
-                    ]
-         *       ] 
-         *          
-         * }
-         * 
-         */
-    }
 
     _enrichTasksWithProgress(tasks, allSubTasks) {
-        // Passo A: O seu mapa de subtarefas já estava correto.
+        
         const subTasksByTaskId = allSubTasks.reduce((acc, subTask) => {
-            // Usamos .toJSON() para garantir que estamos a lidar com objetos simples
             const plainSubTask = subTask.get({ plain: true });
             const taskId = plainSubTask.tarefa_id;
             if (!acc[taskId]) {
@@ -137,15 +93,14 @@ class ProjectServices{
             return acc;
         }, {});
 
-        // Passo B: Percorre cada tarefa para adicionar o progresso e as subtarefas
         return tasks.map(task => {
             const tasksSubTasks = subTasksByTaskId[task.id] || [];
             const progressPercentage = this._calcPercentage(tasksSubTasks);
 
             return {
-                ...task.get({ plain: true }), // Garante que estamos a lidar com um objeto simples
+                ...task.get({ plain: true }), 
                 progress: progressPercentage,
-                subTasks: tasksSubTasks // <<< CORREÇÃO 1: Adiciona as subtarefas ao objeto
+                subTasks: tasksSubTasks 
             };
         });
     }
@@ -157,8 +112,8 @@ class ProjectServices{
 
         const totalDeSubtarefas = subTasks.length;
 
-        // Usar 'filter' é uma forma mais limpa de contar os itens concluídos
-        const tarefasConcluidas = subTasks.filter(subTask => subTask.status_id === 1).length; // <<< CORREÇÃO 2
+        
+        const tarefasConcluidas = subTasks.filter(subTask => subTask.status_id === 1).length; 
 
         const porcentagem = (tarefasConcluidas / totalDeSubtarefas) * 100;
 
@@ -174,9 +129,9 @@ class ProjectServices{
 
         const [project, tasks, members, sprints] = await Promise.all([
             projectDAO.findById(projectId),
-            taskDAO.findByProjectId(projectId), // Garanta que este método retorna o sprint_id
+            taskDAO.findByProjectId(projectId), 
             userProjectRoleDAO.findMemberByProjectId(projectId),
-            sprintDAO.findAllByProjectId(projectId) // Novo método necessário no SprintDAO
+            sprintDAO.findAllByProjectId(projectId) 
         ]);
 
         if (!project) {
@@ -210,11 +165,10 @@ class ProjectServices{
         const tasksBySprintId = {};
         const backlogTasks = [];
 
-        // Primeiro, agrupa todas as tarefas pelo sprint_id
         for (const task of tasks) {
             const sprintId = task.sprint_id;
             if (sprintId === null || sprintId === undefined) {
-                backlogTasks.push(task); // Tarefas sem sprint vão para o backlog
+                backlogTasks.push(task); 
             } else {
                 if (!tasksBySprintId[sprintId]) {
                     tasksBySprintId[sprintId] = [];
@@ -223,13 +177,12 @@ class ProjectServices{
             }
         }
 
-        // Depois, formata o array de sprints, adicionando as tarefas correspondentes
         const shapedSprints = sprints.map(sprint => ({
             id: sprint.id,
             sprintNumber: sprint.sprint_number,
             startDate: sprint.start_date,
             endDate: sprint.end_date,
-            tasks: tasksBySprintId[sprint.id] || [] // Pega nas tarefas do mapa ou retorna [] se não houver
+            tasks: tasksBySprintId[sprint.id] || [] 
         }));
 
         return { shapedSprints, backlogTasks };
@@ -328,7 +281,7 @@ class ProjectServices{
                 throw new Error("Acesso negado: você não tem permissão para adicionar membros a este projeto.");
             }
 
-            //O projeto passado existe?
+            //O projeto informado existe?
             const project = await projectDAO.findById(projectId);
 
             if(!project){
@@ -351,22 +304,6 @@ class ProjectServices{
 
             await t.commit();
 
-            // try {
-            //     await notificationDAO.create({
-            //         userId: userIdToAdd, 
-            //         type: 'convite',
-            //         message: `${currentUserId.nome} te convidou para o Projeto ${project.titulo} `,
-            //         metadata: {
-            //             requesterId: currentUserId,
-            //             projectId: projectId,
-            //             role: role
-            //         }
-            //     });
-            // } catch (notificationError) {
-            //     // Logamos o erro, mas não impedimos o sucesso da amizade.
-            //     // Numa aplicação real, você poderia usar uma fila para garantir o envio.
-            //     console.error("Falha ao criar notificação de convite para projeto:", notificationError);
-            // }
 
             return newMember.get({plain: true});
         }catch(error){
@@ -430,8 +367,6 @@ class ProjectServices{
                 emailsToInvite.push(email);
             }
         }
-
-        // console.log("emails para convidar", emailsToInvite);
 
         // 5. AÇÃO DO BANCO: Cria apenas os convites válidos
         if(emailsToInvite.length > 0){
