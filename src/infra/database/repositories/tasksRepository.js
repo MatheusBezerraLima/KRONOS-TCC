@@ -42,47 +42,6 @@ class TasksDAO{
         }
         
     };
-
-    // async findAllGeneralTasks(userId){
-    //     try{
-    //         return await Task.findAll({
-    //             where: {
-    //                 projeto_id: null,
-    //                 criador_id: userId
-    //             },
-    //             include: [
-    //                 {
-    //                     model: CategoryTask,
-    //                     attributes: ['id', 'nome'] 
-    //                 },
-    //                 {
-    //                     model: StatusTask,
-    //                 },
-    //                 {
-    //                     model: User,
-    //                     as: 'assignedMembers', // Usa o alias da sua associação Task -> User
-    //                     // IMPORTANTE: Seleciona apenas os dados não sensíveis dos membros
-    //                     attributes: ['id', 'nome'],
-    //                     // Inclui o perfil para buscar o avatar
-    //                     include: [{
-    //                         model: Profile,
-    //                         as: 'profile',
-    //                         attributes: ['foto_perfil']
-    //                     }, {
-    //                        model: CategoryTask,
-    //                        attributes: [''] 
-    //                     }],
-                        
-    //                     through: { attributes: [] } 
-    //                 }
-    //             ]
-    //         });
-    //     }catch(error){
-    //         console.error(`Erro ao buscar todas as tasks ${error.message}`);
-    //         throw error;           
-    //     }
-        
-    // };
     
     
     async findByIdWithDetails(id) {
@@ -91,16 +50,16 @@ class TasksDAO{
                 include: [
                     {
                         model: CategoryTask,
-                        as: 'categoryTask' // Use o 'as' definido na sua associação
+                        as: 'categoryTask' 
                     },
                     {
                         model: StatusTask,
-                        as: 'statusTask' // Use o 'as' definido na sua associação
+                        as: 'statusTask' 
                     },
                     {
                         model: SubTask,
-                        as: 'subTasks', // Use o 'as' definido na sua associação
-                        order: [['criado_em', 'ASC']] // Opcional: ordena as subtarefas
+                        as: 'subTasks',
+                        order: [['criado_em', 'ASC']] 
                     },
                     {
                         model: BoardColumn,
@@ -108,14 +67,13 @@ class TasksDAO{
                     },// --- INCLUINDO MEMBROS ---
                     {
                         model: User,
-                        as: 'assignedMembers', // Alias definido na associação (Task.belongsToMany User)
+                        as: 'assignedMembers',
                         attributes: ['id', 'nome'],
                         include: [{
                             model: ProfileUser,
                             as: 'profile',
                             attributes: ['foto_perfil']
                         }],
-                        // 'through: { attributes: [] }' remove os dados da tabela de ligação (assignmentTask) do retorno JSON, deixando mais limpo
                         through: { attributes: [] } 
                     }
                 ],
@@ -145,14 +103,13 @@ class TasksDAO{
                     },// --- INCLUINDO MEMBROS ---
                     {
                         model: User,
-                        as: 'assignedMembers', // Alias definido na associação (Task.belongsToMany User)
+                        as: 'assignedMembers', 
                         attributes: ['id', 'nome'],
                         include: [{
                             model: ProfileUser,
                             as: 'profile',
                             attributes: ['foto_perfil']
                         }],
-                        // 'through: { attributes: [] }' remove os dados da tabela de ligação (assignmentTask) do retorno JSON, deixando mais limpo
                         through: { attributes: [] } 
                     }
                 ]
@@ -201,14 +158,13 @@ class TasksDAO{
                     },// --- INCLUINDO MEMBROS ---
                     {
                         model: User,
-                        as: 'assignedMembers', // Alias definido na associação (Task.belongsToMany User)
+                        as: 'assignedMembers', 
                         attributes: ['id', 'nome'],
                         include: [{
                             model: ProfileUser,
                             as: 'profile',
                             attributes: ['foto_perfil']
                         }],
-                        // 'through: { attributes: [] }' remove os dados da tabela de ligação (assignmentTask) do retorno JSON, deixando mais limpo
                         through: { attributes: [] } 
                     }
                 ]
@@ -231,8 +187,7 @@ class TasksDAO{
 
 async update(taskId, dataToUpdate){
         try{
-            // 1. O update precisa de AWAIT!
-            // O update retorna um array onde o primeiro item é o número de linhas afetadas
+           
             const [affectedRows] = await Task.update(
                 {...dataToUpdate},
                 {
@@ -242,25 +197,23 @@ async update(taskId, dataToUpdate){
                 }
             );
             
-            // 2. Se atualizou algo, buscamos o objeto COMPLETO
+            
             if(affectedRows > 0){
-                // AQUI ESTÁ O SEGREDO: Precisamos dos 'includes'
-                // Certifique-se de importar o Model CategoryTask no topo do arquivo
                 const updatedTask = await Task.findByPk(taskId, {
                     include: [
                         {
-                            model: CategoryTask, // Importe esse Model!
-                            as: 'categoryTask', // O mesmo 'as' definido no seu relacionamento (Associations.js ou index.js)
+                            model: CategoryTask, 
+                            as: 'categoryTask', 
                             attributes: ['id', 'nome', 'cor_fundo', 'cor_texto']
                         }
-                        // Se precisar de status ou criador, adicione aqui também
+                       
                     ]
                 });
                 
                 return updatedTask;
             }
 
-            return null; // Retorna null se não achou a tarefa para atualizar
+            return null; 
         } catch(error){
             console.error(`Erro no DAO ao tentar atualizar tarefa:`, error);
             throw error;
